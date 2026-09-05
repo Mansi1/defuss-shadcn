@@ -137,6 +137,19 @@ the search input when the popover opens.
 
 ---
 
+## States
+
+The api is bound **per dropdown popover**. Declared states: `default`
+(closed) · `open` (listbox shown, search focused).
+`getState().config.value` reports the selected option's text.
+
+```js
+document.querySelector('#cb-framework-popover').api.setState('open');
+document.querySelector('#cb-framework-popover').api.getState(); // { name: 'open', config: { value: '' } }
+```
+
+The registry global is `_defussShadcn.comboboxApi` / `_defussShadcn.comboboxStates`.
+
 ## Notes
 
 - The trigger is a `.btn[data-variant="outline"]` — styled by the button system

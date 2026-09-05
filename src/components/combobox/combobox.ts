@@ -1,5 +1,55 @@
 // -- Combobox -------------------------------------------------
-// Searchable select with keyboard navigation and popover positioning.
+// Searchable select with keyboard navigation and popover positioning, plus
+// the named-state API bound per dropdown popover, so agents/tests can open
+// and close it by name (AGENTS.md "State API").
+
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals, safeShowPopover } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const comboboxStates = ['default', 'open'];
+
+/**
+ * UI side of setState (per popover): 'default' closes, 'open' shows. The
+ * wrapper's own open()/close() (registered at init) keep aria-expanded,
+ * highlight and focus bookkeeping in one place.
+ */
+function triggerStateChange(popover, stateName, _config) {
+  switch (stateName) {
+    case 'default':
+      popover._close?.();
+      break;
+    case 'open':
+      popover._open?.();
+      break;
+  }
+}
+
+/** Registry-level API; pass the popover element explicitly. Unknown names throw. */
+export const comboboxApi = {
+  setState(popover, stateName, config = {}) {
+    if (!comboboxStates.includes(stateName)) {
+      throw new Error(`combobox: unknown state "${stateName}" (supported: ${comboboxStates.join(', ')})`);
+    }
+    triggerStateChange(popover, stateName, config);
+    // state lives on the ELEMENT, not the module (many comboboxes per page)
+    popover.dataset.stateName = stateName;
+    popover._stateConfig = config;
+  },
+  getState(popover) {
+    const selected = popover.querySelector('[role="option"][aria-selected="true"]');
+    return {
+      // reflect reality: trigger clicks and Escape change the UI too
+      name: popover.matches(':popover-open') ? 'open' : 'default',
+      config: { ...popover._stateConfig, value: selected?.textContent?.trim() ?? '' },
+    };
+  },
+};
+
+_defussShadcn.comboboxApi = comboboxApi;
+_defussShadcn.comboboxStates = comboboxStates;
 
 function init() {
   document.querySelectorAll('.combobox:not([data-init])').forEach((wrapper) => {
@@ -22,7 +72,9 @@ function init() {
 
     const getVisibleItems = () => allItems.filter((item) => !item.hidden && item.getAttribute('aria-disabled') !== 'true');
     const open = () => {
-      popover.showPopover();
+      // deferred show (safeShowPopover): showPopover() mid-exit crashes the
+      // headless renderer; hide-then-show is deterministic everywhere.
+      safeShowPopover(popover);
       trigger.setAttribute('aria-expanded', 'true');
       searchInput.value = '';
       filter('');
@@ -34,6 +86,14 @@ function init() {
       searchInput.setAttribute('aria-activedescendant', '');
       clearHighlight();
       trigger.focus();
+    };
+    // expose for the State API (element members, not module scope)
+    popover._open = open;
+    popover._close = close;
+    // bind-scope the api per popover: `$('#cb-popover').api.setState('open')`
+    popover.api = {
+      setState: (stateName, config) => comboboxApi.setState(popover, stateName, config),
+      getState: () => comboboxApi.getState(popover),
     };
     const isOpen = () => popover.matches(':popover-open');
     const filter = (query) => {

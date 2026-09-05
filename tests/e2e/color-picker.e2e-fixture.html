@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>color-picker e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/color-picker/color-picker.css" />
+  </head>
+  <body style="padding:2rem;display:flex;flex-direction:column;gap:1.5rem;align-items:flex-start;">
+    <!-- mirrors the doc page: default picker -->
+    <div class="color-picker" id="cp-default">
+      <input type="color" id="d-color" value="#6366f1" aria-label="Color" />
+      <span class="color-picker-value">#6366f1</span>
+    </div>
+
+    <!-- second instance: state must stay per element -->
+    <div class="color-picker" id="cp-second">
+      <input type="color" id="d-color-2" value="#10b981" aria-label="Color 2" />
+      <span class="color-picker-value">#10b981</span>
+    </div>
+
+    <script type="module" src="/dist/components/color-picker/color-picker.js"></script>
+  </body>
+</html>

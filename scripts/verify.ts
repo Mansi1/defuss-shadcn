@@ -208,10 +208,10 @@ check(
 // contract and only warn — remove a name from the list as it is migrated, and
 // every NEW JS component must satisfy the contract from day one.
 const STATE_API_LEGACY = [
-  'avatar', 'calendar', 'color-picker', 'combobox',
+  'avatar',
   'context-menu', 'image',
   'sidebar',
-  'toast', 'tree-view',
+  'toast',
 ];
 const STATE_API_PATTERNS: Array<[string, RegExp]> = [
   // preamble comes from the shared helper (build inlines it into dist .js);

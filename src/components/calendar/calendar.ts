@@ -1,5 +1,61 @@
 // -- Calendar -------------------------------------------------
-// Interactive calendar grid with month navigation and day selection.
+// Interactive calendar grid with month navigation and day selection, plus
+// the named-state API (AGENTS.md "State API"). The calendar's observable
+// state is its view (visible month + selected day), so 'default' resets to
+// today (or navigates/selects via { year, month, day }) and getState()
+// reports the live view.
+
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const calendarStates = ['default'];
+
+/**
+ * UI side of setState: 'default' (re)renders the view. Without config it
+ * resets to today with no selection; { year, month, day } navigates to that
+ * month (month is 0-based, like Date) and optionally selects a day.
+ */
+function triggerStateChange(cal, stateName, config) {
+  const state = cal._calState;
+  if (!state || stateName !== 'default') return;
+  const now = new Date();
+  state.year = config?.year ?? now.getFullYear();
+  state.month = config?.month ?? now.getMonth();
+  state.selected = config?.day ?? null;
+  renderCalendar(cal, state.year, state.month, state.selected);
+}
+
+/** Registry-level API; pass the calendar element explicitly. Unknown names throw. */
+export const calendarApi = {
+  setState(cal, stateName, config = {}) {
+    if (!calendarStates.includes(stateName)) {
+      throw new Error(`calendar: unknown state "${stateName}" (supported: ${calendarStates.join(', ')})`);
+    }
+    triggerStateChange(cal, stateName, config);
+    // state lives on the ELEMENT, not the module (many calendars per page)
+    cal.dataset.stateName = stateName;
+    cal._stateConfig = config;
+  },
+  getState(cal) {
+    const state = cal._calState ?? {};
+    return {
+      name: cal.dataset.stateName || 'default',
+      // live view — reflects nav clicks and day selection, not just setState
+      config: {
+        ...cal._stateConfig,
+        year: state.year,
+        month: state.month,
+        selected: state.selected,
+      },
+    };
+  },
+};
+
+_defussShadcn.calendarApi = calendarApi;
+_defussShadcn.calendarStates = calendarStates;
 
 const DAYS = Array.from({ length: 7 }, (_, i) =>
   new Intl.DateTimeFormat(undefined, { weekday: 'short' }).format(new Date(2024, 0, i))
@@ -69,10 +125,16 @@ function init() {
 document.querySelectorAll('.calendar:not([data-init])').forEach((cal) => {
     cal.dataset.init = '';
     const now = new Date();
-    const state = {
+    // state lives on the ELEMENT, not module scope (AGENTS.md "State API")
+    const state = (cal._calState = {
       year: now.getFullYear(),
       month: now.getMonth(),
-      selected: null
+      selected: null,
+    });
+    // bind-scope the api per instance: `$('#my-calendar').api.setState('default', { year: 2024, month: 0, day: 15 })`
+    cal.api = {
+      setState: (stateName, config) => calendarApi.setState(cal, stateName, config),
+      getState: () => calendarApi.getState(cal),
     };
 
     renderCalendar(cal, state.year, state.month, state.selected);

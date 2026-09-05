@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>combobox e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/button/button.css" />
+    <link rel="stylesheet" href="/dist/components/label/label.css" />
+    <link rel="stylesheet" href="/dist/components/combobox/combobox.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: searchable select -->
+    <div class="combobox" style="width:14rem;" id="cb-demo">
+      <label class="label" id="cb-framework-label">Framework</label>
+      <button class="btn combobox-trigger" data-variant="outline" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="cb-framework-label" aria-controls="cb-framework-popover">
+        <span class="combobox-value" data-placeholder="Select framework...">Select framework...</span>
+        <svg class="combobox-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 15 5 5 5-5" /><path d="m7 9 5-5 5 5" /></svg>
+      </button>
+      <div id="cb-framework-popover" class="combobox-content" popover>
+        <div class="combobox-search">
+          <input class="combobox-search-input" type="text" role="combobox" autocomplete="off" aria-expanded="true" aria-controls="cb-framework-listbox" aria-activedescendant="" aria-autocomplete="list" placeholder="Search..." />
+        </div>
+        <div id="cb-framework-listbox" role="listbox" class="combobox-listbox" aria-label="Frameworks">
+          <div class="combobox-empty" hidden>No results found.</div>
+          <div role="option" id="cb-opt-next" class="combobox-item" data-value="nextjs" aria-selected="false">Next.js</div>
+          <div role="option" id="cb-opt-svelte" class="combobox-item" data-value="sveltekit" aria-selected="false">SvelteKit</div>
+          <div role="option" id="cb-opt-nuxt" class="combobox-item" data-value="nuxt" aria-selected="false">Nuxt</div>
+          <div role="option" id="cb-opt-remix" class="combobox-item" data-value="remix" aria-selected="false">Remix</div>
+          <div role="option" id="cb-opt-astro" class="combobox-item" data-value="astro" aria-selected="false">Astro</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- grouped + disabled option + separator (documented composition) -->
+    <div class="combobox" style="width:14rem;margin-top:2rem;" id="cb-grouped">
+      <label class="label" id="cb-tz-label">Timezone</label>
+      <button class="btn combobox-trigger" data-variant="outline" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="cb-tz-label" aria-controls="cb-tz-popover">
+        <span class="combobox-value" data-placeholder="Select timezone...">Select timezone...</span>
+      </button>
+      <div id="cb-tz-popover" class="combobox-content" popover>
+        <div class="combobox-search">
+          <input class="combobox-search-input" type="text" role="combobox" autocomplete="off" aria-expanded="true" aria-controls="cb-tz-listbox" aria-activedescendant="" aria-autocomplete="list" placeholder="Search..." />
+        </div>
+        <div id="cb-tz-listbox" role="listbox" class="combobox-listbox" aria-label="Timezones">
+          <div class="combobox-empty" hidden>No results found.</div>
+          <div class="combobox-group-label">North America</div>
+          <div role="option" id="cb-tz-pt" class="combobox-item" data-value="pt" aria-selected="false">PT (Los Angeles)</div>
+          <div role="option" id="cb-tz-et" class="combobox-item" data-value="et" aria-selected="false">ET (New York)</div>
+          <div class="combobox-separator"></div>
+          <div class="combobox-group-label">Europe</div>
+          <div role="option" id="cb-tz-eet" class="combobox-item" data-value="eet" aria-selected="false" aria-disabled="true">EET (Bucharest)</div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/dist/components/combobox/combobox.js"></script>
+  </body>
+</html>

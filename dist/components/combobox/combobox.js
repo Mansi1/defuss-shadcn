@@ -1,6 +1,96 @@
-"use strict";
 // -- Combobox -------------------------------------------------
-// Searchable select with keyboard navigation and popover positioning.
+// Searchable select with keyboard navigation and popover positioning, plus
+// the named-state API bound per dropdown popover, so agents/tests can open
+// and close it by name (AGENTS.md "State API").
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+/**
+ * Why: every interactive component needs the same preamble (global registry +
+ * `$` query alias). Single-sourced here instead of duplicated in 26 files;
+ * scripts/build.ts inlines the compiled functions into each shipped component
+ * .js so dist files stay isolated and copy-paste/CDN-ready. The function is
+ * idempotent: whichever component loads first wins, the rest are no-ops.
+ * Contract: AGENTS.md "State API"; types: src/types/defuss-shadcn.d.ts.
+ */
+function defussGlobals() {
+    globalThis._defussShadcn = globalThis._defussShadcn || {};
+    if (typeof globalThis.$ !== 'function')
+        globalThis.$ = document.querySelector.bind(document);
+    return globalThis._defussShadcn;
+}
+/**
+ * Why: calling showPopover() on a popover while its exit transition is still
+ * running — the exact setState('open') path right after a light dismiss,
+ * whose display:none is delayed by `transition: display … allow-discrete` —
+ * crashes the headless renderer (reproduced: headless Chromium dies outright,
+ * popover + nav-menu + dropdown + tooltip share the CSS pattern). Wait until
+ * the element's computed display has actually flipped to none (the exit
+ * committed), then show. A stable-open element polls to the cap and the
+ * guarded showPopover() is a harmless no-op. Inlined by build.ts like
+ * defussGlobals(); keep self-contained.
+ */
+function safeShowPopover(el) {
+    const show = () => {
+        try {
+            el.showPopover();
+        }
+        catch { /* already open */ }
+    };
+    const displayed = () => getComputedStyle(el).display !== 'none';
+    if (!displayed()) {
+        show();
+        return;
+    }
+    // displayed: either stably open (nothing to do) or mid-exit (must wait).
+    // Cap the poll at ~500ms — longer than any component's exit transition.
+    const deadline = performance.now() + 500;
+    const tick = () => {
+        if (!displayed() || performance.now() > deadline)
+            show();
+        else
+            requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+}
+const _defussShadcn = defussGlobals();
+const comboboxStates = ['default', 'open'];
+/**
+ * UI side of setState (per popover): 'default' closes, 'open' shows. The
+ * wrapper's own open()/close() (registered at init) keep aria-expanded,
+ * highlight and focus bookkeeping in one place.
+ */
+function triggerStateChange(popover, stateName, _config) {
+    switch (stateName) {
+        case 'default':
+            popover._close?.();
+            break;
+        case 'open':
+            popover._open?.();
+            break;
+    }
+}
+/** Registry-level API; pass the popover element explicitly. Unknown names throw. */
+export const comboboxApi = {
+    setState(popover, stateName, config = {}) {
+        if (!comboboxStates.includes(stateName)) {
+            throw new Error(`combobox: unknown state "${stateName}" (supported: ${comboboxStates.join(', ')})`);
+        }
+        triggerStateChange(popover, stateName, config);
+        // state lives on the ELEMENT, not the module (many comboboxes per page)
+        popover.dataset.stateName = stateName;
+        popover._stateConfig = config;
+    },
+    getState(popover) {
+        const selected = popover.querySelector('[role="option"][aria-selected="true"]');
+        return {
+            // reflect reality: trigger clicks and Escape change the UI too
+            name: popover.matches(':popover-open') ? 'open' : 'default',
+            config: { ...popover._stateConfig, value: selected?.textContent?.trim() ?? '' },
+        };
+    },
+};
+_defussShadcn.comboboxApi = comboboxApi;
+_defussShadcn.comboboxStates = comboboxStates;
 function init() {
     document.querySelectorAll('.combobox:not([data-init])').forEach((wrapper) => {
         wrapper.dataset.init = '';
@@ -20,7 +110,9 @@ function init() {
         popover.style.positionAnchor = anchorId;
         const getVisibleItems = () => allItems.filter((item) => !item.hidden && item.getAttribute('aria-disabled') !== 'true');
         const open = () => {
-            popover.showPopover();
+            // deferred show (safeShowPopover): showPopover() mid-exit crashes the
+            // headless renderer; hide-then-show is deterministic everywhere.
+            safeShowPopover(popover);
             trigger.setAttribute('aria-expanded', 'true');
             searchInput.value = '';
             filter('');
@@ -32,6 +124,14 @@ function init() {
             searchInput.setAttribute('aria-activedescendant', '');
             clearHighlight();
             trigger.focus();
+        };
+        // expose for the State API (element members, not module scope)
+        popover._open = open;
+        popover._close = close;
+        // bind-scope the api per popover: `$('#cb-popover').api.setState('open')`
+        popover.api = {
+            setState: (stateName, config) => comboboxApi.setState(popover, stateName, config),
+            getState: () => comboboxApi.getState(popover),
         };
         const isOpen = () => popover.matches(':popover-open');
         const filter = (query) => {

@@ -40,6 +40,20 @@ Nested `<ul>` elements with `role="tree"` / `role="treeitem"` ARIA pattern for h
 </ul>
 ```
 
+## States
+
+The api is bound **per branch** (`<details class="tree-branch">`). Declared
+states: `default` (the branch's authored open/closed state, restored via the
+init snapshot) · `expanded` (branch open; `aria-expanded` on the treeitem
+stays in sync through the native toggle event).
+
+```js
+document.querySelector('#my-branch').api.setState('expanded');
+document.querySelector('#my-branch').api.getState(); // { name: 'expanded', config: {} }
+```
+
+The registry global is `_defussShadcn.treeViewApi` / `_defussShadcn.treeViewStates` (camelCase).
+
 ## Accessibility
 
 - Root `<ul>` has `role="tree"` and `aria-label`

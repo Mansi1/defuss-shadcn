@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>calendar e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/calendar/calendar.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: month navigation + generated grid -->
+    <div class="calendar" id="cal-default" style="width:20rem;">
+      <div class="calendar-header">
+        <button class="calendar-nav" data-action="prev-month" aria-label="Previous month">&lsaquo;</button>
+        <span class="calendar-heading" aria-live="polite"></span>
+        <button class="calendar-nav" data-action="next-month" aria-label="Next month">&rsaquo;</button>
+      </div>
+      <table class="calendar-grid" role="grid"></table>
+    </div>
+
+    <script type="module" src="/dist/components/calendar/calendar.js"></script>
+  </body>
+</html>

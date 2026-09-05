@@ -1,5 +1,54 @@
 // -- Tree View ------------------------------------------------
-// Keyboard navigation and ARIA state for tree views.
+// Keyboard navigation and ARIA state for tree views, plus the named-state
+// API bound per branch (<details class="tree-branch">), so agents/tests can
+// expand branches by name (AGENTS.md "State API").
+
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const treeViewStates = ['default', 'expanded'];
+
+/**
+ * UI side of setState (per branch): 'expanded' opens the branch, 'default'
+ * restores the authored open/closed snapshot taken at init. The <details>
+ * toggle event keeps aria-expanded on the treeitem in sync automatically.
+ */
+function triggerStateChange(details, stateName, _config) {
+  switch (stateName) {
+    case 'default':
+      details.open = details._defaultOpen ?? false;
+      break;
+    case 'expanded':
+      details.open = true;
+      break;
+  }
+}
+
+/** Registry-level API; pass the branch element explicitly. Unknown names throw. */
+export const treeViewApi = {
+  setState(details, stateName, config = {}) {
+    if (!treeViewStates.includes(stateName)) {
+      throw new Error(`tree-view: unknown state "${stateName}" (supported: ${treeViewStates.join(', ')})`);
+    }
+    triggerStateChange(details, stateName, config);
+    // state lives on the ELEMENT, not the module (many branches per tree)
+    details.dataset.stateName = stateName;
+    details._stateConfig = config;
+  },
+  getState(details) {
+    // reflect reality: summary clicks and ArrowLeft/Right change it too
+    return {
+      name: details.open ? 'expanded' : 'default',
+      config: details._stateConfig ?? {},
+    };
+  },
+};
+
+_defussShadcn.treeViewApi = treeViewApi;
+_defussShadcn.treeViewStates = treeViewStates;
 
 function init() {
   document.querySelectorAll('.tree[role="tree"]:not([data-init])').forEach((tree) => {
@@ -9,8 +58,18 @@ function init() {
       const treeitem = details.closest('[role="treeitem"]');
       if (!treeitem) return;
 
+      // snapshot the authored state + bind the api per branch:
+      // `$('#my-branch').api.setState('expanded')`
+      details._defaultOpen = details.open;
+      details.api = {
+        setState: (stateName, config) => treeViewApi.setState(details, stateName, config),
+        getState: () => treeViewApi.getState(details),
+      };
+
       details.addEventListener('toggle', () => {
         treeitem.setAttribute('aria-expanded', String(details.open));
+        // user interaction also moves the named state (keeps getState honest)
+        details.dataset.stateName = details.open ? 'expanded' : 'default';
       });
     });
 

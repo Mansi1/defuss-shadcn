@@ -1,6 +1,103 @@
-"use strict";
 // -- Calendar -------------------------------------------------
-// Interactive calendar grid with month navigation and day selection.
+// Interactive calendar grid with month navigation and day selection, plus
+// the named-state API (AGENTS.md "State API"). The calendar's observable
+// state is its view (visible month + selected day), so 'default' resets to
+// today (or navigates/selects via { year, month, day }) and getState()
+// reports the live view.
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+/**
+ * Why: every interactive component needs the same preamble (global registry +
+ * `$` query alias). Single-sourced here instead of duplicated in 26 files;
+ * scripts/build.ts inlines the compiled functions into each shipped component
+ * .js so dist files stay isolated and copy-paste/CDN-ready. The function is
+ * idempotent: whichever component loads first wins, the rest are no-ops.
+ * Contract: AGENTS.md "State API"; types: src/types/defuss-shadcn.d.ts.
+ */
+function defussGlobals() {
+    globalThis._defussShadcn = globalThis._defussShadcn || {};
+    if (typeof globalThis.$ !== 'function')
+        globalThis.$ = document.querySelector.bind(document);
+    return globalThis._defussShadcn;
+}
+/**
+ * Why: calling showPopover() on a popover while its exit transition is still
+ * running — the exact setState('open') path right after a light dismiss,
+ * whose display:none is delayed by `transition: display … allow-discrete` —
+ * crashes the headless renderer (reproduced: headless Chromium dies outright,
+ * popover + nav-menu + dropdown + tooltip share the CSS pattern). Wait until
+ * the element's computed display has actually flipped to none (the exit
+ * committed), then show. A stable-open element polls to the cap and the
+ * guarded showPopover() is a harmless no-op. Inlined by build.ts like
+ * defussGlobals(); keep self-contained.
+ */
+function safeShowPopover(el) {
+    const show = () => {
+        try {
+            el.showPopover();
+        }
+        catch { /* already open */ }
+    };
+    const displayed = () => getComputedStyle(el).display !== 'none';
+    if (!displayed()) {
+        show();
+        return;
+    }
+    // displayed: either stably open (nothing to do) or mid-exit (must wait).
+    // Cap the poll at ~500ms — longer than any component's exit transition.
+    const deadline = performance.now() + 500;
+    const tick = () => {
+        if (!displayed() || performance.now() > deadline)
+            show();
+        else
+            requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+}
+const _defussShadcn = defussGlobals();
+const calendarStates = ['default'];
+/**
+ * UI side of setState: 'default' (re)renders the view. Without config it
+ * resets to today with no selection; { year, month, day } navigates to that
+ * month (month is 0-based, like Date) and optionally selects a day.
+ */
+function triggerStateChange(cal, stateName, config) {
+    const state = cal._calState;
+    if (!state || stateName !== 'default')
+        return;
+    const now = new Date();
+    state.year = config?.year ?? now.getFullYear();
+    state.month = config?.month ?? now.getMonth();
+    state.selected = config?.day ?? null;
+    renderCalendar(cal, state.year, state.month, state.selected);
+}
+/** Registry-level API; pass the calendar element explicitly. Unknown names throw. */
+export const calendarApi = {
+    setState(cal, stateName, config = {}) {
+        if (!calendarStates.includes(stateName)) {
+            throw new Error(`calendar: unknown state "${stateName}" (supported: ${calendarStates.join(', ')})`);
+        }
+        triggerStateChange(cal, stateName, config);
+        // state lives on the ELEMENT, not the module (many calendars per page)
+        cal.dataset.stateName = stateName;
+        cal._stateConfig = config;
+    },
+    getState(cal) {
+        const state = cal._calState ?? {};
+        return {
+            name: cal.dataset.stateName || 'default',
+            // live view — reflects nav clicks and day selection, not just setState
+            config: {
+                ...cal._stateConfig,
+                year: state.year,
+                month: state.month,
+                selected: state.selected,
+            },
+        };
+    },
+};
+_defussShadcn.calendarApi = calendarApi;
+_defussShadcn.calendarStates = calendarStates;
 const DAYS = Array.from({ length: 7 }, (_, i) => new Intl.DateTimeFormat(undefined, { weekday: 'short' }).format(new Date(2024, 0, i)));
 const MONTHS = Array.from({ length: 12 }, (_, i) => new Intl.DateTimeFormat(undefined, { month: 'long' }).format(new Date(2024, i, 1)));
 const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
@@ -61,10 +158,16 @@ function init() {
     document.querySelectorAll('.calendar:not([data-init])').forEach((cal) => {
         cal.dataset.init = '';
         const now = new Date();
-        const state = {
+        // state lives on the ELEMENT, not module scope (AGENTS.md "State API")
+        const state = (cal._calState = {
             year: now.getFullYear(),
             month: now.getMonth(),
-            selected: null
+            selected: null,
+        });
+        // bind-scope the api per instance: `$('#my-calendar').api.setState('default', { year: 2024, month: 0, day: 15 })`
+        cal.api = {
+            setState: (stateName, config) => calendarApi.setState(cal, stateName, config),
+            getState: () => calendarApi.getState(cal),
         };
         renderCalendar(cal, state.year, state.month, state.selected);
         /* Navigation */

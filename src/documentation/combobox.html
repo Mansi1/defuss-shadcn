@@ -185,7 +185,7 @@
                 <span class="combobox-value" data-placeholder="Select framework...">Select framework...</span>
                 <svg class="combobox-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
               </button>
-              <div id="cb-framework-popover" class="combobox-content" popover>
+              <div id="cb-framework-popover" class="combobox-content" popover data-state-demo>
                 <div class="combobox-search">
                   <svg class="combobox-search-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                   <input class="combobox-search-input" type="text" role="combobox" autocomplete="off" aria-expanded="true" aria-controls="cb-framework-listbox" aria-activedescendant="" aria-autocomplete="list" placeholder="Search...">
@@ -346,6 +346,17 @@
   ...
 &lt;/button&gt;</code></pre>
           </div>
+        <!-- -- States ------------------------------------ -->
+        <section style="margin-top:3rem;" id="states">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">States</h2>
+          <p class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;">Named states via the shared State API, driven per instance through the bound <code>api</code>:</p>
+          <ul class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;padding-left:1.25rem;">
+            <li><code>default</code> — closed (the authored state; the trigger toggles it)</li>
+            <li><code>open</code> — listbox shown via <code>showPopover()</code> with the search input focused; <code>getState().config.value</code> reports the selected option</li>
+          </ul>
+          <p class="text-sm text-muted-foreground">The demo element carries <code>data-state-demo</code>; <code>bun run screenshots</code> drives it via <code>el.api.setState(name)</code> and captures <code>screenshots/{mode}/combobox-{state}.png</code>.</p>
+        </section>
+
         <!-- -- CSS --------------------------------------- -->
         <section style="margin-top:3rem;" id="source-css">
           <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">CSS <a href="../components/combobox/combobox.css" target="_blank" style="font-size:0.75rem;font-weight:400;color:var(--muted-foreground);text-decoration:underline;text-underline-offset:3px;margin-left:0.5rem;">view file</a></h2>
@@ -541,7 +552,57 @@
               Copy
             </button>
             <pre><code class="language-javascript">// -- Combobox -------------------------------------------------
-// Searchable select with keyboard navigation and popover positioning.
+// Searchable select with keyboard navigation and popover positioning, plus
+// the named-state API bound per dropdown popover, so agents/tests can open
+// and close it by name (AGENTS.md &quot;State API&quot;).
+
+// Shared preamble (AGENTS.md &quot;State API&quot;); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals, safeShowPopover } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const comboboxStates = ['default', 'open'];
+
+/**
+ * UI side of setState (per popover): 'default' closes, 'open' shows. The
+ * wrapper's own open()/close() (registered at init) keep aria-expanded,
+ * highlight and focus bookkeeping in one place.
+ */
+function triggerStateChange(popover, stateName, _config) {
+  switch (stateName) {
+    case 'default':
+      popover._close?.();
+      break;
+    case 'open':
+      popover._open?.();
+      break;
+  }
+}
+
+/** Registry-level API; pass the popover element explicitly. Unknown names throw. */
+export const comboboxApi = {
+  setState(popover, stateName, config = {}) {
+    if (!comboboxStates.includes(stateName)) {
+      throw new Error(`combobox: unknown state &quot;${stateName}&quot; (supported: ${comboboxStates.join(', ')})`);
+    }
+    triggerStateChange(popover, stateName, config);
+    // state lives on the ELEMENT, not the module (many comboboxes per page)
+    popover.dataset.stateName = stateName;
+    popover._stateConfig = config;
+  },
+  getState(popover) {
+    const selected = popover.querySelector('[role=&quot;option&quot;][aria-selected=&quot;true&quot;]');
+    return {
+      // reflect reality: trigger clicks and Escape change the UI too
+      name: popover.matches(':popover-open') ? 'open' : 'default',
+      config: { ...popover._stateConfig, value: selected?.textContent?.trim() ?? '' },
+    };
+  },
+};
+
+_defussShadcn.comboboxApi = comboboxApi;
+_defussShadcn.comboboxStates = comboboxStates;
 
 function init() {
   document.querySelectorAll('.combobox:not([data-init])').forEach((wrapper) =&gt; {
@@ -564,7 +625,9 @@ function init() {
 
     const getVisibleItems = () =&gt; allItems.filter((item) =&gt; !item.hidden &amp;&amp; item.getAttribute('aria-disabled') !== 'true');
     const open = () =&gt; {
-      popover.showPopover();
+      // deferred show (safeShowPopover): showPopover() mid-exit crashes the
+      // headless renderer; hide-then-show is deterministic everywhere.
+      safeShowPopover(popover);
       trigger.setAttribute('aria-expanded', 'true');
       searchInput.value = '';
       filter('');
@@ -576,6 +639,14 @@ function init() {
       searchInput.setAttribute('aria-activedescendant', '');
       clearHighlight();
       trigger.focus();
+    };
+    // expose for the State API (element members, not module scope)
+    popover._open = open;
+    popover._close = close;
+    // bind-scope the api per popover: `$('#cb-popover').api.setState('open')`
+    popover.api = {
+      setState: (stateName, config) =&gt; comboboxApi.setState(popover, stateName, config),
+      getState: () =&gt; comboboxApi.getState(popover),
     };
     const isOpen = () =&gt; popover.matches(':popover-open');
     const filter = (query) =&gt; {

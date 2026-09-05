@@ -129,7 +129,7 @@
         <div class="preview">
           <div>
             <label class="label" for="d-color">Background Color</label>
-            <div class="color-picker">
+            <div class="color-picker" data-state-demo>
               <input type="color" id="d-color" value="#6366f1">
               <span class="color-picker-value">#6366f1</span>
             </div>
@@ -175,6 +175,16 @@
   &lt;span class="color-picker-value"&gt;#0a0a0a&lt;/span&gt;
 &lt;/div&gt;</code></pre>
         </div>
+
+        <!-- -- States ------------------------------------ -->
+        <section style="margin-top:3rem;" id="states">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">States</h2>
+          <p class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;">Named states via the shared State API, driven per instance through the bound <code>api</code>:</p>
+          <ul class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;padding-left:1.25rem;">
+            <li><code>default</code> — <code>setState('default', { value })</code> presets the color through the native input (events fire); <code>getState().config.value</code> reports the live hex</li>
+          </ul>
+          <p class="text-sm text-muted-foreground">The demo element carries <code>data-state-demo</code>; <code>bun run screenshots</code> drives it via <code>el.api.setState(name)</code> and captures <code>screenshots/{mode}/color-picker-{state}.png</code>.</p>
+        </section>
 
         <!-- -- CSS --------------------------------------- -->
         <section style="margin-top:3rem;" id="source-css">
@@ -233,11 +243,64 @@
           <div style="position:relative;margin-top:0.5rem;">
             <button class="copy-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
             <pre><code class="language-javascript">// -- Color Picker ---------------------------------------------
-// Syncs the hex value display with the color input.
+// Syncs the hex value display with the color input, plus the named-state API
+// (AGENTS.md &quot;State API&quot;). The picker's observable state is the chosen color,
+// so 'default' carries an optional { value } preset and getState().config
+// reports the live value.
+
+// Shared preamble (AGENTS.md &quot;State API&quot;); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const colorPickerStates = ['default'];
+
+const getInput = (picker) =&gt; picker.querySelector('input[type=&quot;color&quot;]');
+
+/**
+ * UI side of setState: 'default' optionally presets { value } through the
+ * native color input (input event dispatched so the display stays in sync).
+ */
+function triggerStateChange(picker, config) {
+  const input = getInput(picker);
+  if (!input || config?.value === undefined) return;
+  input.value = String(config.value);
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+/** Registry-level API; pass the wrapper explicitly. Unknown names throw. */
+export const colorPickerApi = {
+  setState(picker, stateName, config = {}) {
+    if (!colorPickerStates.includes(stateName)) {
+      throw new Error(`color-picker: unknown state &quot;${stateName}&quot; (supported: ${colorPickerStates.join(', ')})`);
+    }
+    triggerStateChange(picker, config);
+    // state lives on the ELEMENT, not the module (many pickers per page)
+    picker.dataset.stateName = stateName;
+    picker._stateConfig = config;
+  },
+  getState(picker) {
+    const input = getInput(picker);
+    return {
+      name: picker.dataset.stateName || 'default',
+      // live value — reflects picking and typing, not just setState
+      config: { ...picker._stateConfig, value: input ? input.value : '' },
+    };
+  },
+};
+
+_defussShadcn.colorPickerApi = colorPickerApi;
+_defussShadcn.colorPickerStates = colorPickerStates;
 
 function init() {
   document.querySelectorAll('.color-picker:not([data-init])').forEach((picker) =&gt; {
   picker.dataset.init = '';
+  // bind-scope the api per instance: `$('#theme-color').api.setState('default', { value: '#ff0000' })`
+  picker.api = {
+    setState: (stateName, config) =&gt; colorPickerApi.setState(picker, stateName, config),
+    getState: () =&gt; colorPickerApi.getState(picker),
+  };
   const input = picker.querySelector('input[type=&quot;color&quot;]');
   const display = picker.querySelector('.color-picker-value');
   if (!input || !display) return;

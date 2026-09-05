@@ -52,6 +52,21 @@
 | `data-outside`  | Day from adjacent month            |
 | `data-disabled` | Non-selectable date                |
 
+## States
+
+The calendar's observable state is its view: visible month + selected day.
+Declared states: `default` (reset to today's month, no selection;
+`{ year, month, day }` config — 0-based month — navigates/selects).
+`getState().config` reports the live `year`/`month`/`selected`.
+
+```js
+document.querySelector('#my-calendar').api.setState('default', { year: 2025, month: 0, day: 15 });
+document.querySelector('#my-calendar').api.getState(); // { name: 'default', config: { year: 2025, month: 0, selected: 15 } }
+```
+
+The api is bound per calendar; the registry global is
+`_defussShadcn.calendarApi` / `_defussShadcn.calendarStates`.
+
 ## Accessibility
 
 - Month heading uses `aria-live="polite"` for navigation announcements

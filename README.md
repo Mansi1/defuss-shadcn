@@ -1,6 +1,6 @@
 # defuss-shadcn
 
-[![GitHub stars](https://img.shields.io/github/stars/codylindley/defuss-shadcn?style=flat&logo=github)](https://github.com/codylindley/defuss-shadcn)
+[![GitHub stars](https://img.shields.io/github/stars/kyr0/defuss-shadcn?style=flat&logo=github)](https://github.com/kyr0/defuss-shadcn)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![No dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)
 ![HTML CSS JS](https://img.shields.io/badge/stack-HTML%20·%20CSS%20·%20JS-orange)
@@ -25,23 +25,23 @@ A portable UI component system built on the [shadcn/ui](https://ui.shadcn.com) t
 
 ```html
 <!-- 1. Add a theme -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/codylindley/defuss-shadcn@latest/dist/theme/default-semantic-tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/theme/default-semantic-tokens.css">
 
 <!-- 2. Add the icons -->
 <script src="https://unpkg.com/lucide@1.8.0"></script>
 <script>lucide.createIcons();</script>
 
 <!-- 3. Select the components you want -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/codylindley/defuss-shadcn@latest/dist/components/button/button.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/codylindley/defuss-shadcn@latest/dist/components/dialog/dialog.css">
-<script type="module" src="https://cdn.jsdelivr.net/gh/codylindley/defuss-shadcn@latest/dist/components/dialog/dialog.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/button/button.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/dialog/dialog.css">
+<script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/dialog/dialog.js"></script>
 ```
 
 ### Self-hosting
 
 Download the full system and drop it into any project. All the files are static — no build step, no dependencies. Point an AI at the folder and it has everything it needs: component skills to read, CSS to include, JS to wire up, and the entire documentation site with working examples of every component.
 
-**[Download latest (.zip)](https://github.com/codylindley/defuss-shadcn/archive/refs/heads/main.zip)**
+**[Download latest (.zip)](https://github.com/kyr0/defuss-shadcn/archive/refs/heads/main.zip)**
 
 ## Built on five layers
 
@@ -185,7 +185,7 @@ lockstep as they land.
 
 ## Author
 
-Built by [Cody Lindley](https://codylindley.com)
+Built by [Cody Lindley](https://kyr0.com)
 
 ## License
 

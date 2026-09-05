@@ -69,6 +69,18 @@ No additional ARIA attributes are needed. The native `popover` attribute and `po
 | Enter / Space | Toggle popover (on trigger button) |
 | Escape | Close popover (native light-dismiss) |
 
+## States
+
+Declared states: `default` (hidden) · `open` (shown via native showPopover()).
+
+```js
+document.querySelector('#my-popover').api.setState('open');
+document.querySelector('#my-popover').api.getState(); // { name: 'open', config: {} }
+```
+
+The api is bound per popover element; the registry global is
+`_defussShadcn.popoverApi` / `_defussShadcn.popoverStates`.
+
 ## Notes
 
 - The popover renders in the **top layer**, so it appears above all other content regardless of `z-index`.

@@ -209,9 +209,9 @@ check(
 // every NEW JS component must satisfy the contract from day one.
 const STATE_API_LEGACY = [
   'alert-dialog', 'avatar', 'calendar', 'carousel', 'color-picker', 'combobox',
-  'command', 'context-menu', 'dropdown', 'image', 'navigation-menu',
-  'number-input', 'popover', 'sheet', 'sidebar', 'slider', 'sortable', 'tabs',
-  'toast', 'toggle', 'toggle-group', 'toolbar', 'tooltip', 'tree-view',
+  'command', 'context-menu', 'image', 'navigation-menu',
+  'number-input', 'sheet', 'sidebar', 'slider', 'sortable', 'tabs',
+  'toast', 'toggle', 'toggle-group', 'toolbar', 'tree-view',
 ];
 const STATE_API_PATTERNS: Array<[string, RegExp]> = [
   // preamble comes from the shared helper (build inlines it into dist .js);

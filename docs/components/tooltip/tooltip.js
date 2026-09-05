@@ -1,7 +1,63 @@
-"use strict";
 // -- Tooltip --------------------------------------------------
 // Popover API tooltips with delay, group behavior, ARIA wiring,
-// CSS anchor positioning, and scroll dismiss.
+// CSS anchor positioning, and scroll dismiss, plus the named-state API
+// so agents/tests can drive visibility by name (AGENTS.md "State API").
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+/**
+ * Why: every interactive component needs the same preamble (global registry +
+ * `$` query alias). Single-sourced here instead of duplicated in 26 files;
+ * scripts/build.ts inlines the compiled function into each shipped component
+ * .js so dist files stay isolated and copy-paste/CDN-ready. The function is
+ * idempotent: whichever component loads first wins, the rest are no-ops.
+ * Contract: AGENTS.md "State API"; types: src/types/defuss-shadcn.d.ts.
+ */
+function defussGlobals() {
+    globalThis._defussShadcn = globalThis._defussShadcn || {};
+    if (typeof globalThis.$ !== 'function')
+        globalThis.$ = document.querySelector.bind(document);
+    return globalThis._defussShadcn;
+}
+const _defussShadcn = defussGlobals();
+const tooltipStates = ['default', 'visible'];
+/**
+ * UI side of setState: 'default' hides, 'visible' shows immediately
+ * (bypasses the hover delay — a declared state is imperative, not hover-sim).
+ */
+function triggerStateChange(tip, stateName, _config) {
+    switch (stateName) {
+        case 'default':
+            try {
+                tip.hidePopover();
+            }
+            catch { /* already closed */ }
+            break;
+        case 'visible':
+            try {
+                tip.showPopover();
+            }
+            catch { /* already open */ }
+            markGroupOpen();
+            break;
+    }
+}
+/** Registry-level API; pass the tooltip element explicitly. Unknown names throw. */
+export const tooltipApi = {
+    setState(tip, stateName, config = {}) {
+        if (!tooltipStates.includes(stateName)) {
+            throw new Error(`tooltip: unknown state "${stateName}" (supported: ${tooltipStates.join(', ')})`);
+        }
+        triggerStateChange(tip, stateName, config);
+        // state lives on the ELEMENT, not the module (many tooltips per page)
+        tip.dataset.stateName = stateName;
+        tip._stateConfig = config;
+    },
+    getState(tip) {
+        return { name: tip.dataset.stateName || 'default', config: tip._stateConfig ?? {} };
+    },
+};
+_defussShadcn.tooltipApi = tooltipApi;
+_defussShadcn.tooltipStates = tooltipStates;
 const DELAY_DEFAULT = 700; // ms before first tooltip opens
 const CLOSE_DELAY_DEFAULT = 0; // ms before tooltip closes
 const GROUP_TIMEOUT = 400; // ms after last tooltip hides before delay resets
@@ -58,6 +114,14 @@ function init() {
         trigger.addEventListener('mouseleave', hide);
         trigger.addEventListener('focus', show);
         trigger.addEventListener('blur', hide);
+    });
+    // bind-scope the api per tooltip instance: `$('#tip').api.setState('visible')`
+    document.querySelectorAll('.tooltip[popover]:not([data-init])').forEach((tip) => {
+        tip.dataset.init = '';
+        tip.api = {
+            setState: (stateName, config) => tooltipApi.setState(tip, stateName, config),
+            getState: () => tooltipApi.getState(tip),
+        };
     });
 }
 init();

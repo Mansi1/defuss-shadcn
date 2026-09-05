@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>popover e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/button/button.css" />
+    <link rel="stylesheet" href="/dist/components/popover/popover.css" />
+  </head>
+  <body style="padding:12rem;">
+    <!-- mirrors the doc page: default bottom placement + every documented side -->
+    <button class="btn" data-variant="outline" popovertarget="pop-default">Bottom</button>
+    <div class="popover" id="pop-default" popover>
+      <div class="popover-header">
+        <p class="popover-title">Dimensions</p>
+        <p class="popover-description">Set the dimensions for the layer.</p>
+      </div>
+      <div class="popover-content"><p>Width: 100%</p></div>
+    </div>
+
+    <button class="btn" data-variant="outline" popovertarget="pop-top">Top</button>
+    <div class="popover" id="pop-top" data-side="top" popover>
+      <p class="popover-title">Top</p>
+    </div>
+
+    <button class="btn" data-variant="outline" popovertarget="pop-left">Left</button>
+    <div class="popover" id="pop-left" data-side="left" popover>
+      <p class="popover-title">Left</p>
+    </div>
+
+    <button class="btn" data-variant="outline" popovertarget="pop-right">Right</button>
+    <div class="popover" id="pop-right" data-side="right" popover>
+      <p class="popover-title">Right</p>
+    </div>
+
+    <!-- align variants (combine with side) -->
+    <button class="btn" data-variant="outline" popovertarget="pop-start">Start</button>
+    <div class="popover" id="pop-start" data-align="start" popover><p class="popover-title">Start</p></div>
+
+    <button class="btn" data-variant="outline" popovertarget="pop-end">End</button>
+    <div class="popover" id="pop-end" data-align="end" popover><p class="popover-title">End</p></div>
+
+    <script type="module" src="/dist/components/popover/popover.js"></script>
+  </body>
+</html>

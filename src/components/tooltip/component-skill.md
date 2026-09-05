@@ -83,6 +83,18 @@ Popover API (`popover="hint"`) for hover/focus hint popups with CSS anchor posit
 | `aria-describedby` | trigger  | Links trigger to tooltip (set by JS)      |
 | `popover="hint"`   | `.tooltip` | Hint popover semantics                   |
 
+## States
+
+Declared states: `default` (hidden; hover/focus reveal) · `visible` (shown immediately, bypassing the hover delay).
+
+```js
+document.querySelector('#my-tip').api.setState('visible');
+document.querySelector('#my-tip').api.getState(); // { name: 'visible', config: {} }
+```
+
+The api is bound per tooltip element; the registry global is
+`_defussShadcn.tooltipApi` / `_defussShadcn.tooltipStates`.
+
 ## Notes
 
 - **Delay**: Default open delay is 700 ms. Set `data-delay` on the trigger to override. Set to `0` for instant.

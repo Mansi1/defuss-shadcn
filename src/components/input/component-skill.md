@@ -30,7 +30,7 @@ Also covers `<textarea>` with auto-grow via `field-sizing: content`.
 ```html
 <div>
   <label class="label" for="username">Username</label>
-  <input class="input" type="text" id="username" placeholder="codylindley">
+  <input class="input" type="text" id="username" placeholder="kyr0">
   <p class="field-description">Choose a unique username for your account.</p>
 </div>
 ```

@@ -1,7 +1,63 @@
-"use strict";
 // -- Dropdown Menu --------------------------------------------
 // Wires [data-dropdown-trigger] buttons to popover menus with
-// full keyboard navigation and ARIA support.
+// full keyboard navigation and ARIA support, plus the named-state API
+// so agents/tests can drive open/closed by name (AGENTS.md "State API").
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+/**
+ * Why: every interactive component needs the same preamble (global registry +
+ * `$` query alias). Single-sourced here instead of duplicated in 26 files;
+ * scripts/build.ts inlines the compiled function into each shipped component
+ * .js so dist files stay isolated and copy-paste/CDN-ready. The function is
+ * idempotent: whichever component loads first wins, the rest are no-ops.
+ * Contract: AGENTS.md "State API"; types: src/types/defuss-shadcn.d.ts.
+ */
+function defussGlobals() {
+    globalThis._defussShadcn = globalThis._defussShadcn || {};
+    if (typeof globalThis.$ !== 'function')
+        globalThis.$ = document.querySelector.bind(document);
+    return globalThis._defussShadcn;
+}
+const _defussShadcn = defussGlobals();
+const dropdownStates = ['default', 'open'];
+/**
+ * UI side of setState: 'default' hides, 'open' shows. Open/close mechanics
+ * stay native (Popover API); the toggle listener keeps aria-expanded and
+ * highlight in sync either way.
+ */
+function triggerStateChange(menu, stateName, _config) {
+    switch (stateName) {
+        case 'default':
+            try {
+                menu.hidePopover();
+            }
+            catch { /* already closed */ }
+            break;
+        case 'open':
+            try {
+                menu.showPopover();
+            }
+            catch { /* already open */ }
+            break;
+    }
+}
+/** Registry-level API; pass the menu element explicitly. Unknown names throw. */
+export const dropdownApi = {
+    setState(menu, stateName, config = {}) {
+        if (!dropdownStates.includes(stateName)) {
+            throw new Error(`dropdown: unknown state "${stateName}" (supported: ${dropdownStates.join(', ')})`);
+        }
+        triggerStateChange(menu, stateName, config);
+        // state lives on the ELEMENT, not the module (multiple menus per page)
+        menu.dataset.stateName = stateName;
+        menu._stateConfig = config;
+    },
+    getState(menu) {
+        return { name: menu.dataset.stateName || 'default', config: menu._stateConfig ?? {} };
+    },
+};
+_defussShadcn.dropdownApi = dropdownApi;
+_defussShadcn.dropdownStates = dropdownStates;
 function init() {
     document.querySelectorAll('[data-dropdown-trigger]:not([data-init])').forEach((trigger) => {
         trigger.dataset.init = '';
@@ -22,7 +78,14 @@ function init() {
                 item.focus();
             }
         };
-        trigger.addEventListener('click', () => { menu.togglePopover(); });
+        // Native declarative toggle. A JS `togglePopover()` click handler is
+        // buggy for popover="auto": light dismiss closes the menu *before* the
+        // click handler runs, so togglePopover re-opens it and the menu can
+        // never be closed by clicking the trigger again. The popovertarget
+        // command is dismiss-aware — the trigger button must be a <button>
+        // (documented API) for the native command to apply.
+        if (!trigger.hasAttribute('popovertarget'))
+            trigger.setAttribute('popovertarget', menu.id);
         menu.addEventListener('toggle', (e) => {
             const open = e.newState === 'open';
             trigger.setAttribute('aria-expanded', open);
@@ -96,6 +159,14 @@ function init() {
                     }
             }
         });
+    });
+    // bind-scope the api per menu instance: `$('#menu').api.setState('open')`
+    document.querySelectorAll('.dropdown-content[popover]:not([data-init])').forEach((menu) => {
+        menu.dataset.init = '';
+        menu.api = {
+            setState: (stateName, config) => dropdownApi.setState(menu, stateName, config),
+            getState: () => dropdownApi.getState(menu),
+        };
     });
 }
 init();

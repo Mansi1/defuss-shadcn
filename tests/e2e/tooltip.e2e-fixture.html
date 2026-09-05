@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>tooltip e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/button/button.css" />
+    <link rel="stylesheet" href="/dist/components/tooltip/tooltip.css" />
+  </head>
+  <body style="padding:12rem;">
+    <!-- zero-delay hover trigger for deterministic open tests -->
+    <button class="btn" data-variant="outline" data-tooltip-trigger="tip-instant" data-delay="0">Instant</button>
+    <div class="tooltip" id="tip-instant" popover="hint" role="tooltip">Add to library</div>
+
+    <!-- default-delay trigger (group/delay behavior lives in the JS) -->
+    <button class="btn" data-variant="outline" data-tooltip-trigger="tip-default">Delayed</button>
+    <div class="tooltip" id="tip-default" popover="hint" role="tooltip">Delayed tooltip</div>
+
+    <!-- every documented side + align combination -->
+    <button class="btn" data-variant="outline" data-tooltip-trigger="tip-top">Top</button>
+    <div class="tooltip" id="tip-top" data-side="top" popover="hint" role="tooltip">Top tooltip</div>
+
+    <button class="btn" data-variant="outline" data-tooltip-trigger="tip-bottom">Bottom</button>
+    <div class="tooltip" id="tip-bottom" data-side="bottom" popover="hint" role="tooltip">Bottom tooltip</div>
+
+    <button class="btn" data-variant="outline" data-tooltip-trigger="tip-left">Left</button>
+    <div class="tooltip" id="tip-left" data-side="left" popover="hint" role="tooltip">Left tooltip</div>
+
+    <button class="btn" data-variant="outline" data-tooltip-trigger="tip-right">Right</button>
+    <div class="tooltip" id="tip-right" data-side="right" popover="hint" role="tooltip">Right tooltip</div>
+
+    <button class="btn" data-variant="outline" data-tooltip-trigger="tip-start">Start</button>
+    <div class="tooltip" id="tip-start" data-align="start" popover="hint" role="tooltip">Start aligned</div>
+
+    <button class="btn" data-variant="outline" data-tooltip-trigger="tip-end">End</button>
+    <div class="tooltip" id="tip-end" data-align="end" popover="hint" role="tooltip">End aligned</div>
+
+    <!-- tall spacer so the page can scroll (scroll-dismiss test) -->
+    <div style="height:300vh;"></div>
+
+    <script type="module" src="/dist/components/tooltip/tooltip.js"></script>
+  </body>
+</html>

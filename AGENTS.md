@@ -1,5 +1,15 @@
 # defuss-shadcn — Maintainer Instructions
 
+Scratch space: throwaway scripts, probes and scaffolds go in the repo-local
+`tmp/` (gitignored) — never `/tmp` or other machine-specific locations. This
+keeps everything relative to the repo root (see the `portable paths` verify
+check) and inspectable: `bun tmp/<script>.ts` from the repo root.
+
+Long-running commands: always run e2e tests, screenshot generation, builds and
+browser tooling with a **timeout** (execute_command's `timeout` parameter, or
+`--timeout`/`PAGE_TIMEOUT_MS` inside the scripts). A stalled Chromium session
+must surface as a failure with output, never as an agent hanging forever.
+
 You are working on the **defuss-shadcn** design system repo.
 The consumer-facing system lives in `dist/` — **it is generated**: edit sources in
 `src/` (`bun run build` compiles `.ts` → `.js` and copies everything else 1:1).

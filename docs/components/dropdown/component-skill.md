@@ -139,6 +139,18 @@ For checkbox/radio items in the menu, use `aria-checked`:
 
 ---
 
+## States
+
+Declared states: `default` (closed) · `open` (shown via native showPopover(), first item highlighted).
+
+```js
+document.querySelector('#my-menu').api.setState('open');
+document.querySelector('#my-menu').api.getState(); // { name: 'open', config: {} }
+```
+
+The api is bound per menu element; the registry global is
+`_defussShadcn.dropdownApi` / `_defussShadcn.dropdownStates`.
+
 ## Notes
 
 - Always use `popover` attribute for the menu — it renders in the top layer and avoids overflow clipping

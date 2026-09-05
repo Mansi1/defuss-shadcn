@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>dropdown e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/button/button.css" />
+    <link rel="stylesheet" href="/dist/components/dropdown/dropdown.css" />
+  </head>
+  <body style="padding:12rem;">
+    <!-- mirrors doc demo 1: options menu (label, group, disabled, separator, destructive) -->
+    <button class="btn" data-variant="outline" data-dropdown-trigger="demo-dropdown" aria-haspopup="menu" aria-expanded="false">Open</button>
+    <div id="demo-dropdown" role="menu" popover class="dropdown-content" aria-label="Options menu" style="min-width:12rem;">
+      <div class="dropdown-label">My Account</div>
+      <div role="group" aria-label="Navigation">
+        <button role="menuitem" class="dropdown-item" tabindex="-1">Profile <span class="dropdown-shortcut">⇧⌘P</span></button>
+        <button role="menuitem" class="dropdown-item" tabindex="-1">Settings</button>
+        <button role="menuitem" class="dropdown-item" tabindex="-1" disabled>Upload</button>
+      </div>
+      <div class="dropdown-separator" role="separator"></div>
+      <div role="group" aria-label="Actions">
+        <button role="menuitem" class="dropdown-item" tabindex="-1">Export</button>
+        <button role="menuitem" class="dropdown-item" data-variant="destructive" tabindex="-1">Delete</button>
+      </div>
+    </div>
+
+    <!-- mirrors doc demo 2: checkbox + radio items -->
+    <button class="btn" data-variant="outline" data-dropdown-trigger="demo-checks" aria-haspopup="menu" aria-expanded="false">View</button>
+    <div id="demo-checks" role="menu" popover class="dropdown-content" aria-label="View options" style="min-width:11rem;">
+      <button role="menuitemcheckbox" aria-checked="true" class="dropdown-item" tabindex="-1">
+        <span class="dropdown-check" aria-hidden="true"></span> Status Bar
+      </button>
+      <div role="group" aria-label="Cursor style">
+        <button role="menuitemradio" aria-checked="true" class="dropdown-item" tabindex="-1">Default</button>
+        <button role="menuitemradio" aria-checked="false" class="dropdown-item" tabindex="-1">Text</button>
+      </div>
+    </div>
+
+    <script type="module" src="/dist/components/dropdown/dropdown.js"></script>
+  </body>
+</html>

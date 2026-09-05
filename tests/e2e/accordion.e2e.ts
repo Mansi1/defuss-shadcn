@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { chromium } from 'playwright';
-import { startServer } from './server.mjs';
+import { chromium, type Page } from 'playwright';
+import { startServer } from './server.ts';
 
 /**
  * Why: E2E smoke test for the shipped accordion component. Loads the fixture
@@ -14,27 +14,29 @@ const server = startServer();
 const browser = await chromium.launch();
 
 /** Polls the open[] flags of an accordion's items until they match `expected`. */
-async function expectOpen(page, id, expected, label) {
-  let actual;
+async function expectOpen(page: Page, id: string, expected: boolean[], label: string): Promise<void> {
+  let actual: boolean[] = [];
   for (let i = 0; i < 100; i++) {
-    actual = await page.$$eval(`#${id} .accordion-item`, (els) => els.map((el) => el.open));
+    // selector targets <details class="accordion-item"> — Playwright can't infer
+    // that from the string, so annotate for `.open`
+    actual = await page.$$eval(`#${id} .accordion-item`, (els: HTMLDetailsElement[]) => els.map((el) => el.open));
     if (actual.join(',') === expected.join(',')) return;
     await page.waitForTimeout(20);
   }
   assert.fail(`${label}: #${id} expected [${expected}] but got [${actual}]`);
 }
 
-const clickItem = (page, id, n) =>
+const clickItem = (page: Page, id: string, n: number) =>
   page.click(`#${id} .accordion-item[data-item="${n}"] > summary`);
 
 let failures = 0;
-async function check(label, fn) {
+async function check(label: string, fn: () => Promise<void>): Promise<void> {
   try {
     await fn();
     console.log(`  ✓ ${label}`);
   } catch (err) {
     failures++;
-    console.error(`  ✗ ${label}\n    ${err.message}`);
+    console.error(`  ✗ ${label}\n    ${err instanceof Error ? err.message : err}`);
   }
 }
 
@@ -113,11 +115,11 @@ try {
   });
 
   // -- State API (AGENTS.md "State API"): agents drive states by name --------
-  const setState = (id, state) =>
-    page.$eval(`#${id}`, (el, s) => el.api.setState(s), state);
+  const setState = (id: string, state: string) =>
+    page.$eval(`#${id}`, (el, s) => (el as HTMLElement).api!.setState(s), state);
 
   await check('state API: default state reported for bound instances', async () => {
-    const state = await page.$eval('#single', (el) => el.api.getState());
+    const state = await page.$eval('#single', (el) => (el as HTMLElement).api!.getState());
     assert.equal(state.name, 'default');
     assert.deepEqual(state.config, {});
   });
@@ -125,7 +127,7 @@ try {
   await check('state API: setState("all-open") opens every item', async () => {
     await setState('single', 'all-open');
     await expectOpen(page, 'single', [true, true, true], 'all-open');
-    const state = await page.$eval('#single', (el) => el.api.getState());
+    const state = await page.$eval('#single', (el) => (el as HTMLElement).api!.getState());
     assert.equal(state.name, 'all-open');
   });
 
@@ -137,17 +139,17 @@ try {
   await check('state API: setState("default") restores the authored markup', async () => {
     await setState('single', 'default');
     await expectOpen(page, 'single', [true, false, false], 'back to default');
-    const state = await page.$eval('#single', (el) => el.api.getState());
+    const state = await page.$eval('#single', (el) => (el as HTMLElement).api!.getState());
     assert.equal(state.name, 'default');
   });
 
   await check('state API: unknown state names throw', async () => {
     const err = await page.evaluate(() => {
       try {
-        document.querySelector('#single').api.setState('nope');
+        (document.querySelector('#single') as HTMLElement).api!.setState('nope');
         return null;
       } catch (e) {
-        return e.message;
+        return (e as Error).message;
       }
     });
     assert.ok(err && err.includes('unknown state'), `expected throw, got ${err}`);
@@ -155,7 +157,7 @@ try {
 
   await check('state API: per-instance isolation (sibling unaffected)', async () => {
     // read the sibling first — earlier tests clicked it, its pattern is whatever it is
-    const before = await page.$$eval('#collapsible .accordion-item', (els) => els.map((el) => el.open));
+    const before = await page.$$eval('#collapsible .accordion-item', (els: HTMLDetailsElement[]) => els.map((el) => el.open));
     await setState('single', 'all-open');
     await expectOpen(page, 'single', [true, true, true], 'single all-open');
     await expectOpen(page, 'collapsible', before, 'collapsible untouched');

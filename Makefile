@@ -23,7 +23,7 @@ test-run: ## Vitest browser-mode UI tests (single run)
 coverage: ## Vitest UI tests with coverage report
 	bun run test:coverage
 
-e2e: ## Component E2E smoke tests (tests/e2e/*.e2e.mjs)
+e2e: ## Component E2E smoke tests (tests/e2e/*.e2e.ts)
 	bun run e2e
 
 lint: ## Lint src/, tests/ and scripts/ with oxlint

@@ -65,12 +65,12 @@ check(
 // surface (incl. State API states) — writing them before the source is
 // refactored means rewriting the test afterwards. Source first, then e2e.
 const missingE2e = componentDirs
-  .filter((c) => !existsSync(join(E2E, `${c}.e2e.mjs`)))
-  .map((c) => `tests/e2e/${c}.e2e.mjs missing`);
+  .filter((c) => !existsSync(join(E2E, `${c}.e2e.ts`)))
+  .map((c) => `tests/e2e/${c}.e2e.ts missing`);
 check(
   'e2e smoke tests',
   missingE2e,
-  'per component: 1) refactor source to State API + docs/skill (see "state API" warning), 2) THEN add fixture + test per tests/e2e/accordion.e2e.{mjs,fixture.html} template, 3) `bun run e2e`',
+  'per component: 1) refactor source to State API + docs/skill (see "state API" warning), 2) THEN add fixture + test per tests/e2e/accordion.e2e.{ts,fixture.html} template, 3) `bun run e2e`',
   true,
 );
 
@@ -335,8 +335,8 @@ for (const c of componentDirs) {
   const skill = existsSync(join(COMPS, c, 'component-skill.md'))
     ? readFileSync(join(COMPS, c, 'component-skill.md'), 'utf8')
     : '';
-  const e2e = existsSync(join(ROOT, 'tests', 'e2e', `${c}.e2e.mjs`))
-    ? readFileSync(join(ROOT, 'tests', 'e2e', `${c}.e2e.mjs`), 'utf8')
+  const e2e = existsSync(join(ROOT, 'tests', 'e2e', `${c}.e2e.ts`))
+    ? readFileSync(join(ROOT, 'tests', 'e2e', `${c}.e2e.ts`), 'utf8')
     : '';
 
   for (const s of states) {
@@ -345,7 +345,7 @@ for (const c of componentDirs) {
     }
     if (!doc.includes(`<code>${s}</code>`)) coverageProblems.push(`${c}: state "${s}" not documented in ${c}.html (<code>${s}</code>)`);
     if (!skill.includes(s)) coverageProblems.push(`${c}: state "${s}" not listed in component-skill.md`);
-    if (!e2e.includes(`'${s}'`)) coverageProblems.push(`${c}: state "${s}" not asserted in ${c}.e2e.mjs`);
+    if (!e2e.includes(`'${s}'`)) coverageProblems.push(`${c}: state "${s}" not asserted in ${c}.e2e.ts`);
   }
 }
 check(

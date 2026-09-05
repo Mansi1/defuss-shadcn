@@ -49,12 +49,12 @@ defuss-shadcn/
 │   ├── push.sh                        ← commit + push dev → main (non-release)
 │   └── deploy.sh                      ← release: version bump, changelog, tag, GitHub release
 ├── tests/                             ← UI tests (Vitest browser mode + Playwright)
-│   ├── helpers.js                     ← loads real doc pages in a same-origin iframe
-│   ├── ui.test.js                     ← end-to-end tests of the actual site UI
+│   ├── helpers.ts                     ← loads real doc pages in a same-origin iframe
+│   ├── ui.test.ts                     ← end-to-end tests of the actual site UI
 │   └── e2e/                           ← per-component smoke tests (plain Playwright)
-│       ├── run.mjs                    ← `bun run e2e` runner: every *.e2e.mjs file
-│       ├── server.mjs                 ← Bun static server exposing /dist and /tests/e2e
-│       └── accordion.e2e-{fixture.html,mjs}  ← fixture + test for one component
+│       ├── run.ts                    ← `bun run e2e` runner: every *.e2e.ts file
+│       ├── server.ts                 ← Bun static server exposing /dist and /tests/e2e
+│       └── accordion.e2e-{fixture.html,ts}  ← fixture + test for one component
 ├── vitest.config.ts                   ← browser-mode test config (root = repo root)
 ├── Makefile                           ← setup / dev / test / e2e / build shortcuts (wrappers for bun scripts)
 │
@@ -278,7 +278,7 @@ document.querySelector('#x').api.getState(); // → { name: 'open', config: { �
    - **Screenshots**: one PNG per state per mode (light + dark), default state
      as `{name}.png` from the first `.preview`
    - **Skill**: the state name appears in the `## States` section
-   - **E2E**: the state name string appears in `{name}.e2e.mjs` (a
+   - **E2E**: the state name string appears in `{name}.e2e.ts` (a
      `setState(name)` assertion)
    Adding a state without all four fails the build.
 
@@ -663,14 +663,14 @@ since `bun run build` runs `verify` before screenshots could be refreshed).
 First run needs `make setup` (or `bunx playwright install`).
 
 Tests load the real pages from `dist/documentation/` inside a **same-origin iframe**
-(`openDocPage()` in `tests/helpers.js`) — Vitest browser mode has no `page.goto()`.
+(`openDocPage()` in `tests/helpers.ts`) — Vitest browser mode has no `page.goto()`.
 Interactions go through `userEvent.click()` on elements queried from the iframe's
 `document` (trusted Playwright input); state is asserted by reading that same
 same-origin `document` directly. `frame.getBy*()` locators work too, but Vitest's
 ARIA-tree queries are slow/flaky on these very large doc pages, so prefer
 `doc.querySelector` + `expect` for assertions.
 
-When adding a component, add at least one interaction test in `tests/ui.test.js`
+When adding a component, add at least one interaction test in `tests/ui.test.ts`
 covering its JS behavior (see the dialog/accordion tests as templates).
 
 ### Component E2E smoke tests (`bun run e2e`)
@@ -682,14 +682,14 @@ Per-component smoke tests live in `tests/e2e/` and run with **plain Playwright**
   component skill documents (all variants/sizes/states/compositions), linking the
   real files by absolute path (`/dist/theme/default-semantic-tokens.css`,
   `/dist/components/{name}/{name}.css` + `.js`). The fixture is served by
-  `server.mjs`, a static Bun server rooted at the repo root that exposes only
+  `server.ts`, a static Bun server rooted at the repo root that exposes only
   `/dist/` and `/tests/e2e/`.
-- `{name}.e2e.mjs` — a standalone script (exits non-zero on failure) that launches
+- `{name}.e2e.ts` — a standalone script (exits non-zero on failure) that launches
   Chromium, serves the fixture, and asserts behavior: init markers, initial state,
   applied CSS (via computed styles), each interaction, and keyboard behavior.
-  `accordion.e2e.mjs` is the reference template.
+  `accordion.e2e.ts` is the reference template.
 
-`tests/e2e/run.mjs` globs and runs every `*.e2e.mjs` in isolated child processes.
+`tests/e2e/run.ts` globs and runs every `*.e2e.ts` in isolated child processes.
 When adding a component, add both files (see the accordion pair as the template).
 
 ### Migration order (legacy components)
@@ -701,7 +701,7 @@ e2e test**, never the other way round:
 1. refactor `{name}.ts` to the State API (AGENTS.md "State API"), update the
    skill's `## States` + doc page (`<code>` per state + `data-state-demo` anchor),
    run `bun run screenshots`, remove the name from `STATE_API_LEGACY` — commit
-2. then write `{name}.e2e-fixture.html` + `{name}.e2e.mjs` covering the now-final
+2. then write `{name}.e2e-fixture.html` + `{name}.e2e.ts` covering the now-final
    surface (every variant/size/state) — commit
 
 The fixture encodes the component's declared surface; writing it before the

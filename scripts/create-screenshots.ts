@@ -37,7 +37,7 @@ const CONCURRENCY = 8;
 /** Hard ceiling per page so a slow network/CDN can never hang the run. */
 const PAGE_TIMEOUT_MS = 20_000;
 
-/** Static server exposing only /dist (same allowlist idea as tests/e2e/server.mjs). */
+/** Static server exposing only /dist (same allowlist idea as tests/e2e/server.ts). */
 function serveDist() {
   const MIME: Record<string, string> = {
     '.html': 'text/html; charset=utf-8',

@@ -15,7 +15,7 @@ const POLL_MS = 50;
 /** Default timeout for iframe page loads (CDN scripts included). */
 const LOAD_TIMEOUT_MS = 15000;
 
-export async function waitFor(predicate, label, timeout = 5000) {
+export async function waitFor(predicate: () => unknown, label: string, timeout = 5000): Promise<void> {
   const start = Date.now();
   while (!predicate()) {
     if (Date.now() - start > timeout) throw new Error(`Timed out waiting for ${label}`);
@@ -28,7 +28,11 @@ export async function waitFor(predicate, label, timeout = 5000) {
  * same-origin iframe and resolves once it fully loaded (module scripts ran).
  * Returns `frame` for interactions and `doc` for direct state assertions.
  */
-export async function openDocPage(name) {
+export async function openDocPage(name: string): Promise<{
+  el: HTMLIFrameElement;
+  frame: ReturnType<typeof page.frameLocator>;
+  doc: Document;
+}> {
   document.body.innerHTML = ''; // ensure only one iframe at a time
   const el = document.createElement('iframe');
   el.setAttribute(
@@ -48,7 +52,7 @@ export async function openDocPage(name) {
     LOAD_TIMEOUT_MS,
   );
   // same-origin: contentWindow survives navigation, keeps a live handle
-  const contentWindow = el.contentWindow;
+  const contentWindow = el.contentWindow as Window;
   return { el, frame: page.frameLocator(page.elementLocator(el)), doc: contentWindow.document };
 }
 
@@ -58,7 +62,7 @@ export async function openDocPage(name) {
  * raw Element, so CSS-selected nodes from `doc` can still be clicked with
  * real, trusted Playwright input.
  */
-export async function clickSelector(doc, css) {
+export async function clickSelector(doc: Document, css: string): Promise<void> {
   await waitFor(() => doc.querySelector(css), `element "${css}" to exist`);
-  await userEvent.click(doc.querySelector(css));
+  await userEvent.click(doc.querySelector(css) as Element);
 }

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { chromium } from 'playwright';
-import { startServer } from './server.mjs';
+import { chromium, type Page } from 'playwright';
+import { startServer } from './server.ts';
 
 /**
  * Why: E2E smoke test for the shipped dialog component. Loads the fixture
@@ -14,16 +14,18 @@ const FIXTURE = '/tests/e2e/dialog.e2e-fixture.html';
 const server = startServer();
 const browser = await chromium.launch();
 
-const isOpen = (page) => page.$eval('#demo-dialog', (el) => el.open);
+const isOpen = (page: Page) => page.$eval('#demo-dialog', (el) => (el as HTMLDialogElement).open);
+const setState = (page: Page, state: string) =>
+  page.$eval('#demo-dialog', (el, s) => (el as HTMLElement).api!.setState(s), state);
 
 let failures = 0;
-async function check(label, fn) {
+async function check(label: string, fn: () => Promise<void>): Promise<void> {
   try {
     await fn();
     console.log(`  ✓ ${label}`);
   } catch (err) {
     failures++;
-    console.error(`  ✗ ${label}\n    ${err.message}`);
+    console.error(`  ✗ ${label}\n    ${err instanceof Error ? err.message : err}`);
   }
 }
 
@@ -67,30 +69,30 @@ try {
 
   // -- State API (AGENTS.md "State API") -------------------------------------
   await check('state API: default state reported for bound dialog', async () => {
-    const state = await page.$eval('#demo-dialog', (el) => el.api.getState());
+    const state = await page.$eval('#demo-dialog', (el) => (el as HTMLElement).api!.getState());
     assert.equal(state.name, 'default');
     assert.equal(await isOpen(page), false, "'default' means closed");
   });
 
   await check("state API: setState('open') shows the dialog", async () => {
-    await page.$eval('#demo-dialog', (el) => el.api.setState('open'));
+    await setState(page, 'open');
     assert.equal(await isOpen(page), true, 'open state must show the modal');
-    const state = await page.$eval('#demo-dialog', (el) => el.api.getState());
+    const state = await page.$eval('#demo-dialog', (el) => (el as HTMLElement).api!.getState());
     assert.equal(state.name, 'open');
   });
 
   await check("state API: setState('default') closes it again", async () => {
-    await page.$eval('#demo-dialog', (el) => el.api.setState('default'));
+    await setState(page, 'default');
     assert.equal(await isOpen(page), false, 'back to default state = closed');
   });
 
   await check('state API: unknown state names throw', async () => {
     const err = await page.evaluate(() => {
       try {
-        document.querySelector('#demo-dialog').api.setState('nope');
+        (document.querySelector('#demo-dialog') as HTMLElement).api!.setState('nope');
         return null;
       } catch (e) {
-        return e.message;
+        return (e as Error).message;
       }
     });
     assert.ok(err && err.includes('unknown state'), `expected throw, got ${err}`);
@@ -108,14 +110,14 @@ try {
   });
 
   await check('Escape closes (native dialog behavior preserved)', async () => {
-    await page.$eval('#demo-dialog', (el) => el.api.setState('open'));
+    await setState(page, 'open');
     await page.keyboard.press('Escape');
     assert.equal(await isOpen(page), false, 'native Escape-to-close must still work');
   });
 
   // -- Sizes (documented in dialog.html + skill: sm/lg/xl/full) --------------
   // max-width from dialog.css; width is calc(100vw - 2rem) so the cap binds.
-  const sizeExpect = { 'size-sm': 24, 'size-lg': 32, 'size-xl': 40, 'size-full': 0 }; // rem; 0 = no cap below viewport
+  const sizeExpect: Record<string, number> = { 'size-sm': 24, 'size-lg': 32, 'size-xl': 40, 'size-full': 0 }; // rem; 0 = no cap below viewport
   await check('data-size variants apply documented max-widths', async () => {
     for (const [id, rem] of Object.entries(sizeExpect)) {
       const px = await page.$eval(`#${id}`, (el) => parseFloat(getComputedStyle(el).maxWidth));

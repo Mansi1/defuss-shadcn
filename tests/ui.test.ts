@@ -1,11 +1,14 @@
 import { expect, test } from 'vitest';
-import { clickSelector, openDocPage, waitFor } from './helpers.js';
+import { clickSelector, openDocPage, waitFor } from './helpers.ts';
 
 /**
  * Why: end-to-end checks that the real doc-site UI — web components, SPA
  * router, and component interaction JS — actually work in a real browser
  * (Chromium via Playwright), loading the genuine pages from dist/.
  */
+
+/** `<site-header>`/`<site-nav>` are custom elements — not in the DOM lib types. */
+type HTMLElementOrNull = HTMLElement | null;
 
 test('site shell renders header and sidebar from layout.js web components', async () => {
   const { doc } = await openDocPage('index.html');
@@ -14,9 +17,9 @@ test('site shell renders header and sidebar from layout.js web components', asyn
   await waitFor(() => doc.querySelector('site-header button#theme-toggle'), 'site-header to render');
   // checkVisibility() runs in the iframe's document, since Vitest's ARIA-based
   // expect.element doesn't traverse into child frames reliably.
-  const navLink = doc.querySelector('site-nav a[href="accordion.html"]');
+  const navLink: HTMLElementOrNull = doc.querySelector('site-nav a[href="accordion.html"]');
   expect(navLink, 'sidebar link to Accordion').toBeTruthy();
-  expect(navLink.checkVisibility({ opacityProperty: true, visibilityProperty: true })).toBe(true);
+  expect(navLink!.checkVisibility({ opacityProperty: true, visibilityProperty: true })).toBe(true);
 });
 
 test('SPA router swaps <main> content on nav click without reloading', async () => {
@@ -26,7 +29,7 @@ test('SPA router swaps <main> content on nav click without reloading', async () 
   await clickSelector(doc, 'site-nav a[href="tabs.html"]');
 
   // the router replaces <main> innerHTML — new page shows its own <h1>
-  await waitFor(() => doc.querySelector('main h1')?.textContent.includes('Tabs'), 'tabs page content');
+  await waitFor(() => doc.querySelector('main h1')?.textContent?.includes('Tabs'), 'tabs page content');
   // no full reload: the header web component instance is still the same node
   expect(doc.querySelector('site-header button#theme-toggle')).toBeTruthy();
 });
@@ -47,7 +50,7 @@ test('dialog component: trigger opens native <dialog>, close button closes it', 
 
   await expect.element(frame.getByRole('button', { name: 'Edit Profile' })).toBeInTheDocument();
 
-  const dialog = doc.getElementById('demo-dialog');
+  const dialog = doc.getElementById('demo-dialog') as HTMLDialogElement;
   expect(dialog.open).toBe(false);
 
   await clickSelector(doc, '[data-dialog-trigger="demo-dialog"]');
@@ -66,8 +69,8 @@ test('dialog component: trigger opens native <dialog>, close button closes it', 
 test('accordion single-open: opening one item closes its siblings', async () => {
   const { doc } = await openDocPage('accordion.html');
 
-  const single = doc.querySelector('.accordion[data-type="single"]');
-  const items = [...single.querySelectorAll('.accordion-item')];
+  const single = doc.querySelector('.accordion[data-type="single"]') as HTMLElement;
+  const items = [...single.querySelectorAll('.accordion-item')] as HTMLDetailsElement[];
   expect(items.length).toBe(3);
 
   // first item is open by default; click the second item's summary

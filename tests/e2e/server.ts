@@ -11,7 +11,7 @@ import { resolve } from 'node:path';
 /** Repo root — server serves everything under it. */
 const ROOT = resolve(import.meta.dirname, '../..');
 
-const MIME = {
+const MIME: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
@@ -22,7 +22,7 @@ const MIME = {
 };
 
 /** Starts the fixture server on a random port; resolves to { url, stop }. */
-export function startServer() {
+export function startServer(): { url: string; stop: () => void } {
   const server = serve({
     port: 0,
     async fetch(req) {

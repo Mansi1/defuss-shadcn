@@ -2,18 +2,18 @@ import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 /**
- * Why: `bun run e2e` runs every tests/e2e/*.e2e.mjs as an isolated child
+ * Why: `bun run e2e` runs every tests/e2e/*.e2e.ts as an isolated child
  * process (one crash must not hide the other components' results). Each file
  * is a standalone smoke test: it exits 0 on pass, non-zero on failure.
  */
 
 const dir = import.meta.dirname;
 const files = readdirSync(dir)
-  .filter((f) => f.endsWith('.e2e.mjs'))
+  .filter((f) => f.endsWith('.e2e.ts'))
   .sort();
 
 if (files.length === 0) {
-  console.error('No *.e2e.mjs tests found in tests/e2e/');
+  console.error('No *.e2e.ts tests found in tests/e2e/');
   process.exit(1);
 }
 

@@ -145,7 +145,7 @@ and the exact fix command.
 
 Tests exist so agents (and humans) can verify the implementation end-to-end instead of trusting it.
 
-UI tests run in a real browser (Chromium via Playwright) with **Vitest browser mode** — no mocking. The suite in [`tests/ui.test.js`](tests/ui.test.js) loads the actual documentation pages from `dist/documentation/` in a same-origin iframe and drives them end-to-end: web-component shell rendering, the SPA router, dark-mode toggle, dialog open/close/focus-return, and the single-open accordion.
+UI tests run in a real browser (Chromium via Playwright) with **Vitest browser mode** — no mocking. The suite in [`tests/ui.test.ts`](tests/ui.test.ts) loads the actual documentation pages from `dist/documentation/` in a same-origin iframe and drives them end-to-end: web-component shell rendering, the SPA router, dark-mode toggle, dialog open/close/focus-return, and the single-open accordion.
 
 ```bash
 bun run test         # watch mode

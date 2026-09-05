@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Combobox component — searchable dropdown with keyboard navigation.">
+  <meta property="og:title" content="Combobox — defuss-shadcn">
+  <meta property="og:description" content="Combobox component — searchable dropdown with keyboard navigation.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kyr0.github.io/defuss-shadcn/documentation/combobox.html">
+  <meta property="og:site_name" content="defuss-shadcn">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Combobox — defuss-shadcn">
+  <meta name="twitter:description" content="Combobox component — searchable dropdown with keyboard navigation.">
+  <title>Combobox — defuss-shadcn</title>
+  <script src="js/themes.js"></script>
+  <script src="js/theme-switcher.js"></script>
+  <script src="js/layout.js"></script>
+  <link rel="stylesheet" href="../theme/default-semantic-tokens.css">
+  <link rel="stylesheet" href="css/docs-theme.css">
+  <link rel="stylesheet" href="css/docs-utilities.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js" defer integrity="sha384-H+hy9ULve6xfxRkWIh/YOtvDdpXgV2fmAGQkIDTxIgZwNoaoBal14Di2YTMR6MzR" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../components/button/button.css">
+  <link rel="stylesheet" href="../components/card/card.css">
+  <link rel="stylesheet" href="../components/dialog/dialog.css">
+  <link rel="stylesheet" href="../components/badge/badge.css">
+  <link rel="stylesheet" href="../components/input/input.css">
+  <link rel="stylesheet" href="../components/accordion/accordion.css">
+  <link rel="stylesheet" href="../components/tabs/tabs.css">
+  <link rel="stylesheet" href="../components/dropdown/dropdown.css">
+  <link rel="stylesheet" href="../components/toast/toast.css">
+  <link rel="stylesheet" href="../components/combobox/combobox.css">
+  <link rel="stylesheet" href="../components/sheet/sheet.css">
+  <link rel="stylesheet" href="../components/toggle/toggle.css">
+  <link rel="stylesheet" href="../components/icon/icon.css">
+  <link rel="stylesheet" href="../components/typography/typography.css">
+  <link rel="stylesheet" href="../components/separator/separator.css">
+  <link rel="stylesheet" href="../components/label/label.css">
+  <link rel="stylesheet" href="../components/toggle-group/toggle-group.css">
+  <link rel="stylesheet" href="../components/button-group/button-group.css">
+  <link rel="stylesheet" href="../components/toolbar/toolbar.css">
+  <link rel="stylesheet" href="../components/textarea/textarea.css">
+  <link rel="stylesheet" href="../components/checkbox/checkbox.css">
+  <link rel="stylesheet" href="../components/radio/radio.css">
+  <link rel="stylesheet" href="../components/switch/switch.css">
+  <link rel="stylesheet" href="../components/slider/slider.css">
+  <link rel="stylesheet" href="../components/select/select.css">
+  <link rel="stylesheet" href="../components/number-input/number-input.css">
+  <link rel="stylesheet" href="../components/file-input/file-input.css">
+  <link rel="stylesheet" href="../components/color-picker/color-picker.css">
+  <link rel="stylesheet" href="../components/date-picker/date-picker.css">
+  <link rel="stylesheet" href="../components/form/form.css">
+  <link rel="stylesheet" href="../components/avatar/avatar.css">
+  <link rel="stylesheet" href="../components/image/image.css">
+  <link rel="stylesheet" href="../components/statistic/statistic.css">
+  <link rel="stylesheet" href="../components/table/table.css">
+  <link rel="stylesheet" href="../components/collapsible/collapsible.css">
+  <link rel="stylesheet" href="../components/timeline/timeline.css">
+  <link rel="stylesheet" href="../components/tree-view/tree-view.css">
+  <link rel="stylesheet" href="../components/calendar/calendar.css">
+  <link rel="stylesheet" href="../components/spinner/spinner.css">
+  <link rel="stylesheet" href="../components/skeleton/skeleton.css">
+  <link rel="stylesheet" href="../components/progress/progress.css">
+  <link rel="stylesheet" href="../components/alert/alert.css">
+  <link rel="stylesheet" href="../components/alert-dialog/alert-dialog.css">
+  <link rel="stylesheet" href="../components/popover/popover.css">
+  <link rel="stylesheet" href="../components/tooltip/tooltip.css">
+  <link rel="stylesheet" href="../components/context-menu/context-menu.css">
+  <link rel="stylesheet" href="../components/command/command.css">
+  <link rel="stylesheet" href="../components/breadcrumb/breadcrumb.css">
+  <link rel="stylesheet" href="../components/pagination/pagination.css">
+  <link rel="stylesheet" href="../components/steps/steps.css">
+  <link rel="stylesheet" href="../components/navigation-menu/navigation-menu.css">
+  <link rel="stylesheet" href="../components/scroll-area/scroll-area.css">
+  <link rel="stylesheet" href="../components/carousel/carousel.css">
+  <link rel="stylesheet" href="../components/sidebar/sidebar.css">
+  <link rel="stylesheet" href="../components/sortable/sortable.css">
+</head>
+<body>
+  <site-header></site-header>
+
+  <div class="flex" style="margin-top: 3.5rem; min-height: calc(100vh - 3.5rem);">
+    <site-nav></site-nav>
+
+    <main style="flex: 1; min-width: 0; max-width: 44rem; padding: 2rem 3.5rem 8rem;">
+      <div class="page-header">
+        <div class="flex items-baseline justify-between mb-1">
+          <p class="text-sm text-muted-foreground" style="font-family:var(--font-mono);">defuss-shadcn / combobox</p>
+          <div style="display:flex;align-items:baseline;gap:0.375rem;"><span class="text-xs text-muted-foreground" style="font-family:var(--font-mono);white-space:nowrap;">Built with:</span> <a href="#source-css" class="badge built-with-pill" data-variant="outline">CSS</a> <a href="#source-js" class="badge built-with-pill" data-variant="outline">JS</a></div>
+        </div>
+        <h1 style="font-family:var(--font-display);font-size:2.5rem;font-weight:400;letter-spacing:-0.035em;margin:0 0 0.75rem;">Combobox</h1>
+        <p class="text-muted-foreground leading-relaxed mb-6">
+          A searchable select triggered by an outline button. Opens a popover with a search input and a scrollable list of options.
+          Keyboard navigable via <code>aria-activedescendant</code>. Uses the <code>popover</code> API for top-layer rendering.
+        </p>
+        <!-- Component Skill -->
+        <details style="margin-bottom:2rem;border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;">
+          <summary style="padding:0.875rem 1.25rem;background:var(--muted);cursor:pointer;font-size:0.8125rem;font-weight:600;font-family:var(--font-mono);color:var(--muted-foreground);list-style:none;display:flex;align-items:center;gap:0.5rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 200ms;"><path d="m9 18 6-6-6-6"/></svg>
+            Component Skill — <span data-spec-href="../components/combobox/component-skill.md" style="text-decoration:underline;text-underline-offset:3px;">components/combobox/component-skill.md</span>
+          </summary>
+          <div style="padding:1.5rem;font-size:0.875rem;line-height:1.85;">
+            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Native basis</p>
+            <p class="text-muted-foreground" style="margin:0 0 1.25rem;">Button trigger + <code>popover</code> popup containing a search input and <code>role=&quot;listbox&quot;</code>.</p>
+
+            <p style="margin:0 0 0.625rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Web Platform APIs</p>
+            <div style="display:flex;flex-wrap:wrap;gap:0.375rem;margin-bottom:1.25rem;">
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/Popover_API" target="_blank" rel="noopener" title="top-layer rendering and light-dismiss for the dropdown list" class="api-pill"><code>Popover API</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning" target="_blank" rel="noopener" title="positions the popover relative to the trigger without JS" class="api-pill"><code>CSS Anchor Positioning</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style" target="_blank" rel="noopener" title="entry animation starting values for popover appearance" class="api-pill"><code>@starting-style</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior" target="_blank" rel="noopener" title="prevents scroll chaining from the listbox to the page" class="api-pill"><code>overscroll-behavior</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://www.w3.org/WAI/ARIA/apg/patterns/combobox/" target="_blank" rel="noopener" title="keyboard navigation and screen reader contract" class="api-pill"><code>WAI-ARIA Combobox pattern</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+            </div>
+
+            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Classes</p>
+            <div style="display:flex;flex-wrap:wrap;gap:0.375rem;margin-bottom:1.25rem;">
+              <code>.combobox</code>
+              <code>.combobox-trigger</code>
+              <code>.combobox-value</code>
+              <code>.combobox-chevron</code>
+              <code>.combobox-content</code>
+              <code>.combobox-search</code>
+              <code>.combobox-search-icon</code>
+              <code>.combobox-search-input</code>
+              <code>.combobox-listbox</code>
+              <code>.combobox-item</code>
+              <code>.combobox-empty</code>
+              <code>.combobox-group-label</code>
+              <code>.combobox-separator</code>
+            </div>
+
+            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Data attributes</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>data-placeholder</code> — on <code>.combobox-value</code>; present when showing placeholder text, removed on selection</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>data-highlighted</code> — on <code>.combobox-item</code>; JS-managed, set on the currently keyboard-highlighted option</p>
+            <p class="text-muted-foreground" style="margin:0 0 1.25rem;">• <code>data-value</code> — on <code>.combobox-item</code>; the programmatic value of the option (used by JS, not CSS)</p>
+
+
+            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Keyboard</p>
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:0.25rem 1rem;margin-bottom:1.25rem;">
+              <code>Key</code><span class="text-muted-foreground">Behavior</span>
+              <code>ArrowDown</code><span class="text-muted-foreground">Highlight next item</span>
+              <code>ArrowUp</code><span class="text-muted-foreground">Highlight previous item</span>
+              <code>Home</code><span class="text-muted-foreground">Highlight first visible item</span>
+              <code>End</code><span class="text-muted-foreground">Highlight last visible item</span>
+              <code>Enter</code><span class="text-muted-foreground">Select highlighted item, close popup</span>
+              <code>Escape</code><span class="text-muted-foreground">Close popup, return focus to trigger</span>
+              <code>Tab</code><span class="text-muted-foreground">Close popup, move focus to next element</span>
+              <code>Typing</code><span class="text-muted-foreground">Filter items, auto-highlight first match</span>
+            </div>
+
+
+            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Notes</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• The trigger is a <code>.btn[data-variant=&quot;outline&quot;]</code> — styled by the button system</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• When the popover opens, focus moves to the search input inside</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• When the popover closes, focus returns to the trigger button</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Use <code>aria-activedescendant</code> to communicate the highlighted item to screen readers</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• The <code>popover</code> attribute enables top-layer rendering and light-dismiss</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• CSS anchor positioning places the popover below the trigger; no JS positioning needed</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• The popover animates in via <code>@starting-style</code> + <code>transition-behavior: allow-discrete</code></p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• The check icon for selected items uses a CSS <code>::before</code> pseudo-element</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Filter matching is case-insensitive and supports substring matching</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Group labels and separators auto-hide when their group has no visible items</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>overscroll-behavior: contain</code> prevents scroll chaining from the listbox</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>prefers-reduced-motion: reduce</code> disables all transitions</p>
+            <p class="text-muted-foreground" style="margin:0 0 0;">• <code>forced-colors: active</code> supports Windows High Contrast Mode</p>
+          </div>
+        </details>
+      </div>
+
+        <!-- --- Example 1: Basic Combobox --- -->
+          <p class="text-sm font-medium mb-2 mt-6">Basic Combobox</p>
+          <p class="text-xs text-muted-foreground mb-3">An outline button opens a popover with a search field and selectable options. Click the trigger or use keyboard to interact.</p>
+
+          <div class="preview" style="min-height:20rem;align-items:flex-start;padding-top:2rem;">
+            <div class="combobox" style="width:14rem;">
+              <label class="label" id="cb-framework-label">Framework</label>
+              <button class="btn combobox-trigger" data-variant="outline"
+                      aria-haspopup="listbox"
+                      aria-expanded="false"
+                      aria-labelledby="cb-framework-label"
+                      aria-controls="cb-framework-popover">
+                <span class="combobox-value" data-placeholder="Select framework...">Select framework...</span>
+                <svg class="combobox-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+              </button>
+              <div id="cb-framework-popover" class="combobox-content" popover>
+                <div class="combobox-search">
+                  <svg class="combobox-search-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                  <input class="combobox-search-input" type="text" role="combobox" autocomplete="off" aria-expanded="true" aria-controls="cb-framework-listbox" aria-activedescendant="" aria-autocomplete="list" placeholder="Search...">
+                </div>
+                <div id="cb-framework-listbox" role="listbox" class="combobox-listbox" aria-label="Frameworks">
+                  <div class="combobox-empty" hidden>No results found.</div>
+                  <div role="option" id="cb-opt-next" class="combobox-item" data-value="nextjs" aria-selected="false">Next.js</div>
+                  <div role="option" id="cb-opt-svelte" class="combobox-item" data-value="sveltekit" aria-selected="false">SvelteKit</div>
+                  <div role="option" id="cb-opt-nuxt" class="combobox-item" data-value="nuxt" aria-selected="false">Nuxt</div>
+                  <div role="option" id="cb-opt-remix" class="combobox-item" data-value="remix" aria-selected="false">Remix</div>
+                  <div role="option" id="cb-opt-astro" class="combobox-item" data-value="astro" aria-selected="false">Astro</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copy
+            </button>
+            <pre><code class="language-markup">&lt;div class="combobox" style="width:14rem;"&gt;
+  &lt;label class="label" id="framework-label"&gt;Framework&lt;/label&gt;
+  &lt;button class="btn combobox-trigger" data-variant="outline"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-labelledby="framework-label"
+          aria-controls="framework-popover"&gt;
+    &lt;span class="combobox-value"
+          data-placeholder="Select framework..."&gt;
+      Select framework...
+    &lt;/span&gt;
+    &lt;svg class="combobox-chevron" aria-hidden="true"
+         width="16" height="16" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2"&gt;
+      &lt;path d="m7 15 5 5 5-5"/&gt;
+      &lt;path d="m7 9 5-5 5 5"/&gt;
+    &lt;/svg&gt;
+  &lt;/button&gt;
+  &lt;div id="framework-popover"
+       class="combobox-content" popover&gt;
+    &lt;div class="combobox-search"&gt;
+      &lt;svg class="combobox-search-icon" ...&gt;...&lt;/svg&gt;
+      &lt;input class="combobox-search-input"
+             type="text" role="combobox"
+             autocomplete="off"
+             aria-controls="framework-listbox"
+             aria-autocomplete="list"
+             placeholder="Search..."&gt;
+    &lt;/div&gt;
+    &lt;div id="framework-listbox"
+         role="listbox" class="combobox-listbox"&gt;
+      &lt;div class="combobox-empty" hidden&gt;
+        No results found.
+      &lt;/div&gt;
+      &lt;div role="option" class="combobox-item"
+           data-value="nextjs"&gt;Next.js&lt;/div&gt;
+      &lt;!-- more options... --&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+        <!-- --- Example 2: Grouped with Disabled Items --- -->
+          <p class="text-sm font-medium mb-2 mt-6">Grouped with Disabled Items</p>
+          <p class="text-xs text-muted-foreground mb-3">Combobox with option groups, visual separators, and a disabled option. Use <code>.combobox-group-label</code> for headings and <code>aria-disabled="true"</code> to disable individual items.</p>
+
+          <div class="preview" style="min-height:22rem;align-items:flex-start;padding-top:2rem;">
+            <div class="combobox" style="width:14rem;">
+              <label class="label" id="cb-timezone-label">Timezone</label>
+              <button class="btn combobox-trigger" data-variant="outline"
+                      aria-haspopup="listbox"
+                      aria-expanded="false"
+                      aria-labelledby="cb-timezone-label"
+                      aria-controls="cb-timezone-popover">
+                <span class="combobox-value" data-placeholder="Select timezone...">Select timezone...</span>
+                <svg class="combobox-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+              </button>
+              <div id="cb-timezone-popover" class="combobox-content" popover>
+                <div class="combobox-search">
+                  <svg class="combobox-search-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                  <input class="combobox-search-input" type="text" role="combobox" autocomplete="off" aria-expanded="true" aria-controls="cb-timezone-listbox" aria-activedescendant="" aria-autocomplete="list" placeholder="Search...">
+                </div>
+                <div id="cb-timezone-listbox" role="listbox" class="combobox-listbox" aria-label="Timezones">
+                  <div class="combobox-empty" hidden>No results found.</div>
+                  <div class="combobox-group-label">North America</div>
+                  <div role="option" id="cb-tz-est" class="combobox-item" data-value="est" aria-selected="false">Eastern (EST)</div>
+                  <div role="option" id="cb-tz-cst" class="combobox-item" data-value="cst" aria-selected="false">Central (CST)</div>
+                  <div role="option" id="cb-tz-pst" class="combobox-item" data-value="pst" aria-selected="false">Pacific (PST)</div>
+                  <div class="combobox-separator"></div>
+                  <div class="combobox-group-label">Europe</div>
+                  <div role="option" id="cb-tz-gmt" class="combobox-item" data-value="gmt" aria-selected="false">GMT (London)</div>
+                  <div role="option" id="cb-tz-cet" class="combobox-item" data-value="cet" aria-selected="false">CET (Berlin)</div>
+                  <div role="option" id="cb-tz-eet" class="combobox-item" data-value="eet" aria-selected="false" aria-disabled="true">EET (Bucharest)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copy
+            </button>
+            <pre><code class="language-markup">&lt;!-- Groups use .combobox-group-label and .combobox-separator --&gt;
+&lt;div class="combobox-group-label"&gt;North America&lt;/div&gt;
+&lt;div role="option" class="combobox-item"
+     data-value="est"&gt;Eastern (EST)&lt;/div&gt;
+&lt;div class="combobox-separator"&gt;&lt;/div&gt;
+&lt;div class="combobox-group-label"&gt;Europe&lt;/div&gt;
+&lt;div role="option" class="combobox-item"
+     data-value="gmt"&gt;GMT (London)&lt;/div&gt;
+
+&lt;!-- Disabled option --&gt;
+&lt;div role="option" class="combobox-item"
+     aria-disabled="true"&gt;EET (Bucharest)&lt;/div&gt;</code></pre>
+          </div>
+
+        <!-- --- Example 3: Disabled Combobox --- -->
+          <p class="text-sm font-medium mb-2 mt-6">Disabled</p>
+          <p class="text-xs text-muted-foreground mb-3">Disable the trigger button to prevent interaction.</p>
+
+          <div class="preview" style="min-height:6rem;align-items:flex-start;padding-top:2rem;">
+            <div class="combobox" style="width:14rem;">
+              <label class="label" id="cb-disabled-label">Framework</label>
+              <button class="btn combobox-trigger" data-variant="outline" disabled
+                      aria-haspopup="listbox"
+                      aria-expanded="false"
+                      aria-labelledby="cb-disabled-label"
+                      aria-controls="cb-disabled-popover">
+                <span class="combobox-value" data-placeholder="Select framework...">Select framework...</span>
+                <svg class="combobox-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+              </button>
+              <div id="cb-disabled-popover" class="combobox-content" popover>
+                <div class="combobox-search">
+                  <svg class="combobox-search-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                  <input class="combobox-search-input" type="text" role="combobox" autocomplete="off" aria-expanded="true" aria-controls="cb-disabled-listbox" aria-activedescendant="" aria-autocomplete="list" placeholder="Search...">
+                </div>
+                <div id="cb-disabled-listbox" role="listbox" class="combobox-listbox" aria-label="Frameworks">
+                  <div class="combobox-empty" hidden>No results found.</div>
+                  <div role="option" id="cb-dis-next" class="combobox-item" data-value="nextjs" aria-selected="false">Next.js</div>
+                  <div role="option" id="cb-dis-svelte" class="combobox-item" data-value="sveltekit" aria-selected="false">SvelteKit</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copy
+            </button>
+            <pre><code class="language-markup">&lt;!-- Add disabled to the trigger button --&gt;
+&lt;button class="btn combobox-trigger"
+        data-variant="outline" disabled
+        aria-haspopup="listbox"
+        aria-expanded="false"&gt;
+  ...
+&lt;/button&gt;</code></pre>
+          </div>
+        <!-- -- CSS --------------------------------------- -->
+        <section style="margin-top:3rem;" id="source-css">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">CSS <a href="../components/combobox/combobox.css" target="_blank" style="font-size:0.75rem;font-weight:400;color:var(--muted-foreground);text-decoration:underline;text-underline-offset:3px;margin-left:0.5rem;">view file</a></h2>
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
+            <pre><code class="language-scss">/* -- Combobox component ---------------------------------------- */
+
+@layer components {
+  .combobox {
+    position: relative;
+  }
+
+  .combobox-trigger {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .combobox-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .combobox-value[data-placeholder] {
+    color: var(--muted-foreground);
+  }
+
+  .combobox-chevron {
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+    opacity: 0.5;
+  }
+
+  .combobox-content {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    padding: 0;
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+
+    /* -- Anchor positioning -- */
+    top: anchor(bottom);
+    left: anchor(left);
+    width: anchor-size(width);
+    margin-top: 4px;
+    position-try-fallbacks: flip-block;
+
+    /* -- Animation --------------------------------------------- */
+    opacity: 0;
+    transform: scale(0.96) translateY(-0.25rem);
+    transition: opacity 150ms ease, transform 150ms ease,
+                display 150ms allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @starting-style {
+    .combobox-content:popover-open {
+      opacity: 0;
+      transform: scale(0.96) translateY(-0.25rem);
+    }
+  }
+
+  .combobox-search {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .combobox-search-icon {
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+  }
+
+  .combobox-search-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+
+    &::placeholder { color: var(--muted-foreground); }
+  }
+
+  .combobox-listbox {
+    max-height: 16rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.25rem;
+  }
+
+  .combobox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.5rem;
+    border-radius: calc(var(--radius) * 0.6);
+    font-size: 0.875rem;
+    cursor: pointer;
+    outline: none;
+    transition: background 100ms;
+
+    &:hover, &[data-highlighted] {
+      background-color: var(--accent);
+      color: var(--accent-foreground);
+    }
+
+    &[aria-selected="true"]::before {
+      content: '';
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+      background-size: contain;
+      flex-shrink: 0;
+    }
+
+    &[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  .combobox-empty {
+    padding: 1.5rem 0.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  .combobox-group-label {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+  }
+
+  .combobox-separator {
+    height: 1px;
+    background: var(--border);
+    margin: 0.25rem -0.25rem;
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .combobox-content {
+      transition: none;
+    }
+    .combobox-item {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .combobox-content {
+      border-color: ButtonText;
+    }
+    .combobox-item {
+      &:hover, &[data-highlighted] {
+        forced-color-adjust: none;
+        background: Highlight;
+        color: HighlightText;
+      }
+    }
+  }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- -- JavaScript -------------------------------- -->
+        <section style="margin-top:3rem;" id="source-js">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">JavaScript <a href="../components/combobox/combobox.js" target="_blank" style="font-size:0.75rem;font-weight:400;color:var(--muted-foreground);text-decoration:underline;text-underline-offset:3px;margin-left:0.5rem;">view file</a></h2>
+          <p class="text-muted-foreground text-sm mb-4">Trigger opens/closes the popover. Search input filters the list. Arrow keys navigate, Enter selects, Escape closes. Focus moves to search input on open and back to trigger on close.</p>
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copy
+            </button>
+            <pre><code class="language-javascript">// -- Combobox -------------------------------------------------
+// Searchable select with keyboard navigation and popover positioning.
+
+function init() {
+  document.querySelectorAll('.combobox:not([data-init])').forEach((wrapper) => {
+    wrapper.dataset.init = '';
+    const trigger = wrapper.querySelector('.combobox-trigger');
+    const valueEl = wrapper.querySelector('.combobox-value');
+    const popover = wrapper.querySelector('.combobox-content');
+    const searchInput = wrapper.querySelector('.combobox-search-input');
+    const listbox = wrapper.querySelector('[role="listbox"]');
+    const empty = wrapper.querySelector('.combobox-empty');
+    if (!trigger || !popover || !searchInput || !listbox) return;
+
+    const allItems = Array.from(listbox.querySelectorAll('[role="option"]'));
+    let highlighted = -1;
+
+    // CSS anchor positioning - unique name per trigger-popover pair
+    const anchorId = `--combobox-${popover.id}`;
+    trigger.style.anchorName = anchorId;
+    popover.style.positionAnchor = anchorId;
+
+    const getVisibleItems = () => allItems.filter((item) => !item.hidden && item.getAttribute('aria-disabled') !== 'true');
+    const open = () => {
+      popover.showPopover();
+      trigger.setAttribute('aria-expanded', 'true');
+      searchInput.value = '';
+      filter('');
+      searchInput.focus();
+    };
+    const close = () => {
+      popover.hidePopover();
+      trigger.setAttribute('aria-expanded', 'false');
+      searchInput.setAttribute('aria-activedescendant', '');
+      clearHighlight();
+      trigger.focus();
+    };
+    const isOpen = () => popover.matches(':popover-open');
+    const filter = (query) => {
+      const q = query.toLowerCase(); let hasVisible = false;
+      allItems.forEach((item) => { const match = !q || item.textContent.trim().toLowerCase().includes(q); item.hidden = !match; if (match) hasVisible = true; });
+      listbox.querySelectorAll('.combobox-group-label').forEach((label) => {
+        let next = label.nextElementSibling; let groupHasVisible = false;
+        while (next && !next.classList.contains('combobox-group-label') && !next.classList.contains('combobox-separator')) {
+          if (next.getAttribute('role') === 'option' && !next.hidden) groupHasVisible = true; next = next.nextElementSibling;
+        }
+        label.hidden = !groupHasVisible;
+      });
+      listbox.querySelectorAll('.combobox-separator').forEach((sep) => { const prev = sep.previousElementSibling; const next = sep.nextElementSibling; sep.hidden = (prev && prev.hidden) || (next && next.hidden); });
+      if (empty) empty.hidden = hasVisible;
+    };
+    const clearHighlight = () => { allItems.forEach((item) => { delete item.dataset.highlighted; }); highlighted = -1; };
+    const doHighlight = (index) => {
+      const items = getVisibleItems(); clearHighlight();
+      if (index < 0 || index >= items.length) return;
+      highlighted = index; items[index].dataset.highlighted = '';
+      items[index].scrollIntoView({ block: 'nearest' });
+      searchInput.setAttribute('aria-activedescendant', items[index].id);
+    };
+    const selectItem = (item) => {
+      if (item.getAttribute('aria-disabled') === 'true') return;
+      allItems.forEach((i) => { i.setAttribute('aria-selected', 'false'); });
+      item.setAttribute('aria-selected', 'true');
+      if (valueEl) { valueEl.textContent = item.textContent.trim(); valueEl.removeAttribute('data-placeholder'); }
+      close();
+    };
+    trigger.addEventListener('click', () => { if (isOpen()) { close(); } else { open(); } });
+    searchInput.addEventListener('input', () => { filter(searchInput.value); doHighlight(0); });
+    searchInput.addEventListener('keydown', (e) => {
+      const items = getVisibleItems();
+      switch (e.key) {
+        case 'ArrowDown': e.preventDefault(); doHighlight(Math.min(highlighted + 1, items.length - 1)); break;
+        case 'ArrowUp': e.preventDefault(); doHighlight(Math.max(highlighted - 1, 0)); break;
+        case 'Home': e.preventDefault(); doHighlight(0); break;
+        case 'End': e.preventDefault(); doHighlight(items.length - 1); break;
+        case 'Enter': e.preventDefault(); if (highlighted >= 0 && items[highlighted]) selectItem(items[highlighted]); break;
+        case 'Escape': e.preventDefault(); close(); break;
+        case 'Tab': close(); break;
+      }
+    });
+    listbox.addEventListener('click', (e) => { const item = e.target.closest('[role="option"]'); if (item && !item.hidden && item.getAttribute('aria-disabled') !== 'true') selectItem(item); });
+    listbox.addEventListener('mousemove', (e) => { const item = e.target.closest('[role="option"]'); if (item && !item.hidden) { const items = getVisibleItems(); doHighlight(items.indexOf(item)); } });
+    popover.addEventListener('toggle', (e) => { if (e.newState === 'closed') { trigger.setAttribute('aria-expanded', 'false'); clearHighlight(); } });
+  });
+}
+
+init();
+new MutationObserver(init).observe(document, { childList: true, subtree: true });</code></pre>
+          </div>
+        </section>
+    </main>
+  </div>
+
+  <script src="js/site.js" defer></script>
+  <script type="module" src="js/shiki-highlight.js"></script>
+  <script type="module" src="../components/accordion/accordion.js"></script>
+  <script type="module" src="../components/combobox/combobox.js"></script>
+  <script type="module" src="../components/dialog/dialog.js"></script>
+  <script type="module" src="../components/dropdown/dropdown.js"></script>
+  <script type="module" src="../components/sheet/sheet.js"></script>
+  <script type="module" src="../components/tabs/tabs.js"></script>
+  <script type="module" src="../components/toast/toast.js"></script>
+  <script type="module" src="../components/toggle/toggle.js"></script>
+  <script type="module" src="../components/toggle-group/toggle-group.js"></script>
+  <script type="module" src="../components/toolbar/toolbar.js"></script>
+  <script type="module" src="../components/number-input/number-input.js"></script>
+  <script type="module" src="../components/color-picker/color-picker.js"></script>
+  <script type="module" src="../components/avatar/avatar.js"></script>
+  <script type="module" src="../components/image/image.js"></script>
+  <script type="module" src="../components/tree-view/tree-view.js"></script>
+  <script type="module" src="../components/calendar/calendar.js"></script>
+  <script type="module" src="../components/alert-dialog/alert-dialog.js"></script>
+    <script type="module" src="../components/popover/popover.js"></script>
+  <script type="module" src="../components/tooltip/tooltip.js"></script>
+  <script type="module" src="../components/context-menu/context-menu.js"></script>
+  <script type="module" src="../components/command/command.js"></script>
+  <script type="module" src="../components/navigation-menu/navigation-menu.js"></script>
+  <script type="module" src="../components/sidebar/sidebar.js"></script>
+  <script type="module" src="../components/carousel/carousel.js"></script>
+  <script type="module" src="../components/slider/slider.js"></script>
+  <script type="module" src="../components/sortable/sortable.js"></script>
+  <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
+  <script>lucide.createIcons();</script>
+<script type="text/plain" id="spec-md-content"># Pattern: Combobox
+
+## Native basis
+Button trigger + `popover` popup containing a search input and `role="listbox"`.
+The `popover` API provides top-layer rendering and light-dismiss.
+Requires JavaScript for filtering, keyboard navigation, selection, and
+ARIA management. Follows the WAI-ARIA Combobox design pattern.
+
+The trigger is an outline button. Clicking it opens a popover with a search
+input at the top and a scrollable list of options below. DOM focus moves to
+the search input when the popover opens.
+
+---
+
+## Native Web APIs
+- [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) — top-layer rendering and light-dismiss for the dropdown list
+- [CSS Anchor Positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning) — positions the popover relative to the trigger without JS
+- [`@starting-style`](https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style) — entry animation starting values for popover appearance
+- [`overscroll-behavior`](https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior) — prevents scroll chaining from the listbox to the page
+- [WAI-ARIA Combobox pattern](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) — keyboard navigation and screen reader contract
+
+---
+
+## Structure
+
+```html
+<div class="combobox" style="width:14rem;">
+  <label class="label" id="framework-label">Framework</label>
+  <button class="btn combobox-trigger" data-variant="outline"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-labelledby="framework-label"
+          aria-controls="framework-popover">
+    <span class="combobox-value" data-placeholder="Select framework...">Select framework...</span>
+    <svg class="combobox-chevron" aria-hidden="true" width="16" height="16"
+         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/>
+    </svg>
+  </button>
+  <div id="framework-popover" class="combobox-content" popover>
+    <div class="combobox-search">
+      <svg class="combobox-search-icon" aria-hidden="true" width="16" height="16"
+           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+      </svg>
+      <input class="combobox-search-input"
+             type="text"
+             role="combobox"
+             autocomplete="off"
+             aria-expanded="true"
+             aria-controls="framework-listbox"
+             aria-activedescendant=""
+             aria-autocomplete="list"
+             placeholder="Search...">
+    </div>
+    <div id="framework-listbox" role="listbox" class="combobox-listbox"
+         aria-label="Frameworks">
+      <div class="combobox-empty" hidden>No results found.</div>
+      <div role="option" id="opt-next" class="combobox-item"
+           data-value="nextjs" aria-selected="false">Next.js</div>
+      <div role="option" id="opt-svelte" class="combobox-item"
+           data-value="sveltekit" aria-selected="false">SvelteKit</div>
+      <div role="option" id="opt-nuxt" class="combobox-item"
+           data-value="nuxt" aria-selected="false">Nuxt</div>
+      <div role="option" id="opt-remix" class="combobox-item"
+           data-value="remix" aria-selected="false">Remix</div>
+      <div role="option" id="opt-astro" class="combobox-item"
+           data-value="astro" aria-selected="false">Astro</div>
+    </div>
+  </div>
+</div>
+```
+
+### With groups
+
+```html
+<div id="tz-listbox" role="listbox" class="combobox-listbox" aria-label="Timezones">
+  <div class="combobox-empty" hidden>No results found.</div>
+  <div class="combobox-group-label">North America</div>
+  <div role="option" class="combobox-item" id="opt-est"
+       data-value="est" aria-selected="false">Eastern (EST)</div>
+  <div role="option" class="combobox-item" id="opt-pst"
+       data-value="pst" aria-selected="false">Pacific (PST)</div>
+  <div class="combobox-separator"></div>
+  <div class="combobox-group-label">Europe</div>
+  <div role="option" class="combobox-item" id="opt-gmt"
+       data-value="gmt" aria-selected="false">GMT (London)</div>
+</div>
+```
+
+---
+
+## Data Attributes
+
+| Attribute          | Element              | Values                            | Description                                          |
+|--------------------|----------------------|-----------------------------------|------------------------------------------------------|
+| `data-placeholder` | `.combobox-value`    | (presence)                        | Present when showing placeholder text; removed on selection. CSS uses it to set muted color. |
+| `data-highlighted` | `.combobox-item`     | (presence, JS-managed)            | Set by JS on the currently keyboard-highlighted option. CSS applies accent background. |
+| `data-value`       | `.combobox-item`     | any string                        | The programmatic value of the option, used by JS for selection tracking. Not targeted by CSS. |
+
+---
+
+## ARIA
+
+| Attribute                | Where            | Value                                   |
+|--------------------------|------------------|-----------------------------------------|
+| `aria-haspopup`          | trigger button   | `listbox`                               |
+| `aria-expanded`          | trigger button   | `true` when popup open, `false` when closed |
+| `aria-labelledby`        | trigger button   | ID of the label                         |
+| `aria-controls`          | trigger button   | ID of the popover                       |
+| `role="combobox"`        | search input     | Always                                  |
+| `aria-expanded`          | search input     | `true` when popup open                  |
+| `aria-controls`          | search input     | ID of the listbox                       |
+| `aria-activedescendant`  | search input     | ID of the highlighted option            |
+| `aria-autocomplete`      | search input     | `list` (filters as you type)            |
+| `role="listbox"`         | list container   | Always                                  |
+| `role="option"`          | each item        | Always                                  |
+| `aria-selected`          | each option      | `true` for selected, `false` otherwise  |
+| `aria-disabled`          | disabled options | `true` if option is disabled            |
+
+---
+
+## Keyboard interactions
+
+### Focus on search input (inside popover):
+
+| Key           | Behavior                                         |
+|---------------|--------------------------------------------------|
+| `ArrowDown`   | Highlight next item                              |
+| `ArrowUp`     | Highlight previous item                          |
+| `Home`        | Highlight first visible item                     |
+| `End`         | Highlight last visible item                      |
+| `Enter`       | Select highlighted item, close popup             |
+| `Escape`      | Close popup, return focus to trigger             |
+| `Tab`         | Close popup, move focus to next element          |
+| Typing        | Filter items, auto-highlight first match         |
+
+---
+
+## Notes
+
+- The trigger is a `.btn[data-variant="outline"]` — styled by the button system
+- When the popover opens, focus moves to the search input inside
+- When the popover closes, focus returns to the trigger button
+- Use `aria-activedescendant` to communicate the highlighted item to screen readers
+- The `popover` attribute enables top-layer rendering and light-dismiss
+- CSS anchor positioning (`position-anchor`, `anchor()`, `position-try-fallbacks: flip-block`) places the popover below the trigger; no JS positioning needed
+- The popover animates in via `@starting-style` + `transition-behavior: allow-discrete`
+- The check icon for selected items uses a CSS `::before` pseudo-element
+- Filter matching is case-insensitive and supports substring matching
+- The empty state element is shown when no items match the filter query
+- Group labels and separators auto-hide when their group has no visible items
+- `overscroll-behavior: contain` prevents scroll chaining from the listbox
+- `prefers-reduced-motion: reduce` disables all transitions
+- `forced-colors: active` supports Windows High Contrast Mode
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+.DS_Store
+node_modules
+
+# Local Netlify folder
+.netlify
+
+# Vitest browser-mode artifacts
+.vitest/
+coverage/
+
+.roo/
+
+coverage/

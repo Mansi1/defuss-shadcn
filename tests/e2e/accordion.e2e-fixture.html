@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Accordion E2E Fixture — defuss-shadcn</title>
+  <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css">
+  <link rel="stylesheet" href="/dist/components/card/card.css">
+  <link rel="stylesheet" href="/dist/components/accordion/accordion.css">
+</head>
+<body>
+  <main style="max-width:40rem;margin-inline:auto;padding:2rem;display:flex;flex-direction:column;gap:3rem;">
+
+    <!-- Multi-open: zero JS, any number of items can be open -->
+    <section aria-labelledby="multi-h">
+      <h2 id="multi-h">Multi-open</h2>
+      <div class="accordion" id="multi">
+        <details class="accordion-item" data-item="1" open>
+          <summary class="accordion-trigger">
+            <span>Multi 1</span>
+            <svg class="accordion-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="accordion-content"><p>Content 1</p></div>
+        </details>
+        <details class="accordion-item" data-item="2">
+          <summary class="accordion-trigger">
+            <span>Multi 2</span>
+            <svg class="accordion-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="accordion-content"><p>Content 2</p></div>
+        </details>
+        <details class="accordion-item" data-item="3">
+          <summary class="accordion-trigger">
+            <span>Multi 3</span>
+            <svg class="accordion-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="accordion-content"><p>Content 3</p></div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Single-open: JS closes siblings; at least one item always stays open -->
+    <section aria-labelledby="single-h">
+      <h2 id="single-h">Single-open</h2>
+      <div class="accordion" data-type="single" id="single">
+        <details class="accordion-item" data-item="1" open>
+          <summary class="accordion-trigger">
+            <span>Single 1</span>
+            <svg class="accordion-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="accordion-content"><p>Content 1</p></div>
+        </details>
+        <details class="accordion-item" data-item="2">
+          <summary class="accordion-trigger">
+            <span>Single 2</span>
+            <svg class="accordion-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="accordion-content"><p>Content 2</p></div>
+        </details>
+        <details class="accordion-item" data-item="3">
+          <summary class="accordion-trigger">
+            <span>Single 3</span>
+            <svg class="accordion-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="accordion-content"><p>Content 3</p></div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Collapsible single: like single-open, but allows all items closed -->
+    <section aria-labelledby="collapsible-h">
+      <h2 id="collapsible-h">Single-open collapsible</h2>
+      <div class="accordion" data-type="single" data-collapsible id="collapsible">
+        <details class="accordion-item" data-item="1" open>
+          <summary class="accordion-trigger">
+            <span>Collapsible 1</span>
+            <svg class="accordion-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="accordion-content"><p>Content 1</p></div>
+        </details>
+        <details class="accordion-item" data-item="2">
+          <summary class="accordion-trigger">
+            <span>Collapsible 2</span>
+            <svg class="accordion-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="accordion-content"><p>Content 2</p></div>
+        </details>
+        <details class="accordion-item" data-item="3">
+          <summary class="accordion-trigger">
+            <span>Collapsible 3</span>
+            <svg class="accordion-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="accordion-content"><p>Content 3</p></div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Bordered variant: multi-open wrapped in a border (skill's inline style) -->
+    <section aria-labelledby="bordered-h">
+      <h2 id="bordered-h">Bordered</h2>
+      <div class="accordion" id="bordered" style="border:1px solid var(--border);border-radius:var(--radius-lg);padding:0 1rem;">
+        <details class="accordion-item" data-item="1">
+          <summary class="accordion-trigger">
+            <span>Bordered 1</span>
+            <svg class="accordion-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="accordion-content"><p>Content 1</p></div>
+        </details>
+        <details class="accordion-item" data-item="2">
+          <summary class="accordion-trigger">
+            <span>Bordered 2</span>
+            <svg class="accordion-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="accordion-content"><p>Content 2</p></div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Card-wrapped variant: single-open inside a card -->
+    <section aria-labelledby="card-h">
+      <h2 id="card-h">Card-wrapped</h2>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">FAQ</h3>
+          <p class="card-description">Frequently asked questions.</p>
+        </div>
+        <div class="card-content">
+          <div class="accordion" data-type="single" id="card">
+            <details class="accordion-item" data-item="1" open>
+              <summary class="accordion-trigger">
+                <span>Card 1</span>
+                <svg class="accordion-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <div class="accordion-content"><p>Content 1</p></div>
+            </details>
+            <details class="accordion-item" data-item="2">
+              <summary class="accordion-trigger">
+                <span>Card 2</span>
+                <svg class="accordion-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <div class="accordion-content"><p>Content 2</p></div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <script type="module" src="/dist/components/accordion/accordion.js"></script>
+</body>
+</html>

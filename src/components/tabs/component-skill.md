@@ -130,6 +130,19 @@ Up/Down based on `aria-orientation`.
 
 ---
 
+## Variants
+
+Set `data-variant` on the `.tab-list` element.
+
+| Variant | Behavior |
+| --- | --- |
+| (default) | Filled pill: rounded `--muted` background behind the trigger row, selected tab gets a `--background` pill |
+| `line` | Underline style: no pill background, selected tab sits on a bottom border |
+
+```html
+<div class="tab-list" role="tablist" data-variant="line">…</div>
+```
+
 ## Notes
 
 - Only the active tab is in the tab order (`tabindex="0"`) — inactive tabs use `tabindex="-1"`

@@ -99,6 +99,22 @@ Set `data-position` on the `.toast-container`:
 
 ---
 
+## Variants
+
+Set `data-variant` on the `.toast` element.
+
+| Variant | Behavior |
+| --- | --- |
+| (default) | Neutral popover surface |
+| `destructive` | Filled `--destructive` surface with `--destructive-foreground` text |
+| `success` | Border + `.toast-icon` tinted green (literal oklch, no token) |
+| `warning` | Border + `.toast-icon` tinted amber (literal oklch, no token) |
+| `info` | Border + `.toast-icon` tinted blue (literal oklch, no token) |
+
+```html
+<div class="toast" role="status" data-variant="success">…</div>
+```
+
 ## Notes
 
 - The toast container should be a direct child of `<body>`

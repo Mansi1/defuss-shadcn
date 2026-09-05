@@ -362,6 +362,56 @@ check(
   'restore the marker or deploy.sh cannot add entries',
 );
 
+// 15. code ↔ skill ↔ docs parity: every variant/size IMPLEMENTED in the
+// component CSS (data-variant/data-size selectors are the source of truth —
+// the CSS ships what works) must be documented in BOTH the component skill
+// and the doc page. Catches the classic drift: CSS gains a variant, docs and
+// skill silently rot. A token counts as documented when it appears quoted
+// ("x"), backticked (`x`), or as a table cell (| x |) — the forms the skill
+// template and doc markup actually use.
+const skillProblems: string[] = [];
+for (const c of componentDirs) {
+  const cssFile = join(COMPS, c, `${c}.css`);
+  const docPage = join(DOCS, `${c}.html`);
+  const skillFile = join(COMPS, c, 'component-skill.md');
+  if (!existsSync(cssFile)) continue;
+  const tokens = new Set(
+    [...readFileSync(cssFile, 'utf8').matchAll(/data-(?:variant|size)="([a-z0-9-]+)"/g)].map((m) => m[1]),
+  );
+  if (tokens.size === 0) continue;
+  const skillText = existsSync(skillFile) ? readFileSync(skillFile, 'utf8') : '';
+  const doc = existsSync(docPage) ? readFileSync(docPage, 'utf8') : '';
+  const documented = (text: string, t: string) =>
+    text.includes(`"${t}"`) || text.includes(`\`${t}\``) || new RegExp(`\\|\\s*${t}\\s*\\|`).test(text);
+  const missSkill = [...tokens].filter((t) => !documented(skillText, t));
+  const missDoc = [...tokens].filter((t) => !doc.includes(t));
+  if (missSkill.length)
+    skillProblems.push(`${c}: CSS implements [${missSkill.join(', ')}] but component-skill.md doesn't document it`);
+  if (missDoc.length) skillProblems.push(`${c}: CSS implements [${missDoc.join(', ')}] but ${c}.html doesn't show it`);
+}
+check(
+  'skill ↔ docs parity',
+  skillProblems,
+  'update component-skill.md (Variants/Sizes tables) and the doc page to cover what the CSS implements (AGENTS.md)',
+);
+
+// 16. working tree cleanliness (warn): uncommitted changes make "green build"
+// ambiguous — the agent must finish by committing so CI sees what was tested.
+const gitProblems: string[] = [];
+const gitStatus = Bun.spawnSync({ cmd: ['git', 'status', '--porcelain'], cwd: ROOT });
+if (gitStatus.exitCode === 0) {
+  const dirty = gitStatus.stdout.toString().trim().split('\n').filter(Boolean);
+  if (dirty.length) {
+    gitProblems.push(`${dirty.length} uncommitted change(s), e.g.: ${dirty.slice(0, 4).map((d) => d.slice(0, 40)).join(' | ')}`);
+  }
+} // no .git / git missing → check silently skips (tarball builds, CI without git)
+check(
+  'working tree committed',
+  gitProblems,
+  'commit the verified changes (git add -A && git commit) so CI and other agents see exactly what passed',
+  true,
+);
+
 console.log(
   failed
     ? `\nverify: FAILED (${failed} check group(s), ${warned} warning group(s))`

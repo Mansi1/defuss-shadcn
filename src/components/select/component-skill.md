@@ -48,6 +48,20 @@
 
 ---
 
+## Sizes
+
+Set `data-size` on the `.select` trigger button.
+
+| Size | Height | Use |
+| --- | --- | --- |
+| (default) | 2.25rem | Standard forms |
+| `sm` | 2rem | Dense toolbars |
+| `lg` | 2.75rem | Prominent landing/form fields |
+
+```html
+<button class="select" data-size="sm" aria-haspopup="listbox" aria-expanded="false">…</button>
+```
+
 ## Notes
 
 - Uses `appearance: none` with a custom chevron via `background-image` SVG.

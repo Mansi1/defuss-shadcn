@@ -1,9 +1,61 @@
 // -- Toggle Group ---------------------------------------------
-// Manages single/multiple selection and roving tabindex across .toggle buttons.
+// Manages single/multiple selection and roving tabindex across .toggle
+// buttons, plus the named-state API bound per group, so agents/tests can
+// enable/disable a whole group by name (AGENTS.md "State API").
+
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const toggleGroupStates = ['default', 'disabled'];
+
+/**
+ * UI side of setState: 'disabled' mirrors the documented data-disabled
+ * attribute (CSS kills pointer events + dims items); 'default' removes it.
+ */
+function triggerStateChange(group, stateName, _config) {
+  switch (stateName) {
+    case 'default':
+      group.removeAttribute('data-disabled');
+      break;
+    case 'disabled':
+      group.setAttribute('data-disabled', '');
+      break;
+  }
+}
+
+/** Registry-level API; pass the group element explicitly. Unknown names throw. */
+export const toggleGroupApi = {
+  setState(group, stateName, config = {}) {
+    if (!toggleGroupStates.includes(stateName)) {
+      throw new Error(`toggle-group: unknown state "${stateName}" (supported: ${toggleGroupStates.join(', ')})`);
+    }
+    triggerStateChange(group, stateName, config);
+    // state lives on the ELEMENT, not the module (many groups per page)
+    group.dataset.stateName = stateName;
+    group._stateConfig = config;
+  },
+  getState(group) {
+    return {
+      name: group.hasAttribute('data-disabled') ? 'disabled' : 'default',
+      config: group._stateConfig ?? {},
+    };
+  },
+};
+
+_defussShadcn.toggleGroupApi = toggleGroupApi;
+_defussShadcn.toggleGroupStates = toggleGroupStates;
 
 function init() {
   document.querySelectorAll('.toggle-group:not([data-init])').forEach((group) => {
   group.dataset.init = '';
+  // bind-scope the api per group: `$('#align').api.setState('disabled')`
+  group.api = {
+    setState: (stateName, config) => toggleGroupApi.setState(group, stateName, config),
+    getState: () => toggleGroupApi.getState(group),
+  };
   const type = group.getAttribute('data-type') || 'single';
 
   const getToggles = () => Array.from(group.querySelectorAll('.toggle:not(:disabled)'));

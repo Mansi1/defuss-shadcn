@@ -210,8 +210,8 @@ check(
 const STATE_API_LEGACY = [
   'avatar', 'calendar', 'carousel', 'color-picker', 'combobox',
   'context-menu', 'image',
-  'number-input', 'sidebar', 'slider', 'sortable', 'tabs',
-  'toast', 'toggle', 'toggle-group', 'toolbar', 'tree-view',
+  'number-input', 'sidebar', 'slider', 'sortable',
+  'toast', 'tree-view',
 ];
 const STATE_API_PATTERNS: Array<[string, RegExp]> = [
   // preamble comes from the shared helper (build inlines it into dist .js);

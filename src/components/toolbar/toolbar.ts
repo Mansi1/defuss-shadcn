@@ -1,13 +1,72 @@
 // -- Toolbar --------------------------------------------------
 // Roving tabindex for role="toolbar" containers.
-// Arrow keys move focus between focusable children.
+// Arrow keys move focus between focusable children, plus the named-state API
+// so agents/tests can reset the roving position by name (AGENTS.md
+// "State API"). The toolbar's only observable state is *which item holds the
+// roving tabindex*, so 'default' means "back to the authored position" and
+// getState() reports where the roving stop currently is.
+
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const toolbarStates = ['default'];
+
+/**
+ * UI side of setState: 'default' restores the roving tabindex to the first
+ * enabled item (the authored position); optional { focus: n } config parks
+ * the roving stop on the nth item instead — focus is only moved there if the
+ * toolbar already contains the focus, matching native roving semantics.
+ */
+function triggerStateChange(toolbar, items, stateName, config) {
+  if (stateName !== 'default' || items.length === 0) return;
+  const target = items[Math.min(Number(config?.focus ?? 0), items.length - 1)] || items[0];
+  items.forEach((item) => item.setAttribute('tabindex', item === target ? '0' : '-1'));
+  if (toolbar.contains(document.activeElement)) target.focus();
+}
+
+/** Registry-level API; pass the toolbar element explicitly. Unknown names throw. */
+export const toolbarApi = {
+  setState(toolbar, stateName, config = {}) {
+    if (!toolbarStates.includes(stateName)) {
+      throw new Error(`toolbar: unknown state "${stateName}" (supported: ${toolbarStates.join(', ')})`);
+    }
+    const items = toolbarItems(toolbar);
+    triggerStateChange(toolbar, items, stateName, config);
+    // state lives on the ELEMENT, not the module (many toolbars per page)
+    toolbar.dataset.stateName = stateName;
+    toolbar._stateConfig = config;
+  },
+  getState(toolbar) {
+    const items = toolbarItems(toolbar);
+    const idx = items.findIndex((item) => item.getAttribute('tabindex') === '0');
+    return {
+      name: toolbar.dataset.stateName || 'default',
+      // observable roving position — reflects arrow-key movement too
+      config: { ...toolbar._stateConfig, rovingIndex: idx },
+    };
+  },
+};
+
+_defussShadcn.toolbarApi = toolbarApi;
+_defussShadcn.toolbarStates = toolbarStates;
+
+const toolbarItems = (toolbar) =>
+  Array.from(
+    toolbar.querySelectorAll('button:not(:disabled), a[href], [tabindex]:not([tabindex="-1"])')
+  );
 
 function init() {
   document.querySelectorAll('.toolbar[role="toolbar"]:not([data-init])').forEach((toolbar) => {
   toolbar.dataset.init = '';
-  const items = Array.from(
-    toolbar.querySelectorAll('button:not(:disabled), a[href], [tabindex]:not([tabindex="-1"])')
-  );
+  // bind-scope the api per instance: `$('#fmt').api.setState('default')`
+  toolbar.api = {
+    setState: (stateName, config) => toolbarApi.setState(toolbar, stateName, config),
+    getState: () => toolbarApi.getState(toolbar),
+  };
+  const items = toolbarItems(toolbar);
   if (items.length === 0) return;
 
   items.forEach((item, i) => {

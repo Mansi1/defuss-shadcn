@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>toolbar e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/button/button.css" />
+    <link rel="stylesheet" href="/dist/components/toggle/toggle.css" />
+    <link rel="stylesheet" href="/dist/components/toggle-group/toggle-group.css" />
+    <link rel="stylesheet" href="/dist/components/separator/separator.css" />
+    <link rel="stylesheet" href="/dist/components/toolbar/toolbar.css" />
+  </head>
+  <body style="padding:2rem;display:flex;flex-direction:column;gap:1.5rem;align-items:flex-start;">
+    <!-- mirrors the doc page: formatting toolbar with nested toggle groups -->
+    <div class="toolbar" role="toolbar" aria-label="Formatting" aria-orientation="horizontal" id="tb-format">
+      <div class="toggle-group" role="group" aria-label="Text style" data-type="multiple">
+        <button class="toggle" aria-pressed="false">B</button>
+        <button class="toggle" aria-pressed="false">I</button>
+      </div>
+      <div class="separator" data-orientation="vertical" role="separator"></div>
+      <button class="btn" data-variant="ghost" data-size="sm">Link</button>
+    </div>
+
+    <!-- actions toolbar (documented "Quick actions" demo) + disabled item -->
+    <div class="toolbar" role="toolbar" aria-label="Actions" aria-orientation="horizontal" id="tb-actions">
+      <button class="btn" data-variant="ghost" data-size="icon" aria-label="Undo">U</button>
+      <button class="btn" data-variant="ghost" data-size="icon" aria-label="Redo">R</button>
+      <div class="separator" data-orientation="vertical" role="separator"></div>
+      <button class="btn" data-variant="ghost" data-size="icon" aria-label="Copy" disabled>C</button>
+      <button class="btn" data-variant="ghost" data-size="icon" aria-label="Paste">P</button>
+    </div>
+
+    <!-- vertical orientation (documented axis) -->
+    <div class="toolbar" role="toolbar" aria-label="Vertical actions" aria-orientation="vertical" id="tb-vertical">
+      <button class="btn" data-variant="ghost" data-size="icon" aria-label="Up">1</button>
+      <button class="btn" data-variant="ghost" data-size="icon" aria-label="Down">2</button>
+    </div>
+
+    <script type="module" src="/dist/components/toggle-group/toggle-group.js"></script>
+    <script type="module" src="/dist/components/toolbar/toolbar.js"></script>
+  </body>
+</html>

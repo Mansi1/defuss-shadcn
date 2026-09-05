@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>toggle-group e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/toggle-group/toggle-group.css" />
+  </head>
+  <body style="padding:2rem;display:flex;flex-direction:column;gap:1.5rem;">
+    <!-- single selection (default) -->
+    <div class="toggle-group" role="group" aria-label="Text alignment" data-type="single" id="group-single">
+      <button class="toggle" aria-pressed="true">L</button>
+      <button class="toggle" aria-pressed="false">C</button>
+      <button class="toggle" aria-pressed="false">R</button>
+    </div>
+
+    <!-- multiple selection -->
+    <div class="toggle-group" role="group" aria-label="Text style" data-type="multiple" id="group-multiple">
+      <button class="toggle" aria-pressed="true">B</button>
+      <button class="toggle" aria-pressed="false">I</button>
+      <button class="toggle" aria-pressed="false">U</button>
+    </div>
+
+    <!-- outline variant + sizes + vertical orientation (documented axes) -->
+    <div class="toggle-group" role="group" aria-label="Outline" data-variant="outline" data-size="sm" id="group-outline-sm">
+      <button class="toggle" aria-pressed="false">A</button>
+      <button class="toggle" aria-pressed="false">B</button>
+    </div>
+    <div class="toggle-group" role="group" aria-label="Outline large" data-variant="outline" data-size="lg" id="group-outline-lg">
+      <button class="toggle" aria-pressed="false">A</button>
+      <button class="toggle" aria-pressed="false">B</button>
+    </div>
+    <div class="toggle-group" role="group" aria-label="Vertical" data-orientation="vertical" id="group-vertical">
+      <button class="toggle" aria-pressed="true">1</button>
+      <button class="toggle" aria-pressed="false">2</button>
+    </div>
+
+    <!-- authored disabled group -->
+    <div class="toggle-group" role="group" aria-label="Disabled" data-disabled id="group-disabled">
+      <button class="toggle" aria-pressed="false">X</button>
+    </div>
+
+    <script type="module" src="/dist/components/toggle-group/toggle-group.js"></script>
+  </body>
+</html>

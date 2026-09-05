@@ -137,7 +137,7 @@
         <p class="text-sm font-medium mb-2 mt-6">Text formatting toolbar</p>
         <p class="text-xs text-muted-foreground mb-3">Combines toggle groups with separators and a link button.</p>
         <div class="preview">
-          <div class="toolbar" role="toolbar" aria-label="Formatting" aria-orientation="horizontal">
+          <div class="toolbar" role="toolbar" aria-label="Formatting" aria-orientation="horizontal" data-state-demo>
             <div class="toggle-group" role="group" aria-label="Text style" data-type="multiple">
               <button class="toggle" aria-pressed="false"><i data-lucide="bold"></i></button>
               <button class="toggle" aria-pressed="false"><i data-lucide="italic"></i></button>
@@ -206,6 +206,16 @@
 
         <!-- Spec link -->
 
+        <!-- -- States ------------------------------------ -->
+        <section style="margin-top:3rem;" id="states">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">States</h2>
+          <p class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;">Named states via the shared State API, driven per instance through the bound <code>api</code>:</p>
+          <ul class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;padding-left:1.25rem;">
+            <li><code>default</code> — roving tabindex at the authored position (first item); <code>setState('default', { focus: n })</code> parks the roving stop on item <em>n</em> instead, and <code>getState().config.rovingIndex</code> reports where it currently is</li>
+          </ul>
+          <p class="text-sm text-muted-foreground">The demo element carries <code>data-state-demo</code>; <code>bun run screenshots</code> drives it via <code>el.api.setState(name)</code> and captures <code>screenshots/{mode}/toolbar-{state}.png</code>.</p>
+        </section>
+
         <!-- -- CSS --------------------------------------- -->
         <section style="margin-top:3rem;" id="source-css">
           <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">CSS <a href="../components/toolbar/toolbar.css" target="_blank" style="font-size:0.75rem;font-weight:400;color:var(--muted-foreground);text-decoration:underline;text-underline-offset:3px;margin-left:0.5rem;">view file</a></h2>
@@ -261,14 +271,73 @@
             <button class="copy-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
             <pre><code class="language-javascript">// -- Toolbar --------------------------------------------------
 // Roving tabindex for role=&quot;toolbar&quot; containers.
-// Arrow keys move focus between focusable children.
+// Arrow keys move focus between focusable children, plus the named-state API
+// so agents/tests can reset the roving position by name (AGENTS.md
+// &quot;State API&quot;). The toolbar's only observable state is *which item holds the
+// roving tabindex*, so 'default' means &quot;back to the authored position&quot; and
+// getState() reports where the roving stop currently is.
+
+// Shared preamble (AGENTS.md &quot;State API&quot;); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const toolbarStates = ['default'];
+
+/**
+ * UI side of setState: 'default' restores the roving tabindex to the first
+ * enabled item (the authored position); optional { focus: n } config parks
+ * the roving stop on the nth item instead — focus is only moved there if the
+ * toolbar already contains the focus, matching native roving semantics.
+ */
+function triggerStateChange(toolbar, items, stateName, config) {
+  if (stateName !== 'default' || items.length === 0) return;
+  const target = items[Math.min(Number(config?.focus ?? 0), items.length - 1)] || items[0];
+  items.forEach((item) =&gt; item.setAttribute('tabindex', item === target ? '0' : '-1'));
+  if (toolbar.contains(document.activeElement)) target.focus();
+}
+
+/** Registry-level API; pass the toolbar element explicitly. Unknown names throw. */
+export const toolbarApi = {
+  setState(toolbar, stateName, config = {}) {
+    if (!toolbarStates.includes(stateName)) {
+      throw new Error(`toolbar: unknown state &quot;${stateName}&quot; (supported: ${toolbarStates.join(', ')})`);
+    }
+    const items = toolbarItems(toolbar);
+    triggerStateChange(toolbar, items, stateName, config);
+    // state lives on the ELEMENT, not the module (many toolbars per page)
+    toolbar.dataset.stateName = stateName;
+    toolbar._stateConfig = config;
+  },
+  getState(toolbar) {
+    const items = toolbarItems(toolbar);
+    const idx = items.findIndex((item) =&gt; item.getAttribute('tabindex') === '0');
+    return {
+      name: toolbar.dataset.stateName || 'default',
+      // observable roving position — reflects arrow-key movement too
+      config: { ...toolbar._stateConfig, rovingIndex: idx },
+    };
+  },
+};
+
+_defussShadcn.toolbarApi = toolbarApi;
+_defussShadcn.toolbarStates = toolbarStates;
+
+const toolbarItems = (toolbar) =&gt;
+  Array.from(
+    toolbar.querySelectorAll('button:not(:disabled), a[href], [tabindex]:not([tabindex=&quot;-1&quot;])')
+  );
 
 function init() {
   document.querySelectorAll('.toolbar[role=&quot;toolbar&quot;]:not([data-init])').forEach((toolbar) =&gt; {
   toolbar.dataset.init = '';
-  const items = Array.from(
-    toolbar.querySelectorAll('button:not(:disabled), a[href], [tabindex]:not([tabindex=&quot;-1&quot;])')
-  );
+  // bind-scope the api per instance: `$('#fmt').api.setState('default')`
+  toolbar.api = {
+    setState: (stateName, config) =&gt; toolbarApi.setState(toolbar, stateName, config),
+    getState: () =&gt; toolbarApi.getState(toolbar),
+  };
+  const items = toolbarItems(toolbar);
   if (items.length === 0) return;
 
   items.forEach((item, i) =&gt; {

@@ -143,6 +143,19 @@ Set `data-variant` on the `.tab-list` element.
 <div class="tab-list" role="tablist" data-variant="line">…</div>
 ```
 
+## States
+
+The api is bound **per tab trigger** (selection is exclusive across the
+tablist). Declared states: `default` (this tab's authored selection,
+restored via the init snapshot) · `active` (this tab selected, panel shown).
+
+```js
+document.querySelector('#settings-tab-2').api.setState('active');
+document.querySelector('#settings-tab-2').api.getState(); // { name: 'active', config: {} }
+```
+
+The registry global is `_defussShadcn.tabsApi` / `_defussShadcn.tabsStates`.
+
 ## Notes
 
 - Only the active tab is in the tab order (`tabindex="0"`) — inactive tabs use `tabindex="-1"`

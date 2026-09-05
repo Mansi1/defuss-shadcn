@@ -60,6 +60,21 @@
 
 ---
 
+## States
+
+The toolbar's only observable state is *which item holds the roving
+tabindex*. Declared states: `default` (roving stop back at the authored
+first position; `{ focus: n }` config parks it on item n instead).
+`getState().config.rovingIndex` reports the current stop.
+
+```js
+document.querySelector('#formatting').api.setState('default');
+document.querySelector('#formatting').api.getState(); // { name: 'default', config: { rovingIndex: 0 } }
+```
+
+The api is bound per toolbar; the registry global is
+`_defussShadcn.toolbarApi` / `_defussShadcn.toolbarStates`.
+
 ## Notes
 
 - Toolbars compose Toggle Groups, Button Groups, Buttons, and Separators.

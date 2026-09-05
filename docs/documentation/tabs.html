@@ -161,7 +161,7 @@
           <div class="tabs">
             <div class="tab-list" role="tablist" aria-label="Account settings" id="demo-tablist-pill">
               <button class="tab-trigger" role="tab" aria-selected="true" aria-controls="pill-panel-account" id="pill-tab-account">Account</button>
-              <button class="tab-trigger" role="tab" aria-selected="false" aria-controls="pill-panel-password" id="pill-tab-password" tabindex="-1">Password</button>
+              <button class="tab-trigger" role="tab" aria-selected="false" aria-controls="pill-panel-password" id="pill-tab-password" tabindex="-1" data-state-demo>Password</button>
             </div>
             <div class="tab-content" role="tabpanel" id="pill-panel-account" aria-labelledby="pill-tab-account" tabindex="0">
               <div class="card" style="max-width:24rem;">
@@ -480,6 +480,17 @@
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
         </div>
+        <!-- -- States ------------------------------------ -->
+        <section style="margin-top:3rem;" id="states">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">States</h2>
+          <p class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;">Named states via the shared State API, driven per instance through the bound <code>api</code>:</p>
+          <ul class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;padding-left:1.25rem;">
+            <li><code>default</code> — this tab's authored selection (setState restores the snapshot taken at init)</li>
+            <li><code>active</code> — this tab is selected and its panel visible (per-tab API; selection stays exclusive)</li>
+          </ul>
+          <p class="text-sm text-muted-foreground">The demo element carries <code>data-state-demo</code>; <code>bun run screenshots</code> drives it via <code>el.api.setState(name)</code> and captures <code>screenshots/{mode}/tabs-{state}.png</code>.</p>
+        </section>
+
         <!-- -- CSS --------------------------------------- -->
         <section style="margin-top:3rem;" id="source-css">
           <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">CSS <a href="../components/tabs/tabs.css" target="_blank" style="font-size:0.75rem;font-weight:400;color:var(--muted-foreground);text-decoration:underline;text-underline-offset:3px;margin-left:0.5rem;">view file</a></h2>
@@ -621,26 +632,91 @@
               Copy
             </button>
             <pre><code class="language-javascript">// -- Tabs -----------------------------------------------------
-// ARIA-compliant keyboard navigation for [role=&quot;tablist&quot;] elements.
+// ARIA-compliant keyboard navigation for [role=&quot;tablist&quot;] elements, plus the
+// named-state API bound per tab trigger, so agents/tests can activate a
+// specific tab by name (AGENTS.md &quot;State API&quot;).
 
+// Shared preamble (AGENTS.md &quot;State API&quot;); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+// 'default' = this tab's authored selected state, 'active' = this tab selected
+const tabsStates = ['default', 'active'];
+
+/** Select one tab of a group and reveal its panel (single-selection model). */
 const activateTab = (tab, triggers) =&gt; {
   triggers.forEach((t) =&gt; {
     t.setAttribute('aria-selected', 'false');
     t.setAttribute('tabindex', '-1');
+    // selection is exclusive: every non-selected tab returns to 'default'
+    t.dataset.stateName = 'default';
     const panel = document.getElementById(t.getAttribute('aria-controls'));
     if (panel) panel.hidden = true;
   });
   tab.setAttribute('aria-selected', 'true');
   tab.removeAttribute('tabindex');
+  tab.dataset.stateName = 'active';
   const panel = document.getElementById(tab.getAttribute('aria-controls'));
   if (panel) panel.hidden = false;
 };
+
+/**
+ * UI side of setState (per tab): 'active' selects this tab, 'default'
+ * restores the authored selection snapshot taken at init.
+ */
+function triggerStateChange(tab, triggers, stateName, _config) {
+  switch (stateName) {
+    case 'default':
+      if (tab._defaultSelected) activateTab(tab, triggers);
+      else activateTab(triggers.find((t) =&gt; t._defaultSelected) || triggers[0], triggers);
+      break;
+    case 'active':
+      if (!tab.disabled) activateTab(tab, triggers);
+      break;
+  }
+}
+
+/** Registry-level API; pass the tab trigger explicitly. Unknown names throw. */
+export const tabsApi = {
+  setState(tab, stateName, config = {}) {
+    if (!tabsStates.includes(stateName)) {
+      throw new Error(`tabs: unknown state &quot;${stateName}&quot; (supported: ${tabsStates.join(', ')})`);
+    }
+    const triggers = Array.from(
+      tab.closest('[role=&quot;tablist&quot;]').querySelectorAll('[role=&quot;tab&quot;]'),
+    );
+    triggerStateChange(tab, triggers, stateName, config);
+    // state lives on the ELEMENT, not the module (many tabs per page)
+    tab._stateConfig = config;
+  },
+  getState(tab) {
+    // reflect reality: clicks/keys change aria-selected without setState()
+    return {
+      name: tab.getAttribute('aria-selected') === 'true' ? 'active' : 'default',
+      config: tab._stateConfig ?? {},
+    };
+  },
+};
+
+_defussShadcn.tabsApi = tabsApi;
+_defussShadcn.tabsStates = tabsStates;
 
 function init() {
 document.querySelectorAll('[role=&quot;tablist&quot;]:not([data-init])').forEach((tablist) =&gt; {
     tablist.dataset.init = '';
     if (!tablist.querySelector('.tab-trigger')) return;
     const triggers = Array.from(tablist.querySelectorAll('[role=&quot;tab&quot;]'));
+    // remember the authored selection so setState('default') restores it
+    triggers.forEach((t) =&gt; {
+      t._defaultSelected = t.getAttribute('aria-selected') === 'true';
+      // bind-scope the api per tab: `$('#my-tab').api.setState('active')`
+      t.api = {
+        setState: (stateName, config) =&gt; tabsApi.setState(t, stateName, config),
+        getState: () =&gt; tabsApi.getState(t),
+      };
+    });
     const orientation = tablist.getAttribute('aria-orientation') || 'horizontal';
 
     triggers.forEach((trigger) =&gt; {

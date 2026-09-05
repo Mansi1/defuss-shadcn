@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>toggle e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/toggle/toggle.css" />
+  </head>
+  <body style="padding:2rem;display:flex;gap:0.75rem;">
+    <!-- mirrors the doc page: default + outline variants, both sizes, states -->
+    <button class="toggle" id="tg-default" aria-pressed="false" aria-label="Bookmark">B</button>
+    <button class="toggle" id="tg-pressed" aria-pressed="true" aria-label="Bookmarked">★</button>
+    <button class="toggle" id="tg-outline" data-variant="outline" aria-pressed="true" aria-label="Italic">I</button>
+    <button class="toggle" id="tg-sm" data-size="sm" aria-pressed="false" aria-label="Small">S</button>
+    <button class="toggle" id="tg-lg" data-size="lg" aria-pressed="false" aria-label="Large">L</button>
+    <button class="toggle" id="tg-disabled" aria-pressed="false" aria-label="Disabled" disabled>D</button>
+
+    <script type="module" src="/dist/components/toggle/toggle.js"></script>
+  </body>
+</html>

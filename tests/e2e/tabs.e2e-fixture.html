@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>tabs e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/tabs/tabs.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: default (pill) tabs -->
+    <div class="tabs">
+      <div class="tab-list" role="tablist" aria-label="Account settings" id="tablist-pill">
+        <button class="tab-trigger" role="tab" aria-selected="true" aria-controls="panel-account" id="tab-account">Account</button>
+        <button class="tab-trigger" role="tab" aria-selected="false" aria-controls="panel-password" id="tab-password" tabindex="-1">Password</button>
+      </div>
+      <div class="tab-content" role="tabpanel" id="panel-account" aria-labelledby="tab-account" tabindex="0">Account panel</div>
+      <div class="tab-content" role="tabpanel" id="panel-password" aria-labelledby="tab-password" tabindex="0" hidden>Password panel</div>
+    </div>
+
+    <!-- line variant with a disabled tab (keyboard must skip it) -->
+    <div class="tabs" style="margin-top:2rem;">
+      <div class="tab-list" role="tablist" aria-label="Reports" data-variant="line" id="tablist-line">
+        <button class="tab-trigger" role="tab" aria-selected="true" aria-controls="line-panel-overview" id="line-tab-overview">Overview</button>
+        <button class="tab-trigger" role="tab" aria-selected="false" aria-controls="line-panel-reports" id="line-tab-reports" tabindex="-1" disabled>Reports</button>
+        <button class="tab-trigger" role="tab" aria-selected="false" aria-controls="line-panel-downloads" id="line-tab-downloads" tabindex="-1">Downloads</button>
+      </div>
+      <div class="tab-content" role="tabpanel" id="line-panel-overview" aria-labelledby="line-tab-overview" tabindex="0">Overview panel</div>
+      <div class="tab-content" role="tabpanel" id="line-panel-reports" aria-labelledby="line-tab-reports" tabindex="0" hidden>Reports panel</div>
+      <div class="tab-content" role="tabpanel" id="line-panel-downloads" aria-labelledby="line-tab-downloads" tabindex="0" hidden>Downloads panel</div>
+    </div>
+
+    <script type="module" src="/dist/components/tabs/tabs.js"></script>
+  </body>
+</html>

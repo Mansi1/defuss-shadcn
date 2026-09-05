@@ -139,6 +139,19 @@ Arrow direction follows `data-orientation`: horizontal uses Left/Right, vertical
 
 ---
 
+## States
+
+Declared states: `default` (enabled) · `disabled` (mirrors the documented
+`data-disabled` attribute; CSS dims items and blocks pointer events).
+
+```js
+document.querySelector('#alignment').api.setState('disabled');
+document.querySelector('#alignment').api.getState(); // { name: 'disabled', config: {} }
+```
+
+The api is bound per group; the registry global is
+`_defussShadcn.toggleGroupApi` / `_defussShadcn.toggleGroupStates` (camelCase).
+
 ## Notes
 
 - Uses **roving tabindex**: only one item has `tabindex="0"` at a time; others have `tabindex="-1"`. Tab enters/exits the group as a single stop.

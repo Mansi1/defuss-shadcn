@@ -79,6 +79,19 @@ buttons (bold, italic, underline) or feature toggles.
 
 ---
 
+## States
+
+Declared states: `default` (unpressed — the authored `aria-pressed` value is
+restored) · `pressed` (`aria-pressed="true"`).
+
+```js
+document.querySelector('#my-toggle').api.setState('pressed');
+document.querySelector('#my-toggle').api.getState(); // { name: 'pressed', config: {} }
+```
+
+The api is bound per button; the registry global is
+`_defussShadcn.toggleApi` / `_defussShadcn.toggleStates`.
+
 ## Notes
 
 - The toggle is just a button with `aria-pressed` — no custom elements needed.

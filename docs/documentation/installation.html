@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Install defuss-shadcn — copy CSS files, link tokens, and start building. No npm, no bundler required.">
+  <meta property="og:title" content="Installation — defuss-shadcn">
+  <meta property="og:description" content="Install defuss-shadcn — copy CSS files, link tokens, and start building. No npm, no bundler required.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kyr0.github.io/defuss-shadcn/documentation/installation.html">
+  <meta property="og:site_name" content="defuss-shadcn">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Installation — defuss-shadcn">
+  <meta name="twitter:description" content="Install defuss-shadcn — copy CSS files, link tokens, and start building. No npm, no bundler required.">
+  <title>Installation — defuss-shadcn</title>
+  <script src="js/themes.js"></script>
+  <script src="js/theme-switcher.js"></script>
+  <script src="js/layout.js"></script>
+  <link rel="stylesheet" href="../theme/default-semantic-tokens.css">
+  <link rel="stylesheet" href="css/docs-theme.css">
+  <link rel="stylesheet" href="css/docs-utilities.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js" defer integrity="sha384-H+hy9ULve6xfxRkWIh/YOtvDdpXgV2fmAGQkIDTxIgZwNoaoBal14Di2YTMR6MzR" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../components/button/button.css">
+  <link rel="stylesheet" href="../components/card/card.css">
+  <link rel="stylesheet" href="../components/dialog/dialog.css">
+  <link rel="stylesheet" href="../components/badge/badge.css">
+  <link rel="stylesheet" href="../components/input/input.css">
+  <link rel="stylesheet" href="../components/accordion/accordion.css">
+  <link rel="stylesheet" href="../components/tabs/tabs.css">
+  <link rel="stylesheet" href="../components/dropdown/dropdown.css">
+  <link rel="stylesheet" href="../components/toast/toast.css">
+  <link rel="stylesheet" href="../components/combobox/combobox.css">
+  <link rel="stylesheet" href="../components/sheet/sheet.css">
+  <link rel="stylesheet" href="../components/toggle/toggle.css">
+  <link rel="stylesheet" href="../components/icon/icon.css">
+  <link rel="stylesheet" href="../components/typography/typography.css">
+  <link rel="stylesheet" href="../components/separator/separator.css">
+  <link rel="stylesheet" href="../components/label/label.css">
+  <link rel="stylesheet" href="../components/toggle-group/toggle-group.css">
+  <link rel="stylesheet" href="../components/button-group/button-group.css">
+  <link rel="stylesheet" href="../components/toolbar/toolbar.css">
+  <link rel="stylesheet" href="../components/textarea/textarea.css">
+  <link rel="stylesheet" href="../components/checkbox/checkbox.css">
+  <link rel="stylesheet" href="../components/radio/radio.css">
+  <link rel="stylesheet" href="../components/switch/switch.css">
+  <link rel="stylesheet" href="../components/slider/slider.css">
+  <link rel="stylesheet" href="../components/select/select.css">
+  <link rel="stylesheet" href="../components/number-input/number-input.css">
+  <link rel="stylesheet" href="../components/file-input/file-input.css">
+  <link rel="stylesheet" href="../components/color-picker/color-picker.css">
+  <link rel="stylesheet" href="../components/date-picker/date-picker.css">
+  <link rel="stylesheet" href="../components/form/form.css">
+  <link rel="stylesheet" href="../components/avatar/avatar.css">
+  <link rel="stylesheet" href="../components/image/image.css">
+  <link rel="stylesheet" href="../components/statistic/statistic.css">
+  <link rel="stylesheet" href="../components/table/table.css">
+  <link rel="stylesheet" href="../components/collapsible/collapsible.css">
+  <link rel="stylesheet" href="../components/timeline/timeline.css">
+  <link rel="stylesheet" href="../components/tree-view/tree-view.css">
+  <link rel="stylesheet" href="../components/calendar/calendar.css">
+  <link rel="stylesheet" href="../components/spinner/spinner.css">
+  <link rel="stylesheet" href="../components/skeleton/skeleton.css">
+  <link rel="stylesheet" href="../components/progress/progress.css">
+  <link rel="stylesheet" href="../components/alert/alert.css">
+  <link rel="stylesheet" href="../components/alert-dialog/alert-dialog.css">
+  <link rel="stylesheet" href="../components/popover/popover.css">
+  <link rel="stylesheet" href="../components/tooltip/tooltip.css">
+  <link rel="stylesheet" href="../components/context-menu/context-menu.css">
+  <link rel="stylesheet" href="../components/command/command.css">
+  <link rel="stylesheet" href="../components/breadcrumb/breadcrumb.css">
+  <link rel="stylesheet" href="../components/pagination/pagination.css">
+  <link rel="stylesheet" href="../components/steps/steps.css">
+  <link rel="stylesheet" href="../components/navigation-menu/navigation-menu.css">
+  <link rel="stylesheet" href="../components/scroll-area/scroll-area.css">
+  <link rel="stylesheet" href="../components/carousel/carousel.css">
+  <link rel="stylesheet" href="../components/sidebar/sidebar.css">
+  <link rel="stylesheet" href="../components/sortable/sortable.css">
+</head>
+<body>
+  <site-header></site-header>
+
+  <div class="flex" style="margin-top: 3.5rem; min-height: calc(100vh - 3.5rem);">
+    <site-nav></site-nav>
+
+    <main style="flex: 1; min-width: 0; max-width: 44rem; padding: 2rem 3.5rem 8rem;">
+      <div class="page-header">
+<p class="text-sm text-muted-foreground mb-3" style="font-family:var(--font-mono);">defuss-shadcn / installation</p>
+  <h1 style="font-family:var(--font-display);font-size:2.5rem;font-weight:400;letter-spacing:-0.035em;margin:0 0 0.75rem;">Installation</h1>
+  <p class="text-muted-foreground leading-relaxed mb-10">Each component is a self-contained folder with a static component skill, a stylesheet, and a JavaScript file if needed. No npm. No build step.</p>
+      </div>
+
+  <!-- -- Installation -------------------------------------- -->
+  <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.02em;margin:0 0 1rem;">Quick start</h2>
+
+  <p class="text-sm text-muted-foreground mb-6">All files are served via <a href="https://www.jsdelivr.com" target="_blank" style="color:var(--primary);text-decoration:underline;text-underline-offset:4px;">jsDelivr</a> CDN directly from the GitHub repo. No download or install required — just reference the URLs in your HTML.</p>
+
+  <div class="flex flex-col gap-8">
+    <div>
+      <div class="flex items-center gap-3 mb-3">
+        <span style="width:1.625rem;height:1.625rem;border-radius:50%;background:var(--primary);color:var(--primary-foreground);font-size:0.75rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</span>
+        <h3 style="margin:0;font-size:1rem;font-weight:500;">Add a theme</h3>
+      </div>
+      <pre><code class="language-markup">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/codylindley/defuss-shadcn@latest/dist/theme/default-semantic-tokens.css"&gt;</code></pre>
+      <p class="text-sm text-muted-foreground mt-2">This defines every token for the default light and dark theme. To switch themes, you just switch this file — that's all the theme selector in this documentation site is doing. Compatible with <a href="https://tweakcn.com" target="_blank" style="color:var(--primary);text-decoration:underline;text-underline-offset:4px;">tweakcn.com</a> theme exports.</p>
+    </div>
+
+    <div>
+      <div class="flex items-center gap-3 mb-3">
+        <span style="width:1.625rem;height:1.625rem;border-radius:50%;background:var(--primary);color:var(--primary-foreground);font-size:0.75rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</span>
+        <h3 style="margin:0;font-size:1rem;font-weight:500;">Add the icons</h3>
+      </div>
+      <pre><code class="language-markup">&lt;script src="https://unpkg.com/lucide@1.8.0"&gt;&lt;/script&gt;
+&lt;script&gt;lucide.createIcons();&lt;/script&gt;</code></pre>
+      <p class="text-sm text-muted-foreground mt-2"><a href="https://lucide.dev" target="_blank" style="color:var(--primary);text-decoration:underline;text-underline-offset:4px;">Lucide</a> provides ~1,500 icons via CDN. Use <code>&lt;i data-lucide="name"&gt;&lt;/i&gt;</code> anywhere in your HTML. The script replaces each element with an inline SVG on page load. See the <a href="icon.html" style="color:var(--primary);text-decoration:underline;text-underline-offset:4px;">Icon</a> page for details.</p>
+    </div>
+
+    <div>
+      <div class="flex items-center gap-3 mb-3">
+        <span style="width:1.625rem;height:1.625rem;border-radius:50%;background:var(--primary);color:var(--primary-foreground);font-size:0.75rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</span>
+        <h3 style="margin:0;font-size:1rem;font-weight:500;">Select the components you want</h3>
+      </div>
+      <pre><code class="language-markup">&lt;!-- CSS — pick what you need --&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/codylindley/defuss-shadcn@latest/dist/components/button/button.css"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/codylindley/defuss-shadcn@latest/dist/components/dialog/dialog.css"&gt;
+
+&lt;!-- JS — when the component needs it --&gt;
+&lt;script type="module" src="https://cdn.jsdelivr.net/gh/codylindley/defuss-shadcn@latest/dist/components/dialog/dialog.js"&gt;&lt;/script&gt;</code></pre>
+      <p class="text-sm text-muted-foreground mt-2">Each component lives in <code>components/{name}/</code> with its own <code>.css</code> and <code>.js</code> when needed. Include only the components you use — they're independent of each other.</p>
+    </div>
+
+    <div>
+      <div class="flex items-center gap-3 mb-3">
+        <span style="width:1.625rem;height:1.625rem;border-radius:50%;background:var(--primary);color:var(--primary-foreground);font-size:0.75rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</span>
+        <h3 style="margin:0;font-size:1rem;font-weight:500;">Read the component skill, write the HTML</h3>
+      </div>
+      <pre><code class="language-markup">&lt;button class="btn" data-variant="default"
+        data-dialog-trigger="confirm"
+        aria-haspopup="dialog"&gt;
+  Open Dialog
+&lt;/button&gt;
+
+&lt;dialog id="confirm" class="dialog"
+        role="dialog" aria-modal="true"
+        aria-labelledby="confirm-title"&gt;
+  &lt;div class="dialog-content"&gt;
+    &lt;div class="dialog-header"&gt;
+      &lt;h2 class="dialog-title" id="confirm-title"&gt;Are you sure?&lt;/h2&gt;
+      &lt;p class="dialog-description"&gt;This action cannot be undone.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="dialog-footer"&gt;
+      &lt;button class="btn" data-variant="outline" data-dialog-close&gt;Cancel&lt;/button&gt;
+      &lt;button class="btn" data-variant="default"&gt;Confirm&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/dialog&gt;</code></pre>
+      <p class="text-sm text-muted-foreground mt-2">Each component folder has a <code>component-skill.md</code> that documents the exact HTML structure, attributes, variants, and ARIA. Read it, copy the pattern, fill in your content. The CSS and JS handle the rest.</p>
+    </div>
+
+    <div>
+      <div class="flex items-center gap-3 mb-3">
+        <span style="width:1.625rem;height:1.625rem;border-radius:50%;background:var(--primary);color:var(--primary-foreground);font-size:0.75rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</span>
+        <h3 style="margin:0;font-size:1rem;font-weight:500;">That's it</h3>
+      </div>
+      <p class="text-sm text-muted-foreground">Serve your HTML via any local server (e.g. <code>npx serve</code>). ES modules require HTTP — they don't run from <code>file://</code>. Dark mode toggles automatically when you add <code>class="dark"</code> to <code>&lt;html&gt;</code>.</p>
+    </div>
+  </div>
+
+  <!-- -- Pinning a version --------------------------------- -->
+  <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);">
+    <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.02em;margin:0 0 0.75rem;">Pinning a version</h2>
+    <p class="text-sm text-muted-foreground mb-3">Replace <code>@latest</code> with a specific version tag to lock your project to a release:</p>
+    <pre><code class="language-markup">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/codylindley/defuss-shadcn@v0.1.1/dist/theme/default-semantic-tokens.css"&gt;</code></pre>
+    <p class="text-sm text-muted-foreground mt-2">This ensures your project won't break when new versions are published. Check the <a href="https://github.com/codylindley/defuss-shadcn/tags" target="_blank" style="color:var(--primary);text-decoration:underline;text-underline-offset:4px;">releases page</a> for available versions.</p>
+  </div>
+
+  <!-- -- Self-hosting -------------------------------------- -->
+  <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);">
+    <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.02em;margin:0 0 0.75rem;">Self-hosting</h2>
+    <p class="text-sm text-muted-foreground mb-3">Download the full system and drop it into any project. All the files are static — no build step, no dependencies. Point an AI at the folder and it has everything it needs: component skills to read, CSS to include, JS to wire up, and this entire documentation site with working examples of every component.</p>
+    <p class="mb-4"><a href="https://github.com/codylindley/defuss-shadcn/archive/refs/heads/main.zip" class="btn" data-variant="outline" style="text-decoration:none;"><i data-lucide="download" style="width:1rem;height:1rem;"></i> Download latest (.zip)</a></p>
+  </div>
+
+  <!-- -- Component folder structure ------------------------ -->
+  <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);">
+    <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.02em;margin:0 0 0.75rem;">Component folder structure</h2>
+    <pre><code>components/
+└-- dialog/
+    ├-- component-skill.md    ← HTML structure, attributes, ARIA (read this first)
+    ├-- dialog.css   ← stylesheet (include via &lt;link&gt;)
+    └-- dialog.js    ← interaction behavior (include via &lt;script type="module"&gt;)</code></pre>
+    <p class="text-sm text-muted-foreground mt-2">Some components — like Button and Badge — are CSS-only. No JavaScript needed.</p>
+  </div>
+    </main>
+  </div>
+
+  <script src="js/site.js" defer></script>
+  <script type="module" src="js/shiki-highlight.js"></script>
+  <script type="module" src="../components/accordion/accordion.js"></script>
+  <script type="module" src="../components/combobox/combobox.js"></script>
+  <script type="module" src="../components/dialog/dialog.js"></script>
+  <script type="module" src="../components/dropdown/dropdown.js"></script>
+  <script type="module" src="../components/sheet/sheet.js"></script>
+  <script type="module" src="../components/tabs/tabs.js"></script>
+  <script type="module" src="../components/toast/toast.js"></script>
+  <script type="module" src="../components/toggle/toggle.js"></script>
+  <script type="module" src="../components/toggle-group/toggle-group.js"></script>
+  <script type="module" src="../components/toolbar/toolbar.js"></script>
+  <script type="module" src="../components/number-input/number-input.js"></script>
+  <script type="module" src="../components/color-picker/color-picker.js"></script>
+  <script type="module" src="../components/avatar/avatar.js"></script>
+  <script type="module" src="../components/image/image.js"></script>
+  <script type="module" src="../components/tree-view/tree-view.js"></script>
+  <script type="module" src="../components/calendar/calendar.js"></script>
+  <script type="module" src="../components/alert-dialog/alert-dialog.js"></script>
+    <script type="module" src="../components/popover/popover.js"></script>
+  <script type="module" src="../components/tooltip/tooltip.js"></script>
+  <script type="module" src="../components/context-menu/context-menu.js"></script>
+  <script type="module" src="../components/command/command.js"></script>
+  <script type="module" src="../components/navigation-menu/navigation-menu.js"></script>
+  <script type="module" src="../components/sidebar/sidebar.js"></script>
+  <script type="module" src="../components/carousel/carousel.js"></script>
+  <script type="module" src="../components/slider/slider.js"></script>
+  <script type="module" src="../components/sortable/sortable.js"></script>
+  <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

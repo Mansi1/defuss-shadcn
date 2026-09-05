@@ -3,6 +3,10 @@
 You are working on the **defuss-shadcn** design system repo.
 The consumer-facing system lives in `dist/` — **it is generated**: edit sources in
 `src/` (`bun run build` compiles `.ts` → `.js` and copies everything else 1:1).
+`docs/` is also generated: a 1:1 mirror of `dist/` (whole tree — Pages pages reference
+`../components/…` siblings) published by GitHub Pages; refresh it with `bun run docs`
+(`make build` does this automatically and `verify` fails if the mirror drifts). Never
+edit `docs/` directly — like `dist/`, it is deleted and rebuilt on every `bun run docs`.
 Never edit `dist/` directly; it is deleted and rebuilt on every build.
 
 ---
@@ -41,6 +45,7 @@ defuss-shadcn/
 ├── scripts/                           ← build & maintenance scripts (no one-shot migrations)
 │   ├── build.ts                       ← src/ → dist/ (tsc type-strip + copy everything else 1:1)
 │   ├── verify.ts                      ← static consistency gate (runs at end of build; `bun run verify`)
+│   ├── sync-docs.ts                   ← mirror dist/ → docs/ for GitHub Pages (`bun run docs`)
 │   ├── create-screenshots.ts          ← parallel default-state screenshots for agent inspection
 │   ├── lib/audit.ts                   ← undefined-utility audit (used by verify)
 │   ├── lib/snippets.ts                ← shared snippet drift/replace logic (syncers + verify)
@@ -656,7 +661,7 @@ of removing it).
 `make help` lists the shortcuts (`setup`, `dev`, `test`, `test-run`, `coverage`, `e2e`, `lint`,
 `verify`, `screenshots`, `build`) — they wrap the equivalent `bun run <script>` commands;
 package.json stays the single source of truth. `make build` is the full pipeline:
-lint → compile → screenshots → verify → tests → e2e (it calls `scripts/build.ts` directly,
+lint → compile → screenshots → docs-mirror → verify → tests → e2e (it calls `scripts/build.ts` directly,
 since `bun run build` runs `verify` before screenshots could be refreshed).
 
 `bun run test:run` runs the UI suite in headless Chromium (Vitest browser mode + Playwright).

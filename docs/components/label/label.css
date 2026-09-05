@@ -1,0 +1,56 @@
+/* -- Label component -------------------------------------------- */
+
+@layer components {
+  .label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    line-height: 1;
+    color: var(--foreground);
+    display: block;
+    margin-bottom: 0.375rem;
+    cursor: default;
+
+    /* Disabled — explicit attribute */
+    &[data-disabled] {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    /* Disabled — auto-detect via adjacent disabled control */
+    &:has(+ :disabled),
+    &:has(+ [data-disabled]) {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  /* -- Hint text (optional, required indicators) ----------- */
+  .label-hint {
+    font-weight: 400;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+  }
+
+  /* -- Accessibility ---------------------------------------- */
+  @media (prefers-contrast: more) {
+    .label[data-disabled],
+    .label:has(+ :disabled),
+    .label:has(+ [data-disabled]) {
+      opacity: 0.85;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .label {
+      color: LinkText;
+    }
+
+    .label[data-disabled],
+    .label:has(+ :disabled),
+    .label:has(+ [data-disabled]) {
+      opacity: 1;
+      color: GrayText;
+    }
+  }
+}

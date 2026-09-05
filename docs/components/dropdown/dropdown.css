@@ -1,0 +1,148 @@
+/* -- Dropdown component ---------------------------------------- */
+
+@layer components {
+  .dropdown-content {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 0.25rem;
+    min-width: 8rem;
+    box-shadow: 0 4px 16px oklch(0 0 0 / 0.12), 0 0 0 1px var(--border);
+
+    /* -- Anchor positioning ------------------------------------ */
+    position: fixed;
+    inset: auto;
+    top: anchor(bottom);
+    left: anchor(left);
+    margin: 0;
+    margin-top: 4px;
+    position-try-fallbacks: flip-block;
+
+    /* -- Animation --------------------------------------------- */
+    opacity: 0;
+    transform: scale(0.96) translateY(-0.25rem);
+    transition: opacity 150ms ease, transform 150ms ease,
+                display 150ms allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @starting-style {
+    .dropdown-content:popover-open {
+      opacity: 0;
+      transform: scale(0.96) translateY(-0.25rem);
+    }
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.375rem 0.5rem;
+    border-radius: calc(var(--radius) * 0.6);
+    font-size: 0.875rem;
+    border: none;
+    background: transparent;
+    color: var(--foreground);
+    cursor: pointer;
+    outline: none;
+    text-align: left;
+
+    &:hover, &[data-highlighted] {
+      background-color: var(--accent);
+      color: var(--accent-foreground);
+    }
+
+    &[data-variant="destructive"] {
+      &:hover, &[data-highlighted] {
+        background-color: var(--destructive);
+        color: var(--destructive-foreground);
+      }
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  /* -- Checkbox / Radio indicators ----------------------------- */
+  .dropdown-check,
+  .dropdown-radio {
+    padding-inline-start: 1.5rem;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: 0.375rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0.875rem;
+      height: 0.875rem;
+    }
+  }
+
+  .dropdown-check[aria-checked="true"]::before {
+    content: '';
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .dropdown-radio[aria-checked="true"]::before {
+    content: '';
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .dropdown-separator {
+    height: 1px;
+    background: var(--border);
+    margin: 0.25rem -0.25rem;
+  }
+
+  .dropdown-label {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+  }
+
+  .dropdown-shortcut {
+    margin-inline-start: auto;
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    letter-spacing: 0.05em;
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .dropdown-content {
+      transition: none;
+    }
+    .dropdown-item {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .dropdown-content {
+      border-color: ButtonText;
+    }
+    .dropdown-item {
+      &:hover, &[data-highlighted] {
+        forced-color-adjust: none;
+        background: Highlight;
+        color: HighlightText;
+      }
+    }
+  }
+}

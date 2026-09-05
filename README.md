@@ -127,7 +127,9 @@ mirror, committed and the only thing that ships.
 A `Makefile` wraps the common tasks: `make setup` (install deps + Playwright browsers),
 `make dev`, `make test-run`, `make coverage`, `make e2e`, `make lint` (oxlint),
 `make verify`, `make screenshots`. **`make build`** runs the whole pipeline —
-lint → compile → screenshots → verify → tests → e2e — the same loop CI runs.
+lint → compile → screenshots → docs-mirror → verify → tests → e2e — the same loop CI runs.
+`make docs` (or `bun run docs`) re-builds and mirrors `dist/` → `docs/`, the 1:1 tree
+GitHub Pages publishes; `verify` fails if that mirror drifts from `dist/`.
 
 `bun run verify` is the static consistency gate — it runs automatically at the end of
 every `bun run build` and checks: component skills, doc pages, E2E coverage, token usage,

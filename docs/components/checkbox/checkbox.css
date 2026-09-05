@@ -1,0 +1,120 @@
+/* -- Checkbox component ----------------------------------------- */
+
+@layer components {
+  .checkbox {
+    appearance: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--background);
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: background-color 150ms, border-color 150ms;
+
+    &:checked {
+      background-color: var(--primary);
+      border-color: var(--primary);
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 45%;
+        width: 6px;
+        height: 10px;
+        border: solid var(--primary-foreground);
+        border-width: 0 2px 2px 0;
+        transform: translate(-50%, -50%) rotate(45deg);
+      }
+    }
+
+    &:indeterminate {
+      background-color: var(--primary);
+      border-color: var(--primary);
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 10px;
+        height: 2px;
+        background: var(--primary-foreground);
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:is([aria-invalid="true"], :user-invalid) {
+      border-color: var(--destructive);
+    }
+  }
+
+  /* -- Checkbox item layout --------------------------------- */
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    & > label {
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+  }
+
+  .checkbox-item-block {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+    & > label {
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+
+    & > .checkbox {
+      margin-top: 0.125rem;
+    }
+  }
+
+  /* Disabled auto-styling */
+  .checkbox-item:has(.checkbox:disabled),
+  .checkbox-item-block:has(.checkbox:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* -- Accessibility ---------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .checkbox {
+      transition: none;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .checkbox {
+      border-width: 2px;
+    }
+
+    .checkbox:disabled {
+      opacity: 0.7;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .checkbox {
+      appearance: auto;
+    }
+  }
+}

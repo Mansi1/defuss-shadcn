@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "vite",
     "build": "bun scripts/build.ts && bun scripts/verify.ts",
+    "docs": "bun scripts/build.ts && bun scripts/sync-docs.ts",
     "lint": "oxlint src tests scripts",
     "verify": "bun scripts/verify.ts",
     "screenshots": "bun scripts/create-screenshots.ts",

@@ -1,0 +1,53 @@
+/* -- Icon component ---------------------------------------- */
+/* Styling for Lucide CDN icons (<i data-lucide="name">).     */
+/* Lucide replaces <i> with <svg>, these styles target that.  */
+
+@layer components {
+  [data-lucide] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    vertical-align: middle;
+    width: 1rem;
+    height: 1rem;
+    pointer-events: none;
+
+    /* -- Sizes via data-size --------------------------------- */
+    &[data-size="xs"] { width: 0.75rem; height: 0.75rem; }
+    &[data-size="sm"] { width: 0.875rem; height: 0.875rem; }
+    &[data-size="md"] { width: 1.25rem; height: 1.25rem; }
+    &[data-size="lg"] { width: 1.5rem; height: 1.5rem; }
+    &[data-size="xl"] { width: 2rem; height: 2rem; }
+
+    /* -- Spin animation ------------------------------------- */
+    &[data-animate="spin"] {
+      animation: icon-spin 1s linear infinite;
+    }
+  }
+
+  @keyframes icon-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ---- Accessibility ---------------------------------------- */
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-lucide] {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    [data-lucide] {
+      stroke-width: 2.5;
+    }
+  }
+
+  @media (forced-colors: active) {
+    [data-lucide] {
+      color: CanvasText;
+    }
+  }
+}

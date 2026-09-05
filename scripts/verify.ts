@@ -405,6 +405,48 @@ check(
   'update component-skill.md (Variants/Sizes tables) and the doc page to cover what the CSS implements (AGENTS.md)',
 );
 
+// 15b. strict type-check of the tooling/test trees (bun run typecheck). The
+// e2e rollout is all test code — a type error must not survive to CI. ~0.3 s.
+const typecheck = Bun.spawnSync({ cmd: ['bun', 'run', 'typecheck'], cwd: ROOT });
+check(
+  'typecheck',
+  typecheck.exitCode === 0
+    ? []
+    : typecheck.stderr
+        .toString()
+        .split('\n')
+        .filter((l) => /\w+\.\w+\(\d+,\d+\): error/.test(l))
+        .slice(0, 8),
+  'fix the type errors above (bun run typecheck prints full output)',
+);
+
+// 15c. docs/ mirror freshness: GitHub Pages publishes ./docs verbatim, so it
+// must be byte-identical to the current dist/ (same tree sync-docs.ts writes).
+const docsProblems: string[] = [];
+const DOCS_OUT = join(ROOT, 'docs');
+if (existsSync(DOCS_OUT) && existsSync(DIST)) {
+  const tree = (dir: string): Map<string, string> =>
+    new Map(
+      walk(dir, [''])
+        .filter((f) => !f.endsWith('.DS_Store'))
+        .map((f) => [relative(dir, f), createHash('sha256').update(readFileSync(f)).digest('hex')]),
+    );
+  const distTree = tree(DIST);
+  const docsTree = tree(DOCS_OUT);
+  for (const [rel, hash] of distTree) {
+    if (!docsTree.has(rel)) docsProblems.push(`docs/${rel} missing`);
+    else if (docsTree.get(rel) !== hash) docsProblems.push(`docs/${rel} differs from dist/`);
+  }
+  for (const rel of docsTree.keys()) if (!distTree.has(rel)) docsProblems.push(`docs/${rel} is stale (not in dist/)`);
+} else if (!existsSync(DOCS_OUT) && existsSync(DIST)) {
+  docsProblems.push('docs/ missing — GitHub Pages would publish nothing');
+}
+check(
+  'docs mirror fresh',
+  docsProblems.slice(0, 8),
+  'run `bun run docs` (re-builds dist/ and re-mirrors to docs/ for GitHub Pages)',
+);
+
 // 16. working tree cleanliness (warn): uncommitted changes make "green build"
 // ambiguous — the agent must finish by committing so CI sees what was tested.
 const gitProblems: string[] = [];

@@ -1,5 +1,53 @@
 // -- Command --------------------------------------------------
-// Command palette dialog with search filtering, keyboard navigation, and Cmd/Ctrl+K shortcut.
+// Command palette dialog with search filtering, keyboard navigation, and
+// Cmd/Ctrl+K shortcut, plus the named-state API so agents/tests can drive
+// open/closed by name (AGENTS.md "State API").
+
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const commandStates = ['default', 'open'];
+
+/**
+ * UI side of setState: 'default' closes, 'open' opens modally and focuses
+ * the search input (same affordance as the trigger/keyboard shortcut).
+ */
+function triggerStateChange(dialog, stateName, _config) {
+  switch (stateName) {
+    case 'default':
+      if (dialog.open) dialog.close();
+      break;
+    case 'open':
+      if (!dialog.open) dialog.showModal();
+      {
+        const input = dialog.querySelector('.command-input');
+        if (input) input.focus();
+      }
+      break;
+  }
+}
+
+/** Registry-level API; pass the dialog element explicitly. Unknown names throw. */
+export const commandApi = {
+  setState(dialog, stateName, config = {}) {
+    if (!commandStates.includes(stateName)) {
+      throw new Error(`command: unknown state "${stateName}" (supported: ${commandStates.join(', ')})`);
+    }
+    triggerStateChange(dialog, stateName, config);
+    // state lives on the ELEMENT, not the module (multiple palettes per page)
+    dialog.dataset.stateName = stateName;
+    dialog._stateConfig = config;
+  },
+  getState(dialog) {
+    return { name: dialog.dataset.stateName || 'default', config: dialog._stateConfig ?? {} };
+  },
+};
+
+_defussShadcn.commandApi = commandApi;
+_defussShadcn.commandStates = commandStates;
 
 /* Cmd/Ctrl+K handler — added once at module level */
 let commandKeydownAdded = false;
@@ -33,6 +81,11 @@ function highlightItem(list, index) {
 function init() {
 document.querySelectorAll('dialog.command:not([data-init])').forEach((dialog) => {
     dialog.dataset.init = '';
+    // bind-scope the api per instance: `$('#demo-cmd').api.setState('open')`
+    dialog.api = {
+      setState: (stateName, config) => commandApi.setState(dialog, stateName, config),
+      getState: () => commandApi.getState(dialog),
+    };
     const input = dialog.querySelector('.command-input');
     const list = dialog.querySelector('.command-list');
     const empty = dialog.querySelector('.command-empty');
@@ -83,6 +136,8 @@ document.querySelectorAll('dialog.command:not([data-init])').forEach((dialog) =>
       if (e.target.closest('.command-item')) dialog.close();
     });
     dialog.addEventListener('close', () => {
+      // reflect the actual UI state: Escape/item-click/backdrop close = 'default'
+      dialog.dataset.stateName = 'default';
       input.value = '';
       filter('');
       list.querySelectorAll('.command-item[data-highlighted]').forEach((el) => delete el.dataset.highlighted);

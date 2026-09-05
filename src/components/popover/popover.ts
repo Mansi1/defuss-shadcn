@@ -4,7 +4,7 @@
 
 // Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
 // shipped .js, so this import never appears in dist/.
-import { defussGlobals } from '../../shared/state-api.js';
+import { defussGlobals, safeShowPopover } from '../../shared/state-api.js';
 
 const _defussShadcn = defussGlobals();
 
@@ -20,7 +20,9 @@ function triggerStateChange(popover, stateName, _config) {
       try { popover.hidePopover(); } catch { /* already closed */ }
       break;
     case 'open':
-      try { popover.showPopover(); } catch { /* already open */ }
+      // deferred show (safeShowPopover): showPopover() mid-exit (right after
+      // light dismiss) crashes the headless renderer; exclusion stays native.
+      safeShowPopover(popover);
       break;
   }
 }

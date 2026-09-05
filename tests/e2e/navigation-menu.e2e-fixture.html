@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>navigation-menu e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/navigation-menu/navigation-menu.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page "With dropdowns" demo -->
+    <nav class="nav-menu" aria-label="Site navigation">
+      <ul class="nav-menu-list">
+        <li class="nav-menu-item">
+          <button class="nav-menu-trigger" popovertarget="nav-products">
+            Products
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="nav-menu-content" id="nav-products" popover>
+            <a class="nav-menu-content-link" href="#"><strong>Analytics</strong><p>View your dashboard and metrics</p></a>
+            <a class="nav-menu-content-link" href="#"><strong>Automation</strong><p>Build workflows and integrations</p></a>
+          </div>
+        </li>
+        <li class="nav-menu-item">
+          <button class="nav-menu-trigger" popovertarget="nav-resources">
+            Resources
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="nav-menu-content" id="nav-resources" popover>
+            <a class="nav-menu-content-link" href="#"><strong>Docs</strong><p>Guides and API reference</p></a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+
+    <script type="module" src="/dist/components/navigation-menu/navigation-menu.js"></script>
+  </body>
+</html>

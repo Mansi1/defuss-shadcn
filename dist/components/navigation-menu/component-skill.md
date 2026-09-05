@@ -66,6 +66,18 @@
 
 ---
 
+## States
+
+Declared states: `default` (hidden) · `open` (shown via native showPopover()).
+
+```js
+document.querySelector('#my-menu').api.setState('open');
+document.querySelector('#my-menu').api.getState(); // { name: 'open', config: {} }
+```
+
+The api is bound per `.nav-menu-content` element; the registry global is
+`_defussShadcn.navigationMenuApi` / `_defussShadcn.navigationMenuStates` (camelCase).
+
 ## Notes
 
 - The `popover` API handles open/close — no JS click handlers needed.

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>alert-dialog e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/button/button.css" />
+    <link rel="stylesheet" href="/dist/components/alert-dialog/alert-dialog.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: destructive confirmation dialog -->
+    <button class="btn" data-variant="outline" data-alert-dialog-trigger="demo-alert-dialog-1" aria-haspopup="dialog">Delete Account</button>
+    <dialog id="demo-alert-dialog-1" class="alert-dialog" role="alertdialog" aria-modal="true" aria-labelledby="ad1-title" aria-describedby="ad1-desc">
+      <div class="alert-dialog-content">
+        <div class="alert-dialog-header">
+          <h2 class="alert-dialog-title" id="ad1-title">Are you absolutely sure?</h2>
+          <p class="alert-dialog-description" id="ad1-desc">This action cannot be undone. This will permanently delete your account and remove your data from our servers.</p>
+        </div>
+        <div class="alert-dialog-footer">
+          <button class="btn" data-variant="outline" data-alert-dialog-close>Cancel</button>
+          <button class="btn" data-variant="destructive" data-alert-dialog-close>Delete</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script type="module" src="/dist/components/alert-dialog/alert-dialog.js"></script>
+  </body>
+</html>

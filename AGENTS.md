@@ -3,7 +3,10 @@
 Scratch space: throwaway scripts, probes and scaffolds go in the repo-local
 `tmp/` (gitignored) — never `/tmp` or other machine-specific locations. This
 keeps everything relative to the repo root (see the `portable paths` verify
-check) and inspectable: `bun tmp/<script>.ts` from the repo root.
+check) and inspectable. **Write the file with the file-writing tool and run it
+with `bun tmp/<script>.ts` from the repo root** — do not build scripts through
+`python3 - <<'PY'`/heredoc rewrites, which get permission-blocked and are
+harder to iterate on than editing the file directly.
 
 Long-running commands: always run e2e tests, screenshot generation, builds and
 browser tooling with a **timeout** (execute_command's `timeout` parameter, or

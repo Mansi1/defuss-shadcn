@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>sheet e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/button/button.css" />
+    <link rel="stylesheet" href="/dist/components/input/input.css" />
+    <link rel="stylesheet" href="/dist/components/label/label.css" />
+    <link rel="stylesheet" href="/dist/components/sheet/sheet.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: one sheet per documented side -->
+    <button class="btn" data-variant="outline" data-sheet-trigger="sheet-right" aria-haspopup="dialog">Open Right Sheet</button>
+    <dialog id="sheet-right" class="sheet" data-side="right" role="dialog" aria-modal="true" aria-labelledby="sheet-right-title">
+      <div class="sheet-header">
+        <h2 id="sheet-right-title" class="sheet-title">Create project</h2>
+        <p class="sheet-description">Deploy your new project in one-click.</p>
+      </div>
+      <div class="sheet-content">
+        <label class="label" for="sheet-right-name">Name</label>
+        <input class="input" id="sheet-right-name" type="text" value="My Project" />
+      </div>
+      <div class="sheet-footer">
+        <button class="btn" data-variant="outline" data-sheet-close>Cancel</button>
+        <button class="btn" data-variant="default">Deploy</button>
+      </div>
+    </dialog>
+
+    <button class="btn" data-variant="outline" data-sheet-trigger="sheet-left" aria-haspopup="dialog">Open Left Sheet</button>
+    <dialog id="sheet-left" class="sheet" data-side="left" role="dialog" aria-modal="true" aria-labelledby="sheet-left-title">
+      <div class="sheet-header">
+        <h2 id="sheet-left-title" class="sheet-title">Left Sheet</h2>
+      </div>
+      <div class="sheet-content"><button class="btn" data-variant="outline" data-sheet-close>Close</button></div>
+    </dialog>
+
+    <button class="btn" data-variant="outline" data-sheet-trigger="sheet-top" aria-haspopup="dialog">Open Top Sheet</button>
+    <dialog id="sheet-top" class="sheet" data-side="top" role="dialog" aria-modal="true" aria-labelledby="sheet-top-title">
+      <div class="sheet-header">
+        <h2 id="sheet-top-title" class="sheet-title">Top Sheet</h2>
+      </div>
+      <div class="sheet-content"><button class="btn" data-variant="outline" data-sheet-close>Close</button></div>
+    </dialog>
+
+    <button class="btn" data-variant="outline" data-sheet-trigger="sheet-bottom" aria-haspopup="dialog">Open Bottom Sheet</button>
+    <dialog id="sheet-bottom" class="sheet" data-side="bottom" role="dialog" aria-modal="true" aria-labelledby="sheet-bottom-title">
+      <div class="sheet-header">
+        <h2 id="sheet-bottom-title" class="sheet-title">Bottom Sheet</h2>
+      </div>
+      <div class="sheet-content"><button class="btn" data-variant="outline" data-sheet-close>Close</button></div>
+    </dialog>
+
+    <script type="module" src="/dist/components/sheet/sheet.js"></script>
+  </body>
+</html>

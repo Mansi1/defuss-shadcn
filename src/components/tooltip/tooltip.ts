@@ -5,7 +5,7 @@
 
 // Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
 // shipped .js, so this import never appears in dist/.
-import { defussGlobals } from '../../shared/state-api.js';
+import { defussGlobals, safeShowPopover } from '../../shared/state-api.js';
 
 const _defussShadcn = defussGlobals();
 
@@ -21,7 +21,9 @@ function triggerStateChange(tip, stateName, _config) {
       try { tip.hidePopover(); } catch { /* already closed */ }
       break;
     case 'visible':
-      try { tip.showPopover(); } catch { /* already open */ }
+      // deferred show (safeShowPopover): showPopover() mid-exit (after
+      // scroll-hiding) crashes the headless renderer; hints stay hints.
+      safeShowPopover(tip);
       markGroupOpen();
       break;
   }

@@ -35,6 +35,18 @@
 </dialog>
 ```
 
+## States
+
+Declared states: `default` (closed) · `open` (shown modally). Escape and backdrop clicks never close it — only close buttons, `close()`, or the API.
+
+```js
+document.querySelector('#my-alert').api.setState('open');
+document.querySelector('#my-alert').api.getState(); // { name: 'open', config: {} }
+```
+
+The api is bound per dialog; the registry global is
+`_defussShadcn.alertDialogApi` / `_defussShadcn.alertDialogStates` (camelCase).
+
 ## Accessibility
 
 - Uses `role="alertdialog"` instead of `role="dialog"` — signals interruption

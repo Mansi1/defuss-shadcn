@@ -18,7 +18,9 @@ import { join } from 'node:path';
 const ROOT = join(import.meta.dirname, '..');
 const SRC = join(ROOT, 'src');
 const DIST = join(ROOT, 'dist');
-const SHARED_IMPORT = /import \{ defussGlobals \} from '\.\.\/\.\.\/shared\/state-api\.js';\n/;
+// any named import from the shared helper file, e.g. `{ defussGlobals }` or
+// `{ defussGlobals, safeShowPopover }` — the whole helper is inlined either way
+const SHARED_IMPORT = /import \{[^}]+\} from '\.\.\/\.\.\/shared\/state-api\.js';\n/;
 
 // fresh tree so deleted sources never linger in dist/
 rmSync(DIST, { recursive: true, force: true });
@@ -42,8 +44,8 @@ cpSync(SRC, DIST, { recursive: true, filter: (s) => !s.endsWith('.ts') });
 // shipped files keep zero local module dependencies
 const helperPath = join(DIST, 'shared', 'state-api.js');
 if (existsSync(helperPath)) {
-  // drop `export` — each module gets its own hoisted copy of the function
-  const helper = readFileSync(helperPath, 'utf8').replace(/^export /m, '');
+  // drop `export` — each module gets its own hoisted copy of the functions
+  const helper = readFileSync(helperPath, 'utf8').replace(/^export /gm, '');
   for (const dir of readdirSync(join(DIST, 'components'))) {
     const js = join(DIST, 'components', dir, `${dir}.js`);
     if (!existsSync(js)) continue;

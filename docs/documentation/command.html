@@ -142,7 +142,7 @@
         <p class="text-xs text-muted-foreground mb-3">Click the button or press <kbd>⌘K</kbd> to open. Use Arrow keys to navigate, Enter to select, Escape to close.</p>
         <div class="preview">
           <button class="btn" data-variant="outline" data-command-trigger="demo-cmd">Open Command Menu</button>
-          <dialog id="demo-cmd" class="command" role="dialog" aria-modal="true" aria-label="Command menu">
+          <dialog id="demo-cmd" class="command" data-state-demo role="dialog" aria-modal="true" aria-label="Command menu">
             <div class="command-content">
               <div class="command-input-wrapper">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -188,6 +188,17 @@
   &lt;/div&gt;
 &lt;/dialog&gt;</code></pre>
         </div>
+
+        <!-- -- States ------------------------------------ -->
+        <section style="margin-top:3rem;" id="states">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">States</h2>
+          <p class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;">Named states via the shared State API, driven per instance through the bound <code>api</code>:</p>
+          <ul class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;padding-left:1.25rem;">
+            <li><code>default</code> — closed (the authored state; trigger or <code>Cmd/Ctrl+K</code> opens it)</li>
+            <li><code>open</code> — shown modally with the search input focused</li>
+          </ul>
+          <p class="text-sm text-muted-foreground">The demo element carries <code>data-state-demo</code>; <code>bun run screenshots</code> drives it via <code>el.api.setState(name)</code> and captures <code>screenshots/{mode}/command-{state}.png</code>.</p>
+        </section>
 
         <!-- -- CSS --------------------------------------- -->
         <section style="margin-top:3rem;" id="source-css">
@@ -278,7 +289,55 @@
           <div style="position:relative;margin-top:0.5rem;">
             <button class="copy-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
             <pre><code class="language-javascript">// -- Command --------------------------------------------------
-// Command palette dialog with search filtering, keyboard navigation, and Cmd/Ctrl+K shortcut.
+// Command palette dialog with search filtering, keyboard navigation, and
+// Cmd/Ctrl+K shortcut, plus the named-state API so agents/tests can drive
+// open/closed by name (AGENTS.md &quot;State API&quot;).
+
+// Shared preamble (AGENTS.md &quot;State API&quot;); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const commandStates = ['default', 'open'];
+
+/**
+ * UI side of setState: 'default' closes, 'open' opens modally and focuses
+ * the search input (same affordance as the trigger/keyboard shortcut).
+ */
+function triggerStateChange(dialog, stateName, _config) {
+  switch (stateName) {
+    case 'default':
+      if (dialog.open) dialog.close();
+      break;
+    case 'open':
+      if (!dialog.open) dialog.showModal();
+      {
+        const input = dialog.querySelector('.command-input');
+        if (input) input.focus();
+      }
+      break;
+  }
+}
+
+/** Registry-level API; pass the dialog element explicitly. Unknown names throw. */
+export const commandApi = {
+  setState(dialog, stateName, config = {}) {
+    if (!commandStates.includes(stateName)) {
+      throw new Error(`command: unknown state &quot;${stateName}&quot; (supported: ${commandStates.join(', ')})`);
+    }
+    triggerStateChange(dialog, stateName, config);
+    // state lives on the ELEMENT, not the module (multiple palettes per page)
+    dialog.dataset.stateName = stateName;
+    dialog._stateConfig = config;
+  },
+  getState(dialog) {
+    return { name: dialog.dataset.stateName || 'default', config: dialog._stateConfig ?? {} };
+  },
+};
+
+_defussShadcn.commandApi = commandApi;
+_defussShadcn.commandStates = commandStates;
 
 /* Cmd/Ctrl+K handler — added once at module level */
 let commandKeydownAdded = false;
@@ -312,6 +371,11 @@ function highlightItem(list, index) {
 function init() {
 document.querySelectorAll('dialog.command:not([data-init])').forEach((dialog) =&gt; {
     dialog.dataset.init = '';
+    // bind-scope the api per instance: `$('#demo-cmd').api.setState('open')`
+    dialog.api = {
+      setState: (stateName, config) =&gt; commandApi.setState(dialog, stateName, config),
+      getState: () =&gt; commandApi.getState(dialog),
+    };
     const input = dialog.querySelector('.command-input');
     const list = dialog.querySelector('.command-list');
     const empty = dialog.querySelector('.command-empty');
@@ -362,6 +426,8 @@ document.querySelectorAll('dialog.command:not([data-init])').forEach((dialog) =&
       if (e.target.closest('.command-item')) dialog.close();
     });
     dialog.addEventListener('close', () =&gt; {
+      // reflect the actual UI state: Escape/item-click/backdrop close = 'default'
+      dialog.dataset.stateName = 'default';
       input.value = '';
       filter('');
       list.querySelectorAll('.command-item[data-highlighted]').forEach((el) =&gt; delete el.dataset.highlighted);

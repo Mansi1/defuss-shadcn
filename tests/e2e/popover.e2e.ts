@@ -96,7 +96,8 @@ try {
 
   await check("state API: setState('open') shows it, getState reports it", async () => {
     await setState(page, 'pop-default', 'open');
-    assert.equal(await isOpen(page, 'pop-default'), true, 'open state must show the popover');
+    // the deferred show waits out any running exit transition (≤500ms cap)
+    await page.waitForFunction(() => document.querySelector('#pop-default')!.matches(':popover-open'));
     const state = await page.$eval('#pop-default', (el) => (el as HTMLElement).api!.getState());
     assert.equal(state.name, 'open');
   });

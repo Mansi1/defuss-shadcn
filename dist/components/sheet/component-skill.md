@@ -101,6 +101,18 @@ Uses `data-side` attribute to control which edge: `top`, `right`, `bottom`, `lef
 
 ---
 
+## States
+
+Declared states: `default` (closed) · `open` (shown modally via showModal()).
+
+```js
+document.querySelector('#sheet-right').api.setState('open');
+document.querySelector('#sheet-right').api.getState(); // { name: 'open', config: {} }
+```
+
+The api is bound per sheet element; the registry global is
+`_defussShadcn.sheetApi` / `_defussShadcn.sheetStates`.
+
 ## Notes
 
 - Right/left sheets have a fixed width of `24rem` with `max-width: 100vw` for small screens.

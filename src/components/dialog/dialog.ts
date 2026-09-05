@@ -69,6 +69,9 @@ function init() {
       btn.addEventListener('click', () => { dialog.close(); });
     });
     dialog.addEventListener('close', () => {
+      // reflect the actual UI state: any close path (Escape, backdrop, close
+      // button) returns the dialog to 'default', even when it wasn't setState'd
+      dialog.dataset.stateName = 'default';
       if (dialog._trigger) dialog._trigger.focus();
     });
   });

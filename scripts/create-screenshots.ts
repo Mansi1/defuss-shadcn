@@ -135,6 +135,14 @@ async function shoot(
         target.api.setState(s);
       }, state);
       await page.waitForTimeout(SETTLE_MS);
+      // fixed/anchored popovers render in the viewport's top layer — a demo
+      // below the fold would capture as blank. Scrolling the document moves
+      // the static trigger (and the CSS anchor + popover with it) into view.
+      await anchor.evaluate((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.bottom > innerHeight || r.top < 0) window.scrollBy(0, r.top - innerHeight / 2);
+      });
+      await page.waitForTimeout(SETTLE_MS / 2); // let anchor re-positioning settle
       await anchor.screenshot({ path: join(OUT, mode, `${name}-${state}.png`), timeout: PAGE_TIMEOUT_MS });
       console.log(`  ✓ ${mode}/${name}-${state}.png`);
     }

@@ -78,6 +78,18 @@
 
 ---
 
+## States
+
+Declared states: `default` (closed) · `open` (shown modally with the search input focused).
+
+```js
+document.querySelector('#cmd').api.setState('open');
+document.querySelector('#cmd').api.getState(); // { name: 'open', config: {} }
+```
+
+The api is bound per palette dialog; the registry global is
+`_defussShadcn.commandApi` / `_defussShadcn.commandStates`.
+
 ## Notes
 
 - The search input filters items by text content — groups with no matching items are hidden automatically.

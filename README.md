@@ -15,6 +15,7 @@ A portable UI component system built on the [shadcn/ui](https://ui.shadcn.com) t
 
 - **Themeable** — full shadcn semantic token model. Swap a [tweakcn](https://tweakcn.com) theme and every component updates instantly
 - **Component Skills** — every component includes a structured skill — markup, variants, ARIA, and wiring conventions — grounded in web standards
+- **Observable state** — interactive components expose a State API (`el.api.setState('open')`, `el.api.getState()`), so agents and tests can drive every documented state by name without knowing the implementation
 - **Accessible** — built on native HTML elements and WAI-ARIA patterns. Keyboard navigation, focus management, and screen reader support by default
 - **Framework Free** — runs in any browser, zero dependencies, no build pipeline required
 
@@ -107,11 +108,20 @@ project, or download the `.zip`.
 The toolchain exists so coding agents can **verify correctness of the implementation**,
 not to produce it:
 
-- **TypeScript** — component sources live in `src/` as `.ts`, giving agents type-checkable
+- **TypeScript** — component sources live in `src/` as `.ts`, and the entire test tree
+  (Vitest suite, e2e runner, helpers) is TypeScript too, giving agents type-checkable
   contracts; the build strips types to plain JS (`noCheck`, see [`tsconfig.json`](tsconfig.json))
-  so what ships is still zero-dependency vanilla JS
-- **E2E tests** — every component is exercised in a real browser (see [Testing](#testing));
-  an agent can prove a change works instead of guessing
+  so what ships is still zero-dependency vanilla JS. `bun run typecheck` (also part of
+  `verify`) keeps both tooling trees strict.
+- **State API** — interactive components declare their states (`const dialogStates = ['default', 'open']`)
+  and expose them per element (`el.api.setState(...)` / `el.api.getState()`), plus registry
+  globals for tooling. Every declared state must be covered by four artifacts — screenshot
+  (light + dark), doc page, component skill, and e2e assertion — enforced by `verify`.
+- **Screenshots for agents** — `bun run screenshots` renders each component (and each
+  named state) to `screenshots/{light,dark}/` so an agent can *look* at what it changed;
+  a content-hash manifest makes re-capture incremental.
+- **E2E tests** — components are exercised in a real browser against the shipped files
+  (see [Testing](#testing)); an agent can prove a change works instead of guessing
 - **oxlint** — `make lint` catches dead code and mistakes instantly, in milliseconds
 
 ```bash
@@ -122,26 +132,33 @@ bun run test:run   # run the UI test suite (headless Chromium)
 ```
 
 `src/` is the authoring tree (`.ts` + html/css/md/fonts); `dist/` is its compiled, 1:1
-mirror, committed and the only thing that ships.
+mirror, committed and the only thing that ships. `docs/` is a generated 1:1 mirror of
+`dist/` that GitHub Pages publishes — refresh with `bun run docs`, never edit it directly.
 
 A `Makefile` wraps the common tasks: `make setup` (install deps + Playwright browsers),
 `make dev`, `make test-run`, `make coverage`, `make e2e`, `make lint` (oxlint),
-`make verify`, `make screenshots`. **`make build`** runs the whole pipeline —
-lint → compile → screenshots → docs-mirror → verify → tests → e2e — the same loop CI runs.
-`make docs` (or `bun run docs`) re-builds and mirrors `dist/` → `docs/`, the 1:1 tree
-GitHub Pages publishes; `verify` fails if that mirror drifts from `dist/`.
+`make typecheck`, `make verify`, `make screenshots`, `make docs`. **`make build`** runs
+the whole pipeline — lint → compile → screenshots → docs-mirror → verify → tests → e2e —
+the same loop CI runs.
 
-`bun run verify` is the static consistency gate — it runs automatically at the end of
-every `bun run build` and checks: component skills, doc pages, E2E coverage, token usage,
-undefined utility classes, snippet sync + escaping, cross-page imports, sidebar links,
-lint, `dist/` freshness (1:1 with `src/`), `.preview` blocks, screenshot freshness
-(content-hash manifest — `bun run screenshots` re-shoots only changed components),
-the State API contract + per-state coverage (screenshots, docs, skill, e2e), inlined
-preamble in shipped JS, skill ↔ docs ↔ CSS variant parity, `prefers-reduced-motion`
-coverage, init idempotency, doc command references, dead links (linkedom), machine-absolute
-paths, and render drift. Known rollout gaps print as ⚠ warnings with a migration
-procedure (fix source first, e2e after). Each failing check prints the offending file
-and the exact fix command.
+`bun run verify` is the static consistency gate (~0.3 s, runs automatically at the end
+of every build) and the contract every coding agent must satisfy. It checks, among others:
+
+- **structure** — component skills, doc pages, CSS/JS imports on every page, sidebar links,
+  `.preview` blocks, `dist/` freshness (1:1 with `src/`), `docs/` mirror byte-identical
+- **consistency** — inline source snippets match the real files (and are properly escaped),
+  skill ↔ docs ↔ CSS variant parity, State API contract + per-state coverage across
+  screenshots/docs/skill/e2e, changelog & version markers, doc command references
+  (every `bun run`/`make` quoted in the docs must exist)
+- **quality** — token boundary rule (only tweakcn-defined `var(--*)`), undefined utility
+  classes, `prefers-reduced-motion` coverage, init idempotency (double-binding guard),
+  dead links (parsed with linkedom), portable paths (no machine-absolute paths),
+  strict typecheck, render drift (screenshot pixels changed without input changes)
+- **hygiene** — working tree committed, so a green build is a committed build
+
+Known rollout gaps (e.g. components still missing e2e tests) print as ⚠ warnings with a
+step-by-step migration procedure — always refactor the source first, write the e2e test
+after. Each failing check prints the offending file and the exact fix command.
 
 ## Testing
 
@@ -157,11 +174,14 @@ bun run test:coverage
 
 The first run needs Playwright's browser: `bunx playwright install chromium`.
 
-Each component also ships with an E2E smoke test in [`tests/e2e/`](tests/e2e/): a static
-fixture page using the component in **all** of its documented configurations, driven by
-plain Playwright against the unmodified files in `dist/` (`bun run e2e`). This is the
-verification loop a coding agent runs after touching any component — the shipped files
-themselves are asserted, so "it compiles" is never mistaken for "it works".
+Each component also gets an E2E smoke test in [`tests/e2e/`](tests/e2e/): a static
+fixture page using the component in **all** of its documented configurations (every
+variant, size, and State API state), driven by plain Playwright against the unmodified
+files in `dist/` (`bun run e2e`). This is the verification loop a coding agent runs
+after touching any component — the shipped files themselves are asserted, so "it
+compiles" is never mistaken for "it works". The rollout is in progress (`verify` lists
+the components still missing one) and its parity rule keeps fixture, docs and code in
+lockstep as they land.
 
 ## Author
 

@@ -227,19 +227,24 @@ for (const name of componentDirs) {
   const src = readFileSync(jsFile, 'utf8');
   const missing = STATE_API_PATTERNS.filter(([, re]) => !re.test(src)).map(([label]) => label);
   if (missing.length === 0) continue;
-  const line = `${name}: missing ${missing.join(', ')}`;
+  // spell out the refactor directive when the states array itself is absent —
+  // an agent reading only this line must know what to do (AGENTS.md "State API")
+  const rest = missing.filter((m) => m !== 'states array declares default').join(', ');
+  const line = missing.includes('states array declares default')
+    ? `${name}: no ${name}States = ['default', …] declared — refactor this component to support at least the 'default' state following the State API architecture${rest ? ` (also missing: ${rest})` : ''}`
+    : `${name}: missing ${missing.join(', ')}`;
   if (STATE_API_LEGACY.includes(name)) stateApiWarnings.push(line);
   else stateApiProblems.push(line);
 }
 check(
   'state API',
   stateApiProblems,
-  'add the State API preamble + states + bound api (AGENTS.md "State API", copy accordion.ts)',
+  `refactor each component above to the State API architecture: declare {name}States with "default" first, implement setState/getState/triggerStateChange, bind el.api (AGENTS.md "State API", copy accordion.ts); then drop migrated names from STATE_API_LEGACY in scripts/verify.ts`,
 );
 check(
   'state API (legacy rollout)',
   stateApiWarnings,
-  'migrate these components one by one, then drop them from STATE_API_LEGACY in scripts/verify.ts',
+  'same refactor as above (at least a "default" state, AGENTS.md "State API"), one component per commit, then drop it from STATE_API_LEGACY in scripts/verify.ts',
   true,
 );
 

@@ -198,23 +198,23 @@
     resize: vertical;
     field-sizing: content;
 
-    &:focus {
+    &amp;:focus {
       border-color: var(--ring);
       box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
     }
 
-    &::placeholder { color: var(--muted-foreground); }
+    &amp;::placeholder { color: var(--muted-foreground); }
 
-    &:disabled {
+    &amp;:disabled {
       opacity: 0.5;
       cursor: not-allowed;
       resize: none;
     }
 
-    &:is([aria-invalid="true"], :user-invalid) {
+    &amp;:is([aria-invalid=&quot;true&quot;], :user-invalid) {
       border-color: var(--destructive);
 
-      &:focus {
+      &amp;:focus {
         border-color: var(--destructive);
         box-shadow: 0 0 0 2px oklch(from var(--destructive) l c h / 0.2);
       }
@@ -256,7 +256,7 @@
       border-color: GrayText;
     }
 
-    .textarea:is([aria-invalid="true"], :user-invalid) {
+    .textarea:is([aria-invalid=&quot;true&quot;], :user-invalid) {
       border-color: LinkText;
     }
   }

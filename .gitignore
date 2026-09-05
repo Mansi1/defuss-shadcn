@@ -8,6 +8,9 @@ node_modules
 .vitest/
 coverage/
 
+# Verification screenshots (regenerate: `bun run screenshots`)
+screenshots/
+
 .roo/
 
 coverage/

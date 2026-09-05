@@ -205,9 +205,9 @@
     opacity: 0; transform: scale(0.98);
     transition: opacity 150ms ease, transform 150ms ease, display 150ms allow-discrete;
 
-    &[open] { opacity: 1; transform: scale(1); }
-    &::backdrop { background: oklch(0 0 0 / 0); transition: all 150ms ease, display 150ms allow-discrete; }
-    &[open]::backdrop { background: oklch(0 0 0 / 0.45); }
+    &amp;[open] { opacity: 1; transform: scale(1); }
+    &amp;::backdrop { background: oklch(0 0 0 / 0); transition: all 150ms ease, display 150ms allow-discrete; }
+    &amp;[open]::backdrop { background: oklch(0 0 0 / 0.45); }
   }
 
   @starting-style {
@@ -218,13 +218,13 @@
   .command-input-wrapper {
     display: flex; align-items: center; gap: 0.5rem;
     padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
-    & svg { width: 1rem; height: 1rem; color: var(--muted-foreground); flex-shrink: 0; }
+    &amp; svg { width: 1rem; height: 1rem; color: var(--muted-foreground); flex-shrink: 0; }
   }
 
   .command-input {
     flex: 1; border: none; background: transparent;
     font-size: 0.875rem; color: var(--foreground); outline: none; font-family: inherit;
-    &::placeholder { color: var(--muted-foreground); }
+    &amp;::placeholder { color: var(--muted-foreground); }
   }
 
   .command-list { max-height: 18rem; overflow-y: auto; overscroll-behavior: contain; padding: 0.25rem; }
@@ -236,10 +236,10 @@
     padding: 0.5rem 0.5rem; border: none; border-radius: var(--radius-md);
     background: transparent; color: var(--foreground); font-size: 0.8125rem;
     font-family: inherit; text-align: left; cursor: pointer; outline: none;
-    &:hover, &[data-highlighted] { background-color: var(--accent); }
-    &:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
-    &[aria-disabled="true"] { pointer-events: none; opacity: 0.5; }
-    & svg { width: 1rem; height: 1rem; color: var(--muted-foreground); flex-shrink: 0; }
+    &amp;:hover, &amp;[data-highlighted] { background-color: var(--accent); }
+    &amp;:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
+    &amp;[aria-disabled=&quot;true&quot;] { pointer-events: none; opacity: 0.5; }
+    &amp; svg { width: 1rem; height: 1rem; color: var(--muted-foreground); flex-shrink: 0; }
   }
 
   .command-separator { height: 1px; background-color: var(--border); margin: 0.25rem -0.25rem; }
@@ -256,14 +256,14 @@
   @media (prefers-contrast: more) {
     dialog.command { border: 2px solid var(--border); }
     .command-item {
-      &:hover, &[data-highlighted] { outline: 1px solid var(--foreground); }
+      &amp;:hover, &amp;[data-highlighted] { outline: 1px solid var(--foreground); }
     }
   }
 
   @media (forced-colors: active) {
     dialog.command { border: 2px solid CanvasText; }
     .command-item {
-      &:hover, &[data-highlighted] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+      &amp;:hover, &amp;[data-highlighted] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
     }
     .command-separator { background-color: CanvasText; }
   }
@@ -284,8 +284,8 @@
 let commandKeydownAdded = false;
 if (!commandKeydownAdded) {
   commandKeydownAdded = true;
-  document.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+  document.addEventListener('keydown', (e) =&gt; {
+    if ((e.metaKey || e.ctrlKey) &amp;&amp; e.key === 'k') {
       const dialog = document.querySelector('dialog.command');
       if (!dialog) return;
       e.preventDefault();
@@ -296,12 +296,12 @@ if (!commandKeydownAdded) {
 }
 
 function getVisibleItems(list) {
-  return Array.from(list.querySelectorAll('.command-item:not([hidden]):not([aria-disabled="true"])'));
+  return Array.from(list.querySelectorAll('.command-item:not([hidden]):not([aria-disabled=&quot;true&quot;])'));
 }
 
 function highlightItem(list, index) {
   const visible = getVisibleItems(list);
-  list.querySelectorAll('.command-item[data-highlighted]').forEach((el) => delete el.dataset.highlighted);
+  list.querySelectorAll('.command-item[data-highlighted]').forEach((el) =&gt; delete el.dataset.highlighted);
   if (visible.length === 0) return -1;
   const clamped = ((index % visible.length) + visible.length) % visible.length;
   visible[clamped].dataset.highlighted = '';
@@ -310,7 +310,7 @@ function highlightItem(list, index) {
 }
 
 function init() {
-document.querySelectorAll('dialog.command:not([data-init])').forEach((dialog) => {
+document.querySelectorAll('dialog.command:not([data-init])').forEach((dialog) =&gt; {
     dialog.dataset.init = '';
     const input = dialog.querySelector('.command-input');
     const list = dialog.querySelector('.command-list');
@@ -319,25 +319,25 @@ document.querySelectorAll('dialog.command:not([data-init])').forEach((dialog) =>
     const items = Array.from(list.querySelectorAll('.command-item'));
     let highlightIndex = -1;
 
-    const filter = (q) => {
+    const filter = (q) =&gt; {
       const query = q.toLowerCase(); let hasVisible = false;
-      items.forEach((item) => {
+      items.forEach((item) =&gt; {
         const match = !query || item.textContent.toLowerCase().includes(query);
         item.hidden = !match; if (match) hasVisible = true;
       });
-      list.querySelectorAll('.command-group').forEach((g) => {
+      list.querySelectorAll('.command-group').forEach((g) =&gt; {
         g.hidden = g.querySelectorAll('.command-item:not([hidden])').length === 0;
       });
-      list.querySelectorAll('.command-separator').forEach((s) => {
+      list.querySelectorAll('.command-separator').forEach((s) =&gt; {
         s.hidden = !!query;
       });
       if (empty) empty.hidden = hasVisible;
       highlightIndex = highlightItem(list, 0);
     };
 
-    input.addEventListener('input', () => { filter(input.value); });
+    input.addEventListener('input', () =&gt; { filter(input.value); });
 
-    input.addEventListener('keydown', (e) => {
+    input.addEventListener('keydown', (e) =&gt; {
       const visible = getVisibleItems(list);
       if (e.key === 'ArrowDown') {
         e.preventDefault();
@@ -357,23 +357,23 @@ document.querySelectorAll('dialog.command:not([data-init])').forEach((dialog) =>
       }
     });
 
-    dialog.addEventListener('click', (e) => {
+    dialog.addEventListener('click', (e) =&gt; {
       if (e.target === dialog) dialog.close();
       if (e.target.closest('.command-item')) dialog.close();
     });
-    dialog.addEventListener('close', () => {
+    dialog.addEventListener('close', () =&gt; {
       input.value = '';
       filter('');
-      list.querySelectorAll('.command-item[data-highlighted]').forEach((el) => delete el.dataset.highlighted);
+      list.querySelectorAll('.command-item[data-highlighted]').forEach((el) =&gt; delete el.dataset.highlighted);
       highlightIndex = -1;
     });
   });
 
-document.querySelectorAll('[data-command-trigger]:not([data-init])').forEach((trigger) => {
+document.querySelectorAll('[data-command-trigger]:not([data-init])').forEach((trigger) =&gt; {
   trigger.dataset.init = '';
   const dialog = document.getElementById(trigger.dataset.commandTrigger);
   if (!dialog) return;
-  trigger.addEventListener('click', () => {
+  trigger.addEventListener('click', () =&gt; {
     dialog.showModal();
     const input = dialog.querySelector('.command-input');
     if (input) input.focus();

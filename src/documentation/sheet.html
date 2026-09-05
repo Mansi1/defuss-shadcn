@@ -371,10 +371,10 @@
     opacity: 0;
     transition: opacity 300ms ease, transform 300ms ease, display 300ms allow-discrete;
 
-    &[open] { opacity: 1; }
+    &amp;[open] { opacity: 1; }
 
     /* -- Side: right (default) --------------------------------- */
-    &, &[data-side="right"] {
+    &amp;, &amp;[data-side=&quot;right&quot;] {
       position: fixed;
       top: 0; right: 0; bottom: 0;
       left: auto;
@@ -386,12 +386,12 @@
       transform: translateX(100%);
     }
 
-    &[open], &[data-side="right"][open] {
+    &amp;[open], &amp;[data-side=&quot;right&quot;][open] {
       transform: translateX(0);
     }
 
     /* -- Side: left -------------------------------------------- */
-    &[data-side="left"] {
+    &amp;[data-side=&quot;left&quot;] {
       position: fixed;
       top: 0; left: 0; bottom: 0;
       right: auto;
@@ -403,11 +403,11 @@
       border-right: 1px solid var(--border);
       transform: translateX(-100%);
 
-      &[open] { transform: translateX(0); }
+      &amp;[open] { transform: translateX(0); }
     }
 
     /* -- Side: top --------------------------------------------- */
-    &[data-side="top"] {
+    &amp;[data-side=&quot;top&quot;] {
       position: fixed;
       top: 0; left: 0; right: 0;
       bottom: auto;
@@ -419,11 +419,11 @@
       border-bottom: 1px solid var(--border);
       transform: translateY(-100%);
 
-      &[open] { transform: translateY(0); }
+      &amp;[open] { transform: translateY(0); }
     }
 
     /* -- Side: bottom ------------------------------------------ */
-    &[data-side="bottom"] {
+    &amp;[data-side=&quot;bottom&quot;] {
       position: fixed;
       bottom: 0; left: 0; right: 0;
       top: auto;
@@ -435,17 +435,17 @@
       border-top: 1px solid var(--border);
       transform: translateY(100%);
 
-      &[open] { transform: translateY(0); }
+      &amp;[open] { transform: translateY(0); }
     }
 
     /* -- Backdrop ---------------------------------------------- */
-    &::backdrop {
+    &amp;::backdrop {
       background: oklch(0 0 0 / 0);
       backdrop-filter: blur(0px);
       transition: all 300ms ease, display 300ms allow-discrete;
     }
 
-    &[open]::backdrop {
+    &amp;[open]::backdrop {
       background: oklch(0 0 0 / 0.45);
       backdrop-filter: blur(3px);
     }
@@ -453,22 +453,22 @@
 
   @starting-style {
     dialog.sheet[open],
-    dialog.sheet[data-side="right"][open] {
+    dialog.sheet[data-side=&quot;right&quot;][open] {
       opacity: 0;
       transform: translateX(100%);
     }
 
-    dialog.sheet[data-side="left"][open] {
+    dialog.sheet[data-side=&quot;left&quot;][open] {
       opacity: 0;
       transform: translateX(-100%);
     }
 
-    dialog.sheet[data-side="top"][open] {
+    dialog.sheet[data-side=&quot;top&quot;][open] {
       opacity: 0;
       transform: translateY(-100%);
     }
 
-    dialog.sheet[data-side="bottom"][open] {
+    dialog.sheet[data-side=&quot;bottom&quot;][open] {
       opacity: 0;
       transform: translateY(100%);
     }
@@ -502,7 +502,7 @@
     cursor: pointer;
     transition: color 150ms, background-color 150ms;
 
-    &:hover {
+    &amp;:hover {
       color: var(--foreground);
       background-color: var(--accent);
     }
@@ -521,27 +521,27 @@
               Copy
             </button>
             <pre><code class="language-javascript">// -- Sheet ----------------------------------------------------
-// Wires [data-sheet-trigger] buttons to <dialog class="sheet"> elements.
+// Wires [data-sheet-trigger] buttons to &lt;dialog class=&quot;sheet&quot;&gt; elements.
 
 function init() {
-document.querySelectorAll('[data-sheet-trigger]:not([data-init])').forEach((trigger) => {
+document.querySelectorAll('[data-sheet-trigger]:not([data-init])').forEach((trigger) =&gt; {
   trigger.dataset.init = '';
   const sheet = document.getElementById(trigger.dataset.sheetTrigger);
   if (!sheet) return;
-  trigger.addEventListener('click', () => {
+  trigger.addEventListener('click', () =&gt; {
     sheet._trigger = trigger;
     sheet.showModal();
   });
 });
-document.querySelectorAll('dialog.sheet:not([data-init])').forEach((sheet) => {
+document.querySelectorAll('dialog.sheet:not([data-init])').forEach((sheet) =&gt; {
   sheet.dataset.init = '';
-  sheet.addEventListener('click', (e) => {
+  sheet.addEventListener('click', (e) =&gt; {
     if (e.target === sheet) sheet.close();
   });
-  sheet.querySelectorAll('[data-sheet-close]').forEach((btn) => {
-    btn.addEventListener('click', () => { sheet.close(); });
+  sheet.querySelectorAll('[data-sheet-close]').forEach((btn) =&gt; {
+    btn.addEventListener('click', () =&gt; { sheet.close(); });
   });
-  sheet.addEventListener('close', () => {
+  sheet.addEventListener('close', () =&gt; {
     if (sheet._trigger) sheet._trigger.focus();
   });
 });

@@ -6,13 +6,20 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
  * scripts thin and their behavior guaranteed identical.
  */
 
-/** HTML-escapes a source file for embedding inside a <code> element. */
+/**
+ * HTML-escapes a source file for embedding inside a <code> element.
+ * The entity replacements are spelled with \u0026 (not a literal ampersand)
+ * so they survive editors/tools that decode HTML entities in transit — an
+ * earlier edit silently turned them into identity replacements, which
+ * embedded raw `<`/`>`/`&` into every synced doc page and broke strict
+ * HTML parsers (parse5 "invalid-first-character-of-tag-name").
+ */
 export function htmlEncode(str: string): string {
   return str
-    .replace(/&/g, '&')
-    .replace(/</g, '<')
-    .replace(/>/g, '>')
-    .replace(/"/g, '"');
+    .replace(/&/g, '\u0026amp;')
+    .replace(/</g, '\u0026lt;')
+    .replace(/>/g, '\u0026gt;')
+    .replace(/"/g, '\u0026quot;');
 }
 
 /**
@@ -42,11 +49,9 @@ export function syncFirstSnippet(
   if (!snippetDrifts(html, langClass, readFileSync(sourcePath, 'utf8'))) return 'skipped';
 
   const regex = new RegExp(`(<pre><code class="${langClass}"[^>]*>)([\\s\\S]*?)(</code></pre>)`);
-  const match = html.match(regex)!;
-  writeFileSync(
-    htmlPath,
-    html.replace(regex, match[1] + htmlEncode(readFileSync(sourcePath, 'utf8').trimEnd()) + match[3]),
-    'utf8',
-  );
+  const encoded = htmlEncode(readFileSync(sourcePath, 'utf8').trimEnd());
+  // MUST be a function replacer: a string replacement would interpret `$&`,
+  // "$`" etc. in the encoded source (component comments contain backtick-$-backtick)
+  writeFileSync(htmlPath, html.replace(regex, (_m, open, _old, close) => open + encoded + close), 'utf8');
   return 'updated';
 }

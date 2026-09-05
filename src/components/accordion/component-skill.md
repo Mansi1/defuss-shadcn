@@ -1,5 +1,16 @@
 # Pattern: Accordion
 
+## States
+Named states via the shared State API (AGENTS.md "State API"), bound per instance:
+`default` (authored markup, snapshotted at init), `all-open`, `all-closed`.
+
+```js
+document.querySelector('.accordion[data-type="single"]').api.setState('all-open');
+document.querySelector('.accordion[data-type="single"]').api.getState(); // { name: 'all-open', config: {} }
+```
+
+Unknown state names throw. `globalThis._defussShadcn.accordionStates` lists them.
+
 ## Native basis
 `<details>` / `<summary>` elements. The browser provides:
 - Click to toggle (automatically)

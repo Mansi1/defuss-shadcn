@@ -498,20 +498,20 @@
     gap: 0.125rem;
 
     /* -- Line variant --------------------------------------------- */
-    &[data-variant="line"] {
+    &amp;[data-variant=&quot;line&quot;] {
       background: transparent;
       border-radius: 0;
       padding: 0;
       gap: 0;
       border-bottom: 1px solid var(--border);
 
-      & .tab-trigger {
+      &amp; .tab-trigger {
         border-radius: 0;
         padding: 0.5rem 1rem;
         border-bottom: 2px solid transparent;
         margin-bottom: -1px;
 
-        &[aria-selected="true"] {
+        &amp;[aria-selected=&quot;true&quot;] {
           background: transparent;
           color: var(--foreground);
           border-bottom-color: var(--primary);
@@ -521,11 +521,11 @@
     }
 
     /* -- Vertical orientation ------------------------------------ */
-    &[aria-orientation="vertical"] {
+    &amp;[aria-orientation=&quot;vertical&quot;] {
       flex-direction: column;
       width: auto;
 
-      & .tab-trigger {
+      &amp; .tab-trigger {
         justify-content: flex-start;
         width: 100%;
       }
@@ -549,30 +549,30 @@
     white-space: nowrap;
     outline: none;
 
-    &[aria-selected="true"] {
+    &amp;[aria-selected=&quot;true&quot;] {
       background: var(--background);
       color: var(--foreground);
       box-shadow: 0 1px 3px oklch(0 0 0 / 0.08), 0 0 0 1px var(--border);
     }
 
-    &:focus-visible {
+    &amp;:focus-visible {
       outline: 2px solid var(--ring);
       outline-offset: 2px;
     }
 
-    &:disabled {
+    &amp;:disabled {
       pointer-events: none;
       opacity: 0.5;
     }
   }
 
   /* -- Vertical layout container ----------------------------- */
-  .tabs:has(.tab-list[aria-orientation="vertical"]) {
+  .tabs:has(.tab-list[aria-orientation=&quot;vertical&quot;]) {
     display: flex;
     gap: 1rem;
     align-items: flex-start;
 
-    & > .tab-content {
+    &amp; &gt; .tab-content {
       margin-top: 0;
       flex: 1;
     }
@@ -582,12 +582,12 @@
   .tab-content {
     margin-top: 0.75rem;
 
-    &:focus-visible {
+    &amp;:focus-visible {
       outline: 2px solid var(--ring);
       outline-offset: 2px;
     }
 
-    &[hidden] { display: none; }
+    &amp;[hidden] { display: none; }
   }
 
   /* -- Accessibility ------------------------------------------ */
@@ -597,12 +597,12 @@
   }
 
   @media (forced-colors: active) {
-    .tab-trigger[aria-selected="true"] {
+    .tab-trigger[aria-selected=&quot;true&quot;] {
       border: 2px solid Highlight;
       box-shadow: none;
     }
 
-    .tab-list[data-variant="line"] .tab-trigger[aria-selected="true"] {
+    .tab-list[data-variant=&quot;line&quot;] .tab-trigger[aria-selected=&quot;true&quot;] {
       border: none;
       border-bottom: 2px solid Highlight;
     }
@@ -621,10 +621,10 @@
               Copy
             </button>
             <pre><code class="language-javascript">// -- Tabs -----------------------------------------------------
-// ARIA-compliant keyboard navigation for [role="tablist"] elements.
+// ARIA-compliant keyboard navigation for [role=&quot;tablist&quot;] elements.
 
-const activateTab = (tab, triggers) => {
-  triggers.forEach((t) => {
+const activateTab = (tab, triggers) =&gt; {
+  triggers.forEach((t) =&gt; {
     t.setAttribute('aria-selected', 'false');
     t.setAttribute('tabindex', '-1');
     const panel = document.getElementById(t.getAttribute('aria-controls'));
@@ -637,15 +637,15 @@ const activateTab = (tab, triggers) => {
 };
 
 function init() {
-document.querySelectorAll('[role="tablist"]:not([data-init])').forEach((tablist) => {
+document.querySelectorAll('[role=&quot;tablist&quot;]:not([data-init])').forEach((tablist) =&gt; {
     tablist.dataset.init = '';
     if (!tablist.querySelector('.tab-trigger')) return;
-    const triggers = Array.from(tablist.querySelectorAll('[role="tab"]'));
+    const triggers = Array.from(tablist.querySelectorAll('[role=&quot;tab&quot;]'));
     const orientation = tablist.getAttribute('aria-orientation') || 'horizontal';
 
-    triggers.forEach((trigger) => {
-      trigger.addEventListener('click', () => { activateTab(trigger, triggers); });
-      trigger.addEventListener('keydown', (e) => {
+    triggers.forEach((trigger) =&gt; {
+      trigger.addEventListener('click', () =&gt; { activateTab(trigger, triggers); });
+      trigger.addEventListener('keydown', (e) =&gt; {
         const current = triggers.indexOf(trigger);
         let next;
         const forward = orientation === 'horizontal' ? 'ArrowRight' : 'ArrowDown';
@@ -653,28 +653,28 @@ document.querySelectorAll('[role="tablist"]:not([data-init])').forEach((tablist)
         switch (e.key) {
           case forward:
             e.preventDefault();
-            for (let i = 1; i <= triggers.length; i++) {
+            for (let i = 1; i &lt;= triggers.length; i++) {
               const c = triggers[(current + i) % triggers.length];
               if (!c.disabled) { next = c; break; }
             }
             break;
           case backward:
             e.preventDefault();
-            for (let i = 1; i <= triggers.length; i++) {
+            for (let i = 1; i &lt;= triggers.length; i++) {
               const c = triggers[(current - i + triggers.length) % triggers.length];
               if (!c.disabled) { next = c; break; }
             }
             break;
           case 'Home':
             e.preventDefault();
-            next = triggers.find((t) => !t.disabled);
+            next = triggers.find((t) =&gt; !t.disabled);
             break;
           case 'End':
             e.preventDefault();
-            next = triggers.slice().reverse().find((t) => !t.disabled);
+            next = triggers.slice().reverse().find((t) =&gt; !t.disabled);
             break;
         }
-        if (next && !next.disabled) {
+        if (next &amp;&amp; !next.disabled) {
           activateTab(next, triggers);
           next.focus();
         }

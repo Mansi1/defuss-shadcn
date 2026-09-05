@@ -234,21 +234,21 @@
     color: var(--muted-foreground); text-decoration: none;
     border-radius: var(--radius-sm); outline: none;
     transition: color 150ms ease;
-    &:hover { color: var(--foreground); }
-    &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    &amp;:hover { color: var(--foreground); }
+    &amp;:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
   }
   .breadcrumb-separator {
     color: var(--muted-foreground); font-size: 0.75rem;
-    & svg { width: 0.875rem; height: 0.875rem; flex-shrink: 0; }
+    &amp; svg { width: 0.875rem; height: 0.875rem; flex-shrink: 0; }
 
     /* RTL: auto-flip chevron separators */
-    [dir="rtl"] & svg { scale: -1 1; }
+    [dir=&quot;rtl&quot;] &amp; svg { scale: -1 1; }
   }
   .breadcrumb-page { color: var(--foreground); font-weight: 400; }
   .breadcrumb-ellipsis {
     display: flex; align-items: center; justify-content: center;
     width: 1.5rem; height: 1.5rem; color: var(--muted-foreground);
-    & span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+    &amp; span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
   }
 
   /* -- Accessibility ------------------------------------------ */
@@ -264,7 +264,7 @@
 
   @media (forced-colors: active) {
     .breadcrumb-link {
-      &:hover { forced-color-adjust: none; color: HighlightText; background: Highlight; }
+      &amp;:hover { forced-color-adjust: none; color: HighlightText; background: Highlight; }
     }
     .breadcrumb-page { color: CanvasText; }
     .breadcrumb-separator { color: GrayText; }

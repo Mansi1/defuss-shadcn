@@ -111,6 +111,67 @@ try {
     await page.keyboard.press('Enter');
     await expectOpen(page, 'multi', [true, true, true], 'after second Enter');
   });
+
+  // -- State API (AGENTS.md "State API"): agents drive states by name --------
+  const setState = (id, state) =>
+    page.$eval(`#${id}`, (el, s) => el.api.setState(s), state);
+
+  await check('state API: default state reported for bound instances', async () => {
+    const state = await page.$eval('#single', (el) => el.api.getState());
+    assert.equal(state.name, 'default');
+    assert.deepEqual(state.config, {});
+  });
+
+  await check('state API: setState("all-open") opens every item', async () => {
+    await setState('single', 'all-open');
+    await expectOpen(page, 'single', [true, true, true], 'all-open');
+    const state = await page.$eval('#single', (el) => el.api.getState());
+    assert.equal(state.name, 'all-open');
+  });
+
+  await check('state API: setState("all-closed") even on non-collapsible', async () => {
+    await setState('single', 'all-closed');
+    await expectOpen(page, 'single', [false, false, false], 'all-closed');
+  });
+
+  await check('state API: setState("default") restores the authored markup', async () => {
+    await setState('single', 'default');
+    await expectOpen(page, 'single', [true, false, false], 'back to default');
+    const state = await page.$eval('#single', (el) => el.api.getState());
+    assert.equal(state.name, 'default');
+  });
+
+  await check('state API: unknown state names throw', async () => {
+    const err = await page.evaluate(() => {
+      try {
+        document.querySelector('#single').api.setState('nope');
+        return null;
+      } catch (e) {
+        return e.message;
+      }
+    });
+    assert.ok(err && err.includes('unknown state'), `expected throw, got ${err}`);
+  });
+
+  await check('state API: per-instance isolation (sibling unaffected)', async () => {
+    // read the sibling first — earlier tests clicked it, its pattern is whatever it is
+    const before = await page.$$eval('#collapsible .accordion-item', (els) => els.map((el) => el.open));
+    await setState('single', 'all-open');
+    await expectOpen(page, 'single', [true, true, true], 'single all-open');
+    await expectOpen(page, 'collapsible', before, 'collapsible untouched');
+    await setState('single', 'default');
+  });
+
+  await check('state API: registry globals expose api + declared states', async () => {
+    const reg = await page.evaluate(() => ({
+      hasApi: typeof globalThis._defussShadcn?.accordionApi?.setState === 'function',
+      states: globalThis._defussShadcn?.accordionStates,
+      dollarWorks: typeof globalThis.$ === 'function' && !!globalThis.$('#single'),
+    }));
+    assert.ok(reg.hasApi, '_defussShadcn.accordionApi.setState missing');
+    assert.deepEqual(reg.states, ['default', 'all-open', 'all-closed']);
+    assert.ok(reg.dollarWorks, 'globalThis.$ query alias missing');
+  });
 } finally {
   await browser.close();
   server.stop();

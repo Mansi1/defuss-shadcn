@@ -1,5 +1,16 @@
 # Pattern: Dialog
 
+## States
+Named states via the shared State API (AGENTS.md "State API"), bound per instance:
+`default` (closed) and `open` (modal shown).
+
+```js
+document.querySelector('#my-dialog').api.setState('open');
+document.querySelector('#my-dialog').api.getState(); // { name: 'open', config: {} }
+```
+
+Unknown state names throw. `globalThis._defussShadcn.dialogStates` lists them.
+
 ## Native basis
 `<dialog>` element + `showModal()`. The browser provides:
 - Focus trap (automatically)

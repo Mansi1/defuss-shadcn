@@ -312,12 +312,12 @@ toast.show({
     max-height: 100vh;
     pointer-events: none;
 
-    &[data-position="bottom-right"] { bottom: 0; right: 0; }
-    &[data-position="bottom-left"]  { bottom: 0; left: 0; }
-    &[data-position="top-right"]    { top: 0; right: 0; flex-direction: column; }
-    &[data-position="top-left"]     { top: 0; left: 0; flex-direction: column; }
-    &[data-position="top-center"]   { top: 0; left: 50%; transform: translateX(-50%); flex-direction: column; align-items: center; }
-    &[data-position="bottom-center"]{ bottom: 0; left: 50%; transform: translateX(-50%); align-items: center; }
+    &amp;[data-position=&quot;bottom-right&quot;] { bottom: 0; right: 0; }
+    &amp;[data-position=&quot;bottom-left&quot;]  { bottom: 0; left: 0; }
+    &amp;[data-position=&quot;top-right&quot;]    { top: 0; right: 0; flex-direction: column; }
+    &amp;[data-position=&quot;top-left&quot;]     { top: 0; left: 0; flex-direction: column; }
+    &amp;[data-position=&quot;top-center&quot;]   { top: 0; left: 50%; transform: translateX(-50%); flex-direction: column; align-items: center; }
+    &amp;[data-position=&quot;bottom-center&quot;]{ bottom: 0; left: 50%; transform: translateX(-50%); align-items: center; }
   }
 
   /* -- Toast ---------------------------------------------------- */
@@ -335,40 +335,40 @@ toast.show({
     transform: translateY(0.5rem);
     transition: opacity 200ms ease, transform 200ms ease;
 
-    &:popover-open {
+    &amp;:popover-open {
       opacity: 1;
       transform: translateY(0);
     }
 
     /* -- Variants ------------------------------------------------- */
-    &[data-variant="destructive"] {
+    &amp;[data-variant=&quot;destructive&quot;] {
       background-color: var(--destructive);
       color: var(--destructive-foreground);
       border-color: var(--destructive);
 
-      & .toast-description {
+      &amp; .toast-description {
         color: var(--destructive-foreground);
         opacity: 0.85;
       }
     }
 
     /* -- Semantic variants (border + icon color) ----------------- */
-    &[data-variant="success"] {
+    &amp;[data-variant=&quot;success&quot;] {
       border-color: oklch(0.65 0.2 145);
 
-      & .toast-icon { color: oklch(0.65 0.2 145); }
+      &amp; .toast-icon { color: oklch(0.65 0.2 145); }
     }
 
-    &[data-variant="warning"] {
+    &amp;[data-variant=&quot;warning&quot;] {
       border-color: oklch(0.75 0.18 75);
 
-      & .toast-icon { color: oklch(0.75 0.18 75); }
+      &amp; .toast-icon { color: oklch(0.75 0.18 75); }
     }
 
-    &[data-variant="info"] {
+    &amp;[data-variant=&quot;info&quot;] {
       border-color: oklch(0.6 0.15 250);
 
-      & .toast-icon { color: oklch(0.6 0.15 250); }
+      &amp; .toast-icon { color: oklch(0.6 0.15 250); }
     }
   }
 
@@ -419,7 +419,7 @@ toast.show({
     border-radius: calc(var(--radius) * 0.5);
     transition: color 150ms, background 150ms;
 
-    &:hover {
+    &amp;:hover {
       color: var(--foreground);
       background: var(--accent);
     }
@@ -465,15 +465,15 @@ if (!toastContainer) {
   document.body.appendChild(toastContainer);
 }
 
-const toastDismiss = (el, callback) => {
+const toastDismiss = (el, callback) =&gt; {
   if (!el || !el.parentNode) return;
   el.animate(
     [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(0.5rem)' }],
     { duration: 200, easing: 'ease', fill: 'forwards' }
-  ).finished.then(() => { try { el.hidePopover(); } catch {} el.remove(); if (callback) callback(); });
+  ).finished.then(() =&gt; { try { el.hidePopover(); } catch {} el.remove(); if (callback) callback(); });
 };
 
-const toastCreate = (options) => {
+const toastCreate = (options) =&gt; {
   const o = typeof options === 'string' ? { title: options } : options;
   const { title, description, variant, action, onDismiss } = o;
   const duration = o.duration != null ? o.duration : DURATION;
@@ -483,15 +483,15 @@ const toastCreate = (options) => {
   el.setAttribute('aria-atomic', 'true'); el.setAttribute('popover', 'manual');
   if (variant) el.setAttribute('data-variant', variant);
   const icons = {
-    success: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>',
-    warning: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
-    info: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>',
-    destructive: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>'
+    success: '&lt;svg class=&quot;toast-icon&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/&gt;&lt;path d=&quot;m9 12 2 2 4-4&quot;/&gt;&lt;/svg&gt;',
+    warning: '&lt;svg class=&quot;toast-icon&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3&quot;/&gt;&lt;path d=&quot;M12 9v4&quot;/&gt;&lt;path d=&quot;M12 17h.01&quot;/&gt;&lt;/svg&gt;',
+    info: '&lt;svg class=&quot;toast-icon&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/&gt;&lt;path d=&quot;M12 16v-4&quot;/&gt;&lt;path d=&quot;M12 8h.01&quot;/&gt;&lt;/svg&gt;',
+    destructive: '&lt;svg class=&quot;toast-icon&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/&gt;&lt;path d=&quot;m15 9-6 6&quot;/&gt;&lt;path d=&quot;m9 9 6 6&quot;/&gt;&lt;/svg&gt;'
   };
   // Build toast DOM safely (no innerHTML with user content)
   const contentEl = document.createElement('div');
   contentEl.className = 'toast-content';
-  if (variant && icons[variant]) {
+  if (variant &amp;&amp; icons[variant]) {
     const tmpl = document.createElement('template');
     tmpl.innerHTML = icons[variant];
     contentEl.appendChild(tmpl.content);
@@ -503,7 +503,7 @@ const toastCreate = (options) => {
   contentEl.appendChild(textDiv);
   const closeBtn = document.createElement('button');
   closeBtn.className = 'toast-close'; closeBtn.setAttribute('aria-label', 'Dismiss'); closeBtn.dataset.toastClose = '';
-  closeBtn.innerHTML = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+  closeBtn.innerHTML = '&lt;svg aria-hidden=&quot;true&quot; width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/svg&gt;';
   contentEl.appendChild(closeBtn);
   el.appendChild(contentEl);
   if (action) {
@@ -514,21 +514,21 @@ const toastCreate = (options) => {
     actionsDiv.appendChild(actionBtn); el.appendChild(actionsDiv);
   }
   toastContainer.appendChild(el); el.showPopover();
-  closeBtn.addEventListener('click', () => { toastDismiss(el, onDismiss); });
-  if (action) { el.querySelector('[data-toast-action]').addEventListener('click', () => { if (action.onClick) action.onClick(); toastDismiss(el); }); }
-  if (duration !== Infinity) setTimeout(() => { toastDismiss(el, onDismiss); }, duration);
+  closeBtn.addEventListener('click', () =&gt; { toastDismiss(el, onDismiss); });
+  if (action) { el.querySelector('[data-toast-action]').addEventListener('click', () =&gt; { if (action.onClick) action.onClick(); toastDismiss(el); }); }
+  if (duration !== Infinity) setTimeout(() =&gt; { toastDismiss(el, onDismiss); }, duration);
   const toasts = toastContainer.querySelectorAll('.toast');
-  if (toasts.length > MAX_VISIBLE) toastDismiss(toasts[0]);
+  if (toasts.length &gt; MAX_VISIBLE) toastDismiss(toasts[0]);
   return el;
 };
 
 window.toast = {
   show: toastCreate,
-  success: (o) => toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'success' })),
-  warning: (o) => toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'warning' })),
-  info: (o) => toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'info' })),
-  error: (o) => toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'destructive' })),
-  dismiss: () => { toastContainer.querySelectorAll('.toast').forEach((el) => { toastDismiss(el); }); }
+  success: (o) =&gt; toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'success' })),
+  warning: (o) =&gt; toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'warning' })),
+  info: (o) =&gt; toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'info' })),
+  error: (o) =&gt; toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'destructive' })),
+  dismiss: () =&gt; { toastContainer.querySelectorAll('.toast').forEach((el) =&gt; { toastDismiss(el); }); }
 };</code></pre>
           </div>
         </section>

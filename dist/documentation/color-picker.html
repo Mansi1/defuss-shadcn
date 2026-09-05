@@ -194,7 +194,7 @@
     padding: 0.25rem 0.75rem 0.25rem 0.25rem;
     box-shadow: var(--shadow-xs);
 
-    & input[type="color"] {
+    &amp; input[type=&quot;color&quot;] {
       -webkit-appearance: none;
       appearance: none;
       width: 2rem;
@@ -205,18 +205,18 @@
       padding: 0;
       background: none;
 
-      &::-webkit-color-swatch-wrapper { padding: 0; }
-      &::-webkit-color-swatch {
+      &amp;::-webkit-color-swatch-wrapper { padding: 0; }
+      &amp;::-webkit-color-swatch {
         border: none;
         border-radius: calc(var(--radius-sm) - 1px);
       }
-      &::-moz-color-swatch {
+      &amp;::-moz-color-swatch {
         border: none;
         border-radius: calc(var(--radius-sm) - 1px);
       }
     }
 
-    & .color-picker-value {
+    &amp; .color-picker-value {
       font-size: 0.8125rem;
       font-family: var(--font-mono);
       color: var(--muted-foreground);
@@ -236,14 +236,14 @@
 // Syncs the hex value display with the color input.
 
 function init() {
-  document.querySelectorAll('.color-picker:not([data-init])').forEach((picker) => {
+  document.querySelectorAll('.color-picker:not([data-init])').forEach((picker) =&gt; {
   picker.dataset.init = '';
-  const input = picker.querySelector('input[type="color"]');
+  const input = picker.querySelector('input[type=&quot;color&quot;]');
   const display = picker.querySelector('.color-picker-value');
   if (!input || !display) return;
 
   display.textContent = input.value;
-  input.addEventListener('input', () => {
+  input.addEventListener('input', () =&gt; {
     display.textContent = input.value;
   });
 });

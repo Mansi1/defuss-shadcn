@@ -284,7 +284,7 @@
     outline: none;
 
     /* Thumb */
-    &::after {
+    &amp;::after {
       content: '';
       position: absolute;
       top: 2px;
@@ -297,43 +297,43 @@
       box-shadow: 0 1px 2px oklch(0 0 0 / 0.15);
     }
 
-    &:checked {
+    &amp;:checked {
       background: var(--primary);
 
-      &::after {
+      &amp;::after {
         transform: translateX(1rem);
       }
     }
 
-    &:focus-visible {
+    &amp;:focus-visible {
       outline: 2px solid var(--ring);
       outline-offset: 2px;
     }
 
-    &:disabled {
+    &amp;:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
-    &[aria-invalid="true"] {
+    &amp;[aria-invalid=&quot;true&quot;] {
       background: var(--destructive);
 
-      &:checked {
+      &amp;:checked {
         background: var(--destructive);
       }
     }
 
     /* -- Sizes ----------------------------------------------- */
-    &[data-size="sm"] {
+    &amp;[data-size=&quot;sm&quot;] {
       width: 1.75rem;
       height: 1rem;
 
-      &::after {
+      &amp;::after {
         width: calc(1rem - 4px);
         height: calc(1rem - 4px);
       }
 
-      &:checked::after {
+      &amp;:checked::after {
         transform: translateX(0.75rem);
       }
     }
@@ -345,7 +345,7 @@
     align-items: center;
     gap: 0.5rem;
 
-    & > label {
+    &amp; &gt; label {
       font-size: 0.875rem;
       cursor: pointer;
     }
@@ -358,17 +358,17 @@
     gap: 0 0.75rem;
     align-items: center;
 
-    & > .switch {
+    &amp; &gt; .switch {
       grid-row: 1 / 3;
     }
 
-    & > label {
+    &amp; &gt; label {
       font-size: 0.875rem;
       font-weight: 500;
       cursor: pointer;
     }
 
-    & > .switch-description {
+    &amp; &gt; .switch-description {
       font-size: 0.8125rem;
       color: var(--muted-foreground);
       line-height: 1.5;
@@ -395,24 +395,24 @@
       background: ButtonFace;
       border: 1px solid ButtonText;
 
-      &::after {
+      &amp;::after {
         background: ButtonText;
         box-shadow: none;
       }
 
-      &:checked {
+      &amp;:checked {
         background: Highlight;
         border-color: Highlight;
 
-        &::after {
+        &amp;::after {
           background: HighlightText;
         }
       }
 
-      &:disabled {
+      &amp;:disabled {
         border-color: GrayText;
 
-        &::after {
+        &amp;::after {
           background: GrayText;
         }
       }

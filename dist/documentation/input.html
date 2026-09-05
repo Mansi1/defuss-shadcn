@@ -428,46 +428,46 @@
     box-shadow: var(--shadow-xs);
     transition: border-color 150ms, box-shadow 150ms;
 
-    &:focus {
+    &amp;:focus {
       border-color: var(--ring);
       box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
     }
 
-    &::placeholder { color: var(--muted-foreground); }
+    &amp;::placeholder { color: var(--muted-foreground); }
 
-    &:disabled {
+    &amp;:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
     /* -- Readonly state -------------------------------------- */
-    &:read-only:not([type="file"]) {
+    &amp;:read-only:not([type=&quot;file&quot;]) {
       background: var(--muted);
       cursor: default;
       opacity: 0.7;
 
-      &:focus {
+      &amp;:focus {
         border-color: var(--input);
         box-shadow: var(--shadow-xs);
       }
     }
 
     /* -- Invalid state --------------------------------------- */
-    &:is([aria-invalid="true"], :user-invalid) {
+    &amp;:is([aria-invalid=&quot;true&quot;], :user-invalid) {
       border-color: var(--destructive);
 
-      &:focus {
+      &amp;:focus {
         border-color: var(--destructive);
         box-shadow: 0 0 0 2px oklch(from var(--destructive) l c h / 0.2);
       }
     }
 
     /* -- File input ------------------------------------------ */
-    &[type="file"] {
+    &amp;[type=&quot;file&quot;] {
       padding: 0;
       font-size: 0.875rem;
 
-      &::file-selector-button {
+      &amp;::file-selector-button {
         height: 100%;
         border: none;
         border-right: 1px solid var(--input);
@@ -481,13 +481,13 @@
         cursor: pointer;
         transition: background 150ms;
 
-        &:hover { background: var(--accent); }
+        &amp;:hover { background: var(--accent); }
       }
     }
 
     /* -- Sizes ----------------------------------------------- */
-    &[data-size="sm"] { height: 2rem;    padding: 0 0.625rem; font-size: 0.8125rem; }
-    &[data-size="lg"] { height: 2.75rem; padding: 0 1rem;     font-size: 1rem; }
+    &amp;[data-size=&quot;sm&quot;] { height: 2rem;    padding: 0 0.625rem; font-size: 0.8125rem; }
+    &amp;[data-size=&quot;lg&quot;] { height: 2.75rem; padding: 0 1rem;     font-size: 1rem; }
   }
 
   /* -- Auto-growing textarea --------------------------------- */
@@ -518,7 +518,7 @@
       transition: none;
     }
 
-    .input[type="file"]::file-selector-button {
+    .input[type=&quot;file&quot;]::file-selector-button {
       transition: none;
     }
   }
@@ -551,7 +551,7 @@
       border-color: GrayText;
     }
 
-    .input:is([aria-invalid="true"], :user-invalid) {
+    .input:is([aria-invalid=&quot;true&quot;], :user-invalid) {
       border-color: LinkText;
     }
 

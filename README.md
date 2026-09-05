@@ -125,7 +125,16 @@ bun run test:run   # run the UI test suite (headless Chromium)
 mirror, committed and the only thing that ships.
 
 A `Makefile` wraps the common tasks: `make setup` (install deps + Playwright browsers),
-`make dev`, `make test-run`, `make coverage`, `make e2e`, `make lint` (oxlint).
+`make dev`, `make test-run`, `make coverage`, `make e2e`, `make lint` (oxlint),
+`make verify`, `make screenshots`. **`make build`** runs the whole pipeline —
+lint → compile → screenshots → verify → tests → e2e — the same loop CI runs.
+
+`bun run verify` is the static consistency gate — it runs automatically at the end of
+every `bun run build` and checks: component skills, doc pages, E2E coverage, token usage,
+undefined utility classes, snippet sync, cross-page imports, sidebar links, lint,
+`dist/` freshness (1:1 with `src/`), `.preview` blocks, screenshot freshness
+(`bun run screenshots` after the last build), version consistency, and the changelog
+marker. Each failing check prints the offending file and the exact fix command.
 
 ## Testing
 

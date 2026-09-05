@@ -37,11 +37,15 @@ defuss-shadcn/
 │   └── prompts/                       ← reusable prompt files
 │       └── component-review.prompt.md
 │
+├── screenshots/                       ← generated default-state PNGs per component in light/ + dark/ (`bun run screenshots`, gitignored)
 ├── scripts/                           ← build & maintenance scripts (no one-shot migrations)
 │   ├── build.ts                       ← src/ → dist/ (tsc type-strip + copy everything else 1:1)
+│   ├── verify.ts                      ← static consistency gate (runs at end of build; `bun run verify`)
+│   ├── create-screenshots.ts          ← parallel default-state screenshots for agent inspection
+│   ├── lib/audit.ts                   ← undefined-utility audit (used by verify)
+│   ├── lib/snippets.ts                ← shared snippet drift/replace logic (syncers + verify)
 │   ├── sync-css-snippets.ts           ← re-embed component CSS into doc pages after edits
 │   ├── sync-js-snippets.ts            ← re-embed component JS into doc pages after edits
-│   ├── audit-utilities.ts             ← find utility-shaped classes missing from docs-utilities.css
 │   ├── push.sh                        ← commit + push dev → main (non-release)
 │   └── deploy.sh                      ← release: version bump, changelog, tag, GitHub release
 ├── tests/                             ← UI tests (Vitest browser mode + Playwright)
@@ -51,8 +55,8 @@ defuss-shadcn/
 │       ├── run.mjs                    ← `bun run e2e` runner: every *.e2e.mjs file
 │       ├── server.mjs                 ← Bun static server exposing /dist and /tests/e2e
 │       └── accordion.e2e-{fixture.html,mjs}  ← fixture + test for one component
-├── vitest.config.mjs                  ← browser-mode test config (root = repo root)
-├── Makefile                           ← setup / dev / test / e2e shortcuts (wrappers for bun scripts)
+├── vitest.config.ts                   ← browser-mode test config (root = repo root)
+├── Makefile                           ← setup / dev / test / e2e / build shortcuts (wrappers for bun scripts)
 │
 └── AGENTS.md                          ← this file (maintainer instructions)
 ```
@@ -219,6 +223,71 @@ Each component at `dist/components/{name}/` contains:
 
 The component skill `.md` file documents **how to build the HTML**. The `.css` and `.js` files
 are the actual implementation — edit them directly, no build step needed.
+
+### State API (REQUIRED for every JS component)
+
+Components with a `.js` file have observable UI states (open/closed, collapsed,
+selected…). Every such component must expose its states **by name** so agents and
+tests can drive them without knowing the implementation:
+
+```js
+document.querySelector('#x').api.setState('open', { /* config */ });
+document.querySelector('#x').api.getState(); // → { name: 'open', config: { … } }
+```
+
+**Required shape of `{name}.js`** (verify.ts enforces these markers by regex;
+`accordion.ts` and `dialog.ts` are the reference implementations):
+
+1. **Preamble** — import the shared helper (single source in
+   `src/shared/state-api.ts`; `build.ts` inlines it into the shipped `.js`,
+   so dist components stay isolated single files):
+   ```js
+   import { defussGlobals } from '../../shared/state-api.js';
+   const _defussShadcn = defussGlobals();
+   ```
+2. **State list** — `const {name}States = ['default', …]` — `'default'` must be
+   the first entry and always be one of the declared states. Every component
+   starts in its `default` state unless markup declares otherwise.
+3. **`triggerStateChange(el, stateName, config)`** — the only function that
+   touches the DOM for a state change; `switch`/dispatch over the declared states.
+4. **Registry API** — `export const {name}Api = { setState(el, name, config), getState(el) }`
+   with the element passed explicitly; reject unknown state names by throwing.
+   Register both globals:
+   ```js
+   globalThis._defussShadcn.{name}Api = {name}Api;
+   globalThis._defussShadcn.{name}States = {name}States;
+   ```
+5. **Per-instance binding** inside `init()`, on each element the component
+   initializes (state lives **on the element** — `dataset.stateName` +
+   `_stateConfig` — never in module scope; 26 components share one page and each
+   instance may hold a different state):
+   ```js
+   el.api = {
+     setState: (stateName, config) => {name}Api.setState(el, stateName, config),
+     getState: () => {name}Api.getState(el),
+   };
+   ```
+6. **Document the states** in the component skill (`component-skill.md` →
+   `## States` section): state names, meaning, and one `api.setState(...)` example.
+7. **Every state must be visually verifiable** — four artifacts cover each
+   declared state (verify.ts parses `{name}States = [...]` and checks all four):
+   - **Doc page**: `src/documentation/{name}.html` has a `States` section with
+     `<code>{state}</code>` per state, AND the state-bearing demo element
+     carries `data-state-demo` (the anchor `create-screenshots.ts` drives via
+     `api.setState()` to capture `screenshots/{mode}/{name}-{state}.png`)
+   - **Screenshots**: one PNG per state per mode (light + dark), default state
+     as `{name}.png` from the first `.preview`
+   - **Skill**: the state name appears in the `## States` section
+   - **E2E**: the state name string appears in `{name}.e2e.mjs` (a
+     `setState(name)` assertion)
+   Adding a state without all four fails the build.
+
+Types for the globals live in `src/types/defuss-shadcn.d.ts` — extend it when the
+contract grows; never re-declare the globals inside a component file.
+
+`scripts/verify.ts` checks all markers for every new JS component (hard fail).
+Legacy components in its `STATE_API_LEGACY` list warn only until migrated —
+remove a name from the list in the same commit that migrates the component.
 
 ### Tokens are the source of truth for design values
 
@@ -584,8 +653,11 @@ of removing it).
 
 ## Testing
 
-`make help` lists the shortcuts (`setup`, `dev`, `test`, `test-run`, `coverage`, `e2e`, `lint`) —
-they wrap the equivalent `bun run <script>` commands; package.json stays the single source of truth.
+`make help` lists the shortcuts (`setup`, `dev`, `test`, `test-run`, `coverage`, `e2e`, `lint`,
+`verify`, `screenshots`, `build`) — they wrap the equivalent `bun run <script>` commands;
+package.json stays the single source of truth. `make build` is the full pipeline:
+lint → compile → screenshots → verify → tests → e2e (it calls `scripts/build.ts` directly,
+since `bun run build` runs `verify` before screenshots could be refreshed).
 
 `bun run test:run` runs the UI suite in headless Chromium (Vitest browser mode + Playwright).
 First run needs `make setup` (or `bunx playwright install`).
@@ -619,6 +691,27 @@ Per-component smoke tests live in `tests/e2e/` and run with **plain Playwright**
 
 `tests/e2e/run.mjs` globs and runs every `*.e2e.mjs` in isolated child processes.
 When adding a component, add both files (see the accordion pair as the template).
+
+### Docs ↔ E2E parity (REQUIRED)
+
+The e2e fixture and the documentation must describe the **same** component
+surface, so a green pipeline means "documented == tested == shipped":
+
+| Feature exists in… | Then… |
+| --- | --- |
+| code only | add it to the doc page **and** the e2e fixture/test |
+| docs only | add an e2e check for it (it must work in the shipped files) |
+| fixture only | it is undocumented — document it |
+| all three | ✅ |
+
+- The fixture `{name}.e2e-fixture.html` instantiates every configuration the
+  doc page demonstrates (variants, sizes, states, compositions) — same `data-*`
+  attributes, same nesting. If the doc page shows a variant, the fixture has it.
+- Every State API state gets an assertion via `el.api.setState(name)` plus an
+  observation of the resulting UI (computed styles / DOM flags).
+- When you add a feature to a component, update **all three artifacts in the
+  same commit**: source, doc page, fixture + e2e assertions. Reviewers should
+  reject any of the three landing alone.
 
 ## Common pitfalls
 

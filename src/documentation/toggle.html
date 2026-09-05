@@ -296,61 +296,61 @@
     padding: 0 0.5rem;
     min-width: 2.25rem;
 
-    &:hover {
+    &amp;:hover {
       background-color: var(--muted);
       color: var(--muted-foreground);
     }
 
-    &[aria-pressed="true"] {
+    &amp;[aria-pressed=&quot;true&quot;] {
       background-color: var(--accent);
       color: var(--accent-foreground);
 
-      &:hover {
+      &amp;:hover {
         background-color: color-mix(in oklch, var(--accent) 85%, var(--foreground));
       }
     }
 
-    &:focus-visible {
+    &amp;:focus-visible {
       outline: 2px solid var(--ring);
       outline-offset: 2px;
     }
 
-    &:disabled {
+    &amp;:disabled {
       pointer-events: none;
       opacity: 0.5;
     }
 
-    & svg {
+    &amp; svg {
       pointer-events: none;
       flex-shrink: 0;
 
-      &:not([class*="size-"]) { width: 1rem; height: 1rem; }
+      &amp;:not([class*=&quot;size-&quot;]) { width: 1rem; height: 1rem; }
     }
 
     /* -- Variants -------------------------------------------- */
-    &[data-variant="outline"] {
+    &amp;[data-variant=&quot;outline&quot;] {
       border: 1px solid var(--input);
       background: transparent;
       box-shadow: var(--shadow-xs);
 
-      &:hover {
+      &amp;:hover {
         background-color: var(--accent);
         color: var(--accent-foreground);
       }
 
-      &[aria-pressed="true"] {
+      &amp;[aria-pressed=&quot;true&quot;] {
         background-color: var(--accent);
         color: var(--accent-foreground);
 
-        &:hover {
+        &amp;:hover {
           background-color: color-mix(in oklch, var(--accent) 85%, var(--foreground));
         }
       }
     }
 
     /* -- Sizes ----------------------------------------------- */
-    &[data-size="sm"]  { height: 2rem;  padding: 0 0.375rem; min-width: 2rem; }
-    &[data-size="lg"]  { height: 2.5rem; padding: 0 0.625rem; min-width: 2.5rem; }
+    &amp;[data-size=&quot;sm&quot;]  { height: 2rem;  padding: 0 0.375rem; min-width: 2rem; }
+    &amp;[data-size=&quot;lg&quot;]  { height: 2.5rem; padding: 0 0.625rem; min-width: 2.5rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -361,11 +361,11 @@
     .toggle {
       border: 2px solid transparent;
 
-      &[data-variant="outline"] {
+      &amp;[data-variant=&quot;outline&quot;] {
         border-color: var(--foreground);
       }
 
-      &[aria-pressed="true"] {
+      &amp;[aria-pressed=&quot;true&quot;] {
         border-color: currentColor;
       }
     }
@@ -375,12 +375,12 @@
     .toggle {
       border: 1px solid ButtonText;
 
-      &[aria-pressed="true"] {
+      &amp;[aria-pressed=&quot;true&quot;] {
         background: Highlight;
         color: HighlightText;
       }
 
-      &:disabled {
+      &amp;:disabled {
         border-color: GrayText;
         color: GrayText;
       }
@@ -404,9 +404,9 @@
 // Skips toggles inside .toggle-group — those are managed by toggle-group.js.
 
 function init() {
-  document.querySelectorAll('.toggle:not([data-init]):not(.toggle-group .toggle)').forEach((toggle) => {
+  document.querySelectorAll('.toggle:not([data-init]):not(.toggle-group .toggle)').forEach((toggle) =&gt; {
   toggle.dataset.init = '';
-  toggle.addEventListener('click', () => {
+  toggle.addEventListener('click', () =&gt; {
     const pressed = toggle.getAttribute('aria-pressed') === 'true';
     toggle.setAttribute('aria-pressed', !pressed);
   });

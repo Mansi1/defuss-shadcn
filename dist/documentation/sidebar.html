@@ -269,28 +269,28 @@
     z-index: 30;
 
     /* Right side */
-    &[data-side="right"] {
+    &amp;[data-side=&quot;right&quot;] {
       border-right: none;
       border-left: 1px solid var(--sidebar-border);
       order: 1;
     }
 
     /* Collapsed — icon-only rail */
-    &[data-state="collapsed"] {
+    &amp;[data-state=&quot;collapsed&quot;] {
       width: var(--sidebar-width-collapsed, 3.5rem);
 
-      & .sidebar-link span,
-      & .sidebar-section-title,
-      & .sidebar-group-action,
-      & .sidebar-badge,
-      & .sidebar-footer,
-      & .sidebar-logo-text { display: none; }
+      &amp; .sidebar-link span,
+      &amp; .sidebar-section-title,
+      &amp; .sidebar-group-action,
+      &amp; .sidebar-badge,
+      &amp; .sidebar-footer,
+      &amp; .sidebar-logo-text { display: none; }
 
-      & .sidebar-link { justify-content: center; padding: 0.5rem; }
-      & .sidebar-header { justify-content: center; padding: 0.75rem 0.5rem; }
-      & .sidebar-group > summary { justify-content: center; }
-      & .sidebar-group > summary span { display: none; }
-      & .sidebar-group > summary svg:last-child { display: none; }
+      &amp; .sidebar-link { justify-content: center; padding: 0.5rem; }
+      &amp; .sidebar-header { justify-content: center; padding: 0.75rem 0.5rem; }
+      &amp; .sidebar-group &gt; summary { justify-content: center; }
+      &amp; .sidebar-group &gt; summary span { display: none; }
+      &amp; .sidebar-group &gt; summary svg:last-child { display: none; }
     }
 
     /* Hidden on mobile by default — shown via dialog */
@@ -352,24 +352,24 @@
     transition: background-color 150ms ease;
     position: relative;
 
-    &:hover {
+    &amp;:hover {
       background-color: var(--sidebar-accent);
       color: var(--sidebar-accent-foreground);
     }
 
-    &[data-active="true"],
-    &[aria-current="page"] {
+    &amp;[data-active=&quot;true&quot;],
+    &amp;[aria-current=&quot;page&quot;] {
       background-color: var(--sidebar-accent);
       color: var(--sidebar-accent-foreground);
       font-weight: 500;
     }
 
-    &:focus-visible {
+    &amp;:focus-visible {
       outline: 2px solid var(--sidebar-ring);
       outline-offset: -2px;
     }
 
-    & svg {
+    &amp; svg {
       width: 1rem;
       height: 1rem;
       flex-shrink: 0;
@@ -398,9 +398,9 @@
     color: var(--muted-foreground);
   }
 
-  /* ── Collapsible group (uses <details>) ────────────────────── */
+  /* ── Collapsible group (uses &lt;details&gt;) ────────────────────── */
   .sidebar-group {
-    & > summary {
+    &amp; &gt; summary {
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -415,10 +415,10 @@
       border-radius: var(--radius-md);
       transition: background-color 150ms ease;
 
-      &:hover { background-color: var(--sidebar-accent); }
-      &::-webkit-details-marker { display: none; }
+      &amp;:hover { background-color: var(--sidebar-accent); }
+      &amp;::-webkit-details-marker { display: none; }
 
-      & svg:last-child {
+      &amp; svg:last-child {
         width: 0.875rem;
         height: 0.875rem;
         margin-left: auto;
@@ -426,13 +426,13 @@
       }
     }
 
-    &[open] > summary svg:last-child { rotate: 90deg; }
-    & > .sidebar-nav { padding: 0.25rem 0 0.25rem 0.75rem; }
+    &amp;[open] &gt; summary svg:last-child { rotate: 90deg; }
+    &amp; &gt; .sidebar-nav { padding: 0.25rem 0 0.25rem 0.75rem; }
   }
 
-  /* ── Submenu (nested <details>) ────────────────────────────── */
+  /* ── Submenu (nested &lt;details&gt;) ────────────────────────────── */
   .sidebar-submenu {
-    & > summary {
+    &amp; &gt; summary {
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -444,13 +444,13 @@
       list-style: none;
       transition: background-color 150ms ease;
 
-      &:hover {
+      &amp;:hover {
         background-color: var(--sidebar-accent);
         color: var(--sidebar-accent-foreground);
       }
-      &::-webkit-details-marker { display: none; }
+      &amp;::-webkit-details-marker { display: none; }
 
-      & svg:last-child {
+      &amp; svg:last-child {
         width: 0.875rem;
         height: 0.875rem;
         margin-left: auto;
@@ -458,9 +458,9 @@
       }
     }
 
-    &[open] > summary svg:last-child { rotate: 90deg; }
+    &amp;[open] &gt; summary svg:last-child { rotate: 90deg; }
 
-    & > .sidebar-nav {
+    &amp; &gt; .sidebar-nav {
       padding: 0.25rem 0 0.25rem 1.5rem;
       border-left: 1px solid var(--sidebar-border);
       margin-left: 0.75rem;
@@ -477,8 +477,8 @@
     cursor: pointer;
     border-radius: var(--radius-sm);
 
-    &:hover { color: var(--sidebar-foreground); background-color: var(--sidebar-accent); }
-    & svg { width: 0.875rem; height: 0.875rem; }
+    &amp;:hover { color: var(--sidebar-foreground); background-color: var(--sidebar-accent); }
+    &amp; svg { width: 0.875rem; height: 0.875rem; }
   }
 
   /* ── Sidebar footer ───────────────────────────────────────── */
@@ -488,7 +488,7 @@
     font-size: 0.8125rem;
     color: var(--sidebar-foreground);
     flex-shrink: 0;
-    & p { margin: 0; }
+    &amp; p { margin: 0; }
   }
 
   /* ── Sidebar trigger ──────────────────────────────────────── */
@@ -504,12 +504,12 @@
     cursor: pointer;
     border-radius: var(--radius-md);
 
-    &:hover { background-color: var(--accent); }
-    &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-    & svg { width: 1rem; height: 1rem; }
+    &amp;:hover { background-color: var(--accent); }
+    &amp;:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    &amp; svg { width: 1rem; height: 1rem; }
   }
 
-  /* ── Mobile sidebar (<dialog> sheet overlay) ──────────────── */
+  /* ── Mobile sidebar (&lt;dialog&gt; sheet overlay) ──────────────── */
   .sidebar-mobile {
     border: none;
     padding: 0;
@@ -531,27 +531,27 @@
     transition: opacity 200ms ease, translate 200ms ease,
                 display 200ms allow-discrete;
 
-    &[open] {
+    &amp;[open] {
       opacity: 1;
       translate: 0 0;
     }
 
-    &[data-side="right"] {
+    &amp;[data-side=&quot;right&quot;] {
       right: 0;
       left: auto;
       translate: 100% 0;
-      &[open] { translate: 0 0; }
+      &amp;[open] { translate: 0 0; }
     }
 
-    &::backdrop {
+    &amp;::backdrop {
       background: oklch(0 0 0 / 0.5);
       opacity: 0;
       transition: opacity 200ms ease, display 200ms allow-discrete;
     }
 
-    &[open]::backdrop { opacity: 1; }
+    &amp;[open]::backdrop { opacity: 1; }
 
-    & .sidebar-mobile-close {
+    &amp; .sidebar-mobile-close {
       position: absolute;
       top: 0.75rem;
       right: 0.75rem;
@@ -566,8 +566,8 @@
       align-items: center;
       justify-content: center;
 
-      &:hover { background-color: var(--sidebar-accent); }
-      & svg { width: 0.875rem; height: 0.875rem; }
+      &amp;:hover { background-color: var(--sidebar-accent); }
+      &amp; svg { width: 0.875rem; height: 0.875rem; }
     }
 
     @media (min-width: 768px) {
@@ -578,15 +578,15 @@
   @starting-style {
     .sidebar-mobile[open] { opacity: 0; translate: -100% 0; }
     .sidebar-mobile[open]::backdrop { opacity: 0; }
-    .sidebar-mobile[data-side="right"][open] { opacity: 0; translate: 100% 0; }
+    .sidebar-mobile[data-side=&quot;right&quot;][open] { opacity: 0; translate: 100% 0; }
   }
 
   /* ── Reduced motion ───────────────────────────────────────── */
   @media (prefers-reduced-motion: reduce) {
     .app-sidebar { transition: none; }
     .sidebar-link { transition: none; }
-    .sidebar-group > summary svg:last-child { transition: none; }
-    .sidebar-submenu > summary svg:last-child { transition: none; }
+    .sidebar-group &gt; summary svg:last-child { transition: none; }
+    .sidebar-submenu &gt; summary svg:last-child { transition: none; }
     .sidebar-mobile { transition: none; }
     .sidebar-mobile::backdrop { transition: none; }
   }
@@ -604,13 +604,13 @@
 // Toggle collapse, keyboard shortcut (Cmd+B), and mobile dialog.
 
 function init() {
-document.querySelectorAll('.app-sidebar:not([data-init])').forEach((sidebar) => {
+document.querySelectorAll('.app-sidebar:not([data-init])').forEach((sidebar) =&gt; {
   sidebar.dataset.init = '';
 
   // -- Toggle button → collapse/expand -----------------------
-  const triggerId = sidebar.id ? `[data-sidebar-trigger="${sidebar.id}"]` : '.sidebar-trigger';
-  document.querySelectorAll(triggerId).forEach((trigger) => {
-    trigger.addEventListener('click', () => {
+  const triggerId = sidebar.id ? `[data-sidebar-trigger=&quot;${sidebar.id}&quot;]` : '.sidebar-trigger';
+  document.querySelectorAll(triggerId).forEach((trigger) =&gt; {
+    trigger.addEventListener('click', () =&gt; {
       const state = sidebar.dataset.state === 'collapsed' ? 'expanded' : 'collapsed';
       sidebar.dataset.state = state;
     });
@@ -618,18 +618,18 @@ document.querySelectorAll('.app-sidebar:not([data-init])').forEach((sidebar) => 
 });
 
 // -- Mobile dialog triggers ----------------------------------
-document.querySelectorAll('[data-sidebar-mobile]:not([data-init])').forEach((trigger) => {
+document.querySelectorAll('[data-sidebar-mobile]:not([data-init])').forEach((trigger) =&gt; {
   trigger.dataset.init = '';
   const dialog = document.getElementById(trigger.dataset.sidebarMobile);
   if (!dialog) return;
 
-  trigger.addEventListener('click', () => {
+  trigger.addEventListener('click', () =&gt; {
     dialog.showModal();
   });
 
   // Close button inside the dialog
-  dialog.querySelectorAll('.sidebar-mobile-close').forEach((btn) => {
-    btn.addEventListener('click', () => { dialog.close(); });
+  dialog.querySelectorAll('.sidebar-mobile-close').forEach((btn) =&gt; {
+    btn.addEventListener('click', () =&gt; { dialog.close(); });
   });
 });
 }
@@ -640,8 +640,8 @@ new MutationObserver(init).observe(document, { childList: true, subtree: true })
 // -- Keyboard shortcut: Cmd+B / Ctrl+B ----------------------
 if (!document.__sidebarKbInit) {
   document.__sidebarKbInit = true;
-  document.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
+  document.addEventListener('keydown', (e) =&gt; {
+    if ((e.metaKey || e.ctrlKey) &amp;&amp; e.key === 'b') {
       e.preventDefault();
       // Toggle the first sidebar found on the page
       const sidebar = document.querySelector('.app-sidebar');

@@ -418,50 +418,50 @@
     translate: 0 2px;
     position-try-fallbacks: flip-block, flip-inline;
 
-    &:popover-open { opacity: 1; translate: 0 0; }
+    &amp;:popover-open { opacity: 1; translate: 0 0; }
 
     /* ----- Side variants ----- */
-    &[data-side="bottom"] {
+    &amp;[data-side=&quot;bottom&quot;] {
       position-area: bottom;
       margin-bottom: 0;
       margin-top: 6px;
       translate: 0 -2px;
-      &:popover-open { translate: 0 0; }
+      &amp;:popover-open { translate: 0 0; }
     }
 
-    &[data-side="left"] {
+    &amp;[data-side=&quot;left&quot;] {
       position-area: left;
       margin-bottom: 0;
       margin-right: 6px;
       translate: 2px 0;
-      &:popover-open { translate: 0 0; }
+      &amp;:popover-open { translate: 0 0; }
     }
 
-    &[data-side="right"] {
+    &amp;[data-side=&quot;right&quot;] {
       position-area: right;
       margin-bottom: 0;
       margin-left: 6px;
       translate: -2px 0;
-      &:popover-open { translate: 0 0; }
+      &amp;:popover-open { translate: 0 0; }
     }
 
     /* ----- Align variants (combined with side) ----- */
-    &[data-align="start"] {
-      &:not([data-side="left"]):not([data-side="right"]) { position-area: top left; }
-      &[data-side="bottom"] { position-area: bottom left; }
-      &[data-side="left"] { position-area: left top; }
-      &[data-side="right"] { position-area: right top; }
+    &amp;[data-align=&quot;start&quot;] {
+      &amp;:not([data-side=&quot;left&quot;]):not([data-side=&quot;right&quot;]) { position-area: top left; }
+      &amp;[data-side=&quot;bottom&quot;] { position-area: bottom left; }
+      &amp;[data-side=&quot;left&quot;] { position-area: left top; }
+      &amp;[data-side=&quot;right&quot;] { position-area: right top; }
     }
 
-    &[data-align="end"] {
-      &:not([data-side="left"]):not([data-side="right"]) { position-area: top right; }
-      &[data-side="bottom"] { position-area: bottom right; }
-      &[data-side="left"] { position-area: left bottom; }
-      &[data-side="right"] { position-area: right bottom; }
+    &amp;[data-align=&quot;end&quot;] {
+      &amp;:not([data-side=&quot;left&quot;]):not([data-side=&quot;right&quot;]) { position-area: top right; }
+      &amp;[data-side=&quot;bottom&quot;] { position-area: bottom right; }
+      &amp;[data-side=&quot;left&quot;] { position-area: left bottom; }
+      &amp;[data-side=&quot;right&quot;] { position-area: right bottom; }
     }
 
     /* ----- Arrow ----- */
-    & [data-arrow] {
+    &amp; [data-arrow] {
       position: absolute;
       width: 8px;
       height: 8px;
@@ -471,25 +471,25 @@
     }
 
     /* Arrow placement — default (top side): arrow at bottom center */
-    &:not([data-side]), &[data-side="top"] {
-      & [data-arrow] { bottom: -4px; left: 50%; margin-left: -4px; }
+    &amp;:not([data-side]), &amp;[data-side=&quot;top&quot;] {
+      &amp; [data-arrow] { bottom: -4px; left: 50%; margin-left: -4px; }
     }
-    &[data-side="bottom"] {
-      & [data-arrow] { top: -4px; left: 50%; margin-left: -4px; }
+    &amp;[data-side=&quot;bottom&quot;] {
+      &amp; [data-arrow] { top: -4px; left: 50%; margin-left: -4px; }
     }
-    &[data-side="left"] {
-      & [data-arrow] { right: -4px; top: 50%; margin-top: -4px; }
+    &amp;[data-side=&quot;left&quot;] {
+      &amp; [data-arrow] { right: -4px; top: 50%; margin-top: -4px; }
     }
-    &[data-side="right"] {
-      & [data-arrow] { left: -4px; top: 50%; margin-top: -4px; }
+    &amp;[data-side=&quot;right&quot;] {
+      &amp; [data-arrow] { left: -4px; top: 50%; margin-top: -4px; }
     }
   }
 
   @starting-style {
     .tooltip:popover-open { opacity: 0; translate: 0 2px; }
-    .tooltip[data-side="bottom"]:popover-open { opacity: 0; translate: 0 -2px; }
-    .tooltip[data-side="left"]:popover-open { opacity: 0; translate: 2px 0; }
-    .tooltip[data-side="right"]:popover-open { opacity: 0; translate: -2px 0; }
+    .tooltip[data-side=&quot;bottom&quot;]:popover-open { opacity: 0; translate: 0 -2px; }
+    .tooltip[data-side=&quot;left&quot;]:popover-open { opacity: 0; translate: 2px 0; }
+    .tooltip[data-side=&quot;right&quot;]:popover-open { opacity: 0; translate: -2px 0; }
   }
 }</code></pre>
         </div>
@@ -519,11 +519,11 @@ function markGroupOpen() {
 
 function scheduleGroupReset() {
   clearTimeout(groupTimer);
-  groupTimer = setTimeout(() => { groupOpen = false; }, GROUP_TIMEOUT);
+  groupTimer = setTimeout(() =&gt; { groupOpen = false; }, GROUP_TIMEOUT);
 }
 
 function init() {
-document.querySelectorAll('[data-tooltip-trigger]:not([data-init])').forEach((trigger) => {
+document.querySelectorAll('[data-tooltip-trigger]:not([data-init])').forEach((trigger) =&gt; {
   trigger.dataset.init = '';
   const tip = document.getElementById(trigger.dataset.tooltipTrigger);
   if (!tip) return;
@@ -546,7 +546,7 @@ document.querySelectorAll('[data-tooltip-trigger]:not([data-init])').forEach((tr
     clearTimeout(closeTimer);
     clearTimeout(openTimer);
     const wait = groupOpen ? 0 : delay;
-    openTimer = setTimeout(() => {
+    openTimer = setTimeout(() =&gt; {
       try { tip.showPopover(); } catch { /* already open */ }
       markGroupOpen();
     }, wait);
@@ -555,7 +555,7 @@ document.querySelectorAll('[data-tooltip-trigger]:not([data-init])').forEach((tr
   function hide() {
     clearTimeout(openTimer);
     clearTimeout(closeTimer);
-    closeTimer = setTimeout(() => {
+    closeTimer = setTimeout(() =&gt; {
       try { tip.hidePopover(); } catch { /* already closed */ }
       scheduleGroupReset();
     }, closeDelay);
@@ -575,8 +575,8 @@ new MutationObserver(init).observe(document, { childList: true, subtree: true })
 // Hide any open tooltip when the page scrolls.
 if (!document.__tooltipScrollInit) {
   document.__tooltipScrollInit = true;
-  document.addEventListener('scroll', () => {
-    document.querySelectorAll('.tooltip:popover-open').forEach((tip) => {
+  document.addEventListener('scroll', () =&gt; {
+    document.querySelectorAll('.tooltip:popover-open').forEach((tip) =&gt; {
       try { tip.hidePopover(); } catch {}
     });
   }, { passive: true, capture: true });

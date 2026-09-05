@@ -335,15 +335,15 @@
     width: 100%;
 
     /* Vertical */
-    &[data-orientation="vertical"] {
+    &amp;[data-orientation=&quot;vertical&quot;] {
       height: auto;
       width: 1px;
       align-self: stretch;
     }
 
     /* Decorative — hidden from assistive technology */
-    &[aria-hidden="true"],
-    &[role="none"] {
+    &amp;[aria-hidden=&quot;true&quot;],
+    &amp;[role=&quot;none&quot;] {
       /* No visual change — purely semantic */
     }
   }
@@ -354,9 +354,9 @@
     align-items: center;
     gap: 0.75rem;
 
-    & .separator { flex: 1; }
+    &amp; .separator { flex: 1; }
 
-    & span {
+    &amp; span {
       font-size: 0.75rem;
       font-weight: 500;
       color: var(--muted-foreground);
@@ -379,7 +379,7 @@
       background: var(--foreground);
       height: 2px;
 
-      &[data-orientation="vertical"] {
+      &amp;[data-orientation=&quot;vertical&quot;] {
         width: 2px;
         height: auto;
       }

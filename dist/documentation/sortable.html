@@ -326,7 +326,7 @@
     gap: 0.25rem;
 
     /* Horizontal orientation */
-    &[data-orientation="horizontal"] {
+    &amp;[data-orientation=&quot;horizontal&quot;] {
       flex-direction: row;
       flex-wrap: wrap;
     }
@@ -346,48 +346,48 @@
     transition: box-shadow 150ms ease, opacity 150ms ease, border-color 150ms ease;
     user-select: none;
 
-    &:active { cursor: grabbing; }
+    &amp;:active { cursor: grabbing; }
 
     /* Keyboard focus (roving tabindex) */
-    &:focus-visible {
+    &amp;:focus-visible {
       outline: 2px solid var(--ring);
       outline-offset: 2px;
     }
 
     /* Active descendant highlight (keyboard navigation) */
-    &[data-active] {
+    &amp;[data-active] {
       border-color: var(--ring);
       background-color: var(--accent);
       color: var(--accent-foreground);
     }
 
     /* Drag in progress */
-    &[data-dragging] {
+    &amp;[data-dragging] {
       opacity: 0.5;
       box-shadow: var(--shadow-md);
       border-style: dashed;
     }
 
     /* Drop target indicator */
-    &[data-over="before"] {
+    &amp;[data-over=&quot;before&quot;] {
       border-top: 2px solid var(--primary);
     }
-    &[data-over="after"] {
+    &amp;[data-over=&quot;after&quot;] {
       border-bottom: 2px solid var(--primary);
     }
 
     /* Horizontal drop indicators */
-    .sortable[data-orientation="horizontal"] &[data-over="before"] {
+    .sortable[data-orientation=&quot;horizontal&quot;] &amp;[data-over=&quot;before&quot;] {
       border-top: 1px solid var(--border);
       border-inline-start: 2px solid var(--primary);
     }
-    .sortable[data-orientation="horizontal"] &[data-over="after"] {
+    .sortable[data-orientation=&quot;horizontal&quot;] &amp;[data-over=&quot;after&quot;] {
       border-bottom: 1px solid var(--border);
       border-inline-end: 2px solid var(--primary);
     }
 
     /* Disabled */
-    &[aria-disabled="true"] {
+    &amp;[aria-disabled=&quot;true&quot;] {
       opacity: 0.5;
       cursor: not-allowed;
       pointer-events: none;
@@ -403,8 +403,8 @@
     display: inline-flex;
     align-items: center;
 
-    &:active { cursor: grabbing; }
-    & svg { width: 1rem; height: 1rem; }
+    &amp;:active { cursor: grabbing; }
+    &amp; svg { width: 1rem; height: 1rem; }
   }
 
   /* Live region for screen reader announcements */
@@ -427,9 +427,9 @@
   @media (prefers-contrast: more) {
     .sortable-item {
       border-width: 2px;
-      &[data-active] { outline: 2px solid LinkText; }
-      &[data-over="before"] { border-top-width: 3px; }
-      &[data-over="after"] { border-bottom-width: 3px; }
+      &amp;[data-active] { outline: 2px solid LinkText; }
+      &amp;[data-over=&quot;before&quot;] { border-top-width: 3px; }
+      &amp;[data-over=&quot;after&quot;] { border-bottom-width: 3px; }
     }
   }
 
@@ -438,11 +438,11 @@
       border-color: ButtonBorder;
       color: ButtonText;
       background-color: ButtonFace;
-      &[data-active] { border-color: Highlight; color: HighlightText; }
-      &[data-dragging] { border-color: GrayText; }
-      &[data-over="before"] { border-top-color: Highlight; }
-      &[data-over="after"] { border-bottom-color: Highlight; }
-      &[aria-disabled="true"] { color: GrayText; border-color: GrayText; }
+      &amp;[data-active] { border-color: Highlight; color: HighlightText; }
+      &amp;[data-dragging] { border-color: GrayText; }
+      &amp;[data-over=&quot;before&quot;] { border-top-color: Highlight; }
+      &amp;[data-over=&quot;after&quot;] { border-bottom-color: Highlight; }
+      &amp;[aria-disabled=&quot;true&quot;] { color: GrayText; border-color: GrayText; }
     }
     .sortable-handle { color: GrayText; }
   }
@@ -462,7 +462,7 @@
 // Live region announces position changes to screen readers.
 
 function init() {
-document.querySelectorAll('.sortable:not([data-init])').forEach((list) => {
+document.querySelectorAll('.sortable:not([data-init])').forEach((list) =&gt; {
   list.dataset.init = '';
 
   const isHorizontal = list.dataset.orientation === 'horizontal';
@@ -485,11 +485,11 @@ document.querySelectorAll('.sortable:not([data-init])').forEach((list) => {
 
   function announce(msg) {
     liveRegion.textContent = '';
-    requestAnimationFrame(() => { liveRegion.textContent = msg; });
+    requestAnimationFrame(() =&gt; { liveRegion.textContent = msg; });
   }
 
   function getItems() {
-    return Array.from(list.querySelectorAll('.sortable-item:not([aria-disabled="true"])'));
+    return Array.from(list.querySelectorAll('.sortable-item:not([aria-disabled=&quot;true&quot;])'));
   }
 
   function getAllItems() {
@@ -501,7 +501,7 @@ document.querySelectorAll('.sortable:not([data-init])').forEach((list) => {
   }
 
   function setActive(item) {
-    getAllItems().forEach((el) => {
+    getAllItems().forEach((el) =&gt; {
       el.removeAttribute('data-active');
       el.setAttribute('tabindex', '-1');
     });
@@ -524,30 +524,30 @@ document.querySelectorAll('.sortable:not([data-init])').forEach((list) => {
 
   // -- Initialize tabindex --
   const allItems = getAllItems();
-  allItems.forEach((item, i) => {
+  allItems.forEach((item, i) =&gt; {
     item.setAttribute('tabindex', i === 0 ? '0' : '-1');
   });
 
   // -- Drag and drop --
   let dragged = null;
 
-  list.querySelectorAll('.sortable-item').forEach((item) => {
+  list.querySelectorAll('.sortable-item').forEach((item) =&gt; {
     if (item.getAttribute('aria-disabled') === 'true') return;
 
-    item.addEventListener('dragstart', (e) => {
+    item.addEventListener('dragstart', (e) =&gt; {
       dragged = item;
       item.setAttribute('data-dragging', '');
       e.dataTransfer.effectAllowed = 'move';
       e.dataTransfer.setData('text/plain', '');
     });
 
-    item.addEventListener('dragend', () => {
+    item.addEventListener('dragend', () =&gt; {
       item.removeAttribute('data-dragging');
-      list.querySelectorAll('[data-over]').forEach((el) => el.removeAttribute('data-over'));
+      list.querySelectorAll('[data-over]').forEach((el) =&gt; el.removeAttribute('data-over'));
       dragged = null;
     });
 
-    item.addEventListener('dragover', (e) => {
+    item.addEventListener('dragover', (e) =&gt; {
       e.preventDefault();
       e.dataTransfer.dropEffect = 'move';
       if (!dragged || dragged === item) return;
@@ -557,17 +557,17 @@ document.querySelectorAll('.sortable:not([data-init])').forEach((list) => {
         : rect.top + rect.height / 2;
       const pos = isHorizontal ? e.clientX : e.clientY;
       // Clear other indicators
-      list.querySelectorAll('[data-over]').forEach((el) => {
+      list.querySelectorAll('[data-over]').forEach((el) =&gt; {
         if (el !== item) el.removeAttribute('data-over');
       });
-      item.setAttribute('data-over', pos < midpoint ? 'before' : 'after');
+      item.setAttribute('data-over', pos &lt; midpoint ? 'before' : 'after');
     });
 
-    item.addEventListener('dragleave', () => {
+    item.addEventListener('dragleave', () =&gt; {
       item.removeAttribute('data-over');
     });
 
-    item.addEventListener('drop', (e) => {
+    item.addEventListener('drop', (e) =&gt; {
       e.preventDefault();
       const position = item.getAttribute('data-over');
       item.removeAttribute('data-over');
@@ -592,18 +592,18 @@ document.querySelectorAll('.sortable:not([data-init])').forEach((list) => {
   });
 
   // -- Keyboard navigation --
-  list.addEventListener('keydown', (e) => {
-    const active = getActiveItem() || list.querySelector('.sortable-item[tabindex="0"]');
+  list.addEventListener('keydown', (e) =&gt; {
+    const active = getActiveItem() || list.querySelector('.sortable-item[tabindex=&quot;0&quot;]');
     if (!active) return;
     const items = getItems();
     const idx = items.indexOf(active);
 
     // Arrow navigation
-    if (e.key === NEXT_KEY && !e.altKey) {
+    if (e.key === NEXT_KEY &amp;&amp; !e.altKey) {
       e.preventDefault();
       const next = items[idx + 1];
       if (next) setActive(next);
-    } else if (e.key === PREV_KEY && !e.altKey) {
+    } else if (e.key === PREV_KEY &amp;&amp; !e.altKey) {
       e.preventDefault();
       const prev = items[idx - 1];
       if (prev) setActive(prev);
@@ -615,9 +615,9 @@ document.querySelectorAll('.sortable:not([data-init])').forEach((list) => {
       if (items.length) setActive(items[items.length - 1]);
 
     // Alt+Arrow reorders
-    } else if (e.key === NEXT_KEY && e.altKey) {
+    } else if (e.key === NEXT_KEY &amp;&amp; e.altKey) {
       e.preventDefault();
-      if (idx < items.length - 1) {
+      if (idx &lt; items.length - 1) {
         const sibling = items[idx + 1];
         list.insertBefore(active, sibling.nextSibling);
         const newItems = getItems();
@@ -629,9 +629,9 @@ document.querySelectorAll('.sortable:not([data-init])').forEach((list) => {
           detail: { item: active, index: newIdx }
         }));
       }
-    } else if (e.key === PREV_KEY && e.altKey) {
+    } else if (e.key === PREV_KEY &amp;&amp; e.altKey) {
       e.preventDefault();
-      if (idx > 0) {
+      if (idx &gt; 0) {
         const sibling = items[idx - 1];
         list.insertBefore(active, sibling);
         const newItems = getItems();
@@ -647,9 +647,9 @@ document.querySelectorAll('.sortable:not([data-init])').forEach((list) => {
   });
 
   // -- Focus management --
-  list.addEventListener('focusin', (e) => {
+  list.addEventListener('focusin', (e) =&gt; {
     const item = e.target.closest('.sortable-item');
-    if (item && list.contains(item)) setActive(item);
+    if (item &amp;&amp; list.contains(item)) setActive(item);
   });
 });
 }

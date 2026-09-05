@@ -380,73 +380,73 @@
     gap: 0.0625rem;
 
     /* -- Outline variant: propagate border + shadow to children -- */
-    &[data-variant="outline"] > .toggle {
+    &amp;[data-variant=&quot;outline&quot;] &gt; .toggle {
       border: 1px solid var(--input);
       background: transparent;
       box-shadow: var(--shadow-xs);
 
-      &:hover {
+      &amp;:hover {
         background-color: var(--accent);
         color: var(--accent-foreground);
       }
 
-      &[aria-pressed="true"] {
+      &amp;[aria-pressed=&quot;true&quot;] {
         background-color: var(--accent);
         color: var(--accent-foreground);
       }
     }
 
     /* Collapse double borders on connected outline items */
-    &[data-variant="outline"]:not([data-spacing]) > .toggle:not(:first-child) {
+    &amp;[data-variant=&quot;outline&quot;]:not([data-spacing]) &gt; .toggle:not(:first-child) {
       margin-inline-start: -1px;
     }
 
-    &[data-variant="outline"]:not([data-spacing])[data-orientation="vertical"] > .toggle:not(:first-child) {
+    &amp;[data-variant=&quot;outline&quot;]:not([data-spacing])[data-orientation=&quot;vertical&quot;] &gt; .toggle:not(:first-child) {
       margin-inline-start: 0;
       margin-block-start: -1px;
     }
 
     /* -- Sizes: propagate to child toggles ---------------------- */
-    &[data-size="sm"] > .toggle {
+    &amp;[data-size=&quot;sm&quot;] &gt; .toggle {
       height: 2rem;
       padding: 0 0.375rem;
       min-width: 2rem;
 
-      & svg { width: 0.875rem; height: 0.875rem; }
+      &amp; svg { width: 0.875rem; height: 0.875rem; }
     }
 
-    &[data-size="lg"] > .toggle {
+    &amp;[data-size=&quot;lg&quot;] &gt; .toggle {
       height: 2.5rem;
       padding: 0 0.625rem;
       min-width: 2.5rem;
 
-      & svg { width: 1.125rem; height: 1.125rem; }
+      &amp; svg { width: 1.125rem; height: 1.125rem; }
     }
 
     /* -- Vertical orientation ----------------------------------- */
-    &[data-orientation="vertical"] {
+    &amp;[data-orientation=&quot;vertical&quot;] {
       flex-direction: column;
     }
 
     /* -- Connected borders: merge adjacent toggle radii --------- */
-    & > .toggle:not(:first-child) {
+    &amp; &gt; .toggle:not(:first-child) {
       border-start-start-radius: 0;
       border-end-start-radius: 0;
     }
 
-    & > .toggle:not(:last-child) {
+    &amp; &gt; .toggle:not(:last-child) {
       border-start-end-radius: 0;
       border-end-end-radius: 0;
     }
 
-    &[data-orientation="vertical"] {
-      & > .toggle:not(:first-child) {
+    &amp;[data-orientation=&quot;vertical&quot;] {
+      &amp; &gt; .toggle:not(:first-child) {
         border-start-start-radius: 0;
         border-start-end-radius: 0;
         border-end-start-radius: var(--radius-md);
       }
 
-      & > .toggle:not(:last-child) {
+      &amp; &gt; .toggle:not(:last-child) {
         border-end-start-radius: 0;
         border-end-end-radius: 0;
         border-start-end-radius: var(--radius-md);
@@ -454,19 +454,19 @@
     }
 
     /* -- Spacing: adds gap and restores individual radii --------- */
-    &[data-spacing] {
+    &amp;[data-spacing] {
       gap: 0.25rem;
 
-      & > .toggle {
+      &amp; &gt; .toggle {
         border-radius: var(--radius-md);
       }
     }
 
     /* -- Disabled group ----------------------------------------- */
-    &[data-disabled] {
+    &amp;[data-disabled] {
       pointer-events: none;
 
-      & > .toggle {
+      &amp; &gt; .toggle {
         pointer-events: none;
         opacity: 0.5;
       }
@@ -481,16 +481,16 @@
   }
 
   @media (forced-colors: active) {
-    .toggle-group > .toggle {
+    .toggle-group &gt; .toggle {
       border-color: ButtonBorder;
 
-      &[aria-pressed="true"] {
+      &amp;[aria-pressed=&quot;true&quot;] {
         background-color: Highlight;
         color: HighlightText;
         border-color: Highlight;
       }
 
-      &:focus-visible {
+      &amp;:focus-visible {
         outline-color: Highlight;
       }
     }
@@ -509,26 +509,26 @@
 // Manages single/multiple selection and roving tabindex across .toggle buttons.
 
 function init() {
-  document.querySelectorAll('.toggle-group:not([data-init])').forEach((group) => {
+  document.querySelectorAll('.toggle-group:not([data-init])').forEach((group) =&gt; {
   group.dataset.init = '';
   const type = group.getAttribute('data-type') || 'single';
 
-  const getToggles = () => Array.from(group.querySelectorAll('.toggle:not(:disabled)'));
+  const getToggles = () =&gt; Array.from(group.querySelectorAll('.toggle:not(:disabled)'));
 
   // Roving tabindex: only one item tabbable at a time
-  const initTabindex = () => {
+  const initTabindex = () =&gt; {
     const toggles = getToggles();
     if (toggles.length === 0) return;
-    const pressed = toggles.find((t) => t.getAttribute('aria-pressed') === 'true');
+    const pressed = toggles.find((t) =&gt; t.getAttribute('aria-pressed') === 'true');
     const active = pressed || toggles[0];
-    toggles.forEach((t) => {
+    toggles.forEach((t) =&gt; {
       t.setAttribute('tabindex', t === active ? '0' : '-1');
     });
   };
 
   initTabindex();
 
-  group.addEventListener('click', (e) => {
+  group.addEventListener('click', (e) =&gt; {
     const toggle = e.target.closest('.toggle');
     if (!toggle || toggle.disabled || group.hasAttribute('data-disabled')) return;
 
@@ -536,17 +536,17 @@ function init() {
     const pressed = toggle.getAttribute('aria-pressed') === 'true';
 
     if (type === 'single') {
-      toggles.forEach((t) => t.setAttribute('aria-pressed', 'false'));
+      toggles.forEach((t) =&gt; t.setAttribute('aria-pressed', 'false'));
       if (!pressed) toggle.setAttribute('aria-pressed', 'true');
     } else {
       toggle.setAttribute('aria-pressed', String(!pressed));
     }
 
     // Update roving tabindex to current item
-    toggles.forEach((t) => t.setAttribute('tabindex', t === toggle ? '0' : '-1'));
+    toggles.forEach((t) =&gt; t.setAttribute('tabindex', t === toggle ? '0' : '-1'));
   });
 
-  group.addEventListener('keydown', (e) => {
+  group.addEventListener('keydown', (e) =&gt; {
     const toggle = e.target.closest('.toggle');
     if (!toggle || group.hasAttribute('data-disabled')) return;
 

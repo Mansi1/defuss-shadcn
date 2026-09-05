@@ -318,11 +318,11 @@
     position: relative;
     transition: background-color 150ms, border-color 150ms;
 
-    &:checked {
+    &amp;:checked {
       background-color: var(--primary);
       border-color: var(--primary);
 
-      &::after {
+      &amp;::after {
         content: '';
         position: absolute;
         left: 50%;
@@ -335,11 +335,11 @@
       }
     }
 
-    &:indeterminate {
+    &amp;:indeterminate {
       background-color: var(--primary);
       border-color: var(--primary);
 
-      &::after {
+      &amp;::after {
         content: '';
         position: absolute;
         left: 50%;
@@ -351,17 +351,17 @@
       }
     }
 
-    &:focus-visible {
+    &amp;:focus-visible {
       outline: 2px solid var(--ring);
       outline-offset: 2px;
     }
 
-    &:disabled {
+    &amp;:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
-    &:is([aria-invalid="true"], :user-invalid) {
+    &amp;:is([aria-invalid=&quot;true&quot;], :user-invalid) {
       border-color: var(--destructive);
     }
   }
@@ -372,7 +372,7 @@
     align-items: center;
     gap: 0.5rem;
 
-    & > label {
+    &amp; &gt; label {
       font-size: 0.875rem;
       cursor: pointer;
     }
@@ -383,12 +383,12 @@
     align-items: flex-start;
     gap: 0.5rem;
 
-    & > label {
+    &amp; &gt; label {
       font-size: 0.875rem;
       cursor: pointer;
     }
 
-    & > .checkbox {
+    &amp; &gt; .checkbox {
       margin-top: 0.125rem;
     }
   }

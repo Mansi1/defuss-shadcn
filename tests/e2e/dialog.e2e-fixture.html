@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>dialog e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/button/button.css" />
+    <link rel="stylesheet" href="/dist/components/dialog/dialog.css" />
+  </head>
+  <body>
+    <!-- mirrors the doc page: trigger button + modal dialog, default config -->
+    <button class="btn" data-variant="default" data-dialog-trigger="demo-dialog" aria-haspopup="dialog">
+      Open dialog
+    </button>
+
+    <dialog id="demo-dialog" class="dialog" role="dialog" aria-modal="true" aria-labelledby="demo-title">
+      <div class="dialog-content">
+        <div class="dialog-header">
+          <h2 class="dialog-title" id="demo-title">Edit profile</h2>
+          <p class="dialog-description">Make changes to your profile here.</p>
+        </div>
+        <div class="dialog-footer">
+          <button class="btn" data-variant="outline" data-dialog-close>Cancel</button>
+          <button class="btn" data-variant="default" data-dialog-close>Save changes</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script type="module" src="/dist/components/dialog/dialog.js"></script>
+  </body>
+</html>

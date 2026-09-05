@@ -187,7 +187,7 @@
     box-shadow: var(--shadow-xs);
     overflow: hidden;
 
-    & input {
+    &amp; input {
       border: none;
       outline: none;
       background: transparent;
@@ -199,14 +199,14 @@
       color: var(--foreground);
       -moz-appearance: textfield;
 
-      &::-webkit-inner-spin-button,
-      &::-webkit-outer-spin-button {
+      &amp;::-webkit-inner-spin-button,
+      &amp;::-webkit-outer-spin-button {
         -webkit-appearance: none;
         margin: 0;
       }
     }
 
-    & button {
+    &amp; button {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -221,21 +221,21 @@
       transition: background 150ms, color 150ms;
       flex-shrink: 0;
 
-      &:hover {
+      &amp;:hover {
         background: var(--accent);
         color: var(--accent-foreground);
       }
 
-      &:first-child {
+      &amp;:first-child {
         border-right: 1px solid var(--input);
       }
 
-      &:last-child {
+      &amp;:last-child {
         border-left: 1px solid var(--input);
       }
     }
 
-    &:focus-within {
+    &amp;:focus-within {
       border-color: var(--ring);
       box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
     }
@@ -254,24 +254,24 @@
 // Increment/decrement buttons for .number-input containers.
 
 function init() {
-  document.querySelectorAll('.number-input:not([data-init])').forEach((wrapper) => {
+  document.querySelectorAll('.number-input:not([data-init])').forEach((wrapper) =&gt; {
   wrapper.dataset.init = '';
-  const input = wrapper.querySelector('input[type="number"]');
-  const decBtn = wrapper.querySelector('[data-action="decrement"]');
-  const incBtn = wrapper.querySelector('[data-action="increment"]');
+  const input = wrapper.querySelector('input[type=&quot;number&quot;]');
+  const decBtn = wrapper.querySelector('[data-action=&quot;decrement&quot;]');
+  const incBtn = wrapper.querySelector('[data-action=&quot;increment&quot;]');
   if (!input) return;
 
-  const update = (direction) => {
+  const update = (direction) =&gt; {
     try {
-      if (direction > 0) input.stepUp();
+      if (direction &gt; 0) input.stepUp();
       else input.stepDown();
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.dispatchEvent(new Event('change', { bubbles: true }));
     } catch { /* min/max boundary */ }
   };
 
-  if (decBtn) decBtn.addEventListener('click', () => { update(-1); });
-  if (incBtn) incBtn.addEventListener('click', () => { update(1); });
+  if (decBtn) decBtn.addEventListener('click', () =&gt; { update(-1); });
+  if (incBtn) incBtn.addEventListener('click', () =&gt; { update(1); });
 });
 }
 

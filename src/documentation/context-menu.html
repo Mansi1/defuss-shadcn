@@ -170,7 +170,7 @@
     opacity: 0; transform: scale(0.95);
     transition: opacity 100ms ease, transform 100ms ease, display 100ms allow-discrete;
 
-    &:popover-open { opacity: 1; transform: scale(1); }
+    &amp;:popover-open { opacity: 1; transform: scale(1); }
   }
 
   @starting-style {
@@ -184,8 +184,8 @@
     font-size: 0.8125rem; font-family: inherit; text-align: left; cursor: pointer;
     transition: background-color 100ms ease;
 
-    &:hover, &[data-highlighted] { background-color: var(--accent); color: var(--accent-foreground); }
-    &:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
+    &amp;:hover, &amp;[data-highlighted] { background-color: var(--accent); color: var(--accent-foreground); }
+    &amp;:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
   }
 
   .context-menu-separator { height: 1px; background-color: var(--border); margin: 0.25rem -0.25rem; }
@@ -203,18 +203,18 @@
 // Right-click context menu using the Popover API.
 
 function init() {
-  document.querySelectorAll('[data-context-menu]:not([data-init])').forEach((trigger) => {
+  document.querySelectorAll('[data-context-menu]:not([data-init])').forEach((trigger) =&gt; {
   trigger.dataset.init = '';
   const menu = document.getElementById(trigger.dataset.contextMenu);
   if (!menu) return;
-  trigger.addEventListener('contextmenu', (e) => {
+  trigger.addEventListener('contextmenu', (e) =&gt; {
     e.preventDefault();
     menu.style.position = 'fixed';
     menu.style.top = `${e.clientY}px`;
     menu.style.left = `${e.clientX}px`;
     menu.showPopover();
   });
-  menu.addEventListener('click', (e) => {
+  menu.addEventListener('click', (e) =&gt; {
     if (e.target.closest('.context-menu-item')) menu.hidePopover();
   });
 });

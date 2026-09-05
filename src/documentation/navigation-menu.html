@@ -244,9 +244,9 @@
     font-family: inherit; text-decoration: none; cursor: pointer;
     transition: background-color 150ms ease, color 150ms ease;
     outline: none;
-    &:hover { background-color: var(--accent); color: var(--accent-foreground); }
-    &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-    & svg { width: 0.875rem; height: 0.875rem; color: var(--muted-foreground); transition: transform 200ms ease; }
+    &amp;:hover { background-color: var(--accent); color: var(--accent-foreground); }
+    &amp;:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    &amp; svg { width: 0.875rem; height: 0.875rem; color: var(--muted-foreground); transition: transform 200ms ease; }
   }
 
   /* Rotate chevron when popover is open */
@@ -266,16 +266,16 @@
     top: anchor(bottom); left: anchor(left); margin-top: 4px;
     position-try-fallbacks: flip-block;
 
-    &:popover-open { opacity: 1; transform: translateY(0); }
+    &amp;:popover-open { opacity: 1; transform: translateY(0); }
   }
   @starting-style { .nav-menu-content:popover-open { opacity: 0; transform: translateY(-4px); } }
   .nav-menu-content-link {
     display: block; padding: 0.5rem 0.75rem; border-radius: var(--radius-md);
     text-decoration: none; color: var(--foreground); font-size: 0.875rem;
     transition: background-color 150ms ease;
-    &:hover { background-color: var(--accent); }
-    &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-    & p { margin: 0.125rem 0 0; font-size: 0.75rem; color: var(--muted-foreground); font-weight: 400; }
+    &amp;:hover { background-color: var(--accent); }
+    &amp;:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    &amp; p { margin: 0.125rem 0 0; font-size: 0.75rem; color: var(--muted-foreground); font-weight: 400; }
   }
 
   /* -- Accessibility ------------------------------------------ */
@@ -307,9 +307,9 @@
 // CSS anchor positioning for dropdown navigation menus.
 
 function init() {
-  document.querySelectorAll('.nav-menu:not([data-init])').forEach((nav) => {
+  document.querySelectorAll('.nav-menu:not([data-init])').forEach((nav) =&gt; {
   nav.dataset.init = '';
-  nav.querySelectorAll('.nav-menu-trigger[popovertarget]').forEach((trigger) => {
+  nav.querySelectorAll('.nav-menu-trigger[popovertarget]').forEach((trigger) =&gt; {
     const id = trigger.getAttribute('popovertarget');
     const content = document.getElementById(id);
     if (!content) return;

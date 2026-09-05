@@ -316,13 +316,13 @@
     flex-shrink: 0;
     background-color: var(--muted);
 
-    &[data-size="sm"] {
+    &amp;[data-size=&quot;sm&quot;] {
       width: 2rem;
       height: 2rem;
       font-size: 0.6875rem;
     }
 
-    &[data-size="lg"] {
+    &amp;[data-size=&quot;lg&quot;] {
       width: 3rem;
       height: 3rem;
       font-size: 0.875rem;
@@ -371,11 +371,11 @@
     display: flex;
     align-items: center;
 
-    & .avatar {
+    &amp; .avatar {
       border: 2px solid var(--background);
       margin-left: -0.5rem;
 
-      &:first-child {
+      &amp;:first-child {
         margin-left: 0;
       }
     }
@@ -409,9 +409,9 @@
 // Hides broken avatar images and shows the fallback.
 
 function init() {
-  document.querySelectorAll('.avatar-image:not([data-init])').forEach((img) => {
+  document.querySelectorAll('.avatar-image:not([data-init])').forEach((img) =&gt; {
   img.dataset.init = '';
-  img.addEventListener('error', () => {
+  img.addEventListener('error', () =&gt; {
     img.setAttribute('data-error', '');
     img.style.display = 'none';
   });

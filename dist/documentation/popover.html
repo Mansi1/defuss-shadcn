@@ -285,59 +285,59 @@
     margin-top: 4px;
     position-try-fallbacks: flip-block;
 
-    &:popover-open {
+    &amp;:popover-open {
       opacity: 1;
       translate: 0 0;
     }
 
     /* ----- Side variants ----- */
-    &[data-side="top"] {
+    &amp;[data-side=&quot;top&quot;] {
       position-area: top;
       margin-top: 0;
       margin-bottom: 4px;
       translate: 0 4px;
-      &:popover-open { translate: 0 0; }
+      &amp;:popover-open { translate: 0 0; }
     }
 
-    &[data-side="left"] {
+    &amp;[data-side=&quot;left&quot;] {
       position-area: left;
       margin-top: 0;
       margin-right: 4px;
       translate: 4px 0;
       position-try-fallbacks: flip-inline;
-      &:popover-open { translate: 0 0; }
+      &amp;:popover-open { translate: 0 0; }
     }
 
-    &[data-side="right"] {
+    &amp;[data-side=&quot;right&quot;] {
       position-area: right;
       margin-top: 0;
       margin-left: 4px;
       translate: -4px 0;
       position-try-fallbacks: flip-inline;
-      &:popover-open { translate: 0 0; }
+      &amp;:popover-open { translate: 0 0; }
     }
 
     /* ----- Align variants (combined with side) ----- */
-    &[data-align="start"] {
-      &:not([data-side="left"]):not([data-side="right"]) { position-area: bottom left; }
-      &[data-side="top"] { position-area: top left; }
-      &[data-side="left"] { position-area: left top; }
-      &[data-side="right"] { position-area: right top; }
+    &amp;[data-align=&quot;start&quot;] {
+      &amp;:not([data-side=&quot;left&quot;]):not([data-side=&quot;right&quot;]) { position-area: bottom left; }
+      &amp;[data-side=&quot;top&quot;] { position-area: top left; }
+      &amp;[data-side=&quot;left&quot;] { position-area: left top; }
+      &amp;[data-side=&quot;right&quot;] { position-area: right top; }
     }
 
-    &[data-align="end"] {
-      &:not([data-side="left"]):not([data-side="right"]) { position-area: bottom right; }
-      &[data-side="top"] { position-area: top right; }
-      &[data-side="left"] { position-area: left bottom; }
-      &[data-side="right"] { position-area: right bottom; }
+    &amp;[data-align=&quot;end&quot;] {
+      &amp;:not([data-side=&quot;left&quot;]):not([data-side=&quot;right&quot;]) { position-area: bottom right; }
+      &amp;[data-side=&quot;top&quot;] { position-area: top right; }
+      &amp;[data-side=&quot;left&quot;] { position-area: left bottom; }
+      &amp;[data-side=&quot;right&quot;] { position-area: right bottom; }
     }
   }
 
   @starting-style {
     .popover:popover-open { opacity: 0; translate: 0 -4px; }
-    .popover[data-side="top"]:popover-open { opacity: 0; translate: 0 4px; }
-    .popover[data-side="left"]:popover-open { opacity: 0; translate: 4px 0; }
-    .popover[data-side="right"]:popover-open { opacity: 0; translate: -4px 0; }
+    .popover[data-side=&quot;top&quot;]:popover-open { opacity: 0; translate: 0 4px; }
+    .popover[data-side=&quot;left&quot;]:popover-open { opacity: 0; translate: 4px 0; }
+    .popover[data-side=&quot;right&quot;]:popover-open { opacity: 0; translate: -4px 0; }
   }
 
   .popover-header { margin-bottom: 0.75rem; }
@@ -364,7 +364,7 @@
 // CSS anchor positioning for popover components.
 
 function init() {
-  document.querySelectorAll('[popovertarget]:not([data-init])').forEach((trigger) => {
+  document.querySelectorAll('[popovertarget]:not([data-init])').forEach((trigger) =&gt; {
   trigger.dataset.init = '';
   const id = trigger.getAttribute('popovertarget');
   const popover = document.getElementById(id);

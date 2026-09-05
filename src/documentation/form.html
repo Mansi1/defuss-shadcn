@@ -538,12 +538,12 @@
     gap: 0;
 
     /* -- Horizontal orientation (label beside control) ------- */
-    &[data-orientation="horizontal"] {
+    &amp;[data-orientation=&quot;horizontal&quot;] {
       flex-direction: row;
       align-items: start;
       gap: 1rem;
 
-      & > .label {
+      &amp; &gt; .label {
         margin-bottom: 0;
         padding-top: 0.5rem;
         min-width: 8rem;
@@ -552,8 +552,8 @@
     }
 
     /* -- Invalid state -------------------------------------- */
-    &[data-invalid] {
-      & > .field-description {
+    &amp;[data-invalid] {
+      &amp; &gt; .field-description {
         color: var(--destructive);
       }
     }
@@ -565,7 +565,7 @@
     align-items: center;
     gap: 0.5rem;
 
-    & > .label {
+    &amp; &gt; .label {
       margin-bottom: 0;
     }
   }
@@ -582,22 +582,22 @@
     padding: 1rem;
     box-shadow: var(--shadow-xs);
 
-    & > div {
+    &amp; &gt; div {
       display: flex;
       flex-direction: column;
       gap: 0.125rem;
     }
 
-    & > div > .label {
+    &amp; &gt; div &gt; .label {
       margin-bottom: 0;
       line-height: 1.4;
     }
 
-    & > div > .field-description {
+    &amp; &gt; div &gt; .field-description {
       margin: 0;
     }
 
-    &[data-disabled] {
+    &amp;[data-disabled] {
       opacity: 0.6;
     }
   }
@@ -619,7 +619,7 @@
     flex-direction: column;
     gap: 1rem;
 
-    & > legend {
+    &amp; &gt; legend {
       font-size: 0.875rem;
       font-weight: 500;
       font-family: var(--font-sans);
@@ -628,7 +628,7 @@
       margin-bottom: 0.25rem;
     }
 
-    & > .field-description {
+    &amp; &gt; .field-description {
       margin: -0.25rem 0 0.5rem;
     }
   }
@@ -652,7 +652,7 @@
       border-color: ButtonBorder;
     }
 
-    .form-fieldset > legend {
+    .form-fieldset &gt; legend {
       color: LinkText;
     }
   }

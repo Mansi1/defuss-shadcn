@@ -390,86 +390,86 @@
     background-color: var(--primary);
     color: var(--primary-foreground);
 
-    & svg {
+    &amp; svg {
       pointer-events: none;
       flex-shrink: 0;
 
-      &:not([class*="size-"]) { width: 1rem; height: 1rem; }
+      &amp;:not([class*=&quot;size-&quot;]) { width: 1rem; height: 1rem; }
     }
 
-    &:focus-visible {
+    &amp;:focus-visible {
       outline: 2px solid var(--ring);
       outline-offset: 2px;
     }
 
-    &:disabled, &[aria-disabled="true"] {
+    &amp;:disabled, &amp;[aria-disabled=&quot;true&quot;] {
       pointer-events: none;
       opacity: 0.5;
     }
 
     /* -- Variants -------------------------------------------- */
-    &[data-variant="default"] {
+    &amp;[data-variant=&quot;default&quot;] {
       background-color: var(--primary);
       color: var(--primary-foreground);
 
-      &:hover { opacity: 0.9; }
+      &amp;:hover { opacity: 0.9; }
     }
 
-    &[data-variant="secondary"] {
+    &amp;[data-variant=&quot;secondary&quot;] {
       background-color: var(--secondary);
       color: var(--secondary-foreground);
 
-      &:hover { opacity: 0.8; }
+      &amp;:hover { opacity: 0.8; }
     }
 
-    &[data-variant="outline"] {
+    &amp;[data-variant=&quot;outline&quot;] {
       background-color: var(--background);
       color: var(--foreground);
       border: 1px solid var(--border);
       box-shadow: var(--shadow-xs);
 
-      &:hover {
+      &amp;:hover {
         background-color: var(--accent);
         color: var(--accent-foreground);
       }
     }
 
-    &[data-variant="ghost"] {
+    &amp;[data-variant=&quot;ghost&quot;] {
       background-color: transparent;
       color: var(--foreground);
       border-color: transparent;
 
-      &:hover {
+      &amp;:hover {
         background-color: var(--accent);
         color: var(--accent-foreground);
       }
     }
 
-    &[data-variant="destructive"] {
+    &amp;[data-variant=&quot;destructive&quot;] {
       background-color: var(--destructive);
       color: var(--destructive-foreground);
 
-      &:hover { opacity: 0.9; }
+      &amp;:hover { opacity: 0.9; }
     }
 
-    &[data-variant="link"] {
+    &amp;[data-variant=&quot;link&quot;] {
       background-color: transparent;
       color: var(--primary);
       height: auto;
       padding: 0;
       text-underline-offset: 4px;
 
-      &:hover { text-decoration: underline; }
+      &amp;:hover { text-decoration: underline; }
     }
 
     /* -- Sizes ----------------------------------------------- */
-    &[data-size="xs"]      { height: 1.75rem; padding: 0 0.5rem;  font-size: 0.75rem; border-radius: var(--radius-sm); }
-    &[data-size="sm"]      { height: 2rem;    padding: 0 0.75rem; font-size: 0.8125rem; }
-    &[data-size="lg"]      { height: 2.75rem; padding: 0 2rem;    font-size: 1rem; }
-    &[data-size="icon"]    { height: 2.25rem; width: 2.25rem;  padding: 0; }
-    &[data-size="icon-xs"] { height: 1.75rem; width: 1.75rem;  padding: 0; border-radius: var(--radius-sm); }
-    &[data-size="icon-sm"] { height: 2rem;    width: 2rem;     padding: 0; }
-    &[data-size="icon-lg"] { height: 2.75rem; width: 2.75rem;  padding: 0; }
+    &amp;[data-size=&quot;xs&quot;]      { height: 1.75rem; padding: 0 0.5rem;  font-size: 0.75rem; border-radius: var(--radius-sm); }
+    &amp;[data-size=&quot;sm&quot;]      { height: 2rem;    padding: 0 0.75rem; font-size: 0.8125rem; }
+    &amp;[data-size=&quot;lg&quot;]      { height: 2.75rem; padding: 0 2rem;    font-size: 1rem; }
+    &amp;[data-size=&quot;icon&quot;]    { height: 2.25rem; width: 2.25rem;  padding: 0; }
+    &amp;[data-size=&quot;icon-xs&quot;] { height: 1.75rem; width: 1.75rem;  padding: 0; border-radius: var(--radius-sm); }
+    &amp;[data-size=&quot;icon-sm&quot;] { height: 2rem;    width: 2rem;     padding: 0; }
+    &amp;[data-size=&quot;icon-lg&quot;] { height: 2.75rem; width: 2.75rem;  padding: 0; }
   }
 
   /* -- Accessibility ------------------------------------------ */
@@ -482,14 +482,14 @@
     .btn {
       border: 2px solid transparent;
 
-      &[data-variant="default"],
-      &[data-variant="secondary"],
-      &[data-variant="destructive"] {
+      &amp;[data-variant=&quot;default&quot;],
+      &amp;[data-variant=&quot;secondary&quot;],
+      &amp;[data-variant=&quot;destructive&quot;] {
         border-color: currentColor;
       }
 
-      &[data-variant="outline"],
-      &[data-variant="ghost"] {
+      &amp;[data-variant=&quot;outline&quot;],
+      &amp;[data-variant=&quot;ghost&quot;] {
         border-color: var(--foreground);
       }
     }
@@ -499,7 +499,7 @@
     .btn {
       border: 1px solid ButtonText;
 
-      &:disabled, &[aria-disabled="true"] {
+      &amp;:disabled, &amp;[aria-disabled=&quot;true&quot;] {
         border-color: GrayText;
         color: GrayText;
       }

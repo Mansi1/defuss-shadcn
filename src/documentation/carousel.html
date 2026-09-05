@@ -390,7 +390,7 @@
     width: 100%;
 
     /* ── Viewport ──────────────────────────────── */
-    & .carousel-viewport {
+    &amp; .carousel-viewport {
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
@@ -399,11 +399,11 @@
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
 
-      &::-webkit-scrollbar { display: none; }
+      &amp;::-webkit-scrollbar { display: none; }
     }
 
     /* ── Slide ─────────────────────────────────── */
-    & .carousel-slide {
+    &amp; .carousel-slide {
       flex: 0 0 100%;
       scroll-snap-align: start;
       scroll-snap-stop: always;
@@ -411,8 +411,8 @@
     }
 
     /* ── Prev / Next buttons ───────────────────── */
-    & .carousel-prev,
-    & .carousel-next {
+    &amp; .carousel-prev,
+    &amp; .carousel-next {
       position: absolute;
       top: 50%;
       translate: 0 -50%;
@@ -431,24 +431,24 @@
       font-size: 0.875rem;
       z-index: 1;
 
-      &:hover { background-color: var(--accent); }
-      &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-      &:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
-      & svg { width: 1rem; height: 1rem; }
+      &amp;:hover { background-color: var(--accent); }
+      &amp;:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+      &amp;:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+      &amp; svg { width: 1rem; height: 1rem; }
     }
 
-    & .carousel-prev { left: -1rem; }
-    & .carousel-next { right: -1rem; }
+    &amp; .carousel-prev { left: -1rem; }
+    &amp; .carousel-next { right: -1rem; }
 
     /* ── Dot indicators ────────────────────────── */
-    & .carousel-dots {
+    &amp; .carousel-dots {
       display: flex;
       justify-content: center;
       gap: 0.5rem;
       padding-block: 0.75rem;
     }
 
-    & .carousel-dot {
+    &amp; .carousel-dot {
       width: 0.5rem;
       height: 0.5rem;
       border-radius: 9999px;
@@ -458,23 +458,23 @@
       background-color: var(--border);
       transition: background-color 150ms ease, scale 150ms ease;
 
-      &[aria-current="true"] {
+      &amp;[aria-current=&quot;true&quot;] {
         background-color: var(--foreground);
         scale: 1.25;
       }
 
-      &:hover:not([aria-current="true"]) {
+      &amp;:hover:not([aria-current=&quot;true&quot;]) {
         background-color: var(--muted-foreground);
       }
 
-      &:focus-visible {
+      &amp;:focus-visible {
         outline: 2px solid var(--ring);
         outline-offset: 2px;
       }
     }
 
     /* ── Counter text ──────────────────────────── */
-    & .carousel-counter {
+    &amp; .carousel-counter {
       text-align: center;
       font-size: 0.8125rem;
       color: var(--muted-foreground);
@@ -482,8 +482,8 @@
     }
 
     /* ── Vertical orientation ──────────────────── */
-    &[data-orientation="vertical"] {
-      & .carousel-viewport {
+    &amp;[data-orientation=&quot;vertical&quot;] {
+      &amp; .carousel-viewport {
         flex-direction: column;
         overflow-x: hidden;
         overflow-y: auto;
@@ -492,17 +492,17 @@
         overscroll-behavior-y: contain;
       }
 
-      & .carousel-prev,
-      & .carousel-next {
+      &amp; .carousel-prev,
+      &amp; .carousel-next {
         left: 50%;
         right: auto;
         translate: -50% 0;
         top: auto;
       }
-      & .carousel-prev { top: -1rem; bottom: auto; }
-      & .carousel-next { bottom: -1rem; top: auto; }
+      &amp; .carousel-prev { top: -1rem; bottom: auto; }
+      &amp; .carousel-next { bottom: -1rem; top: auto; }
 
-      & .carousel-dots { flex-direction: column; }
+      &amp; .carousel-dots { flex-direction: column; }
     }
   }
 
@@ -533,7 +533,7 @@
     }
     .carousel .carousel-dot {
       background: ButtonText;
-      &[aria-current="true"] { background: Highlight; }
+      &amp;[aria-current=&quot;true&quot;] { background: Highlight; }
     }
   }
 }</code></pre>
@@ -551,7 +551,7 @@
 // dot indicators, loop, autoplay, and ARIA.
 
 function init() {
-document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
+document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) =&gt; {
   carousel.dataset.init = '';
 
   const viewport = carousel.querySelector('.carousel-viewport');
@@ -561,7 +561,7 @@ document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
   const counter = carousel.querySelector('.carousel-counter');
   if (!viewport) return;
 
-  const slides = () => Array.from(viewport.querySelectorAll('.carousel-slide'));
+  const slides = () =&gt; Array.from(viewport.querySelectorAll('.carousel-slide'));
   const isVertical = carousel.dataset.orientation === 'vertical';
   const isLoop = carousel.hasAttribute('data-loop');
   const autoplayDelay = carousel.dataset.autoplay ? parseInt(carousel.dataset.autoplay, 10) : 0;
@@ -576,7 +576,7 @@ document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
   carousel.setAttribute('aria-roledescription', 'carousel');
   if (!carousel.hasAttribute('aria-label')) carousel.setAttribute('aria-label', 'Carousel');
 
-  slides().forEach((slide, i) => {
+  slides().forEach((slide, i) =&gt; {
     slide.setAttribute('role', 'group');
     slide.setAttribute('aria-roledescription', 'slide');
     if (!slide.hasAttribute('aria-label')) {
@@ -585,7 +585,7 @@ document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
   });
 
   // ── Scroll to index ─────────────────────────
-  const scrollToIndex = (index) => {
+  const scrollToIndex = (index) =&gt; {
     const allSlides = slides();
     if (!allSlides.length) return;
 
@@ -605,21 +605,21 @@ document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
   };
 
   // ── Update state (buttons, dots, counter) ───
-  const updateState = (index) => {
+  const updateState = (index) =&gt; {
     const allSlides = slides();
     if (!allSlides.length) return;
     currentIndex = index;
 
     // Prev/next disabled states (non-loop)
     if (!isLoop) {
-      if (prevBtn) prevBtn.disabled = currentIndex <= 0;
-      if (nextBtn) nextBtn.disabled = currentIndex >= allSlides.length - 1;
+      if (prevBtn) prevBtn.disabled = currentIndex &lt;= 0;
+      if (nextBtn) nextBtn.disabled = currentIndex &gt;= allSlides.length - 1;
     }
 
     // Dot indicators
     if (dotsContainer) {
       const dots = dotsContainer.querySelectorAll('.carousel-dot');
-      dots.forEach((dot, i) => {
+      dots.forEach((dot, i) =&gt; {
         dot.setAttribute('aria-current', i === currentIndex ? 'true' : 'false');
       });
     }
@@ -630,16 +630,16 @@ document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
     }
 
     // ARIA labels on slides
-    allSlides.forEach((slide, i) => {
+    allSlides.forEach((slide, i) =&gt; {
       slide.setAttribute('aria-label', `${i + 1} of ${allSlides.length}`);
     });
   };
 
   // ── IntersectionObserver for current slide ──
   const observer = new IntersectionObserver(
-    (entries) => {
+    (entries) =&gt; {
       for (const entry of entries) {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+        if (entry.isIntersecting &amp;&amp; entry.intersectionRatio &gt;= 0.5) {
           const idx = slides().indexOf(entry.target);
           if (idx !== -1) updateState(idx);
         }
@@ -648,11 +648,11 @@ document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
     { root: viewport, threshold: 0.5 }
   );
 
-  slides().forEach((slide) => observer.observe(slide));
+  slides().forEach((slide) =&gt; observer.observe(slide));
 
   // ── Navigation ──────────────────────────────
-  const goNext = () => scrollToIndex(currentIndex + 1);
-  const goPrev = () => scrollToIndex(currentIndex - 1);
+  const goNext = () =&gt; scrollToIndex(currentIndex + 1);
+  const goPrev = () =&gt; scrollToIndex(currentIndex - 1);
 
   if (prevBtn) prevBtn.addEventListener('click', goPrev);
   if (nextBtn) nextBtn.addEventListener('click', goNext);
@@ -661,8 +661,8 @@ document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
   if (dotsContainer) {
     const allSlides = slides();
     // Generate dots if empty
-    if (!dotsContainer.children.length && allSlides.length) {
-      allSlides.forEach((_, i) => {
+    if (!dotsContainer.children.length &amp;&amp; allSlides.length) {
+      allSlides.forEach((_, i) =&gt; {
         const dot = document.createElement('button');
         dot.className = 'carousel-dot';
         dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
@@ -671,7 +671,7 @@ document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
       });
     }
 
-    dotsContainer.addEventListener('click', (e) => {
+    dotsContainer.addEventListener('click', (e) =&gt; {
       const dot = e.target.closest('.carousel-dot');
       if (!dot) return;
       const dots = Array.from(dotsContainer.querySelectorAll('.carousel-dot'));
@@ -681,7 +681,7 @@ document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
   }
 
   // ── Keyboard navigation ─────────────────────
-  carousel.addEventListener('keydown', (e) => {
+  carousel.addEventListener('keydown', (e) =&gt; {
     const prevKey = isVertical ? 'ArrowUp' : 'ArrowLeft';
     const nextKey = isVertical ? 'ArrowDown' : 'ArrowRight';
     if (e.key === prevKey) { e.preventDefault(); goPrev(); }
@@ -696,14 +696,14 @@ document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
   }
 
   // ── Autoplay ────────────────────────────────
-  const startAutoplay = () => {
+  const startAutoplay = () =&gt; {
     if (!autoplayDelay) return;
     stopAutoplay();
     autoplayTimer = setInterval(goNext, autoplayDelay);
     viewport.setAttribute('aria-live', 'off');
   };
 
-  const stopAutoplay = () => {
+  const stopAutoplay = () =&gt; {
     if (autoplayTimer) {
       clearInterval(autoplayTimer);
       autoplayTimer = null;

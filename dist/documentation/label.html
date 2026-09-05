@@ -299,14 +299,14 @@
     cursor: default;
 
     /* Disabled — explicit attribute */
-    &[data-disabled] {
+    &amp;[data-disabled] {
       opacity: 0.7;
       cursor: not-allowed;
     }
 
     /* Disabled — auto-detect via adjacent disabled control */
-    &:has(+ :disabled),
-    &:has(+ [data-disabled]) {
+    &amp;:has(+ :disabled),
+    &amp;:has(+ [data-disabled]) {
       opacity: 0.7;
       cursor: not-allowed;
     }

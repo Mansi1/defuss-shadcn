@@ -407,7 +407,7 @@
     transition: opacity 150ms ease, transform 150ms ease,
                 display 150ms allow-discrete;
 
-    &:popover-open {
+    &amp;:popover-open {
       opacity: 1;
       transform: scale(1) translateY(0);
     }
@@ -442,7 +442,7 @@
     color: var(--foreground);
     outline: none;
 
-    &::placeholder { color: var(--muted-foreground); }
+    &amp;::placeholder { color: var(--muted-foreground); }
   }
 
   .combobox-listbox {
@@ -463,22 +463,22 @@
     outline: none;
     transition: background 100ms;
 
-    &:hover, &[data-highlighted] {
+    &amp;:hover, &amp;[data-highlighted] {
       background-color: var(--accent);
       color: var(--accent-foreground);
     }
 
-    &[aria-selected="true"]::before {
+    &amp;[aria-selected=&quot;true&quot;]::before {
       content: '';
       display: inline-block;
       width: 1rem;
       height: 1rem;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+      background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E&quot;);
       background-size: contain;
       flex-shrink: 0;
     }
 
-    &[aria-disabled="true"] {
+    &amp;[aria-disabled=&quot;true&quot;] {
       pointer-events: none;
       opacity: 0.5;
     }
@@ -520,7 +520,7 @@
       border-color: ButtonText;
     }
     .combobox-item {
-      &:hover, &[data-highlighted] {
+      &amp;:hover, &amp;[data-highlighted] {
         forced-color-adjust: none;
         background: Highlight;
         color: HighlightText;
@@ -544,17 +544,17 @@
 // Searchable select with keyboard navigation and popover positioning.
 
 function init() {
-  document.querySelectorAll('.combobox:not([data-init])').forEach((wrapper) => {
+  document.querySelectorAll('.combobox:not([data-init])').forEach((wrapper) =&gt; {
     wrapper.dataset.init = '';
     const trigger = wrapper.querySelector('.combobox-trigger');
     const valueEl = wrapper.querySelector('.combobox-value');
     const popover = wrapper.querySelector('.combobox-content');
     const searchInput = wrapper.querySelector('.combobox-search-input');
-    const listbox = wrapper.querySelector('[role="listbox"]');
+    const listbox = wrapper.querySelector('[role=&quot;listbox&quot;]');
     const empty = wrapper.querySelector('.combobox-empty');
     if (!trigger || !popover || !searchInput || !listbox) return;
 
-    const allItems = Array.from(listbox.querySelectorAll('[role="option"]'));
+    const allItems = Array.from(listbox.querySelectorAll('[role=&quot;option&quot;]'));
     let highlighted = -1;
 
     // CSS anchor positioning - unique name per trigger-popover pair
@@ -562,67 +562,67 @@ function init() {
     trigger.style.anchorName = anchorId;
     popover.style.positionAnchor = anchorId;
 
-    const getVisibleItems = () => allItems.filter((item) => !item.hidden && item.getAttribute('aria-disabled') !== 'true');
-    const open = () => {
+    const getVisibleItems = () =&gt; allItems.filter((item) =&gt; !item.hidden &amp;&amp; item.getAttribute('aria-disabled') !== 'true');
+    const open = () =&gt; {
       popover.showPopover();
       trigger.setAttribute('aria-expanded', 'true');
       searchInput.value = '';
       filter('');
       searchInput.focus();
     };
-    const close = () => {
+    const close = () =&gt; {
       popover.hidePopover();
       trigger.setAttribute('aria-expanded', 'false');
       searchInput.setAttribute('aria-activedescendant', '');
       clearHighlight();
       trigger.focus();
     };
-    const isOpen = () => popover.matches(':popover-open');
-    const filter = (query) => {
+    const isOpen = () =&gt; popover.matches(':popover-open');
+    const filter = (query) =&gt; {
       const q = query.toLowerCase(); let hasVisible = false;
-      allItems.forEach((item) => { const match = !q || item.textContent.trim().toLowerCase().includes(q); item.hidden = !match; if (match) hasVisible = true; });
-      listbox.querySelectorAll('.combobox-group-label').forEach((label) => {
+      allItems.forEach((item) =&gt; { const match = !q || item.textContent.trim().toLowerCase().includes(q); item.hidden = !match; if (match) hasVisible = true; });
+      listbox.querySelectorAll('.combobox-group-label').forEach((label) =&gt; {
         let next = label.nextElementSibling; let groupHasVisible = false;
-        while (next && !next.classList.contains('combobox-group-label') && !next.classList.contains('combobox-separator')) {
-          if (next.getAttribute('role') === 'option' && !next.hidden) groupHasVisible = true; next = next.nextElementSibling;
+        while (next &amp;&amp; !next.classList.contains('combobox-group-label') &amp;&amp; !next.classList.contains('combobox-separator')) {
+          if (next.getAttribute('role') === 'option' &amp;&amp; !next.hidden) groupHasVisible = true; next = next.nextElementSibling;
         }
         label.hidden = !groupHasVisible;
       });
-      listbox.querySelectorAll('.combobox-separator').forEach((sep) => { const prev = sep.previousElementSibling; const next = sep.nextElementSibling; sep.hidden = (prev && prev.hidden) || (next && next.hidden); });
+      listbox.querySelectorAll('.combobox-separator').forEach((sep) =&gt; { const prev = sep.previousElementSibling; const next = sep.nextElementSibling; sep.hidden = (prev &amp;&amp; prev.hidden) || (next &amp;&amp; next.hidden); });
       if (empty) empty.hidden = hasVisible;
     };
-    const clearHighlight = () => { allItems.forEach((item) => { delete item.dataset.highlighted; }); highlighted = -1; };
-    const doHighlight = (index) => {
+    const clearHighlight = () =&gt; { allItems.forEach((item) =&gt; { delete item.dataset.highlighted; }); highlighted = -1; };
+    const doHighlight = (index) =&gt; {
       const items = getVisibleItems(); clearHighlight();
-      if (index < 0 || index >= items.length) return;
+      if (index &lt; 0 || index &gt;= items.length) return;
       highlighted = index; items[index].dataset.highlighted = '';
       items[index].scrollIntoView({ block: 'nearest' });
       searchInput.setAttribute('aria-activedescendant', items[index].id);
     };
-    const selectItem = (item) => {
+    const selectItem = (item) =&gt; {
       if (item.getAttribute('aria-disabled') === 'true') return;
-      allItems.forEach((i) => { i.setAttribute('aria-selected', 'false'); });
+      allItems.forEach((i) =&gt; { i.setAttribute('aria-selected', 'false'); });
       item.setAttribute('aria-selected', 'true');
       if (valueEl) { valueEl.textContent = item.textContent.trim(); valueEl.removeAttribute('data-placeholder'); }
       close();
     };
-    trigger.addEventListener('click', () => { if (isOpen()) { close(); } else { open(); } });
-    searchInput.addEventListener('input', () => { filter(searchInput.value); doHighlight(0); });
-    searchInput.addEventListener('keydown', (e) => {
+    trigger.addEventListener('click', () =&gt; { if (isOpen()) { close(); } else { open(); } });
+    searchInput.addEventListener('input', () =&gt; { filter(searchInput.value); doHighlight(0); });
+    searchInput.addEventListener('keydown', (e) =&gt; {
       const items = getVisibleItems();
       switch (e.key) {
         case 'ArrowDown': e.preventDefault(); doHighlight(Math.min(highlighted + 1, items.length - 1)); break;
         case 'ArrowUp': e.preventDefault(); doHighlight(Math.max(highlighted - 1, 0)); break;
         case 'Home': e.preventDefault(); doHighlight(0); break;
         case 'End': e.preventDefault(); doHighlight(items.length - 1); break;
-        case 'Enter': e.preventDefault(); if (highlighted >= 0 && items[highlighted]) selectItem(items[highlighted]); break;
+        case 'Enter': e.preventDefault(); if (highlighted &gt;= 0 &amp;&amp; items[highlighted]) selectItem(items[highlighted]); break;
         case 'Escape': e.preventDefault(); close(); break;
         case 'Tab': close(); break;
       }
     });
-    listbox.addEventListener('click', (e) => { const item = e.target.closest('[role="option"]'); if (item && !item.hidden && item.getAttribute('aria-disabled') !== 'true') selectItem(item); });
-    listbox.addEventListener('mousemove', (e) => { const item = e.target.closest('[role="option"]'); if (item && !item.hidden) { const items = getVisibleItems(); doHighlight(items.indexOf(item)); } });
-    popover.addEventListener('toggle', (e) => { if (e.newState === 'closed') { trigger.setAttribute('aria-expanded', 'false'); clearHighlight(); } });
+    listbox.addEventListener('click', (e) =&gt; { const item = e.target.closest('[role=&quot;option&quot;]'); if (item &amp;&amp; !item.hidden &amp;&amp; item.getAttribute('aria-disabled') !== 'true') selectItem(item); });
+    listbox.addEventListener('mousemove', (e) =&gt; { const item = e.target.closest('[role=&quot;option&quot;]'); if (item &amp;&amp; !item.hidden) { const items = getVisibleItems(); doHighlight(items.indexOf(item)); } });
+    popover.addEventListener('toggle', (e) =&gt; { if (e.newState === 'closed') { trigger.setAttribute('aria-expanded', 'false'); clearHighlight(); } });
   });
 }
 

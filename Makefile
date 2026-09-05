@@ -2,7 +2,7 @@
 # KISS: every target delegates to package.json so there is one source of truth.
 
 .DEFAULT_GOAL := help
-.PHONY: help setup dev test test-run coverage e2e lint verify
+.PHONY: help setup dev test test-run coverage e2e lint verify screenshots build
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z0-9_-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -29,5 +29,20 @@ e2e: ## Component E2E smoke tests (tests/e2e/*.e2e.mjs)
 lint: ## Lint src/, tests/ and scripts/ with oxlint
 	bun run lint
 
-verify: ## Static consistency gate (runs automatically after `make` build)
+# Full pipeline: fast checks first, compile, refresh screenshots (the verify
+# gate requires them fresh vs. the new dist/), then gate + tests. Calls
+# scripts/build.ts directly because `bun run build` would run verify BEFORE
+# the screenshots could be refreshed.
+build: ## Full pipeline: lint → compile → screenshots → verify → tests → e2e
+	bun run lint
+	bun scripts/build.ts
+	bun run screenshots
 	bun run verify
+	bun run test:run
+	bun run e2e
+
+verify: ## Static consistency gate (runs automatically after build)
+	bun run verify
+
+screenshots: ## Default-state screenshot of every component (agent inspection)
+	bun run screenshots

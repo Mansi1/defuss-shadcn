@@ -233,13 +233,13 @@
     border-radius: var(--radius-lg);
     overflow: hidden;
 
-    & ::details-content {
+    &amp; ::details-content {
       block-size: 0;
       overflow-y: clip;
       transition: block-size 200ms ease, content-visibility 200ms allow-discrete;
     }
 
-    &[open] ::details-content {
+    &amp;[open] ::details-content {
       block-size: auto;
     }
   }
@@ -262,16 +262,16 @@
     color: var(--foreground);
     list-style: none;
 
-    &:hover {
+    &amp;:hover {
       background-color: var(--accent);
     }
 
-    &:focus-visible {
+    &amp;:focus-visible {
       outline: 2px solid var(--ring);
       outline-offset: -2px;
     }
 
-    &::-webkit-details-marker {
+    &amp;::-webkit-details-marker {
       display: none;
     }
   }
@@ -283,7 +283,7 @@
     transition: transform 200ms ease;
     flex-shrink: 0;
 
-    details[open] > summary > & {
+    details[open] &gt; summary &gt; &amp; {
       transform: rotate(180deg);
     }
   }

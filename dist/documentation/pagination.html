@@ -312,12 +312,12 @@
     font-size: 0.875rem; color: var(--foreground); text-decoration: none;
     cursor: pointer; outline: none;
     transition: background-color 150ms ease, border-color 150ms ease; gap: 0.25rem;
-    &:hover { background-color: var(--accent); }
-    &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-    & svg { width: 1rem; height: 1rem; flex-shrink: 0; }
+    &amp;:hover { background-color: var(--accent); }
+    &amp;:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    &amp; svg { width: 1rem; height: 1rem; flex-shrink: 0; }
 
     /* Disabled state for prev/next at boundaries */
-    &[aria-disabled="true"], &.disabled {
+    &amp;[aria-disabled=&quot;true&quot;], &amp;.disabled {
       pointer-events: none;
       opacity: 0.5;
     }
@@ -327,7 +327,7 @@
   .pagination-ellipsis {
     display: inline-flex; align-items: center; justify-content: center;
     width: 2.25rem; height: 2.25rem; color: var(--muted-foreground);
-    & span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+    &amp; span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
   }
 
   /* -- Accessibility ------------------------------------------ */
@@ -339,7 +339,7 @@
   @media (prefers-contrast: more) {
     .pagination-link, .pagination-prev, .pagination-next {
       border-color: var(--border);
-      &:hover { border-color: var(--foreground); }
+      &amp;:hover { border-color: var(--foreground); }
     }
     .pagination-active { border-width: 2px; }
   }
@@ -349,7 +349,7 @@
       border-color: Highlight;
     }
     .pagination-link, .pagination-prev, .pagination-next {
-      &:hover { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+      &amp;:hover { forced-color-adjust: none; background: Highlight; color: HighlightText; }
     }
   }
 }</code></pre>

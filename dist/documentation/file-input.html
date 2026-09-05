@@ -193,7 +193,7 @@
     padding: 0;
     cursor: pointer;
 
-    &::file-selector-button {
+    &amp;::file-selector-button {
       height: 100%;
       border: none;
       border-right: 1px solid var(--input);
@@ -207,15 +207,15 @@
       cursor: pointer;
       transition: background 150ms;
 
-      &:hover { background: var(--accent); }
+      &amp;:hover { background: var(--accent); }
     }
 
-    &:focus {
+    &amp;:focus {
       border-color: var(--ring);
       box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
     }
 
-    &:disabled {
+    &amp;:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }

@@ -98,6 +98,19 @@ All keyboard interaction is provided natively by `<input type="range">`.
 
 ---
 
+## States
+
+Declared states: `default` (enabled; `{ value }` config presets the position)
+· `disabled` (native `disabled` attribute — greyed and inert).
+
+```js
+document.querySelector('#volume').api.setState('disabled');
+document.querySelector('#volume').api.getState(); // { name: 'disabled', config: { value: '75' } }
+```
+
+The api is bound per input; the registry global is
+`_defussShadcn.sliderApi` / `_defussShadcn.sliderStates`.
+
 ## Notes
 
 - **Filled track**: Firefox uses `::-moz-range-progress` natively. WebKit/Blink requires a `linear-gradient` on the track with a `--slider-value` custom property set by JS.

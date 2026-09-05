@@ -19,6 +19,20 @@
 
 ---
 
+## States
+
+The component's observable state is the number itself. Declared states:
+`default` (enabled; `{ value }` presets it through the native input, events
+fire). `getState().config.value` reports the live value.
+
+```js
+document.querySelector('#qty').api.setState('default', { value: 5 });
+document.querySelector('#qty').api.getState(); // { name: 'default', config: { value: '5' } }
+```
+
+The api is bound per wrapper; the registry global is
+`_defussShadcn.numberInputApi` / `_defussShadcn.numberInputStates` (camelCase).
+
 ## Notes
 
 - Reuses the `.input` class for consistent styling.

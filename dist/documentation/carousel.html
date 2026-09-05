@@ -135,7 +135,7 @@
         <!-- ═══ Default ═══════════════════════════════ -->
         <p class="text-sm font-medium mb-2 mt-6">Default</p>
         <div class="preview" style="padding: 2.5rem 3rem;">
-          <div class="carousel" role="region" aria-roledescription="carousel" aria-label="Default demo" style="max-width:24rem;margin:0 auto;">
+          <div class="carousel" role="region" aria-roledescription="carousel" aria-label="Default demo" data-state-demo style="max-width:24rem;margin:0 auto;">
             <div class="carousel-viewport" aria-live="polite">
               <div class="carousel-slide" role="group" aria-roledescription="slide" aria-label="1 of 5" style="flex:0 0 100%;min-height:12rem;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:var(--radius-xl);background:var(--card);font-size:0.875rem;color:var(--foreground);">1</div>
               <div class="carousel-slide" role="group" aria-roledescription="slide" aria-label="2 of 5" style="flex:0 0 100%;min-height:12rem;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:var(--radius-xl);background:var(--card);font-size:0.875rem;color:var(--foreground);">2</div>
@@ -378,6 +378,16 @@
           </div>
         </div>
 
+        <!-- -- States ------------------------------------ -->
+        <section style="margin-top:3rem;" id="states">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">States</h2>
+          <p class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;">Named states via the shared State API, driven per instance through the bound <code>api</code>:</p>
+          <ul class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;padding-left:1.25rem;">
+            <li><code>default</code> — showing a slide; <code>setState('default', { index })</code> scrolls to that slide (loop-aware), and <code>getState().config.index</code> reports the live index</li>
+          </ul>
+          <p class="text-sm text-muted-foreground">The demo element carries <code>data-state-demo</code>; <code>bun run screenshots</code> drives it via <code>el.api.setState(name)</code> and captures <code>screenshots/{mode}/carousel-{state}.png</code>.</p>
+        </section>
+
         <!-- -- CSS --------------------------------------- -->
         <section style="margin-top:3rem;" id="source-css">
           <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">CSS <a href="../components/carousel/carousel.css" target="_blank" style="font-size:0.75rem;font-weight:400;color:var(--muted-foreground);text-decoration:underline;text-underline-offset:3px;margin-left:0.5rem;">view file</a></h2>
@@ -548,11 +558,59 @@
             <button class="copy-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
             <pre><code class="language-javascript">// -- Carousel -------------------------------------------------
 // Scroll-snap carousel with keyboard navigation, prev/next buttons,
-// dot indicators, loop, autoplay, and ARIA.
+// dot indicators, loop, autoplay, and ARIA, plus the named-state API
+// (AGENTS.md &quot;State API&quot;). The carousel's observable state is which slide is
+// showing, so 'default' carries an optional { index } preset (0 = first) and
+// getState().config.index reports the live slide index.
+
+// Shared preamble (AGENTS.md &quot;State API&quot;); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const carouselStates = ['default'];
+
+/**
+ * UI side of setState: scroll to a slide index (clamped/looped by the
+ * carousel's own scrollToIndex, exposed on the element at init).
+ */
+function triggerStateChange(carousel, config) {
+  const index = Number(config?.index ?? 0);
+  if (typeof carousel._goTo === 'function') carousel._goTo(index);
+}
+
+/** Registry-level API; pass the carousel element explicitly. Unknown names throw. */
+export const carouselApi = {
+  setState(carousel, stateName, config = {}) {
+    if (!carouselStates.includes(stateName)) {
+      throw new Error(`carousel: unknown state &quot;${stateName}&quot; (supported: ${carouselStates.join(', ')})`);
+    }
+    triggerStateChange(carousel, config);
+    // state lives on the ELEMENT, not the module (many carousels per page)
+    carousel.dataset.stateName = stateName;
+    carousel._stateConfig = config;
+  },
+  getState(carousel) {
+    return {
+      name: carousel.dataset.stateName || 'default',
+      // live slide index — updated by updateState() on scroll, not just setState
+      config: { ...carousel._stateConfig, index: Number(carousel.dataset.currentIndex || 0) },
+    };
+  },
+};
+
+_defussShadcn.carouselApi = carouselApi;
+_defussShadcn.carouselStates = carouselStates;
 
 function init() {
 document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) =&gt; {
   carousel.dataset.init = '';
+  // bind-scope the api per instance: `$('#gallery').api.setState('default', { index: 2 })`
+  carousel.api = {
+    setState: (stateName, config) =&gt; carouselApi.setState(carousel, stateName, config),
+    getState: () =&gt; carouselApi.getState(carousel),
+  };
 
   const viewport = carousel.querySelector('.carousel-viewport');
   const prevBtn = carousel.querySelector('.carousel-prev');
@@ -609,6 +667,9 @@ document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) =&gt;
     const allSlides = slides();
     if (!allSlides.length) return;
     currentIndex = index;
+    // mirror the live index onto the element for the State API (AGENTS.md:
+    // state must not live in module scope)
+    carousel.dataset.currentIndex = String(index);
 
     // Prev/next disabled states (non-loop)
     if (!isLoop) {
@@ -656,6 +717,8 @@ document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) =&gt;
 
   if (prevBtn) prevBtn.addEventListener('click', goPrev);
   if (nextBtn) nextBtn.addEventListener('click', goNext);
+  // expose the closure's scroll-to for the State API (element member, not module)
+  carousel._goTo = scrollToIndex;
 
   // ── Dot click handlers ──────────────────────
   if (dotsContainer) {

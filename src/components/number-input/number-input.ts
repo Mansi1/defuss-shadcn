@@ -1,9 +1,63 @@
 // -- Number Input ---------------------------------------------
-// Increment/decrement buttons for .number-input containers.
+// Increment/decrement buttons for .number-input containers, plus the
+// named-state API (AGENTS.md "State API"). The component's only observable
+// state is the number itself, so 'default' carries an optional { value }
+// preset and getState().config.value reports the live value.
+
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const numberInputStates = ['default'];
+
+const getInput = (wrapper) => wrapper.querySelector('input[type="number"]');
+
+/**
+ * UI side of setState: 'default' optionally presets { value } through the
+ * native input (events dispatched so listeners see the change).
+ */
+function triggerStateChange(wrapper, config) {
+  const input = getInput(wrapper);
+  if (!input || config?.value === undefined) return;
+  input.value = String(config.value);
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  input.dispatchEvent(new Event('change', { bubbles: true }));
+}
+
+/** Registry-level API; pass the wrapper explicitly. Unknown names throw. */
+export const numberInputApi = {
+  setState(wrapper, stateName, config = {}) {
+    if (!numberInputStates.includes(stateName)) {
+      throw new Error(`number-input: unknown state "${stateName}" (supported: ${numberInputStates.join(', ')})`);
+    }
+    triggerStateChange(wrapper, config);
+    // state lives on the ELEMENT, not the module (many inputs per page)
+    wrapper.dataset.stateName = stateName;
+    wrapper._stateConfig = config;
+  },
+  getState(wrapper) {
+    const input = getInput(wrapper);
+    return {
+      name: wrapper.dataset.stateName || 'default',
+      // live value — reflects stepper clicks and typing, not just setState
+      config: { ...wrapper._stateConfig, value: input ? input.value : '' },
+    };
+  },
+};
+
+_defussShadcn.numberInputApi = numberInputApi;
+_defussShadcn.numberInputStates = numberInputStates;
 
 function init() {
   document.querySelectorAll('.number-input:not([data-init])').forEach((wrapper) => {
   wrapper.dataset.init = '';
+  // bind-scope the api per instance: `$('#qty').api.setState('default', { value: 5 })`
+  wrapper.api = {
+    setState: (stateName, config) => numberInputApi.setState(wrapper, stateName, config),
+    getState: () => numberInputApi.getState(wrapper),
+  };
   const input = wrapper.querySelector('input[type="number"]');
   const decBtn = wrapper.querySelector('[data-action="decrement"]');
   const incBtn = wrapper.querySelector('[data-action="increment"]');

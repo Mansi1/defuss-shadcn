@@ -208,9 +208,9 @@ check(
 // contract and only warn — remove a name from the list as it is migrated, and
 // every NEW JS component must satisfy the contract from day one.
 const STATE_API_LEGACY = [
-  'avatar', 'calendar', 'carousel', 'color-picker', 'combobox',
+  'avatar', 'calendar', 'color-picker', 'combobox',
   'context-menu', 'image',
-  'number-input', 'sidebar', 'slider', 'sortable',
+  'sidebar',
   'toast', 'tree-view',
 ];
 const STATE_API_PATTERNS: Array<[string, RegExp]> = [

@@ -150,7 +150,7 @@
         <p class="text-xs text-muted-foreground mb-3">Range slider with default value.</p>
         <div class="preview">
           <div style="width:100%;max-width:20rem;">
-            <input class="slider" type="range" min="0" max="100" value="50">
+            <input class="slider" type="range" min="0" max="100" value="50" data-state-demo>
           </div>
         </div>
         <div style="position:relative;margin-top:0.5rem;">
@@ -251,6 +251,17 @@
           </button>
           <pre><code class="language-markup">&lt;input class="slider" type="range" min="0" max="100" value="30" disabled&gt;</code></pre>
         </div>
+
+        <!-- -- States ------------------------------------ -->
+        <section style="margin-top:3rem;" id="states">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">States</h2>
+          <p class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;">Named states via the shared State API, driven per instance through the bound <code>api</code>:</p>
+          <ul class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;padding-left:1.25rem;">
+            <li><code>default</code> — enabled (authored <code>disabled</code> attribute restored; optional <code>{ value }</code> config presets the position)</li>
+            <li><code>disabled</code> — native <code>disabled</code> attribute: greyed track/thumb, no pointer or keyboard input</li>
+          </ul>
+          <p class="text-sm text-muted-foreground">The demo element carries <code>data-state-demo</code>; <code>bun run screenshots</code> drives it via <code>el.api.setState(name)</code> and captures <code>screenshots/{mode}/slider-{state}.png</code>.</p>
+        </section>
 
         <!-- -- CSS --------------------------------------- -->
         <section style="margin-top:3rem;" id="source-css">
@@ -444,6 +455,17 @@
           <div style="position:relative;margin-top:0.5rem;">
             <button class="copy-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
             <pre><code class="language-javascript">/* -- Slider component ------------------------------------------- */
+// Fill-track painting for native range inputs, plus the named-state API so
+// agents/tests can enable/disable (and preset) a slider by name (AGENTS.md
+// &quot;State API&quot;).
+
+// Shared preamble (AGENTS.md &quot;State API&quot;); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const sliderStates = ['default', 'disabled'];
 
 function updateSliderValue(el) {
   const min = parseFloat(el.min || 0);
@@ -453,9 +475,57 @@ function updateSliderValue(el) {
   el.style.setProperty('--slider-value', `${percent}%`);
 }
 
+/**
+ * UI side of setState: 'default' restores the authored enabled state and
+ * optionally presets { value }; 'disabled' uses the native disabled
+ * attribute (CSS :disabled styles it, keyboard/pointer go inert for free).
+ */
+function triggerStateChange(el, stateName, config) {
+  switch (stateName) {
+    case 'default':
+      el.disabled = el._defaultDisabled ?? false;
+      if (config?.value !== undefined) el.value = String(config.value);
+      updateSliderValue(el);
+      break;
+    case 'disabled':
+      el.disabled = true;
+      break;
+  }
+}
+
+/** Registry-level API; pass the input element explicitly. Unknown names throw. */
+export const sliderApi = {
+  setState(el, stateName, config = {}) {
+    if (!sliderStates.includes(stateName)) {
+      throw new Error(`slider: unknown state &quot;${stateName}&quot; (supported: ${sliderStates.join(', ')})`);
+    }
+    triggerStateChange(el, stateName, config);
+    // state lives on the ELEMENT, not the module (many sliders per page)
+    el.dataset.stateName = stateName;
+    el._stateConfig = config;
+  },
+  getState(el) {
+    // reflect reality: dragging/disabling changes the UI without setState()
+    return {
+      name: el.disabled ? 'disabled' : 'default',
+      config: { ...el._stateConfig, value: el.value },
+    };
+  },
+};
+
+_defussShadcn.sliderApi = sliderApi;
+_defussShadcn.sliderStates = sliderStates;
+
 function init() {
   document.querySelectorAll('.slider:not([data-init])').forEach((el) =&gt; {
     el.dataset.init = '';
+    // remember the authored disabled state so setState('default') restores it
+    el._defaultDisabled = el.disabled;
+    // bind-scope the api per instance: `$('#volume').api.setState('disabled')`
+    el.api = {
+      setState: (stateName, config) =&gt; sliderApi.setState(el, stateName, config),
+      getState: () =&gt; sliderApi.getState(el),
+    };
     updateSliderValue(el);
     el.addEventListener('input', () =&gt; updateSliderValue(el));
   });

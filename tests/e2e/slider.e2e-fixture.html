@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>slider e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/slider/slider.css" />
+  </head>
+  <body style="padding:2rem;display:flex;flex-direction:column;gap:2rem;align-items:flex-start;">
+    <!-- mirrors the doc page: default slider, custom range, authored disabled -->
+    <div style="width:20rem;">
+      <input class="slider" id="s-default" type="range" min="0" max="100" value="50" aria-label="Default" />
+    </div>
+    <div style="width:20rem;">
+      <input class="slider" id="s-range" type="range" min="10" max="20" value="15" aria-label="Volume" />
+    </div>
+    <div style="width:20rem;">
+      <input class="slider" id="s-disabled" type="range" min="0" max="100" value="30" disabled aria-label="Disabled" />
+    </div>
+
+    <script type="module" src="/dist/components/slider/slider.js"></script>
+  </body>
+</html>

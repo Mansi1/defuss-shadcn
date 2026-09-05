@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>sortable e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/sortable/sortable.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: vertical list, horizontal list, disabled item -->
+    <ul class="sortable" role="listbox" aria-label="Task priority" id="sb-vertical" style="width:20rem;">
+      <li class="sortable-item" draggable="true" role="option" tabindex="0"><span class="sortable-handle">::</span><span>Build components</span></li>
+      <li class="sortable-item" draggable="true" role="option" tabindex="-1"><span class="sortable-handle">::</span><span>Write documentation</span></li>
+      <li class="sortable-item" draggable="true" role="option" tabindex="-1"><span class="sortable-handle">::</span><span>Deploy to production</span></li>
+    </ul>
+
+    <ul class="sortable" role="listbox" aria-label="Reorder tags" id="sb-horizontal" data-orientation="horizontal" style="max-width:28rem;margin-top:2rem;">
+      <li class="sortable-item" draggable="true" role="option" tabindex="0"><span class="sortable-handle">::</span><span>alpha</span></li>
+      <li class="sortable-item" draggable="true" role="option" tabindex="-1"><span class="sortable-handle">::</span><span>beta</span></li>
+      <li class="sortable-item" draggable="true" role="option" tabindex="-1" aria-disabled="true"><span class="sortable-handle">::</span><span>locked</span></li>
+    </ul>
+
+    <script type="module" src="/dist/components/sortable/sortable.js"></script>
+  </body>
+</html>

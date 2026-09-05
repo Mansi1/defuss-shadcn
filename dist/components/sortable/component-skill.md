@@ -76,6 +76,21 @@ HTML Drag and Drop API + keyboard reordering for accessible drag-and-drop lists.
 | `data-active` | `.sortable-item` | Ring border + accent background (keyboard focus) |
 | `aria-disabled="true"` | `.sortable-item` | Reduced opacity, not draggable |
 
+### State API
+
+The list's observable state is its item order plus the active item. Declared
+states: `default` (restores the authored order after any moves; `{ index }`
+activates one item). `getState().config` reports the live `order` (labels)
+and `activeIndex`.
+
+```js
+document.querySelector('#tasks').api.setState('default');
+document.querySelector('#tasks').api.getState(); // { name: 'default', config: { order: [...], activeIndex: -1 } }
+```
+
+The api is bound per list; the registry global is
+`_defussShadcn.sortableApi` / `_defussShadcn.sortableStates`.
+
 ## Keyboard
 
 | Key | Action |

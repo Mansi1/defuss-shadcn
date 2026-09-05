@@ -1,10 +1,58 @@
 // -- Carousel -------------------------------------------------
 // Scroll-snap carousel with keyboard navigation, prev/next buttons,
-// dot indicators, loop, autoplay, and ARIA.
+// dot indicators, loop, autoplay, and ARIA, plus the named-state API
+// (AGENTS.md "State API"). The carousel's observable state is which slide is
+// showing, so 'default' carries an optional { index } preset (0 = first) and
+// getState().config.index reports the live slide index.
+
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const carouselStates = ['default'];
+
+/**
+ * UI side of setState: scroll to a slide index (clamped/looped by the
+ * carousel's own scrollToIndex, exposed on the element at init).
+ */
+function triggerStateChange(carousel, config) {
+  const index = Number(config?.index ?? 0);
+  if (typeof carousel._goTo === 'function') carousel._goTo(index);
+}
+
+/** Registry-level API; pass the carousel element explicitly. Unknown names throw. */
+export const carouselApi = {
+  setState(carousel, stateName, config = {}) {
+    if (!carouselStates.includes(stateName)) {
+      throw new Error(`carousel: unknown state "${stateName}" (supported: ${carouselStates.join(', ')})`);
+    }
+    triggerStateChange(carousel, config);
+    // state lives on the ELEMENT, not the module (many carousels per page)
+    carousel.dataset.stateName = stateName;
+    carousel._stateConfig = config;
+  },
+  getState(carousel) {
+    return {
+      name: carousel.dataset.stateName || 'default',
+      // live slide index — updated by updateState() on scroll, not just setState
+      config: { ...carousel._stateConfig, index: Number(carousel.dataset.currentIndex || 0) },
+    };
+  },
+};
+
+_defussShadcn.carouselApi = carouselApi;
+_defussShadcn.carouselStates = carouselStates;
 
 function init() {
 document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
   carousel.dataset.init = '';
+  // bind-scope the api per instance: `$('#gallery').api.setState('default', { index: 2 })`
+  carousel.api = {
+    setState: (stateName, config) => carouselApi.setState(carousel, stateName, config),
+    getState: () => carouselApi.getState(carousel),
+  };
 
   const viewport = carousel.querySelector('.carousel-viewport');
   const prevBtn = carousel.querySelector('.carousel-prev');
@@ -61,6 +109,9 @@ document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
     const allSlides = slides();
     if (!allSlides.length) return;
     currentIndex = index;
+    // mirror the live index onto the element for the State API (AGENTS.md:
+    // state must not live in module scope)
+    carousel.dataset.currentIndex = String(index);
 
     // Prev/next disabled states (non-loop)
     if (!isLoop) {
@@ -108,6 +159,8 @@ document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
 
   if (prevBtn) prevBtn.addEventListener('click', goPrev);
   if (nextBtn) nextBtn.addEventListener('click', goNext);
+  // expose the closure's scroll-to for the State API (element member, not module)
+  carousel._goTo = scrollToIndex;
 
   // ── Dot click handlers ──────────────────────
   if (dotsContainer) {

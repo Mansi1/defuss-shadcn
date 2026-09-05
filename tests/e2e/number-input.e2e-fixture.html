@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>number-input e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/number-input/number-input.css" />
+  </head>
+  <body style="padding:2rem;display:flex;flex-direction:column;gap:1.5rem;align-items:flex-start;">
+    <!-- mirrors the doc page: bounded stepper + step 0.5 decimal stepper -->
+    <div class="number-input" id="ni-qty">
+      <button data-action="decrement" aria-label="Decrease">−</button>
+      <input type="number" id="d-qty" value="1" min="0" max="99" step="1" aria-label="Quantity" />
+      <button data-action="increment" aria-label="Increase">+</button>
+    </div>
+
+    <div class="number-input" id="ni-decimal">
+      <button data-action="decrement" aria-label="Decrease">−</button>
+      <input type="number" id="d-decimal" value="1.5" min="0" max="10" step="0.5" aria-label="Rate" />
+      <button data-action="increment" aria-label="Increase">+</button>
+    </div>
+
+    <script type="module" src="/dist/components/number-input/number-input.js"></script>
+  </body>
+</html>

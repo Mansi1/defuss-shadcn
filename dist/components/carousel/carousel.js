@@ -1,10 +1,99 @@
-"use strict";
 // -- Carousel -------------------------------------------------
 // Scroll-snap carousel with keyboard navigation, prev/next buttons,
-// dot indicators, loop, autoplay, and ARIA.
+// dot indicators, loop, autoplay, and ARIA, plus the named-state API
+// (AGENTS.md "State API"). The carousel's observable state is which slide is
+// showing, so 'default' carries an optional { index } preset (0 = first) and
+// getState().config.index reports the live slide index.
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+/**
+ * Why: every interactive component needs the same preamble (global registry +
+ * `$` query alias). Single-sourced here instead of duplicated in 26 files;
+ * scripts/build.ts inlines the compiled functions into each shipped component
+ * .js so dist files stay isolated and copy-paste/CDN-ready. The function is
+ * idempotent: whichever component loads first wins, the rest are no-ops.
+ * Contract: AGENTS.md "State API"; types: src/types/defuss-shadcn.d.ts.
+ */
+function defussGlobals() {
+    globalThis._defussShadcn = globalThis._defussShadcn || {};
+    if (typeof globalThis.$ !== 'function')
+        globalThis.$ = document.querySelector.bind(document);
+    return globalThis._defussShadcn;
+}
+/**
+ * Why: calling showPopover() on a popover while its exit transition is still
+ * running — the exact setState('open') path right after a light dismiss,
+ * whose display:none is delayed by `transition: display … allow-discrete` —
+ * crashes the headless renderer (reproduced: headless Chromium dies outright,
+ * popover + nav-menu + dropdown + tooltip share the CSS pattern). Wait until
+ * the element's computed display has actually flipped to none (the exit
+ * committed), then show. A stable-open element polls to the cap and the
+ * guarded showPopover() is a harmless no-op. Inlined by build.ts like
+ * defussGlobals(); keep self-contained.
+ */
+function safeShowPopover(el) {
+    const show = () => {
+        try {
+            el.showPopover();
+        }
+        catch { /* already open */ }
+    };
+    const displayed = () => getComputedStyle(el).display !== 'none';
+    if (!displayed()) {
+        show();
+        return;
+    }
+    // displayed: either stably open (nothing to do) or mid-exit (must wait).
+    // Cap the poll at ~500ms — longer than any component's exit transition.
+    const deadline = performance.now() + 500;
+    const tick = () => {
+        if (!displayed() || performance.now() > deadline)
+            show();
+        else
+            requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+}
+const _defussShadcn = defussGlobals();
+const carouselStates = ['default'];
+/**
+ * UI side of setState: scroll to a slide index (clamped/looped by the
+ * carousel's own scrollToIndex, exposed on the element at init).
+ */
+function triggerStateChange(carousel, config) {
+    const index = Number(config?.index ?? 0);
+    if (typeof carousel._goTo === 'function')
+        carousel._goTo(index);
+}
+/** Registry-level API; pass the carousel element explicitly. Unknown names throw. */
+export const carouselApi = {
+    setState(carousel, stateName, config = {}) {
+        if (!carouselStates.includes(stateName)) {
+            throw new Error(`carousel: unknown state "${stateName}" (supported: ${carouselStates.join(', ')})`);
+        }
+        triggerStateChange(carousel, config);
+        // state lives on the ELEMENT, not the module (many carousels per page)
+        carousel.dataset.stateName = stateName;
+        carousel._stateConfig = config;
+    },
+    getState(carousel) {
+        return {
+            name: carousel.dataset.stateName || 'default',
+            // live slide index — updated by updateState() on scroll, not just setState
+            config: { ...carousel._stateConfig, index: Number(carousel.dataset.currentIndex || 0) },
+        };
+    },
+};
+_defussShadcn.carouselApi = carouselApi;
+_defussShadcn.carouselStates = carouselStates;
 function init() {
     document.querySelectorAll('.carousel:not([data-init])').forEach((carousel) => {
         carousel.dataset.init = '';
+        // bind-scope the api per instance: `$('#gallery').api.setState('default', { index: 2 })`
+        carousel.api = {
+            setState: (stateName, config) => carouselApi.setState(carousel, stateName, config),
+            getState: () => carouselApi.getState(carousel),
+        };
         const viewport = carousel.querySelector('.carousel-viewport');
         const prevBtn = carousel.querySelector('.carousel-prev');
         const nextBtn = carousel.querySelector('.carousel-next');
@@ -59,6 +148,9 @@ function init() {
             if (!allSlides.length)
                 return;
             currentIndex = index;
+            // mirror the live index onto the element for the State API (AGENTS.md:
+            // state must not live in module scope)
+            carousel.dataset.currentIndex = String(index);
             // Prev/next disabled states (non-loop)
             if (!isLoop) {
                 if (prevBtn)
@@ -100,6 +192,8 @@ function init() {
             prevBtn.addEventListener('click', goPrev);
         if (nextBtn)
             nextBtn.addEventListener('click', goNext);
+        // expose the closure's scroll-to for the State API (element member, not module)
+        carousel._goTo = scrollToIndex;
         // ── Dot click handlers ──────────────────────
         if (dotsContainer) {
             const allSlides = slides();

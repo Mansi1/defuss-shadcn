@@ -2,18 +2,83 @@
 // Drag-and-drop + keyboard reordering for sortable lists.
 // Keyboard: Arrow keys navigate, Alt+Arrow reorders, Home/End jump.
 // Live region announces position changes to screen readers.
+// Named-state API (AGENTS.md "State API"): the list's observable state is
+// its item order + active item, so 'default' restores the authored order
+// (optional { index } activates one item) and getState() reports both live.
+
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const sortableStates = ['default'];
+
+const sortableLabels = (list) =>
+  Array.from(list.querySelectorAll('.sortable-item')).map(
+    (item) => item.querySelector('span:not(.sortable-handle)')?.textContent?.trim() ?? '',
+  );
+
+/**
+ * UI side of setState: 'default' restores the authored order snapshot (taken
+ * at init) and optionally activates the item at config.index.
+ */
+function triggerStateChange(list, stateName, config) {
+  if (stateName !== 'default') return;
+  for (const item of list._defaultOrder ?? []) list.appendChild(item);
+  if (config?.index !== undefined) {
+    const item = list.querySelectorAll('.sortable-item')[Number(config.index)];
+    list._setActive?.(item);
+  }
+}
+
+/** Registry-level API; pass the list element explicitly. Unknown names throw. */
+export const sortableApi = {
+  setState(list, stateName, config = {}) {
+    if (!sortableStates.includes(stateName)) {
+      throw new Error(`sortable: unknown state "${stateName}" (supported: ${sortableStates.join(', ')})`);
+    }
+    triggerStateChange(list, stateName, config);
+    // state lives on the ELEMENT, not the module (many lists per page)
+    list.dataset.stateName = stateName;
+    list._stateConfig = config;
+  },
+  getState(list) {
+    const items = Array.from(list.querySelectorAll('.sortable-item'));
+    const active = list.querySelector('.sortable-item[data-active]');
+    return {
+      name: list.dataset.stateName || 'default',
+      config: {
+        ...list._stateConfig,
+        order: sortableLabels(list),
+        activeIndex: active ? items.indexOf(active) : -1,
+      },
+    };
+  },
+};
+
+_defussShadcn.sortableApi = sortableApi;
+_defussShadcn.sortableStates = sortableStates;
 
 function init() {
 document.querySelectorAll('.sortable:not([data-init])').forEach((list) => {
   list.dataset.init = '';
+  // bind-scope the api per instance: `$('#tasks').api.setState('default')`
+  list.api = {
+    setState: (stateName, config) => sortableApi.setState(list, stateName, config),
+    getState: () => sortableApi.getState(list),
+  };
 
   const isHorizontal = list.dataset.orientation === 'horizontal';
   const NEXT_KEY = isHorizontal ? 'ArrowRight' : 'ArrowDown';
   const PREV_KEY = isHorizontal ? 'ArrowLeft' : 'ArrowUp';
 
   // -- Live region for announcements --
-  let liveRegion = list.parentElement?.querySelector('.sortable-live');
-  if (!liveRegion) {
+  // Look only at the node directly after the list (where init inserts it): a
+  // parent-wide query would hand sibling lists the same region, so one list
+  // would announce through a region anchored to the other list.
+  let liveRegion = list.nextElementSibling;
+  if (!liveRegion || !liveRegion.classList.contains('sortable-live')) {
     liveRegion = document.createElement('span');
     liveRegion.className = 'sortable-live';
     liveRegion.setAttribute('aria-live', 'assertive');
@@ -53,6 +118,10 @@ document.querySelectorAll('.sortable:not([data-init])').forEach((list) => {
       item.focus();
     }
   }
+  // expose for the State API (element member, not module scope)
+  list._setActive = setActive;
+  // authored-order snapshot for setState('default')
+  list._defaultOrder = getAllItems();
 
   function getItemLabel(item) {
     const handle = item.querySelector('.sortable-handle');

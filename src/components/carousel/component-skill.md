@@ -141,6 +141,20 @@ Set `flex-basis` on `.carousel-slide` to control per-slide width:
 | `End` | Jump to last slide |
 | `Tab` | Moves focus through interactive elements (buttons, dots) |
 
+## States
+
+The carousel's observable state is the visible slide. Declared states:
+`default` (`{ index }` scrolls to that slide, loop-aware).
+`getState().config.index` reports the live index.
+
+```js
+document.querySelector('#gallery').api.setState('default', { index: 2 });
+document.querySelector('#gallery').api.getState(); // { name: 'default', config: { index: 2 } }
+```
+
+The api is bound per carousel; the registry global is
+`_defussShadcn.carouselApi` / `_defussShadcn.carouselStates`.
+
 ## Notes
 
 - **No library needed** — built entirely on CSS scroll-snap + IntersectionObserver.

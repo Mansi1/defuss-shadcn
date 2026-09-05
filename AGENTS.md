@@ -692,6 +692,21 @@ Per-component smoke tests live in `tests/e2e/` and run with **plain Playwright**
 `tests/e2e/run.mjs` globs and runs every `*.e2e.mjs` in isolated child processes.
 When adding a component, add both files (see the accordion pair as the template).
 
+### Migration order (legacy components)
+
+`verify` warns about two overlapping rollouts — 24 components missing the State
+API, 53 missing e2e files. **Always refactor the source first, then write the
+e2e test**, never the other way round:
+
+1. refactor `{name}.ts` to the State API (AGENTS.md "State API"), update the
+   skill's `## States` + doc page (`<code>` per state + `data-state-demo` anchor),
+   run `bun run screenshots`, remove the name from `STATE_API_LEGACY` — commit
+2. then write `{name}.e2e-fixture.html` + `{name}.e2e.mjs` covering the now-final
+   surface (every variant/size/state) — commit
+
+The fixture encodes the component's declared surface; writing it before the
+refactor means rewriting the test (and its state assertions) immediately after.
+
 ### Docs ↔ E2E parity (REQUIRED)
 
 The e2e fixture and the documentation must describe the **same** component

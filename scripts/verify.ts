@@ -59,13 +59,16 @@ check(
 );
 
 // 3. every component has an e2e smoke test (warn: rollout in progress)
+// Order matters: the e2e fixture/assertions encode the component's documented
+// surface (incl. State API states) — writing them before the source is
+// refactored means rewriting the test afterwards. Source first, then e2e.
 const missingE2e = componentDirs
   .filter((c) => !existsSync(join(E2E, `${c}.e2e.mjs`)))
   .map((c) => `tests/e2e/${c}.e2e.mjs missing`);
 check(
   'e2e smoke tests',
   missingE2e,
-  'add fixture + test per tests/e2e/accordion.e2e.{mjs,fixture.html} template, then `bun run e2e`',
+  'per component: 1) refactor source to State API + docs/skill (see "state API" warning), 2) THEN add fixture + test per tests/e2e/accordion.e2e.{mjs,fixture.html} template, 3) `bun run e2e`',
   true,
 );
 
@@ -244,7 +247,7 @@ check(
 check(
   'state API (legacy rollout)',
   stateApiWarnings,
-  'same refactor as above (at least a "default" state, AGENTS.md "State API"), one component per commit, then drop it from STATE_API_LEGACY in scripts/verify.ts',
+  'step 1 of the two-step rollout (SOURCE FIRST, e2e after): refactor each component to the State API (at least a "default" state, AGENTS.md "State API"), one component per commit, then drop it from STATE_API_LEGACY in scripts/verify.ts; afterwards its e2e fixture/test must cover every declared state',
   true,
 );
 

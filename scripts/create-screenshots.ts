@@ -1,5 +1,6 @@
 #!/usr/bin/env bun
 import { chromium, type Page } from 'playwright';
+import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { componentFingerprints, declaredStates } from './lib/inputs.ts';
@@ -68,6 +69,18 @@ function stateNames(name: string): string[] {
   return declaredStates(readFileSync(ts, 'utf8')).filter((s) => s !== 'default');
 }
 
+/** All screenshot keys (manifest-relative paths) expected for one component. */
+function shotKeys(name: string): string[] {
+  return MODES.flatMap((mode) =>
+    [`${name}.png`, ...stateNames(name).map((s) => `${name}-${s}.png`)].map((f) => `${mode}/${f}`),
+  );
+}
+
+/** Content hash of a captured PNG — detects renders changing without inputs. */
+function hashFile(path: string): string {
+  return createHash('sha256').update(readFileSync(path)).digest('hex').slice(0, 16);
+}
+
 async function shoot(
   browser: import('playwright').Browser,
   baseUrl: string,
@@ -130,7 +143,12 @@ async function shoot(
   }
 }
 
-type Manifest = { fingerprints: Record<string, string> };
+type Manifest = {
+  /** input fingerprint per component (what the screenshots were shot against) */
+  fingerprints: Record<string, string>;
+  /** content hash per PNG ("mode/file.png") — detects renders edited/corrupted outside the pipeline */
+  renders: Record<string, string>;
+};
 
 const components = readdirSync(COMPS).filter((d) => statSync(join(COMPS, d)).isDirectory());
 if (FORCE) rmSync(OUT, { recursive: true, force: true }); // --force: full recapture
@@ -140,22 +158,20 @@ for (const mode of MODES) mkdirSync(join(OUT, mode), { recursive: true });
 const current = componentFingerprints(DIST);
 const previous: Manifest = existsSync(MANIFEST)
   ? (JSON.parse(readFileSync(MANIFEST, 'utf8')) as Manifest)
-  : { fingerprints: {} };
+  : { fingerprints: {}, renders: {} };
 // a component is stale when inputs changed OR any expected PNG is absent
 // (default shot + one per non-default state, per mode)
 const stale = components.filter(
   (name) =>
     current[name] !== previous.fingerprints[name] ||
-    MODES.some((mode) =>
-      [`${name}.png`, ...stateNames(name).map((s) => `${name}-${s}.png`)].some(
-        (file) => !existsSync(join(OUT, mode, file)),
-      ),
-    ),
+    shotKeys(name).some((key) => !existsSync(join(OUT, key))),
 );
 
-const manifest: Manifest = { fingerprints: {} };
+const manifest: Manifest = { fingerprints: {}, renders: {} };
 for (const name of components) {
-  if (!stale.includes(name)) manifest.fingerprints[name] = current[name]; // carried over
+  if (stale.includes(name)) continue;
+  manifest.fingerprints[name] = current[name]; // carried over
+  for (const key of shotKeys(name)) if (previous.renders?.[key]) manifest.renders[key] = previous.renders[key];
 }
 
 const server = serveDist();
@@ -182,10 +198,14 @@ await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 await browser.close();
 server.stop();
 
-// record fingerprints only for components whose modes ALL succeeded —
-// a partially failed component stays stale and is retried on the next run
+// record fingerprints + render hashes only for components whose modes ALL
+// succeeded — a partially failed component stays stale and is retried
 const failedComponents = new Set(failures.map((f) => f.split(':')[0].split('/')[1]));
-for (const name of stale) if (!failedComponents.has(name)) manifest.fingerprints[name] = current[name];
+for (const name of stale) {
+  if (failedComponents.has(name)) continue;
+  manifest.fingerprints[name] = current[name];
+  for (const key of shotKeys(name)) if (existsSync(join(OUT, key))) manifest.renders[key] = hashFile(join(OUT, key));
+}
 writeFileSync(MANIFEST, JSON.stringify(manifest, null, 2));
 
 if (failures.length) {

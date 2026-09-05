@@ -4,6 +4,10 @@
 // Exposes window.toast with show/success/warning/info/error/dismiss.
 const DURATION = 4000;
 const MAX_VISIBLE = 3;
+// Per-toast callbacks live in a WeakMap so the container's ONE delegated
+// click listener can find them — dynamically created toasts never get their
+// own listeners, so no per-element cleanup is ever needed.
+const toastCallbacks = new WeakMap();
 let toastContainer = document.getElementById('toast-container');
 if (!toastContainer) {
     toastContainer = document.createElement('div');
@@ -84,11 +88,7 @@ const toastCreate = (options) => {
     }
     toastContainer.appendChild(el);
     el.showPopover();
-    closeBtn.addEventListener('click', () => { toastDismiss(el, onDismiss); });
-    if (action) {
-        el.querySelector('[data-toast-action]').addEventListener('click', () => { if (action.onClick)
-            action.onClick(); toastDismiss(el); });
-    }
+    toastCallbacks.set(el, { onDismiss, action });
     if (duration !== Infinity)
         setTimeout(() => { toastDismiss(el, onDismiss); }, duration);
     const toasts = toastContainer.querySelectorAll('.toast');
@@ -96,6 +96,33 @@ const toastCreate = (options) => {
         toastDismiss(toasts[0]);
     return el;
 };
+// Delegated wiring: close/action clicks on ANY toast (including ones created
+// later) are handled by one listener on the container. Guarded per container
+// with data-init and re-run by the MutationObserver, per the component
+// lifecycle contract (AGENTS.md) — survives SPA navigation replacing the body.
+function init() {
+    document.querySelectorAll('#toast-container:not([data-init])').forEach((container) => {
+        container.dataset.init = '';
+        container.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-toast-close],[data-toast-action]');
+            if (!btn)
+                return;
+            const toast = btn.closest('.toast');
+            if (!toast)
+                return;
+            const cb = toastCallbacks.get(toast) ?? {};
+            if (btn.hasAttribute('data-toast-action')) {
+                if (cb.action)
+                    cb.action.onClick();
+                toastDismiss(toast);
+            }
+            else
+                toastDismiss(toast, cb.onDismiss);
+        });
+    });
+}
+init();
+new MutationObserver(init).observe(document.body, { childList: true, subtree: true });
 window.toast = {
     show: toastCreate,
     success: (o) => toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'success' })),

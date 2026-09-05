@@ -112,6 +112,21 @@ try {
     await page.keyboard.press('Escape');
     assert.equal(await isOpen(page), false, 'native Escape-to-close must still work');
   });
+
+  // -- Sizes (documented in dialog.html + skill: sm/lg/xl/full) --------------
+  // max-width from dialog.css; width is calc(100vw - 2rem) so the cap binds.
+  const sizeExpect = { 'size-sm': 24, 'size-lg': 32, 'size-xl': 40, 'size-full': 0 }; // rem; 0 = no cap below viewport
+  await check('data-size variants apply documented max-widths', async () => {
+    for (const [id, rem] of Object.entries(sizeExpect)) {
+      const px = await page.$eval(`#${id}`, (el) => parseFloat(getComputedStyle(el).maxWidth));
+      if (rem === 0) {
+        // full = calc(100vw - 2rem); assert it exceeds every capped size
+        assert.ok(px >= 32 * 16, `#full max-width ${px} should be viewport-wide`);
+      } else {
+        assert.equal(Math.round(px), rem * 16, `#${id} max-width expected ${rem}rem`);
+      }
+    }
+  });
 } finally {
   await browser.close();
   server.stop();

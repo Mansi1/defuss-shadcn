@@ -1,6 +1,8 @@
 #!/usr/bin/env bun
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
+import { parseHTML } from 'linkedom';
 import { auditUtilities, walk } from './lib/audit.ts';
 import { componentFingerprints, declaredStates } from './lib/inputs.ts';
 import { snippetDrifts } from './lib/snippets.ts';
@@ -417,6 +419,209 @@ check(
   'working tree committed',
   gitProblems,
   'commit the verified changes (git add -A && git commit) so CI and other agents see exactly what passed',
+  true,
+);
+
+// 17. snippet escaping sentinel: an unescaped `<` inside <pre><code> breaks
+// every strict HTML parser (parse5 "invalid-first-character-of-tag-name") —
+// this bit us when htmlEncode silently degraded to identity replacements.
+const escapeProblems: string[] = [];
+for (const f of readdirSync(DOCS).filter((x) => x.endsWith('.html'))) {
+  const html = readFileSync(join(DOCS, f), 'utf8');
+  for (const m of html.matchAll(/<pre><code[^>]*>([\s\S]*?)<\/code><\/pre>/g)) {
+    if (/<[a-zA-Z/!?]/.test(m[1])) escapeProblems.push(`${f}: unescaped tag inside <pre><code>`);
+  }
+}
+check(
+  'snippet escaping',
+  escapeProblems,
+  'raw < in a snippet means htmlEncode was bypassed — run `bun run sync-snippets` (never paste source into doc pages by hand)',
+);
+
+// 18. accessibility CSS promises (AGENTS.md "Accessibility CSS"): any
+// component that animates must honor prefers-reduced-motion. Warn-ratchet:
+// 16 legacy components predate the rule; accordion/dialog are the reference
+// implementations and are held to it.
+const REDUCED_MOTION_LEGACY = [
+  'tooltip', 'calendar', 'progress', 'alert-dialog', 'skeleton', 'toast', 'number-input',
+  'spinner', 'file-input', 'context-menu', 'date-picker', 'table', 'collapsible',
+  'tree-view', 'select', 'sheet',
+];
+const motionProblems: string[] = [];
+const motionWarnings: string[] = [];
+for (const c of componentDirs) {
+  const cssFile = join(COMPS, c, `${c}.css`);
+  if (!existsSync(cssFile)) continue;
+  const css = readFileSync(cssFile, 'utf8');
+  if (!/(transition|animation)\s*:/.test(css)) continue;
+  if (css.includes('prefers-reduced-motion')) continue;
+  const line = `${c}: animates but has no @media (prefers-reduced-motion: reduce) block`;
+  if (REDUCED_MOTION_LEGACY.includes(c)) motionWarnings.push(line);
+  else motionProblems.push(line);
+}
+check(
+  'reduced motion',
+  motionProblems,
+  'add an @media (prefers-reduced-motion: reduce) { @layer components { … } } block suppressing transitions (see accordion.css)',
+);
+check(
+  'reduced motion (legacy rollout)',
+  motionWarnings,
+  'same as above, then drop the name from REDUCED_MOTION_LEGACY in scripts/verify.ts',
+  true,
+);
+
+// 19. init idempotency contract (AGENTS.md): JS that attaches listeners must
+// guard against double-initialization (:not([data-init]) or a global flag) and
+// re-run init via MutationObserver, or SPA navigation double-binds handlers.
+const INIT_GUARD_LEGACY: string[] = [];
+const initProblems: string[] = [];
+const initWarnings: string[] = [];
+for (const c of componentDirs) {
+  const tsFile = join(COMPS, c, `${c}.ts`);
+  if (!existsSync(tsFile)) continue;
+  const src = readFileSync(tsFile, 'utf8');
+  if (!src.includes('addEventListener')) continue;
+  const guarded = src.includes('data-init') || /document\.__\w+/.test(src);
+  const reInits = src.includes('MutationObserver');
+  if (guarded && reInits) continue;
+  const line = `${c}: ${guarded ? '' : 'no :not([data-init]) guard'}${guarded && !reInits ? 'and ' : ''}${reInits ? '' : 'no MutationObserver re-init'}`;
+  if (INIT_GUARD_LEGACY.includes(c)) initWarnings.push(line);
+  else initProblems.push(line);
+}
+check(
+  'init idempotency',
+  initProblems,
+  'guard listeners with :not([data-init]) + el.dataset.init (or document.__flag for delegation) and add `new MutationObserver(init).observe(…)` (AGENTS.md)',
+);
+check(
+  'init idempotency (legacy rollout)',
+  initWarnings,
+  'same as above, then drop the name from INIT_GUARD_LEGACY in scripts/verify.ts',
+  true,
+);
+
+// 20. doc/tooling reference integrity: commands quoted in AGENTS.md and
+// README must exist — renaming a script or make target silently rots the docs
+// that agents follow as instructions.
+const pkgScripts = new Set(Object.keys(JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')).scripts));
+const makeTargets = new Set(
+  [...readFileSync(join(ROOT, 'Makefile'), 'utf8').matchAll(/^([a-z][a-z0-9_-]*):/gm)].map((m) => m[1]),
+);
+const refProblems: string[] = [];
+for (const md of ['AGENTS.md', 'README.md']) {
+  const text = readFileSync(join(ROOT, md), 'utf8');
+  // only backtick-quoted commands count — prose like "make sure" must not match
+  for (const m of text.matchAll(/`bun run ([a-z][a-z0-9:-]*)`/g)) {
+    if (!pkgScripts.has(m[1])) refProblems.push(`${md}: "bun run ${m[1]}" is not a package.json script`);
+  }
+  for (const m of text.matchAll(/`make ([a-z][a-z0-9_-]*)`/g)) {
+    if (!makeTargets.has(m[1])) refProblems.push(`${md}: "make ${m[1]}" is not a Makefile target`);
+  }
+}
+check(
+  'doc command refs',
+  refProblems,
+  'fix the doc reference or restore the script/target — docs are agent instructions',
+);
+
+// 21. link integrity in the shipped doc pages: every local href/src and
+// same-page #anchor must resolve inside dist/. Snippet blocks are excluded —
+// they contain escaped examples (src="photo.jpg") meant to be illustrative.
+// checked against the SHIPPED tree (pages reference compiled .js). linkedom
+// gives us the same view the browser has: contents of <pre>, <script> and
+// <style> — including the raw skill markdown embedded in
+// <script type="text/plain"> — are text, not elements, so illustrative
+// markup there (src="photo.jpg") is never mistaken for a live link.
+// Ceiling (ponytail): cross-page anchors (page.html#id) only check the page.
+const linkProblems: string[] = [];
+if (existsSync(DIST)) {
+  for (const f of readdirSync(join(DIST, 'documentation')).filter((x) => x.endsWith('.html'))) {
+    const { document } = parseHTML(readFileSync(join(DIST, 'documentation', f), 'utf8'));
+    const ids = new Set([...document.querySelectorAll('[id]')].map((el) => el.getAttribute('id')));
+    for (const el of document.querySelectorAll('[href],[src]')) {
+      const url = (el.getAttribute(el.hasAttribute('href') ? 'href' : 'src') ?? '').trim();
+      if (/^(https?:|mailto:|data:|javascript:)/i.test(url)) continue;
+      // demo placeholders: no target at all, or the conventional "..." stub
+      if (url === '' || url === '#' || url === '...') continue;
+      if (url.startsWith('#')) {
+        if (!ids.has(url.slice(1))) linkProblems.push(`${f}: dead anchor #${url.slice(1)}`);
+        continue;
+      }
+      const [path] = url.split('#');
+      if (!path) continue;
+      if (!existsSync(join(DIST, 'documentation', path))) linkProblems.push(`${f}: dead link ${url}`);
+    }
+  }
+}
+check(
+  'doc link integrity',
+  linkProblems,
+  'fix or remove the link (dead links on the published docs site are user-facing breakage)',
+);
+
+// 22. fixture ↔ CSS parity: every variant/size the component CSS implements
+// must be instantiated in its e2e fixture (docs parity rule, mechanical side).
+const fixtureProblems: string[] = [];
+for (const c of componentDirs) {
+  const cssFile = join(COMPS, c, `${c}.css`);
+  const fixture = join(ROOT, 'tests', 'e2e', `${c}.e2e-fixture.html`);
+  if (!existsSync(cssFile) || !existsSync(fixture)) continue; // missing fixture = check 3
+  const tokens = new Set(
+    [...readFileSync(cssFile, 'utf8').matchAll(/data-(?:variant|size)="([a-z0-9-]+)"/g)].map((m) => m[1]),
+  );
+  const fx = readFileSync(fixture, 'utf8');
+  const missing = [...tokens].filter((t) => !fx.includes(`"${t}"`));
+  if (missing.length) fixtureProblems.push(`${c}: fixture lacks [${missing.join(', ')}]`);
+}
+check(
+  'fixture ↔ CSS parity',
+  fixtureProblems,
+  'instantiate every documented variant/size in the e2e fixture (AGENTS.md "Docs ↔ E2E parity")',
+);
+
+// 23. portability: no machine-specific absolute paths anywhere in the repo
+// sources/scripts/tests (repo rule — these paths break on other systems).
+const pathProblems: string[] = [];
+for (const f of [...walk(SRC, ['']), ...walk(join(ROOT, 'scripts'), ['']), ...walk(join(ROOT, 'tests'), [''])]) {
+  if (/\.(woff2?|png|ico|jpg|jpeg|gif|webp)$/.test(f)) continue;
+  const hit = readFileSync(f, 'utf8').match(/\/Users\/[a-z]+|[A-Z]:\\|file:\/\/\//);
+  if (hit) pathProblems.push(`${relative(ROOT, f)}: ${hit[0]}`);
+}
+check(
+  'portable paths',
+  pathProblems,
+  'use paths relative to the repo root (import.meta.dirname / relative joins)',
+);
+
+// 24. render drift (warn): a PNG whose bytes changed since capture while its
+// component's inputs did NOT means something outside the repo altered the
+// render (CDN asset, font, browser version) — worth a human/agent look.
+const driftProblems: string[] = [];
+const driftManifestPath = join(ROOT, 'screenshots', 'manifest.json');
+if (existsSync(driftManifestPath) && existsSync(DIST)) {
+  const dm = JSON.parse(readFileSync(driftManifestPath, 'utf8')) as {
+    fingerprints?: Record<string, string>;
+    renders?: Record<string, string>;
+  };
+  const nowFp = componentFingerprints(DIST);
+  for (const [c, fp] of Object.entries(dm.fingerprints ?? {})) {
+    if (nowFp[c] !== fp) continue; // inputs changed → the diff is expected
+    for (const [key, hash] of Object.entries(dm.renders ?? {})) {
+      // keys look like "light/button.png" or "dark/accordion-all-open.png"
+      const file = key.slice(key.indexOf('/') + 1).replace(/\.png$/, '');
+      if (file !== c && !file.startsWith(`${c}-`)) continue;
+      const png = join(ROOT, 'screenshots', key);
+      if (!existsSync(png)) continue;
+      const actual = createHash('sha256').update(readFileSync(png)).digest('hex').slice(0, 16);
+      if (actual !== hash) driftProblems.push(`screenshots/${key} changed pixels without any input changing`);
+    }
+  }
+}
+check(
+  'render drift',
+  driftProblems,
+  'inspect the PNG against the component (external asset/browser change?) — or recapture with `bun run screenshots --force` once intentional',
   true,
 );
 

@@ -131,10 +131,15 @@ lint → compile → screenshots → verify → tests → e2e — the same loop 
 
 `bun run verify` is the static consistency gate — it runs automatically at the end of
 every `bun run build` and checks: component skills, doc pages, E2E coverage, token usage,
-undefined utility classes, snippet sync, cross-page imports, sidebar links, lint,
-`dist/` freshness (1:1 with `src/`), `.preview` blocks, screenshot freshness
-(`bun run screenshots` after the last build), version consistency, and the changelog
-marker. Each failing check prints the offending file and the exact fix command.
+undefined utility classes, snippet sync + escaping, cross-page imports, sidebar links,
+lint, `dist/` freshness (1:1 with `src/`), `.preview` blocks, screenshot freshness
+(content-hash manifest — `bun run screenshots` re-shoots only changed components),
+the State API contract + per-state coverage (screenshots, docs, skill, e2e), inlined
+preamble in shipped JS, skill ↔ docs ↔ CSS variant parity, `prefers-reduced-motion`
+coverage, init idempotency, doc command references, dead links (linkedom), machine-absolute
+paths, and render drift. Known rollout gaps print as ⚠ warnings with a migration
+procedure (fix source first, e2e after). Each failing check prints the offending file
+and the exact fix command.
 
 ## Testing
 

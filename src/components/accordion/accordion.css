@@ -71,3 +71,12 @@
     & p { margin: 0; }
   }
 }
+
+/* Accessibility: reduced motion suppresses the expand/collapse animation
+   (REQUIRED for all components — AGENTS.md "Accessibility CSS"). */
+@media (prefers-reduced-motion: reduce) {
+  @layer components {
+    .accordion-item ::details-content { transition: none; }
+    .accordion-trigger { transition: none; }
+  }
+}

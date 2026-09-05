@@ -62,3 +62,12 @@
   .dialog-body    { margin-top: 1rem; }
   .dialog-footer  { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem; }
 }
+
+/* Accessibility: reduced motion removes open/close transitions (REQUIRED
+   for all components — AGENTS.md "Accessibility CSS"). */
+@media (prefers-reduced-motion: reduce) {
+  @layer components {
+    dialog.dialog,
+    dialog.dialog::backdrop { transition: none; }
+  }
+}

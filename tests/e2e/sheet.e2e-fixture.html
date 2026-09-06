@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/dist/components/button/button.css" />
     <link rel="stylesheet" href="/dist/components/input/input.css" />
     <link rel="stylesheet" href="/dist/components/label/label.css" />
+    <link rel="stylesheet" href="/dist/components/checkbox/checkbox.css" />
     <link rel="stylesheet" href="/dist/components/sheet/sheet.css" />
   </head>
   <body style="padding:2rem;">
@@ -48,7 +49,12 @@
       <div class="sheet-header">
         <h2 id="sheet-bottom-title" class="sheet-title">Bottom Sheet</h2>
       </div>
-      <div class="sheet-content"><button class="btn" data-variant="outline" data-sheet-close>Close</button></div>
+      <div class="sheet-content">
+        <!-- doc-page pattern: real .checkbox component inside the sheet -->
+        <input class="checkbox" type="checkbox" id="fixture-pref" aria-labelledby="fixture-pref-label" checked>
+        <span id="fixture-pref-label">Preference</span>
+        <button class="btn" data-variant="outline" data-sheet-close>Close</button>
+      </div>
     </dialog>
 
     <script type="module" src="/dist/components/sheet/sheet.js"></script>

@@ -93,6 +93,34 @@ try {
     assert.deepEqual(margins.right, ['0px', '0px', '6px', '0px'], 'right: margin-left 6px');
   });
 
+  await check('arrow caret shows outside the box without a scrollbar', async () => {
+    // regression: the UA popover stylesheet sets overflow:auto — the [data-arrow]
+    // caret sits 4px outside the border box, so it was clipped to a sliver and
+    // the text overflow produced a scrollbar inside the tooltip
+    await page.evaluate(() => (document.querySelector('#tip-arrow') as HTMLElement).api!.setState('visible'));
+    // safeShowPopover defers a frame — measure only once actually open
+    await page.waitForFunction(() => document.querySelector('#tip-arrow')!.matches(':popover-open'));
+    const geo = await page.evaluate(() => {
+      const tip = document.querySelector('#tip-arrow') as HTMLElement;
+      const cs = getComputedStyle(tip);
+      const arrow = tip.querySelector('[data-arrow]') as HTMLElement;
+      const ar = arrow.getBoundingClientRect();
+      const tr = tip.getBoundingClientRect();
+      const res = {
+        overflow: cs.overflow,
+        pokesOut: ar.bottom > tr.bottom + 2 || ar.top < tr.top - 2 || ar.left < tr.left - 2 || ar.right > tr.right + 2,
+      };
+      tip.api!.setState('default');
+      return res;
+    });
+    // only auto/scroll render scrollbars; 'visible' (our override of the UA's
+    // auto) can never scroll, which is what removed the bogus scrollbar.
+    // (scrollWidth would still count the caret's ink overflow — a measurement
+    // quirk, not a scrollbar — so don't assert on it.)
+    assert.equal(geo.overflow, 'visible', 'overflow:auto (UA) would clip the caret');
+    assert.equal(geo.pokesOut, true, 'caret protrudes from the box edge');
+  });
+
   await check('scroll dismisses an open tooltip', async () => {
     await page.hover('[data-tooltip-trigger="tip-instant"]');
     await page.waitForFunction(() => document.querySelector('#tip-instant')!.matches(':popover-open'));

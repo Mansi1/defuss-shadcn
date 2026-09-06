@@ -16,7 +16,7 @@
   // "version consistency" gate fails if it (or any other version literal in
   // this file) drifts from package.json — the footer once froze an old number
   // forever because it was a second, un-synchronised literal.
-  var SITE_VERSION = 'v0.7.16';
+  var SITE_VERSION = 'v0.7.17';
 
   /* -- Dark mode (must run before first paint) ----------------- */
   var saved = localStorage.getItem('defuss-shadcn-theme');
@@ -182,6 +182,7 @@
             '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>' +
           '</button>' +
           '<a href="index.html" class="header-brand">' +
+            '<img src="images/favicon.webp" alt="defuss-shadcn logo" class="header-brand-logo">' +
             '<span class="header-brand-name">defuss<em>-shadcn</em></span>' +
             '<span class="badge header-brand-version" data-variant="outline" style="font-family:var(--font-mono);">' + SITE_VERSION + '</span>' +
           '</a>' +
@@ -711,13 +712,12 @@
     if (layoutWrap) {
       layoutWrap.insertAdjacentHTML('afterend',
         '<footer class="site-footer">' +
-          '<p class="site-footer-tagline">' + SITE_VERSION + ' — Agentically engineered by a local vLLM AI inference engine running Qwen3.8-Flash-Next. Every change is verified and audited in a static quality and consistency gating loop, designed by <a href="https://aron-homberg.de" target="_blank" rel="noopener">Aron Homberg (kyr0)</a>. Every release is manually reviewed, verified and proven by the human maintainer.</p>' +
+          '<p class="site-footer-tagline">Agentically engineered with local Qwen3.8-Flash-Next/vLLM, quality-gated automatically, and human-reviewed before release.</p>' +
           '<p class="site-footer-tagline" style="margin-top:0;">Reworked, enhanced and maintained by <a href="https://aron-homberg.de" target="_blank" rel="noopener">Aron Homberg</a></p>' +
-          '<p>' +
+          '<span class="site-footer-dot"> · </span>' +
             'MIT Licensed' +
             '<span class="site-footer-dot"> · </span>' +
             '<a href="https://github.com/kyr0/defuss-shadcn" target="_blank" rel="noopener">Source on GitHub</a>' +
-          '</p>' +
         '</footer>'
       );
     }

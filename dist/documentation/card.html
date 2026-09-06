@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="images/favicon.webp" type="image/webp">
   <meta name="description" content="Card component — content containers with header, body, and footer sections.">
   <meta property="og:title" content="Card — defuss-shadcn">
   <meta property="og:description" content="Card component — content containers with header, body, and footer sections.">
@@ -385,6 +385,12 @@
     gap: 0.5rem;
     padding: 1.5rem;
     padding-top: 0;
+  }
+
+  /* Header + footer with no .card-content between: the zeroed paddings would
+     glue them together — restore the gap for that composition only. */
+  .card-header + .card-footer {
+    padding-top: 1rem;
   }
 
   /* -- Container query: compact card in narrow containers -- */

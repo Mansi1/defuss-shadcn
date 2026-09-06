@@ -113,4 +113,4 @@ The api is bound per tooltip element; the registry global is
 - **Escape dismiss**: Handled natively by `popover="hint"` — no extra JS needed.
 - **Keyboard**: Tooltip shows on focus, hides on blur. Focus stays on trigger.
 - **Disabled triggers**: Wrap a disabled button in a `<span>` with `data-tooltip-trigger` since disabled elements don't fire mouse/focus events.
-- **Arrow**: Add `<div data-arrow></div>` inside the tooltip for a connecting caret. Arrow positioning is automatic based on `data-side`.
+- **Arrow**: Add `<div data-arrow></div>` inside the tooltip for a connecting caret. Arrow positioning is automatic based on `data-side`. The caret sits outside the border box, so `.tooltip` sets `overflow: visible` (overriding the UA popover `overflow: auto`, which would clip the caret and render a scrollbar).

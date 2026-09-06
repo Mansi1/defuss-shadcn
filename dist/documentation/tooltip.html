@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="images/favicon.webp" type="image/webp">
   <meta name="description" content="Tooltip component — hover hints using popover and CSS anchor positioning.">
   <meta property="og:title" content="Tooltip — defuss-shadcn">
   <meta property="og:description" content="Tooltip component — hover hints using popover and CSS anchor positioning.">
@@ -410,6 +410,10 @@
     position: fixed;
     inset: auto;
     margin: 0;
+    /* The UA popover stylesheet sets overflow:auto — the [data-arrow] caret
+       sits OUTSIDE the border box (-4px offsets), so it got clipped to a
+       sliver and overflow:auto rendered a scrollbar around the text. */
+    overflow: visible;
     border: none;
     border-radius: var(--radius-md);
     background-color: var(--primary);

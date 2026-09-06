@@ -36,6 +36,10 @@ html { scroll-padding-top: 4rem; }
 .header-brand-version {
   white-space: nowrap;
 }
+.header-brand-logo {
+  width: auto;
+  height: 32px;
+}
 
 /* -- Site sidebar ------------------------------------------ */
 .site-sidebar {

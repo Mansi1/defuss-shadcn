@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="images/favicon.webp" type="image/webp">
   <meta name="description" content="Release history and changelog for defuss-shadcn.">
   <meta property="og:title" content="Changelog — defuss-shadcn">
   <meta property="og:description" content="Release history and changelog for defuss-shadcn.">
@@ -94,6 +94,21 @@
       </div>
 
   <!-- CHANGELOG_ENTRIES -->
+
+  <div style="margin-bottom:2.5rem;">
+    <div class="flex items-center gap-3 mb-2">
+      <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0;">v0.7.17</h2>
+      <span class="badge" data-variant="outline" style="font-family:var(--font-mono);">September 06, 2026</span>
+    </div>
+    <ul style="margin:0;padding-left:1.25rem;" class="text-sm text-muted-foreground flex flex-col gap-1">
+      <li>tooltip: <code>overflow: visible</code> — the UA popover <code>overflow: auto</code> clipped the <code>data-arrow</code> caret to a sliver and rendered a scrollbar inside every tooltip</li>
+      <li>sheet: top/bottom content columns cap at 48rem and center (side sheets were fine at 24rem); doc demos now use the real <code>.checkbox</code> component instead of raw UA inputs</li>
+      <li>sidebar: collapsed rail centers submenu icons (cog) — the nested-nav indent and submenu-summary padding no longer drift them off the icon column; demo wrapper no longer shrink-wraps so the rail sticks to the preview's left edge; new <code>data-side="right"</code> doc demo + e2e check</li>
+      <li>card: <code>.card-header + .card-footer</code> restores a 1rem gap when no <code>.card-content</code> sits between them (index pillar cards' "Try it out" link was glued to the description)</li>
+      <li>docs: favicon.svg → images/favicon.webp; theme-switcher.js migrated to a .ts source</li>
+      <li>e2e: regression checks for caret geometry, top/bottom content centering, the embedded checkbox, collapsed icon alignment, and the right-docked rail</li>
+    </ul>
+  </div>
 
   <div style="margin-bottom:2.5rem;">
     <div class="flex items-center gap-3 mb-2">

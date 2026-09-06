@@ -56,6 +56,45 @@ try {
     assert.equal(await page.$eval('#demo-sidebar', (el) => el.dataset.state), 'expanded');
   });
 
+  await check('collapsed rail: every icon centers on the same column', async () => {
+    // regression: the submenu summary (cog) is not a .sidebar-link, so it
+    // kept its expanded padding and its icon drifted off the icon column
+    await page.click('[data-sidebar-trigger="demo-sidebar"]');
+    await page.waitForFunction(
+      () => document.querySelector('#demo-sidebar')!.getBoundingClientRect().width < 100,
+    );
+    const centers = await page.$eval('#demo-sidebar', (el) => {
+      const r = el.getBoundingClientRect();
+      const mid = r.x + r.width / 2;
+      const icons = [...el.querySelectorAll('.sidebar-link svg, .sidebar-submenu > summary svg:not(:last-child)')] as SVGElement[];
+      return icons.map((s) => {
+        const ir = s.getBoundingClientRect();
+        return Math.abs(ir.x + ir.width / 2 - mid);
+      });
+    });
+    assert.ok(centers.length >= 3, `expected 3 icons (2 links + submenu), got ${centers.length}`);
+    for (const off of centers) assert.ok(off <= 1, `icon center off rail center by ${off.toFixed(1)}px`);
+    await page.click('[data-sidebar-trigger="demo-sidebar"]');
+    await page.waitForFunction(
+      () => document.querySelector('#demo-sidebar')!.getBoundingClientRect().width > 100,
+    );
+  });
+
+  await check('right-side variant docks the sidebar to the viewport right', async () => {
+    const geo = await page.$eval('#demo-sidebar-right', (el) => {
+      const r = el.getBoundingClientRect();
+      const cs = getComputedStyle(el);
+      return {
+        gap: window.innerWidth - (r.x + r.width),
+        borderLeft: parseFloat(cs.borderLeftWidth),
+        borderRight: parseFloat(cs.borderRightWidth),
+      };
+    });
+    assert.ok(geo.gap < 2, `right edge flush with viewport (gap ${geo.gap.toFixed(1)}px)`);
+    assert.ok(geo.borderLeft > 0, 'border flips to the left side');
+    assert.equal(geo.borderRight, 0, 'no right border on a right-docked sidebar');
+  });
+
   await check('Cmd+B (Control modifier on Linux) toggles the shortcut path', async () => {
     await page.keyboard.press('Control+b');
     assert.equal(await page.$eval('#demo-sidebar', (el) => el.dataset.state), 'collapsed', 'shortcut collapsed it');

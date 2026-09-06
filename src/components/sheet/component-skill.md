@@ -124,6 +124,6 @@ The api is bound per sheet element; the registry global is
 ## Notes
 
 - Right/left sheets have a fixed width of `24rem` with `max-width: 100vw` for small screens.
-- Top/bottom sheets are full width with `height: auto` — they size to their content.
+- Top/bottom sheets are full width with `height: auto` — they size to their content. Their `.sheet-content` column caps at `48rem` and centers, so content doesn't stretch to the viewport edges.
 - The selector is `dialog.sheet` (element + class) to avoid conflicts with `dialog.dialog`.
 - The `sheet-header` has `padding-right: 2rem` to avoid overlapping the close button.

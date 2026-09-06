@@ -45,6 +45,12 @@
     padding-top: 0;
   }
 
+  /* Header + footer with no .card-content between: the zeroed paddings would
+     glue them together — restore the gap for that composition only. */
+  .card-header + .card-footer {
+    padding-top: 1rem;
+  }
+
   /* -- Container query: compact card in narrow containers -- */
   @container (max-width: 280px) {
     .card-header { padding: 1rem; padding-bottom: 0; }

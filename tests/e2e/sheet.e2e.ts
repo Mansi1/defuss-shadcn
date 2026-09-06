@@ -108,6 +108,23 @@ try {
     assert.equal(Math.round(geom.width), geom.viewport, 'full width');
   });
 
+  await check('top/bottom sheets center their content column', async () => {
+    // regression: these sides span the full viewport, so unstretched content
+    // rendered glued to the edges; the content column caps at 48rem, centered
+    await open(page, 'sheet-top');
+    const col = await page.evaluate(() => {
+      const content = document.querySelector('#sheet-top .sheet-content')!.getBoundingClientRect();
+      const sheet = document.querySelector('#sheet-top')!.getBoundingClientRect();
+      return {
+        width: content.width,
+        gapL: content.x - sheet.x,
+        gapR: sheet.x + sheet.width - (content.x + content.width),
+      };
+    });
+    assert.ok(col.width <= 768, `content column <= 48rem (got ${Math.round(col.width)}px)`);
+    assert.ok(Math.abs(col.gapL - col.gapR) < 2, `centered (${col.gapL.toFixed(0)} vs ${col.gapR.toFixed(0)})`);
+  });
+
   await check('bottom sheet: docked bottom, full width', async () => {
     await setState(page, 'sheet-top', 'default');
     await open(page, 'sheet-bottom');
@@ -122,6 +139,25 @@ try {
     });
     assert.equal(Math.round(geom.bottom), geom.vh, 'flush with bottom edge');
     assert.equal(Math.round(geom.width), geom.viewport, 'full width');
+    await setState(page, 'sheet-bottom', 'default');
+  });
+
+  await check('bottom sheet embeds the .checkbox component (not a raw UA input)', async () => {
+    // doc-page parity: cookie-preference rows use class="checkbox"
+    await open(page, 'sheet-bottom');
+    const info = await page.evaluate(() => {
+      const cb = document.querySelector('#sheet-bottom .checkbox') as HTMLInputElement;
+      const content = document.querySelector('#sheet-bottom .sheet-content')!.getBoundingClientRect();
+      const sheet = document.querySelector('#sheet-bottom')!.getBoundingClientRect();
+      return {
+        appearance: getComputedStyle(cb).appearance,
+        w: cb.getBoundingClientRect().width,
+        centered: Math.abs(content.x - sheet.x - (sheet.x + sheet.width - (content.x + content.width))) < 2,
+      };
+    });
+    assert.equal(info.appearance, 'none', 'styled .checkbox, not the raw UA control');
+    assert.ok(Math.abs(info.w - 18) < 1, `1.125rem checkbox (got ${info.w}px)`);
+    assert.ok(info.centered, 'bottom sheet content column centered like top');
     await setState(page, 'sheet-bottom', 'default');
   });
 

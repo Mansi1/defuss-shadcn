@@ -130,7 +130,7 @@ The registry global is `_defussShadcn.sidebarApi` / `_defussShadcn.sidebarStates
 - **Collapsible groups**: `<details class="sidebar-group">` — native toggle, no JS.
 - **Submenus**: `<details class="sidebar-submenu">` for nested nav with left border.
 - **Badges**: `<span class="sidebar-badge">` for notification counts.
-- **Collapsed state**: Labels, titles, badges, footer, logo text hidden — icons remain.
+- **Collapsed state**: Labels, titles, badges, footer, logo text hidden — icons remain. Submenu summaries (e.g. a Settings cog) center their icon in the rail too, and the nested nav stays hidden until expanded.
 - **Sidebar tokens**: Uses `--sidebar-*` token group.
 # Sidebar
 

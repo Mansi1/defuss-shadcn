@@ -1,3 +1,11 @@
+---
+name: Timeline
+why: Ordered list laid out on a vertical rail — the <ol> keeps the chronological semantics.
+when: Event history: activity logs, order tracking, changelog-style lists.
+where: dist/components/timeline/timeline.css
+supportedStates: default
+---
+
 # Timeline
 
 ## Native basis

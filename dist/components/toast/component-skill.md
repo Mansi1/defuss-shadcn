@@ -1,3 +1,11 @@
+---
+name: Toast
+why: Transient notification via the Popover API plus the _defussShadcn.toast factory — auto-dismisses.
+when: Post-action feedback that must not interrupt the user.
+where: dist/components/toast/toast.css + dist/components/toast/toast.js
+supportedStates: default
+---
+
 # Pattern: Toast
 
 ## Native basis

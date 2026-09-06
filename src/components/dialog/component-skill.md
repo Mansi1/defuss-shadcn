@@ -1,3 +1,11 @@
+---
+name: Dialog
+why: Native <dialog> + showModal(): focus trap, Escape-to-close, ::backdrop, and inert background all come from the browser.
+when: Modals for forms, detail views, or previews — unless the answer is mandatory (then alert-dialog).
+where: dist/components/dialog/dialog.css + dist/components/dialog/dialog.js
+supportedStates: default, open
+---
+
 # Pattern: Dialog
 
 ## States

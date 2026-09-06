@@ -1,3 +1,11 @@
+---
+name: Separator
+why: An <hr> (or role=separator with aria-orientation) — semantic and free.
+when: Dividing content groups visually and semantically.
+where: dist/components/separator/separator.css
+supportedStates: default
+---
+
 # Pattern: Separator
 
 ## Native basis

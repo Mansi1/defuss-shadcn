@@ -1,3 +1,11 @@
+---
+name: Badge
+why: Pure-CSS <span> chip with emphasis variants — nothing to wire up.
+when: Short status, version, or count labels next to content — not for actions.
+where: dist/components/badge/badge.css
+supportedStates: default
+---
+
 # Pattern: Badge
 
 ## Native basis

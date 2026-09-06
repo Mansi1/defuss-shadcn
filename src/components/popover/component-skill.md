@@ -1,3 +1,11 @@
+---
+name: Popover
+why: Native Popover API with CSS anchor positioning — show, dismiss, and placement owned by the browser.
+when: Lightweight panel anchored to a trigger — info, mini-forms, menus.
+where: dist/components/popover/popover.css + dist/components/popover/popover.js
+supportedStates: default, open
+---
+
 # Popover
 
 ## Native basis

@@ -1,3 +1,11 @@
+---
+name: Tooltip
+why: popover="hint" anchored label — shows on hover/focus without stealing dismissals from other popovers.
+when: Brief clarifying text for icon-only controls; never for essential information.
+where: dist/components/tooltip/tooltip.css + dist/components/tooltip/tooltip.js
+supportedStates: default, visible
+---
+
 # Tooltip
 
 ## Native basis

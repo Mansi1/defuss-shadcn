@@ -1,3 +1,11 @@
+---
+name: Switch
+why: Native checkbox styled as a sliding toggle — Space/Enter toggling is native.
+when: Settings that apply immediately; a checkbox + submit fits explicit forms better.
+where: dist/components/switch/switch.css
+supportedStates: default
+---
+
 # Pattern: Switch
 
 ## Native basis

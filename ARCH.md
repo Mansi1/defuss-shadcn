@@ -21,12 +21,13 @@ layer is for.
 ## 2. The verifier — the authority layer
 
 [`scripts/verify.ts`](scripts/verify.ts) is a custom, code-implemented audit
-of everything prose cannot guarantee: **39 check groups** over the shipped
-tree — skills exist, doc pages exist, tokens are tweakcn-compatible, snippets
-match source, dist is a 1:1 build of src, every declared state has a
-screenshot/skill/doc/e2e artifact, cross-page imports are complete, links
-resolve, paths are portable, the working tree is committed, the committed
-version has a changelog entry carrying its commit hash (AGENTS.md "Changelog"),
+of everything prose cannot guarantee: **41 check groups** over the shipped
+tree — skills exist (with discovery frontmatter), doc pages exist, tokens are
+tweakcn-compatible, snippets match source, dist is a 1:1 build of src, every
+declared state has a screenshot/skill/doc/e2e artifact, cross-page imports are
+complete, links resolve, paths are portable, the working tree is committed, the
+committed version has a changelog entry carrying its commit hash (AGENTS.md
+"Changelog"), the generated dist/SKILL.md agent index matches the skills,
 and more. Each
 check reads the *actual* files and computes the truth; nothing is taken on
 word.
@@ -107,7 +108,7 @@ flowchart TD
     B --> C["make build"]
     subgraph GATES["mechanical quality gates (no human in the loop)"]
         direction LR
-        L["oxlint<br/>typecheck"] --> P["compile src → dist<br/>1:1 build"] --> SS["screenshots<br/>every state × light/dark<br/>fingerprint-fresh"] --> V["verify.ts<br/>39 consistency gates<br/>incl. 'working tree committed'"] --> Q["Vitest UI tests<br/>56 Playwright e2e"]
+        L["oxlint<br/>typecheck"] --> P["compile src → dist<br/>1:1 build"] --> SS["screenshots<br/>every state × light/dark<br/>fingerprint-fresh"] --> V["verify.ts<br/>41 consistency gates<br/>incl. 'working tree committed'"] --> Q["Vitest UI tests<br/>56 Playwright e2e"]
     end
     C --> GATES
 

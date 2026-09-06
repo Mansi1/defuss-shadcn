@@ -2,6 +2,8 @@
 import { cpSync, existsSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { buildSearchIndexText } from './lib/search-index.ts';
+import { SKILL_OUTPUT_FILE } from './lib/skill.ts';
+import { buildSkillText } from './lib/skill-files.ts';
 
 /**
  * Why: the whole build — `bun run build` produces dist/ from src/ 1:1.
@@ -31,6 +33,11 @@ rmSync(DIST, { recursive: true, force: true });
 // source of truth is the NAV array + every page's <h2>s, both of which live
 // in src/, so this is a pure function of the tree we're about to copy.
 writeFileSync(join(SRC, 'documentation/js/search-index.js'), buildSearchIndexText());
+
+// 0b. regenerate the agent-facing SKILL.md index from src/SKILL_tpl.md + the
+// component-skill.md frontmatter, BEFORE copying, so dist/SKILL.md (the file
+// agents actually read) can never lag the skills.
+writeFileSync(join(SRC, SKILL_OUTPUT_FILE), buildSkillText(SRC));
 
 // 1. TypeScript → JavaScript (emits straight into dist/, same structure)
 const tsc = Bun.spawnSync({

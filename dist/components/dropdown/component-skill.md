@@ -1,3 +1,11 @@
+---
+name: Dropdown Menu
+why: Button-triggered menu as a Popover positioned by CSS anchor positioning — dismiss and placement are browser-owned.
+when: The go-to menu of actions or options anchored to a trigger button.
+where: dist/components/dropdown/dropdown.css + dist/components/dropdown/dropdown.js
+supportedStates: default, open
+---
+
 # Pattern: Dropdown Menu
 
 ## Native basis

@@ -1,3 +1,11 @@
+---
+name: Select
+why: Native <select> — the OS renders the options list, fully accessible on every platform.
+when: Pick one value from a list; prefer it over custom listboxes and comboboxes.
+where: dist/components/select/select.css
+supportedStates: default
+---
+
 # Pattern: Select
 
 ## Native basis

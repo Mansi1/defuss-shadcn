@@ -1,3 +1,11 @@
+---
+name: Steps
+why: Ordered list of process steps with aria-current="step" on the active one.
+when: Multi-step flows: wizards, checkout, onboarding progress.
+where: dist/components/steps/steps.css
+supportedStates: default
+---
+
 # Steps
 
 ## Native basis

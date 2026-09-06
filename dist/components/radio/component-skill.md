@@ -1,3 +1,11 @@
+---
+name: Radio Group
+why: Native radio group with arrow-key grouping and accent-color theming.
+when: A mutually exclusive choice among a short, visible set of options.
+where: dist/components/radio/radio.css
+supportedStates: default
+---
+
 # Pattern: Radio Group
 
 ## Native basis

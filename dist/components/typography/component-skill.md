@@ -1,3 +1,11 @@
+---
+name: Typography
+why: Type styling for raw content elements — headings, lists, blockquotes, code.
+when: Rendering markdown or CMS output where you cannot add classes.
+where: dist/components/typography/typography.css
+supportedStates: default
+---
+
 # Pattern: Typography
 
 ## Native basis

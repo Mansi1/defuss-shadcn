@@ -1,3 +1,11 @@
+---
+name: File Input
+why: A <label> wrapping the native file input with styled drag-over and filled states.
+when: Uploads that need a clear drop-target affordance beyond a bare file field.
+where: dist/components/file-input/file-input.css
+supportedStates: default
+---
+
 # Pattern: File Input
 
 ## Native basis

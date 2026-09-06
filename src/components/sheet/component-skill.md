@@ -1,3 +1,11 @@
+---
+name: Sheet
+why: A <dialog> variant that slides in from an edge — native modal semantics with transform-only animation.
+when: Off-canvas panels: mobile menus, filter drawers, detail side panels.
+where: dist/components/sheet/sheet.css + dist/components/sheet/sheet.js
+supportedStates: default, open
+---
+
 # Pattern: Sheet
 
 ## Native basis

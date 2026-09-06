@@ -39,7 +39,7 @@ A portable UI component system built on the [shadcn/ui](https://ui.shadcn.com) t
 
 ### Self-hosting
 
-Download the full system and drop it into any project. All the files are static — no build step, no dependencies. Point an AI at the folder and it has everything it needs: component skills to read, CSS to include, JS to wire up, and the entire documentation site with working examples of every component.
+Download the full system and drop it into any project. All the files are static — no build step, no dependencies. Point an AI at `dist/SKILL.md` and it has everything it needs: the library's integration guide and philosophy, an index of every component skill (why/when/where + supported states), CSS to include, JS to wire up, and the entire documentation site with working examples of every component.
 
 **[Download latest (.zip)](https://github.com/kyr0/defuss-shadcn/archive/refs/heads/main.zip)**
 

@@ -8,6 +8,13 @@ import { componentFingerprints, declaredStates } from './lib/inputs.ts';
 import { snippetDrifts } from './lib/snippets.ts';
 import { mirrorHashes } from './lib/mirror.ts';
 import { changelogProblems, FIX_TWO_COMMITS, parseChangelogEntries, type CommitInfo } from './lib/changelog.ts';
+import {
+  parseSkillFrontmatter,
+  SKILL_FRONTMATTER_KEYS,
+  SKILL_OUTPUT_FILE,
+  SKILL_TEMPLATE_FILE,
+} from './lib/skill.ts';
+import { buildSkillText } from './lib/skill-files.ts';
 
 /**
  * Why: one static, fast gate that proves the repo is self-consistent after any
@@ -817,6 +824,38 @@ check(
       warnings,
       'add the entry for the bumped version NOW — commit it, then commit that commit\'s hash into the entry (AGENTS.md "Changelog") — before the version bump itself is committed',
       true,
+    );
+  }
+
+  // 30. skill frontmatter + SKILL.md index: every component-skill.md declares
+  // name/why/when/where/supportedStates (the discovery contract agents read —
+  // AGENTS.md "Component skill template"), and the generated agent entry
+  // point (src/SKILL.md → dist/SKILL.md) matches a fresh render of
+  // SKILL_tpl.md + those frontmatters. Skills change → the index must be
+  // rebuilt, same drift class as snippets and the search index.
+  {
+    const fmProblems = componentDirs
+      .filter((c) => existsSync(join(COMPS, c, 'component-skill.md')))
+      .filter((c) => !parseSkillFrontmatter(readFileSync(join(COMPS, c, 'component-skill.md'), 'utf8')))
+      .map((c) => `src/components/${c}/component-skill.md has no valid frontmatter (${SKILL_FRONTMATTER_KEYS.join('/')})`);
+    check(
+      'skill frontmatter',
+      fmProblems,
+      `add a --- frontmatter block (${SKILL_FRONTMATTER_KEYS.join(', ')}) to each listed skill — then \`bun run build\` regenerates SKILL.md`,
+    );
+    let skillProblems: string[] = [];
+    try {
+      const fresh = buildSkillText(SRC);
+      if (!existsSync(join(SRC, SKILL_OUTPUT_FILE))) skillProblems.push(`src/${SKILL_OUTPUT_FILE} missing`);
+      else if (readFileSync(join(SRC, SKILL_OUTPUT_FILE), 'utf8') !== fresh)
+        skillProblems.push(`src/${SKILL_OUTPUT_FILE} is stale vs ${SKILL_TEMPLATE_FILE} + skill frontmatter`);
+    } catch (e) {
+      skillProblems.push(`${(e as Error).message.split(' — ')[0]} — SKILL.md cannot be generated`);
+    }
+    check(
+      'SKILL.md ↔ skills',
+      skillProblems,
+      'run `bun run build` (build.ts regenerates src/SKILL.md from SKILL_tpl.md + frontmatter; never edit SKILL.md by hand)',
     );
   }
   

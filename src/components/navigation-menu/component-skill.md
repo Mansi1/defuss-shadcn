@@ -1,3 +1,11 @@
+---
+name: Navigation Menu
+why: Primary site/app menu with hover/focus-triggered popover panels.
+when: Top-level navigation, optionally with mega-menu panels per item.
+where: dist/components/navigation-menu/navigation-menu.css + dist/components/navigation-menu/navigation-menu.js
+supportedStates: default, open
+---
+
 # Navigation Menu
 
 ## Native basis

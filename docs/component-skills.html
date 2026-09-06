@@ -91,7 +91,7 @@
 <p class="text-sm text-muted-foreground mb-3" style="font-family:var(--font-mono);">defuss-shadcn / component-skills</p>
   <h1 style="font-family:var(--font-display);font-size:2.5rem;font-weight:400;letter-spacing:-0.035em;margin:0 0 0.75rem;">Component Skills</h1>
   <p class="text-muted-foreground leading-relaxed mb-10" style="max-width:38rem;">
-    Every component includes a <code>component-skill.md</code> file — a structured reference that teaches both AI assistants and humans how to build that component's HTML correctly.
+    Every component includes a <code>component-skill.md</code> file — a structured reference that teaches both AI assistants and humans how to build that component's HTML correctly. And every skill is indexed in <code>dist/SKILL.md</code> — the single entry point an agent should read first.
   </p>
       </div>
 
@@ -113,11 +113,20 @@
 
   <div class="sep"></div>
 
+  <!-- -- SKILL.md index -- -->
+  <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0 0 0.875rem;">The SKILL.md index</h2>
+  <p class="text-sm text-muted-foreground mb-5"><code>dist/SKILL.md</code> is the generated entry point of the whole system — integration instructions, the library's philosophy, a map of the <code>dist/</code> layout, and one index entry per component (why to use it, when to reach for it, which files ship it, and which states it supports). It is built on every build from <code>SKILL_tpl.md</code> plus each skill's frontmatter, so it can never drift from the skills it indexes.</p>
+  <p class="text-sm text-muted-foreground mb-5"><strong>If you are an agent wiring this library into a project, point yourself at <a href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/SKILL.md"><code>dist/SKILL.md</code></a> first</strong> — it tells you what to include, which skill to read next, and where the state screenshots live (<code>screenshots/{light,dark}/{name}-{state}.png</code> in the source repo), so you can look up exactly what an "open modal" or "collapsed sidebar" should look like before you build it.</p>
+  <div class="sep"></div>
+
   <!-- -- Skill File Structure -- -->
   <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0 0 0.875rem;">Skill file structure</h2>
-  <p class="text-sm text-muted-foreground mb-5">Every component skill follows a consistent template with these sections in order:</p>
+  <p class="text-sm text-muted-foreground mb-5">Every component skill opens with a YAML frontmatter block and then follows a consistent template with these sections in order:</p>
 
   <div style="display:grid;grid-template-columns:auto 1fr;gap:0.5rem 1rem;margin-bottom:2.5rem;align-items:baseline;">
+    <span style="font-weight:600;font-size:0.8125rem;">0. Frontmatter</span>
+    <span class="text-sm text-muted-foreground">Machine-readable header (<code>name</code>, <code>why</code>, <code>when</code>, <code>where</code>, <code>supportedStates</code>) that <code>SKILL.md</code> is generated from — required on every skill and enforced by <code>verify</code>.</span>
+
     <span style="font-weight:600;font-size:0.8125rem;">1. Native basis</span>
     <span class="text-sm text-muted-foreground">Which HTML element or browser API the component builds on. Every component starts from native semantics.</span>
 
@@ -150,7 +159,17 @@
     <div style="padding:0.625rem 1rem;background:var(--muted);border-bottom:1px solid var(--border);">
       <span style="font-size:0.75rem;font-family:var(--font-mono);color:var(--muted-foreground);">dist/components/badge/component-skill.md</span>
     </div>
-    <pre style="border-radius:0;border:none;margin:0;background:transparent;flex:1;overflow:hidden;"><code class="language-markdown"># Pattern: Badge
+    <pre style="border-radius:0;border:none;margin:0;background:transparent;flex:1;overflow:hidden;"><code class="language-markdown">---
+name: Badge
+why: Pure-CSS <span> chip with emphasis variants —
+     nothing to wire up.
+when: Short status, version, or count labels next to
+      content — not for actions.
+where: dist/components/badge/badge.css
+supportedStates: default
+---
+
+# Pattern: Badge
 
 ## Native basis
 `&lt;span&gt;` element. No interactivity required —
@@ -211,6 +230,9 @@ pure visual indicator.
   <p class="text-sm text-muted-foreground mb-5">Component skills are designed to give AI assistants everything they need to generate correct, accessible markup in a single reference. Here's how to use them:</p>
 
   <div style="display:grid;grid-template-columns:auto 1fr;gap:0.75rem 1.5rem;margin-bottom:1.5rem;align-items:baseline;">
+    <span style="font-weight:600;font-size:0.8125rem;">Start at SKILL.md</span>
+    <span class="text-sm text-muted-foreground">Give the agent <code>dist/SKILL.md</code> as its entry point: it explains integration and philosophy once, then points at the right component skill — the agent only reads the skills it actually needs.</span>
+
     <span style="font-weight:600;font-size:0.8125rem;">Copy & paste</span>
     <span class="text-sm text-muted-foreground">Copy the skill file content into your AI chat alongside your request. The AI will use it as context to generate correct markup.</span>
 
@@ -256,7 +278,7 @@ Here are the component skills:
 
   <!-- -- All Skills -- -->
   <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0 0 0.875rem;">Available skills</h2>
-  <p class="text-sm text-muted-foreground mb-8">Every component in the library has a skill file at <code>dist/components/{name}/component-skill.md</code>. Browse the component pages in the sidebar to see the full list. Each component's documentation page includes a link to view its skill file.</p>
+  <p class="text-sm text-muted-foreground mb-8">Every component in the library has a skill file at <code>dist/components/{name}/component-skill.md</code>, and all of them are listed with their why/when/where and supported states in <code>dist/SKILL.md</code>. Browse the component pages in the sidebar to see the full list. Each component's documentation page includes a link to view its skill file.</p>
 
     </main>
   </div>

@@ -1,3 +1,11 @@
+---
+name: Label
+why: Native <label for> association — click-to-focus and announcement are free.
+when: Every form control, always — never a placeholder standing in for a label.
+where: dist/components/label/label.css
+supportedStates: default
+---
+
 # Pattern: Label
 
 ## Native basis

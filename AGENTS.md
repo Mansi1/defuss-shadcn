@@ -32,10 +32,11 @@ Never edit `dist/` directly; it is deleted and rebuilt on every build.
 ```
 defuss-shadcn/
 ├── dist/                              ← the distributable (drop into any project)
+│   ├── SKILL.md                       ← agent entry point (generated from src/SKILL_tpl.md + skill frontmatter)
 │   ├── theme/default-semantic-tokens.css      ← design tokens (source of truth for colors, radius, shadows)
 │   ├── components/                    ← self-contained component folders
 │   │   └── {name}/
-│   │       ├── component-skill.md      ← component skill (HTML structure & ARIA reference)
+│   │       ├── component-skill.md      ← component skill (frontmatter + HTML structure & ARIA reference)
 │   │       ├── {name}.css             ← component stylesheet (edit directly)
 │   │       └── {name}.js              ← interaction JS (only for interactive components)
 │   └── documentation/                 ← reference implementations + public website
@@ -57,13 +58,15 @@ defuss-shadcn/
 │   └── prompts/                       ← reusable prompt files
 │       └── component-review.prompt.md
 │
-├── screenshots/                       ← generated default-state PNGs per component in light/ + dark/ (`bun run screenshots`, gitignored)
+├── screenshots/                       ← generated PNGs per component AND per declared state, light/ + dark/ (`bun run screenshots`, gitignored) — SKILL.md maps state names to these files
 ├── scripts/                           ← build & maintenance scripts (no one-shot migrations)
 │   ├── build.ts                       ← src/ → dist/ (tsc type-strip + copy everything else 1:1)
 │   ├── verify.ts                      ← static consistency gate (runs at end of build; `bun run verify`)
 │   ├── sync-docs.ts                   ← mirror dist/documentation → docs/ (CDN-rewritten; `bun run docs`)
 │   ├── lib/mirror.ts                  ← shared docs/ mirror transform (sync-docs + verify compare against it)
 │   ├── lib/search-index.ts            ← docs search index generator (build.ts regenerates it every build)
+│   ├── lib/skill.ts                   ← SKILL.md generation core: frontmatter parser + index renderer (pure)
+│   ├── lib/skill-files.ts             ← dist/SKILL.md index generator from src/SKILL_tpl.md + skill frontmatter (build.ts regenerates every build)
 │   ├── create-screenshots.ts          ← parallel default-state screenshots for agent inspection
 │   ├── lib/audit.ts                   ← undefined-utility audit (used by verify)
 │   ├── lib/snippets.ts                ← shared snippet drift/replace logic (syncers + verify)
@@ -616,8 +619,29 @@ status of newer APIs (`popover`, anchor positioning, `@starting-style`, etc.).
 Component skills document **how to build the HTML** for a component. CSS and JS live in
 their own files alongside the skill — edit `.css` and `.js` directly.
 
+Every component skill **must open with a YAML frontmatter block** — it is the machine-readable
+discovery layer `dist/SKILL.md` (the agent entry point) is generated from. `verify`'s
+`skill frontmatter` gate fails without it, and `SKILL.md ↔ skills` fails when the generated
+index lags (rebuild with `bun run build`):
+
+```markdown
+---
+name: Dialog
+why: Native <dialog> + showModal(): focus trap, Escape, ::backdrop, and inert background are browser-provided.
+when: Modals for forms, detail views, or previews — unless the answer is mandatory (then alert-dialog).
+where: dist/components/dialog/dialog.css + dist/components/dialog/dialog.js
+supportedStates: default, open
+---
+```
+
+- **name** — display name (Title Case) · **why** — what its native basis buys · **when** — which
+  use it for, and when to pick a sibling instead · **where** — the shipped files
+  (`dist/components/{name}/{name}.css` + `.js` if interactive) · **supportedStates** — the exact
+  State API names (matches `{name}States`, `default` first; CSS-only components: `default`).
+
 Every component skill must include these sections in order:
 
+0. **Frontmatter** — `name` / `why` / `when` / `where` / `supportedStates` (see above — REQUIRED)
 1. **Native basis** — which HTML element/API it builds on
 2. **Native Web APIs** — bulleted list of significant platform APIs with MDN links (see format below)
 3. **Structure** — complete HTML markup with all attributes

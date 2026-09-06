@@ -52,11 +52,6 @@ html { scroll-padding-top: 4rem; }
   overflow-y: auto;
   padding: 1.25rem 0.75rem;
 }
-.sidebar-author {
-  flex-shrink: 0;
-  padding-bottom: 1rem;
-}
-
 /* -- Nav section heading ----------------------------------- */
 .nav-heading {
   font-size: 0.75rem; font-weight: 600;

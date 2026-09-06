@@ -302,12 +302,6 @@
                 }
             });
             html += '</div>';
-            html += '<div class="sidebar-author">' +
-                '<hr style="border:none;border-top:1px solid var(--sidebar-border);margin:0 0.75rem 0.875rem;">' +
-                '<p style="padding:0 0.75rem 0;margin:0;font-size:0.75rem;color:var(--muted-foreground);line-height:1.6;">' +
-                'Original idea & first implementation by <a href="https://github.com/codylindley" target="_blank" rel="noopener" style="color:var(--foreground);text-decoration:underline;text-underline-offset:3px;font-weight:500;">Cody Lindley</a> · maintained by <a href="https://aron-homberg.de" target="_blank" rel="noopener" style="color:var(--foreground);text-decoration:underline;text-underline-offset:3px;font-weight:500;">Aron Homberg</a>' +
-                '</p>' +
-                '</div>';
             html += '</aside>';
             this.innerHTML = html;
             /* -- Filter logic --------------------------------------- */
@@ -634,8 +628,8 @@
         /* Inject footer */
         if (layoutWrap) {
             layoutWrap.insertAdjacentHTML('afterend', '<footer class="site-footer">' +
-                '<p class="site-footer-tagline">' + SITE_VERSION + ' — Written in two days, entirely by an AI, directed entirely by a human. The future is weird!</p>' +
-                '<p class="site-footer-tagline" style="margin-top:0;">My AIs are open to your AIs\' <a href="https://github.com/kyr0/defuss-shadcn/pulls" target="_blank" rel="noopener">PRs</a> — but that doesn\'t mean this dumb human will accept them.</p>' +
+                '<p class="site-footer-tagline">' + SITE_VERSION + ' — Agentically engineered by a local vLLM AI inference engine running Qwen3.8-Flash-Next. Every change is verified and audited in a static quality and consistency gating loop, designed by <a href="https://aron-homberg.de" target="_blank" rel="noopener">Aron Homberg (kyr0)</a>. Every release is manually reviewed, verified and proven by the human maintainer.</p>' +
+                '<p class="site-footer-tagline" style="margin-top:0;">Reworked, enhanced and maintained by <a href="https://aron-homberg.de" target="_blank" rel="noopener">Aron Homberg</a></p>' +
                 '<p>' +
                 'MIT Licensed' +
                 '<span class="site-footer-dot"> · </span>' +

@@ -7,7 +7,7 @@
 
 **A UI component system that scales with AI.** Themeable components built on semantic HTML, modern CSS, and vanilla JavaScript. No framework. No build step for consumers — `dist/` is committed and ready to use as-is. The simplest possible foundation for AI-driven prototyping.
 
-**[Documentation & Live Demos →](https://kyr0.github.io/defuss-shadcn/documentation/)**
+**[Documentation & Live Demos →](https://kyr0.github.io/defuss-shadcn/)**
 
 ## What this is
 
@@ -73,7 +73,7 @@ Tokens are compatible with [tweakcn.com](https://tweakcn.com) theme exports. To 
 
 ## Components
 
-See the **[full component list with live demos →](https://kyr0.github.io/defuss-shadcn/documentation/)**
+See the **[full component list with live demos →](https://kyr0.github.io/defuss-shadcn/)**
 
 ## Design principles
 
@@ -132,8 +132,11 @@ bun run test:run   # run the UI test suite (headless Chromium)
 ```
 
 `src/` is the authoring tree (`.ts` + html/css/md/fonts); `dist/` is its compiled, 1:1
-mirror, committed and the only thing that ships. `docs/` is a generated 1:1 mirror of
-`dist/` that GitHub Pages publishes — refresh with `bun run docs`, never edit it directly.
+mirror, committed and the only thing that ships. `docs/` is the generated **documentation
+site** (only `dist/documentation/` + the SEO files) that GitHub Pages publishes — the
+pages' `../components/…` / `../theme/…` references are rewritten to the jsDelivr GitHub
+CDN by the mirror ([scripts/lib/mirror.ts](scripts/lib/mirror.ts)), so docs/ carries no
+copies of the component assets. Refresh with `bun run docs`, never edit it directly.
 
 A `Makefile` wraps the common tasks: `make setup` (install deps + Playwright browsers),
 `make dev`, `make test-run`, `make coverage`, `make e2e`, `make lint` (oxlint),
@@ -145,7 +148,7 @@ the same loop CI runs.
 of every build) and the contract every coding agent must satisfy. It checks, among others:
 
 - **structure** — component skills, doc pages, CSS/JS imports on every page, sidebar links,
-  `.preview` blocks, `dist/` freshness (1:1 with `src/`), `docs/` mirror byte-identical
+  `.preview` blocks, `dist/` freshness (1:1 with `src/`), `docs/` mirror current (CDN-rewritten)
 - **consistency** — inline source snippets match the real files (and are properly escaped),
   skill ↔ docs ↔ CSS variant parity, State API contract + per-state coverage across
   screenshots/docs/skill/e2e, changelog & version markers, doc command references

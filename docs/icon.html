@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Icon component — Lucide icons sized and colored with CSS custom properties.">
+  <meta property="og:title" content="Icon — defuss-shadcn">
+  <meta property="og:description" content="Icon component — Lucide icons sized and colored with CSS custom properties.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kyr0.github.io/defuss-shadcn/icon.html">
+  <meta property="og:site_name" content="defuss-shadcn">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Icon — defuss-shadcn">
+  <meta name="twitter:description" content="Icon component — Lucide icons sized and colored with CSS custom properties.">
+  <title>Icon — defuss-shadcn</title>
+  <script src="js/themes.js"></script>
+  <script src="js/theme-switcher.js"></script>
+  <script src="js/layout.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/theme/default-semantic-tokens.css">
+  <link rel="stylesheet" href="css/docs-theme.css">
+  <link rel="stylesheet" href="css/docs-utilities.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js" defer integrity="sha384-H+hy9ULve6xfxRkWIh/YOtvDdpXgV2fmAGQkIDTxIgZwNoaoBal14Di2YTMR6MzR" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/button/button.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/card/card.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/dialog/dialog.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/badge/badge.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/input/input.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/accordion/accordion.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/tabs/tabs.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/dropdown/dropdown.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toast/toast.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/combobox/combobox.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sheet/sheet.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toggle/toggle.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/icon/icon.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/typography/typography.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/separator/separator.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/label/label.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toggle-group/toggle-group.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/button-group/button-group.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toolbar/toolbar.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/textarea/textarea.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/checkbox/checkbox.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/radio/radio.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/switch/switch.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/slider/slider.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/select/select.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/number-input/number-input.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/file-input/file-input.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/color-picker/color-picker.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/date-picker/date-picker.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/form/form.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/avatar/avatar.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/image/image.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/statistic/statistic.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/table/table.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/collapsible/collapsible.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/timeline/timeline.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/tree-view/tree-view.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/calendar/calendar.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/spinner/spinner.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/skeleton/skeleton.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/progress/progress.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/alert/alert.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/alert-dialog/alert-dialog.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/popover/popover.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/tooltip/tooltip.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/context-menu/context-menu.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/command/command.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/breadcrumb/breadcrumb.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/pagination/pagination.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/steps/steps.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/navigation-menu/navigation-menu.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/scroll-area/scroll-area.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/carousel/carousel.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sidebar/sidebar.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sortable/sortable.css">
+</head>
+<body>
+  <site-header></site-header>
+
+  <div class="flex" style="margin-top: 3.5rem; min-height: calc(100vh - 3.5rem);">
+    <site-nav></site-nav>
+
+    <main style="flex: 1; min-width: 0; max-width: 44rem; padding: 2rem 3.5rem 8rem;">
+      <div class="page-header">
+        <div class="flex items-baseline justify-between mb-1">
+          <p class="text-sm text-muted-foreground" style="font-family:var(--font-mono);">defuss-shadcn / icon</p>
+          <div style="display:flex;align-items:baseline;gap:0.375rem;"><span style="font-size:0.75rem;color:var(--muted-foreground);font-family:var(--font-mono);white-space:nowrap;">Built with:</span> <a href="#source-css" class="badge built-with-pill" data-variant="outline">CSS</a></div>
+        </div>
+        <h1 style="font-family:var(--font-display);font-size:2.5rem;font-weight:400;letter-spacing:-0.035em;margin:0 0 0.75rem;">Icon</h1>
+        <p class="text-muted-foreground leading-relaxed mb-6">
+          ~1,500 <a href="https://lucide.dev/icons/" target="_blank" style="color:var(--primary);text-decoration:underline;text-underline-offset:4px;">Lucide</a> icons via CDN. Write <code>&lt;i data-lucide="name"&gt;</code> — the Lucide CDN script replaces it with an inline SVG at page load. Requires the Lucide <code>&lt;script&gt;</code> tag (see <a href="installation.html" style="color:var(--primary);text-decoration:underline;text-underline-offset:4px;">Installation</a>).
+        </p>
+        <!-- Component Skill -->
+        <details style="margin-bottom:2rem;border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;">
+          <summary style="padding:0.875rem 1.25rem;background:var(--muted);cursor:pointer;font-size:0.8125rem;font-weight:600;font-family:var(--font-mono);color:var(--muted-foreground);list-style:none;display:flex;align-items:center;gap:0.5rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 200ms;"><path d="m9 18 6-6-6-6"/></svg>
+            Component Skill — <span data-spec-href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/icon/component-skill.md" style="text-decoration:underline;text-underline-offset:3px;">components/icon/component-skill.md</span>
+          </summary>
+          <div style="padding:1.5rem;font-size:0.875rem;line-height:1.85;">
+            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Native basis</p>
+            <p class="text-muted-foreground" style="margin:0 0 1.25rem;"><code>&lt;i&gt;</code> element with <code>data-lucide</code> attribute. Icons are provided by the [Lucide](https://lucide.dev) icon library via CDN. Lucide replaces each <code>&lt;i data-lucide=&quot;name&quot;&gt;</code> with an inline SVG on page load.</p>
+
+            <p style="margin:0 0 0.625rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Web Platform APIs</p>
+            <div style="display:flex;flex-wrap:wrap;gap:0.375rem;margin-bottom:1.25rem;">
+              <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/svg" target="_blank" rel="noopener" title="inline scalable vector graphics (injected by Lucide)" class="api-pill"><code>&lt;svg&gt;</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-hidden" target="_blank" rel="noopener" title="hides decorative icons from screen readers" class="api-pill"><code>aria-hidden</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#currentcolor_keyword" target="_blank" rel="noopener" title="icons inherit stroke color from the parent's color property" class="api-pill"><code>currentColor</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion" target="_blank" rel="noopener" title="suppresses icon animations when user prefers reduced motion" class="api-pill"><code>prefers-reduced-motion</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors" target="_blank" rel="noopener" title="maps icon color to system CanvasText in Windows High Contrast Mode" class="api-pill"><code>forced-colors</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-contrast" target="_blank" rel="noopener" title="increases stroke width when user requests more contrast" class="api-pill"><code>prefers-contrast</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+            </div>
+
+            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Data attributes</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>data-lucide</code> — icon name (required)</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>data-size</code> — <code>xs</code> | <code>sm</code> | <code>md</code> | <code>lg</code> | <code>xl</code></p>
+            <p class="text-muted-foreground" style="margin:0 0 1.25rem;">• <code>data-animate</code> — <code>spin</code></p>
+
+
+            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Notes</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Icons inherit <code>currentColor</code> for stroke — they automatically match the parent's text color</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Browse all available icons at <a href="https://lucide.dev/icons/" target="_blank" style="color:var(--primary);text-decoration:underline;text-underline-offset:4px;">lucide.dev/icons</a></p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Lucide provides ~1,500 icons covering every common web app need</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• The CDN script replaces <code>&lt;i data-lucide=&quot;name&quot;&gt;</code> elements with inline SVGs on page load</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Use <code>stroke-width</code> attribute to adjust line thickness (default: <code>2</code>)</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Prefer visually-hidden text (<code>.sr-only</code>) over <code>aria-label</code> for accessible standalone icons</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Animations (e.g., <code>data-animate=&quot;spin&quot;</code>) are suppressed when the user has <code>prefers-reduced-motion</code> enabled</p>
+            <p class="text-muted-foreground" style="margin:0 0 0;">• <code>prefers-contrast: more</code> increases stroke width to 2.5 for better visibility</p>
+          </div>
+        </details>
+      </div>
+
+        <!-- -- Example: Basic ------------------------------------ -->
+          <p class="text-sm font-medium mb-2 mt-6">Basic usage</p>
+          <p class="text-xs text-muted-foreground mb-3">Use <code>data-lucide</code> with any icon name from <a href="https://lucide.dev/icons/" target="_blank" style="color:var(--primary);text-decoration:underline;text-underline-offset:4px;">lucide.dev/icons</a>.</p>
+          <div class="preview" style="gap:1.5rem;">
+            <i data-lucide="home"></i>
+            <i data-lucide="settings"></i>
+            <i data-lucide="user"></i>
+            <i data-lucide="search"></i>
+            <i data-lucide="bell"></i>
+            <i data-lucide="mail"></i>
+            <i data-lucide="heart"></i>
+            <i data-lucide="star"></i>
+          </div>
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copy
+            </button>
+            <pre><code class="language-markup">&lt;i data-lucide="home"&gt;&lt;/i&gt;
+&lt;i data-lucide="settings"&gt;&lt;/i&gt;
+&lt;i data-lucide="user"&gt;&lt;/i&gt;
+&lt;i data-lucide="search"&gt;&lt;/i&gt;</code></pre>
+          </div>
+
+        <!-- -- Example: Sizes ------------------------------------ -->
+          <p class="text-sm font-medium mb-2 mt-6">Sizes</p>
+          <p class="text-xs text-muted-foreground mb-3">Use <code>data-size</code> to control icon size.</p>
+          <div class="preview" style="gap:2rem;align-items:center;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+              <i data-lucide="star" data-size="xs"></i>
+              <span style="font-size:0.75rem;color:var(--muted-foreground);font-family:var(--font-mono);">xs (12px)</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+              <i data-lucide="star" data-size="sm"></i>
+              <span style="font-size:0.75rem;color:var(--muted-foreground);font-family:var(--font-mono);">sm (14px)</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+              <i data-lucide="star"></i>
+              <span style="font-size:0.75rem;color:var(--muted-foreground);font-family:var(--font-mono);">default (16px)</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+              <i data-lucide="star" data-size="md"></i>
+              <span style="font-size:0.75rem;color:var(--muted-foreground);font-family:var(--font-mono);">md (20px)</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+              <i data-lucide="star" data-size="lg"></i>
+              <span style="font-size:0.75rem;color:var(--muted-foreground);font-family:var(--font-mono);">lg (24px)</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+              <i data-lucide="star" data-size="xl"></i>
+              <span style="font-size:0.75rem;color:var(--muted-foreground);font-family:var(--font-mono);">xl (32px)</span>
+            </div>
+          </div>
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copy
+            </button>
+            <pre><code class="language-markup">&lt;i data-lucide="star" data-size="xs"&gt;&lt;/i&gt;
+&lt;i data-lucide="star" data-size="sm"&gt;&lt;/i&gt;
+&lt;i data-lucide="star"&gt;&lt;/i&gt;
+&lt;i data-lucide="star" data-size="md"&gt;&lt;/i&gt;
+&lt;i data-lucide="star" data-size="lg"&gt;&lt;/i&gt;
+&lt;i data-lucide="star" data-size="xl"&gt;&lt;/i&gt;</code></pre>
+          </div>
+
+        <!-- -- Example: With Button ------------------------------ -->
+          <p class="text-sm font-medium mb-2 mt-6">With buttons</p>
+          <p class="text-xs text-muted-foreground mb-3">Icons inside buttons inherit the button's color.</p>
+          <div class="preview">
+            <button class="btn" data-variant="default">
+              <i data-lucide="save"></i>
+              Save
+            </button>
+            <button class="btn" data-variant="outline">
+              <i data-lucide="download"></i>
+              Download
+            </button>
+            <button class="btn" data-variant="destructive">
+              <i data-lucide="trash"></i>
+              Delete
+            </button>
+            <button class="btn" data-variant="outline" data-size="icon" aria-label="Settings">
+              <i data-lucide="settings"></i>
+            </button>
+          </div>
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copy
+            </button>
+            <pre><code class="language-markup">&lt;button class="btn" data-variant="default"&gt;
+  &lt;i data-lucide="save"&gt;&lt;/i&gt;
+  Save
+&lt;/button&gt;
+
+&lt;button class="btn" data-variant="outline" data-size="icon" aria-label="Settings"&gt;
+  &lt;i data-lucide="settings"&gt;&lt;/i&gt;
+&lt;/button&gt;</code></pre>
+          </div>
+
+        <!-- -- Example: Color ------------------------------------ -->
+          <p class="text-sm font-medium mb-2 mt-6">Color</p>
+          <p class="text-xs text-muted-foreground mb-3">Icons inherit <code>currentColor</code>. Change color with text color utilities.</p>
+          <div class="preview" style="gap:1.5rem;">
+            <i data-lucide="circle-check" data-size="lg" style="color:oklch(0.72 0.19 142);"></i>
+            <i data-lucide="alert-triangle" data-size="lg" style="color:oklch(0.77 0.17 75);"></i>
+            <i data-lucide="x-circle" data-size="lg" style="color:var(--destructive);"></i>
+            <i data-lucide="info" data-size="lg" style="color:oklch(0.62 0.21 255);"></i>
+          </div>
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copy
+            </button>
+            <pre><code class="language-markup">&lt;i data-lucide="circle-check" data-size="lg" style="color:oklch(0.72 0.19 142);"&gt;&lt;/i&gt;
+&lt;i data-lucide="alert-triangle" data-size="lg" style="color:oklch(0.77 0.17 75);"&gt;&lt;/i&gt;
+&lt;i data-lucide="x-circle" data-size="lg" style="color:var(--destructive);"&gt;&lt;/i&gt;
+&lt;i data-lucide="info" data-size="lg" style="color:oklch(0.62 0.21 255);"&gt;&lt;/i&gt;</code></pre>
+          </div>
+
+        <!-- -- Example: Stroke Width ------------------------------ -->
+          <p class="text-sm font-medium mb-2 mt-6">Stroke width</p>
+          <p class="text-xs text-muted-foreground mb-3">Adjust line thickness with the <code>stroke-width</code> attribute. Default is <code>2</code>.</p>
+          <div class="preview" style="gap:2rem;align-items:center;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+              <i data-lucide="heart" data-size="lg" stroke-width="1"></i>
+              <span style="font-size:0.75rem;color:var(--muted-foreground);font-family:var(--font-mono);">1</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+              <i data-lucide="heart" data-size="lg" stroke-width="1.5"></i>
+              <span style="font-size:0.75rem;color:var(--muted-foreground);font-family:var(--font-mono);">1.5</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+              <i data-lucide="heart" data-size="lg" stroke-width="2"></i>
+              <span style="font-size:0.75rem;color:var(--muted-foreground);font-family:var(--font-mono);">2</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+              <i data-lucide="heart" data-size="lg" stroke-width="3"></i>
+              <span style="font-size:0.75rem;color:var(--muted-foreground);font-family:var(--font-mono);">3</span>
+            </div>
+          </div>
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copy
+            </button>
+            <pre><code class="language-markup">&lt;i data-lucide="heart" data-size="lg" stroke-width="1"&gt;&lt;/i&gt;
+&lt;i data-lucide="heart" data-size="lg" stroke-width="1.5"&gt;&lt;/i&gt;
+&lt;i data-lucide="heart" data-size="lg" stroke-width="2"&gt;&lt;/i&gt;
+&lt;i data-lucide="heart" data-size="lg" stroke-width="3"&gt;&lt;/i&gt;</code></pre>
+          </div>
+
+        <!-- -- Example: Accessible icon --------------------------- -->
+          <p class="text-sm font-medium mb-2 mt-6">Accessible icon</p>
+          <p class="text-xs text-muted-foreground mb-3">For standalone icons that convey meaning, use visually-hidden text or <code>aria-label</code>.</p>
+          <div class="preview" style="gap:2rem;align-items:center;">
+            <span style="display:inline-flex;align-items:center;">
+              <i data-lucide="phone" data-size="md" aria-hidden="true"></i>
+              <span class="sr-only">Phone number</span>
+            </span>
+            <i data-lucide="alert-triangle" data-size="md" aria-label="Warning" role="img"></i>
+          </div>
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copy
+            </button>
+            <pre><code class="language-markup">&lt;!-- Preferred: visually-hidden text --&gt;
+&lt;span style="display:inline-flex;align-items:center;"&gt;
+  &lt;i data-lucide="phone" aria-hidden="true"&gt;&lt;/i&gt;
+  &lt;span class="sr-only"&gt;Phone number&lt;/span&gt;
+&lt;/span&gt;
+
+&lt;!-- Alternative: aria-label --&gt;
+&lt;i data-lucide="alert-triangle" aria-label="Warning" role="img"&gt;&lt;/i&gt;</code></pre>
+          </div>
+
+        <!-- -- Example: Animated ---------------------------------- -->
+          <p class="text-sm font-medium mb-2 mt-6">Animated (spinner)</p>
+          <p class="text-xs text-muted-foreground mb-3">Add <code>data-animate=&quot;spin&quot;</code> for loading indicators. Animation is suppressed when the user has <code>prefers-reduced-motion</code> enabled.</p>
+          <div class="preview" style="gap:2rem;align-items:center;">
+            <i data-lucide="loader-circle" data-size="md" data-animate="spin"></i>
+            <button class="btn" data-variant="outline" disabled>
+              <i data-lucide="loader-circle" data-animate="spin"></i>
+              Loading…
+            </button>
+          </div>
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copy
+            </button>
+            <pre><code class="language-markup">&lt;i data-lucide="loader-circle" data-size="md" data-animate="spin"&gt;&lt;/i&gt;
+
+&lt;button class="btn" data-variant="outline" disabled&gt;
+  &lt;i data-lucide="loader-circle" data-animate="spin"&gt;&lt;/i&gt;
+  Loading…
+&lt;/button&gt;</code></pre>
+          </div>
+
+        <!-- -- Browse all icons ---------------------------------- -->
+          <p class="text-sm font-medium mb-2 mt-6">Filled icons</p>
+          <p class="text-xs text-muted-foreground mb-3">Use the <code>fill</code> and <code>stroke-width</code> attributes for filled icon variants. Works well with simple shapes.</p>
+          <div class="preview" style="gap:1.5rem;align-items:center;">
+            <i data-lucide="star" data-size="lg" fill="currentColor" stroke-width="0"></i>
+            <i data-lucide="heart" data-size="lg" fill="currentColor" stroke-width="0"></i>
+            <i data-lucide="circle" data-size="lg" fill="currentColor" stroke-width="0"></i>
+            <i data-lucide="bookmark" data-size="lg" fill="currentColor" stroke-width="0"></i>
+            <i data-lucide="star" data-size="lg" fill="currentColor" stroke-width="1" style="color:oklch(0.77 0.17 75);"></i>
+          </div>
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copy
+            </button>
+            <pre><code class="language-markup">&lt;i data-lucide="star" data-size="lg" fill="currentColor" stroke-width="0"&gt;&lt;/i&gt;
+&lt;i data-lucide="heart" data-size="lg" fill="currentColor" stroke-width="0"&gt;&lt;/i&gt;
+
+&lt;!-- Filled with stroke outline --&gt;
+&lt;i data-lucide="star" data-size="lg" fill="currentColor" stroke-width="1"&gt;&lt;/i&gt;</code></pre>
+          </div>
+
+        <!-- -- Browse all icons ---------------------------------- -->
+          <p class="text-sm font-medium mb-2 mt-6">Browse all icons</p>
+          <p class="text-xs text-muted-foreground mb-3">Lucide provides ~1,500 icons. Browse and search the full set at:</p>
+          <a href="https://lucide.dev/icons/" target="_blank" class="btn" data-variant="outline" style="text-decoration:none;">
+            <i data-lucide="external-link"></i>
+            lucide.dev/icons
+          </a>
+
+        <!-- -- CSS --------------------------------------- -->
+        <section style="margin-top:3rem;" id="source-css">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">CSS <a href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/icon/icon.css" target="_blank" style="font-size:0.75rem;font-weight:400;color:var(--muted-foreground);text-decoration:underline;text-underline-offset:3px;margin-left:0.5rem;">view file</a></h2>
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
+            <pre><code class="language-scss">/* -- Icon component ---------------------------------------- */
+/* Styling for Lucide CDN icons (&lt;i data-lucide=&quot;name&quot;&gt;).     */
+/* Lucide replaces &lt;i&gt; with &lt;svg&gt;, these styles target that.  */
+
+@layer components {
+  [data-lucide] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    vertical-align: middle;
+    width: 1rem;
+    height: 1rem;
+    pointer-events: none;
+
+    /* -- Sizes via data-size --------------------------------- */
+    &amp;[data-size=&quot;xs&quot;] { width: 0.75rem; height: 0.75rem; }
+    &amp;[data-size=&quot;sm&quot;] { width: 0.875rem; height: 0.875rem; }
+    &amp;[data-size=&quot;md&quot;] { width: 1.25rem; height: 1.25rem; }
+    &amp;[data-size=&quot;lg&quot;] { width: 1.5rem; height: 1.5rem; }
+    &amp;[data-size=&quot;xl&quot;] { width: 2rem; height: 2rem; }
+
+    /* -- Spin animation ------------------------------------- */
+    &amp;[data-animate=&quot;spin&quot;] {
+      animation: icon-spin 1s linear infinite;
+    }
+  }
+
+  @keyframes icon-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ---- Accessibility ---------------------------------------- */
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-lucide] {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    [data-lucide] {
+      stroke-width: 2.5;
+    }
+  }
+
+  @media (forced-colors: active) {
+    [data-lucide] {
+      color: CanvasText;
+    }
+  }
+}</code></pre>
+          </div>
+        </section>
+
+    </main>
+  </div>
+
+  <script src="js/site.js" defer></script>
+  <script type="module" src="js/shiki-highlight.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/accordion/accordion.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/combobox/combobox.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/dialog/dialog.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/dropdown/dropdown.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sheet/sheet.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/tabs/tabs.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toast/toast.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toggle/toggle.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toggle-group/toggle-group.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toolbar/toolbar.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/number-input/number-input.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/color-picker/color-picker.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/avatar/avatar.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/image/image.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/tree-view/tree-view.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/calendar/calendar.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/alert-dialog/alert-dialog.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/popover/popover.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/tooltip/tooltip.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/context-menu/context-menu.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/command/command.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/navigation-menu/navigation-menu.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sidebar/sidebar.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/carousel/carousel.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/slider/slider.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sortable/sortable.js"></script>
+  <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
+  <script>lucide.createIcons();</script>
+<script type="text/plain" id="spec-md-content"># Pattern: Icon
+
+## Native basis
+`<i>` element with `data-lucide` attribute. Icons are provided by the [Lucide](https://lucide.dev) icon library via CDN. Lucide replaces each `<i data-lucide="name">` with an inline SVG on page load.
+
+---
+
+## Native Web APIs
+- [`<svg>`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/svg) — inline scalable vector graphics (injected by Lucide)
+- [`aria-hidden`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-hidden) — hides decorative icons from screen readers (Lucide sets this by default)
+- [`currentColor`](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#currentcolor_keyword) — icons inherit stroke color from the parent's `color` property
+- [`prefers-reduced-motion`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion) — suppresses icon animations (e.g., spinning loaders) when user prefers reduced motion
+- [`forced-colors`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors) — maps icon color to system `CanvasText` in Windows High Contrast Mode
+- [`prefers-contrast`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-contrast) — increases stroke width when user requests more contrast
+
+---
+
+## Setup
+
+Include the Lucide CDN script and call `createIcons()`:
+
+```html
+<script src="https://unpkg.com/lucide@latest"><\/script>
+<script>lucide.createIcons();<\/script>
+```
+
+---
+
+## Data Attributes
+
+| Attribute | Values | Description |
+|-----------|--------|-------------|
+| `data-lucide` | any icon name | Icon to render (required) |
+| `data-size` | `xs`, `sm`, `md`, `lg`, `xl` | Controls icon dimensions |
+| `data-animate` | `spin` | Applies continuous rotation animation |
+
+---
+
+## Structure
+
+### Decorative icon (default)
+```html
+<i data-lucide="sun"></i>
+```
+
+### With accessible label (aria-label)
+```html
+<i data-lucide="alert-triangle" aria-label="Warning" role="img"></i>
+```
+
+### With visually-hidden text (preferred for accessibility)
+```html
+<span style="display:inline-flex;align-items:center;">
+  <i data-lucide="phone" aria-hidden="true"></i>
+  <span class="sr-only">Phone number</span>
+</span>
+```
+
+### Inside a button
+```html
+<button class="btn" data-variant="outline" data-size="icon" aria-label="Settings">
+  <i data-lucide="settings"></i>
+</button>
+```
+
+### With text
+```html
+<button class="btn" data-variant="default">
+  <i data-lucide="save"></i>
+  Save
+</button>
+```
+
+---
+
+## Sizing
+
+Control icon size with `data-size`, inline styles, or HTML attributes:
+
+| Method | Example |
+|--------|--------|
+| `data-size` attribute | `<i data-lucide="star" data-size="lg"></i>` |
+| Inline style | `<i data-lucide="star" style="width:16px;height:16px;"></i>` |
+| HTML attributes | `<i data-lucide="star" width="16" height="16"></i>` |
+| `em` units (font-relative) | `<i data-lucide="star" style="width:1em;height:1em;"></i>` |
+
+The component CSS sets a default size of `1rem` (16px). Available sizes via `data-size`:
+
+| `data-size` | Size |
+|-------------|------|
+| `xs` | 12px (0.75rem) |
+| `sm` | 14px (0.875rem) |
+| *(default)* | 16px (1rem) |
+| `md` | 20px (1.25rem) |
+| `lg` | 24px (1.5rem) |
+| `xl` | 32px (2rem) |
+
+---
+
+## Stroke width
+
+Adjust stroke weight with the `stroke-width` attribute on the `<i>` element:
+
+```html
+<i data-lucide="heart" stroke-width="1"></i>
+<i data-lucide="heart" stroke-width="1.5"></i>
+<i data-lucide="heart" stroke-width="2"></i>
+<i data-lucide="heart" stroke-width="3"></i>
+```
+
+Default stroke width is `2`.
+
+---
+
+## Filled icons
+
+Use the `fill` attribute for filled icon variants. Set `stroke-width="0"` for fill-only, or keep a stroke for a fill+outline look. Works well with simple shapes (star, heart, circle, bookmark).
+
+```html
+<i data-lucide="star" fill="currentColor" stroke-width="0"></i>
+<i data-lucide="heart" fill="currentColor" stroke-width="1"></i>
+```
+
+---
+
+## Color
+
+Icons inherit `currentColor` for stroke. Change color with inline styles or token references:
+
+```html
+<i data-lucide="star" style="color:var(--primary);"></i>
+<i data-lucide="star" style="color:var(--muted-foreground);"></i>
+<i data-lucide="star" style="color:var(--destructive);"></i>
+<i data-lucide="star" style="color:oklch(0.72 0.19 142);"></i>
+```
+
+---
+
+## ARIA
+
+| Attribute | When | Value |
+|-----------|------|-------|
+| (none) | Decorative (icon next to text) | Lucide adds `aria-hidden="true"` by default |
+| `role="img"` + `aria-label` | Meaningful (icon conveys info alone) | Describes the icon's purpose |
+| Visually-hidden `<span>` | Meaningful (preferred alternative) | Provides screen reader text via `.sr-only` |
+
+---
+
+## Notes
+
+- Icons inherit `currentColor` for stroke — they automatically match the parent's text color
+- Browse all available icons at [lucide.dev/icons](https://lucide.dev/icons/)
+- Lucide provides ~1,500 icons covering every common web app need
+- The CDN script replaces `<i data-lucide="name">` elements with inline SVGs on page load
+- Use `stroke-width` attribute to adjust line thickness (default: `2`)
+- Prefer visually-hidden text (`.sr-only`) over `aria-label` for accessible standalone icons — `aria-label` may not be translated by browser translation tools
+- Add `pointer-events: none` is set in CSS — icons don't capture clicks, so the parent element handles interaction
+- Animations (e.g., `data-animate="spin"` on a loader icon) are suppressed when the user has `prefers-reduced-motion` enabled
+- `prefers-contrast: more` increases stroke width to 2.5 for better visibility
+</script>
+</body>
+</html>

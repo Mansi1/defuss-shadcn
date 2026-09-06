@@ -6,6 +6,7 @@ import { parseHTML } from 'linkedom';
 import { auditUtilities, walk } from './lib/audit.ts';
 import { componentFingerprints, declaredStates } from './lib/inputs.ts';
 import { snippetDrifts } from './lib/snippets.ts';
+import { mirrorHashes } from './lib/mirror.ts';
 
 /**
  * Why: one static, fast gate that proves the repo is self-consistent after any
@@ -417,31 +418,31 @@ check(
   'fix the type errors above (bun run typecheck prints full output)',
 );
 
-// 15c. docs/ mirror freshness: GitHub Pages publishes ./docs verbatim, so it
-// must be byte-identical to the current dist/ (same tree sync-docs.ts writes).
+// 15c. docs/ mirror freshness: GitHub Pages publishes ./docs — the documen-
+// tation site (dist/documentation/* + SEO files), with ../component & ../theme
+// refs CDN-rewritten. Compared against exactly what sync-docs.ts writes
+// (shared lib/mirror.ts), so a green gate means the published tree is current.
 const docsProblems: string[] = [];
 const DOCS_OUT = join(ROOT, 'docs');
 if (existsSync(DOCS_OUT) && existsSync(DIST)) {
-  const tree = (dir: string): Map<string, string> =>
-    new Map(
-      walk(dir, [''])
-        .filter((f) => !f.endsWith('.DS_Store'))
-        .map((f) => [relative(dir, f), createHash('sha256').update(readFileSync(f)).digest('hex')]),
-    );
-  const distTree = tree(DIST);
-  const docsTree = tree(DOCS_OUT);
-  for (const [rel, hash] of distTree) {
-    if (!docsTree.has(rel)) docsProblems.push(`docs/${rel} missing`);
-    else if (docsTree.get(rel) !== hash) docsProblems.push(`docs/${rel} differs from dist/`);
+  const expected = mirrorHashes(DIST);
+  const actual = new Map(
+    walk(DOCS_OUT, [''])
+      .filter((f) => !f.endsWith('.DS_Store'))
+      .map((f) => [relative(DOCS_OUT, f), createHash('sha256').update(readFileSync(f)).digest('hex')]),
+  );
+  for (const [rel, hash] of expected) {
+    if (!actual.has(rel)) docsProblems.push(`docs/${rel} missing`);
+    else if (actual.get(rel) !== hash) docsProblems.push(`docs/${rel} is stale (differs from the mirrored dist/)`);
   }
-  for (const rel of docsTree.keys()) if (!distTree.has(rel)) docsProblems.push(`docs/${rel} is stale (not in dist/)`);
+  for (const rel of actual.keys()) if (!expected.has(rel)) docsProblems.push(`docs/${rel} is stale (not in the doc site)`);
 } else if (!existsSync(DOCS_OUT) && existsSync(DIST)) {
   docsProblems.push('docs/ missing — GitHub Pages would publish nothing');
 }
 check(
   'docs mirror fresh',
   docsProblems.slice(0, 8),
-  'run `bun run docs` (re-builds dist/ and re-mirrors to docs/ for GitHub Pages)',
+  'run `bun run docs` (re-builds dist/ and re-mirrors the doc site to docs/ for GitHub Pages)',
 );
 
 // 16. working tree cleanliness (warn): uncommitted changes make "green build"

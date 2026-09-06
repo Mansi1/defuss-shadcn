@@ -16,10 +16,13 @@ must surface as a failure with output, never as an agent hanging forever.
 You are working on the **defuss-shadcn** design system repo.
 The consumer-facing system lives in `dist/` — **it is generated**: edit sources in
 `src/` (`bun run build` compiles `.ts` → `.js` and copies everything else 1:1).
-`docs/` is also generated: a 1:1 mirror of `dist/` (whole tree — Pages pages reference
-`../components/…` siblings) published by GitHub Pages; refresh it with `bun run docs`
-(`make build` does this automatically and `verify` fails if the mirror drifts). Never
-edit `docs/` directly — like `dist/`, it is deleted and rebuilt on every `bun run docs`.
+`docs/` is also generated: **only the documentation site** (`dist/documentation/*` +
+`robots.txt`/`sitemap.xml`) published by GitHub Pages — its pages' `../components/…` and
+`../theme/…` references are rewritten to the jsDelivr GitHub CDN (shared transform in
+`scripts/lib/mirror.ts`), so the mirror carries no copies of the component assets.
+Refresh it with `bun run docs` (`make build` does this automatically and `verify`
+fails if the mirror drifts). Never edit `docs/` directly — like `dist/`, it is
+deleted and rebuilt on every `bun run docs`.
 Never edit `dist/` directly; it is deleted and rebuilt on every build.
 
 ---
@@ -58,7 +61,8 @@ defuss-shadcn/
 ├── scripts/                           ← build & maintenance scripts (no one-shot migrations)
 │   ├── build.ts                       ← src/ → dist/ (tsc type-strip + copy everything else 1:1)
 │   ├── verify.ts                      ← static consistency gate (runs at end of build; `bun run verify`)
-│   ├── sync-docs.ts                   ← mirror dist/ → docs/ for GitHub Pages (`bun run docs`)
+│   ├── sync-docs.ts                   ← mirror dist/documentation → docs/ (CDN-rewritten; `bun run docs`)
+│   ├── lib/mirror.ts                  ← shared docs/ mirror transform (sync-docs + verify compare against it)
 │   ├── create-screenshots.ts          ← parallel default-state screenshots for agent inspection
 │   ├── lib/audit.ts                   ← undefined-utility audit (used by verify)
 │   ├── lib/snippets.ts                ← shared snippet drift/replace logic (syncers + verify)

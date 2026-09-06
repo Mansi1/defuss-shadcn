@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Image component — figure with fallback, lightbox preview, aspect ratio, and caption.">
+  <meta property="og:title" content="Image — defuss-shadcn">
+  <meta property="og:description" content="Image component — figure with fallback, lightbox preview, aspect ratio, and caption.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kyr0.github.io/defuss-shadcn/image.html">
+  <meta property="og:site_name" content="defuss-shadcn">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Image — defuss-shadcn">
+  <meta name="twitter:description" content="Image component — figure with fallback, lightbox preview, aspect ratio, and caption.">
+  <title>Image — defuss-shadcn</title>
+  <script src="js/themes.js"></script>
+  <script src="js/theme-switcher.js"></script>
+  <script src="js/layout.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/theme/default-semantic-tokens.css">
+  <link rel="stylesheet" href="css/docs-theme.css">
+  <link rel="stylesheet" href="css/docs-utilities.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js" defer integrity="sha384-H+hy9ULve6xfxRkWIh/YOtvDdpXgV2fmAGQkIDTxIgZwNoaoBal14Di2YTMR6MzR" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/button/button.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/card/card.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/dialog/dialog.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/badge/badge.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/input/input.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/accordion/accordion.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/tabs/tabs.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/dropdown/dropdown.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toast/toast.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/combobox/combobox.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sheet/sheet.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toggle/toggle.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/icon/icon.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/typography/typography.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/separator/separator.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/label/label.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toggle-group/toggle-group.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/button-group/button-group.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toolbar/toolbar.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/textarea/textarea.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/checkbox/checkbox.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/radio/radio.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/switch/switch.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/slider/slider.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/select/select.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/number-input/number-input.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/file-input/file-input.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/color-picker/color-picker.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/date-picker/date-picker.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/form/form.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/avatar/avatar.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/image/image.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/statistic/statistic.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/table/table.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/collapsible/collapsible.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/timeline/timeline.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/tree-view/tree-view.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/calendar/calendar.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/spinner/spinner.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/skeleton/skeleton.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/progress/progress.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/alert/alert.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/alert-dialog/alert-dialog.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/popover/popover.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/tooltip/tooltip.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/context-menu/context-menu.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/command/command.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/breadcrumb/breadcrumb.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/pagination/pagination.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/steps/steps.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/navigation-menu/navigation-menu.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/scroll-area/scroll-area.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/carousel/carousel.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sidebar/sidebar.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sortable/sortable.css">
+</head>
+<body>
+  <site-header></site-header>
+
+  <div class="flex" style="margin-top: 3.5rem; min-height: calc(100vh - 3.5rem);">
+    <site-nav></site-nav>
+
+    <main style="flex: 1; min-width: 0; max-width: 44rem; padding: 2rem 3.5rem 8rem;">
+      <div class="page-header">
+        <div class="flex items-baseline justify-between mb-1">
+          <p class="text-sm text-muted-foreground" style="font-family:var(--font-mono);">defuss-shadcn / image</p>
+          <div style="display:flex;align-items:baseline;gap:0.375rem;"><span class="text-xs text-muted-foreground" style="font-family:var(--font-mono);white-space:nowrap;">Built with:</span> <a href="#source-css" class="badge built-with-pill" data-variant="outline">CSS</a> <a href="#source-js" class="badge built-with-pill" data-variant="outline">JS</a></div>
+        </div>
+        <h1 style="font-family:var(--font-display);font-size:2.5rem;font-weight:400;letter-spacing:-0.035em;margin:0 0 0.75rem;">Image</h1>
+        <p class="text-muted-foreground leading-relaxed mb-6">
+          A figure-based image component with fallback, lightbox preview, aspect ratio control, and caption. Built on <code>&lt;figure&gt;</code>, <code>&lt;dialog&gt;</code>, and native CSS.
+        </p>
+        <!-- Component Skill -->
+        <details style="margin-bottom:2rem;border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;">
+          <summary style="padding:0.875rem 1.25rem;background:var(--muted);cursor:pointer;font-size:0.8125rem;font-weight:600;font-family:var(--font-mono);color:var(--muted-foreground);list-style:none;display:flex;align-items:center;gap:0.5rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 200ms;"><path d="m9 18 6-6-6-6"/></svg>
+            Component Skill — <span data-spec-href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/image/component-skill.md" style="text-decoration:underline;text-underline-offset:3px;">components/image/component-skill.md</span>
+          </summary>
+          <div style="padding:1.5rem;font-size:0.875rem;line-height:1.85;">
+            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Native basis</p>
+            <p class="text-muted-foreground" style="margin:0 0 1.25rem;"><code>&lt;figure&gt;</code> wrapping <code>&lt;img&gt;</code> with optional <code>&lt;figcaption&gt;</code>. Uses <code>&lt;dialog&gt;</code> for fullscreen lightbox.</p>
+
+            <p style="margin:0 0 0.625rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Web Platform APIs</p>
+            <div style="display:flex;flex-wrap:wrap;gap:0.375rem;margin-bottom:1.25rem;">
+              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/figure" target="_blank" rel="noopener" title="self-contained content with optional caption" class="api-pill"><code>&lt;figure&gt;</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog" target="_blank" rel="noopener" title="native modal for lightbox preview" class="api-pill"><code>&lt;dialog&gt;</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio" target="_blank" rel="noopener" title="intrinsic aspect ratio control" class="api-pill"><code>aspect-ratio</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style" target="_blank" rel="noopener" title="entry animation for lightbox" class="api-pill"><code>@starting-style</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+            </div>
+
+            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Classes</p>
+            <div style="display:flex;flex-wrap:wrap;gap:0.375rem;margin-bottom:1.25rem;">
+              <code>.image</code>
+              <code>.image-caption</code>
+              <code>.image-fallback</code>
+              <code>.image-lightbox</code>
+            </div>
+
+            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Data attributes</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>data-preview</code> — enables click-to-preview lightbox</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>data-ratio</code> — values: <code>1/1</code>, <code>4/3</code>, <code>3/2</code>, <code>16/9</code>, <code>21/9</code>, <code>3/4</code></p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>data-fit</code> — values: <code>contain</code>, <code>fill</code>, <code>none</code></p>
+            <p class="text-muted-foreground" style="margin:0 0 0;">• <code>data-radius</code> — values: <code>none</code>, <code>sm</code>, <code>md</code>, <code>full</code></p>
+          </div>
+        </details>
+      </div>
+
+        <!-- Default -->
+        <p class="text-sm font-medium mb-2 mt-6">Default</p>
+        <p class="text-xs text-muted-foreground mb-3">Basic image in a figure with rounded corners and cover fit.</p>
+        <div class="preview">
+          <figure class="image" style="max-width:400px;">
+            <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&h=400&fit=crop" alt="Abstract gradient" />
+          </figure>
+        </div>
+        <div style="position:relative;margin-top:0.5rem;">
+          <button class="copy-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            Copy
+          </button>
+          <pre><code class="language-markup">&lt;figure class="image"&gt;
+  &lt;img src="photo.jpg" alt="Description" /&gt;
+&lt;/figure&gt;</code></pre>
+        </div>
+
+        <!-- With Caption -->
+        <p class="text-sm font-medium mb-2 mt-8">With Caption</p>
+        <p class="text-xs text-muted-foreground mb-3">Semantic <code>&lt;figcaption&gt;</code> for descriptive text below the image.</p>
+        <div class="preview">
+          <figure class="image" style="max-width:400px;">
+            <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&h=400&fit=crop" alt="Abstract gradient" />
+            <figcaption class="image-caption">Photo by Unsplash — Abstract gradient composition</figcaption>
+          </figure>
+        </div>
+        <div style="position:relative;margin-top:0.5rem;">
+          <button class="copy-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            Copy
+          </button>
+          <pre><code class="language-markup">&lt;figure class="image"&gt;
+  &lt;img src="photo.jpg" alt="Description" /&gt;
+  &lt;figcaption class="image-caption"&gt;Caption text&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+        </div>
+
+        <!-- Fallback -->
+        <p class="text-sm font-medium mb-2 mt-8">Fallback</p>
+        <p class="text-xs text-muted-foreground mb-3">Shows a placeholder when the image fails to load. Uses <code>:has()</code> to detect error state.</p>
+        <div class="preview">
+          <figure class="image" style="max-width:400px;height:200px;" data-state-demo>
+            <img src="https://invalid-url-that-will-fail.example/photo.jpg" alt="Broken image example" />
+            <div class="image-fallback">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+            </div>
+          </figure>
+        </div>
+        <div style="position:relative;margin-top:0.5rem;">
+          <button class="copy-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            Copy
+          </button>
+          <pre><code class="language-markup">&lt;figure class="image"&gt;
+  &lt;img src="photo.jpg" alt="Description" /&gt;
+  &lt;div class="image-fallback"&gt;
+    &lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"&gt;
+      &lt;rect width="18" height="18" x="3" y="3" rx="2" ry="2"/&gt;
+      &lt;circle cx="9" cy="9" r="2"/&gt;
+      &lt;path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/&gt;
+    &lt;/svg&gt;
+  &lt;/div&gt;
+&lt;/figure&gt;</code></pre>
+        </div>
+
+        <!-- Lightbox Preview -->
+        <p class="text-sm font-medium mb-2 mt-8">Lightbox Preview</p>
+        <p class="text-xs text-muted-foreground mb-3">Click the image to open a fullscreen preview with zoom and rotate controls. Uses native <code>&lt;dialog&gt;</code>.</p>
+        <div class="preview">
+          <figure class="image" data-preview style="max-width:400px;">
+            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=400&fit=crop" alt="Mountain landscape" />
+            <figcaption class="image-caption">Click to preview — Mountain landscape</figcaption>
+          </figure>
+        </div>
+        <div style="position:relative;margin-top:0.5rem;">
+          <button class="copy-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            Copy
+          </button>
+          <pre><code class="language-markup">&lt;figure class="image" data-preview&gt;
+  &lt;img src="photo.jpg" alt="Description" /&gt;
+&lt;/figure&gt;</code></pre>
+        </div>
+
+        <!-- Aspect Ratios -->
+        <p class="text-sm font-medium mb-2 mt-8">Aspect Ratios</p>
+        <p class="text-xs text-muted-foreground mb-3">Controlled aspect ratios via <code>data-ratio</code>.</p>
+        <div class="preview">
+          <div style="display:flex;gap:1.0rem;flex-wrap:wrap;align-items:flex-start;">
+            <figure class="image" data-ratio="1/1" style="width:120px;">
+              <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=400&h=400&fit=crop" alt="Square" />
+              <figcaption class="image-caption">1:1</figcaption>
+            </figure>
+            <figure class="image" data-ratio="4/3" style="width:160px;">
+              <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=400&h=300&fit=crop" alt="Standard" />
+              <figcaption class="image-caption">4:3</figcaption>
+            </figure>
+            <figure class="image" data-ratio="16/9" style="width:200px;">
+              <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=400&h=225&fit=crop" alt="Widescreen" />
+              <figcaption class="image-caption">16:9</figcaption>
+            </figure>
+            <figure class="image" data-ratio="3/4" style="width:120px;">
+              <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=300&h=400&fit=crop" alt="Portrait" />
+              <figcaption class="image-caption">3:4</figcaption>
+            </figure>
+          </div>
+        </div>
+        <div style="position:relative;margin-top:0.5rem;">
+          <button class="copy-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            Copy
+          </button>
+          <pre><code class="language-markup">&lt;figure class="image" data-ratio="1/1"&gt;...&lt;/figure&gt;
+&lt;figure class="image" data-ratio="4/3"&gt;...&lt;/figure&gt;
+&lt;figure class="image" data-ratio="16/9"&gt;...&lt;/figure&gt;
+&lt;figure class="image" data-ratio="3/4"&gt;...&lt;/figure&gt;</code></pre>
+        </div>
+
+        <!-- Fit Variants -->
+        <p class="text-sm font-medium mb-2 mt-8">Object Fit</p>
+        <p class="text-xs text-muted-foreground mb-3">Control how the image fills its container via <code>data-fit</code>.</p>
+        <div class="preview">
+          <div style="display:flex;gap:1.0rem;flex-wrap:wrap;align-items:flex-start;">
+            <figure class="image" data-ratio="4/3" style="width:180px;background:var(--muted);">
+              <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&h=400&fit=crop" alt="Cover (default)" />
+              <figcaption class="image-caption">cover (default)</figcaption>
+            </figure>
+            <figure class="image" data-ratio="4/3" data-fit="contain" style="width:180px;background:var(--muted);">
+              <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&h=400&fit=crop" alt="Contain" />
+              <figcaption class="image-caption">contain</figcaption>
+            </figure>
+            <figure class="image" data-ratio="4/3" data-fit="none" style="width:180px;background:var(--muted);">
+              <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&h=400&fit=crop" alt="None" />
+              <figcaption class="image-caption">none</figcaption>
+            </figure>
+          </div>
+        </div>
+        <div style="position:relative;margin-top:0.5rem;">
+          <button class="copy-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            Copy
+          </button>
+          <pre><code class="language-markup">&lt;!-- default: cover --&gt;
+&lt;figure class="image" data-ratio="4/3"&gt;...&lt;/figure&gt;
+
+&lt;!-- contain --&gt;
+&lt;figure class="image" data-ratio="4/3" data-fit="contain"&gt;...&lt;/figure&gt;
+
+&lt;!-- none (natural size, clipped) --&gt;
+&lt;figure class="image" data-ratio="4/3" data-fit="none"&gt;...&lt;/figure&gt;</code></pre>
+        </div>
+
+        <!-- Radius Variants -->
+        <p class="text-sm font-medium mb-2 mt-8">Border Radius</p>
+        <p class="text-xs text-muted-foreground mb-3">Control border radius via <code>data-radius</code>.</p>
+        <div class="preview">
+          <div style="display:flex;gap:1.0rem;flex-wrap:wrap;align-items:flex-start;">
+            <figure class="image" data-radius="none" data-ratio="1/1" style="width:100px;">
+              <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=400&h=400&fit=crop" alt="No radius" />
+              <figcaption class="image-caption">none</figcaption>
+            </figure>
+            <figure class="image" data-radius="sm" data-ratio="1/1" style="width:100px;">
+              <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=400&h=400&fit=crop" alt="Small radius" />
+              <figcaption class="image-caption">sm</figcaption>
+            </figure>
+            <figure class="image" data-ratio="1/1" style="width:100px;">
+              <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=400&h=400&fit=crop" alt="Default radius" />
+              <figcaption class="image-caption">default (lg)</figcaption>
+            </figure>
+            <figure class="image" data-radius="full" data-ratio="1/1" style="width:100px;">
+              <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=400&h=400&fit=crop" alt="Full radius" />
+              <figcaption class="image-caption">full</figcaption>
+            </figure>
+          </div>
+        </div>
+        <div style="position:relative;margin-top:0.5rem;">
+          <button class="copy-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            Copy
+          </button>
+          <pre><code class="language-markup">&lt;figure class="image" data-radius="none"&gt;...&lt;/figure&gt;
+&lt;figure class="image" data-radius="sm"&gt;...&lt;/figure&gt;
+&lt;figure class="image"&gt;...&lt;/figure&gt;  &lt;!-- default: lg --&gt;
+&lt;figure class="image" data-radius="full"&gt;...&lt;/figure&gt;</code></pre>
+        </div>
+
+        <!-- -- States ------------------------------------ -->
+        <section style="margin-top:3rem;" id="states">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">States</h2>
+          <p class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;">Named states via the shared State API, driven per instance through the bound <code>api</code>:</p>
+          <ul class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;padding-left:1.25rem;">
+            <li><code>default</code> — image loaded, caption/fallback hidden</li>
+            <li><code>error</code> — <code>.image-fallback</code> revealed (the same state a failed network load produces)</li>
+          </ul>
+          <p class="text-sm text-muted-foreground">The demo element carries <code>data-state-demo</code>; <code>bun run screenshots</code> drives it via <code>el.api.setState(name)</code> and captures <code>screenshots/{mode}/image-{state}.png</code>.</p>
+        </section>
+
+        <!-- -- CSS --------------------------------------- -->
+        <section style="margin-top:3rem;" id="source-css">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">CSS <a href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/image/image.css" target="_blank" style="font-size:0.75rem;font-weight:400;color:var(--muted-foreground);text-decoration:underline;text-underline-offset:3px;margin-left:0.5rem;">view file</a></h2>
+          <p class="text-muted-foreground text-sm mb-4">Styles for figure, caption, fallback, and lightbox dialog.</p>
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
+            <pre><code class="language-scss" data-src="../components/image/image.css"></code></pre>
+          </div>
+        </section>
+
+        <!-- -- JS --------------------------------------- -->
+        <section style="margin-top:3rem;" id="source-js">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">JavaScript <a href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/image/image.js" target="_blank" style="font-size:0.75rem;font-weight:400;color:var(--muted-foreground);text-decoration:underline;text-underline-offset:3px;margin-left:0.5rem;">view file</a></h2>
+          <p class="text-muted-foreground text-sm mb-4">Fallback error detection and lightbox preview with zoom/rotate.</p>
+          <div style="position:relative;margin-top:0.5rem;">
+            <button class="copy-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
+            <pre><code class="language-javascript" data-src="../components/image/image.js"></code></pre>
+          </div>
+        </section>
+
+    </main>
+  </div>
+
+  <script src="js/site.js" defer></script>
+  <script type="module" src="js/shiki-highlight.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/accordion/accordion.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/combobox/combobox.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/dialog/dialog.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/dropdown/dropdown.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sheet/sheet.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/tabs/tabs.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toast/toast.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toggle/toggle.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toggle-group/toggle-group.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/toolbar/toolbar.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/number-input/number-input.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/color-picker/color-picker.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/avatar/avatar.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/image/image.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/tree-view/tree-view.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/calendar/calendar.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/alert-dialog/alert-dialog.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/popover/popover.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/tooltip/tooltip.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/context-menu/context-menu.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/command/command.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/navigation-menu/navigation-menu.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sidebar/sidebar.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/carousel/carousel.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/slider/slider.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sortable/sortable.js"></script>
+  <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
+  <script>lucide.createIcons();</script>
+<script type="text/plain" id="spec-md-content"># Image
+
+## Native basis
+
+`<figure>` element wrapping an `<img>` with optional `<figcaption>`. Uses `<dialog>` for fullscreen preview/lightbox.
+
+## Native Web APIs
+
+- [`<figure>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/figure) — self-contained content with optional caption
+- [`<figcaption>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/figcaption) — caption for the figure
+- [`<dialog>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog) — native modal for fullscreen lightbox preview
+- [`::backdrop`](https://developer.mozilla.org/en-US/docs/Web/CSS/::backdrop) — overlay behind lightbox dialog
+- [`loading="lazy"`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#loading) — native lazy loading
+- [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) — how image fills its container
+- [`aspect-ratio`](https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio) — intrinsic aspect ratio control
+- [`@starting-style`](https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style) — entry animation for lightbox
+
+## Structure
+
+### Basic image
+```html
+<figure class="image">
+  <img src="photo.jpg" alt="Description" />
+</figure>
+```
+
+### With caption
+```html
+<figure class="image">
+  <img src="photo.jpg" alt="Description" />
+  <figcaption class="image-caption">Photo caption text</figcaption>
+</figure>
+```
+
+### With fallback
+```html
+<figure class="image">
+  <img src="photo.jpg" alt="Description" />
+  <div class="image-fallback">
+    <svg><!-- fallback icon --></svg>
+  </div>
+</figure>
+```
+
+### With lightbox preview
+```html
+<figure class="image" data-preview>
+  <img src="photo.jpg" alt="Description" />
+</figure>
+```
+
+### With aspect ratio
+```html
+<figure class="image" data-ratio="16/9">
+  <img src="photo.jpg" alt="Description" />
+</figure>
+```
+
+## Variants
+
+### Fit (`data-fit`)
+
+| Value       | Behavior                        |
+| ----------- | ------------------------------- |
+| *(default)* | `object-fit: cover` (fills)     |
+| `contain`   | Fits inside, preserves ratio    |
+| `fill`      | Stretches to fill               |
+| `none`      | No resizing, natural size       |
+
+### Ratio (`data-ratio`)
+
+| Value   | Aspect ratio  |
+|---------|--------------|
+| `1/1`   | Square        |
+| `4/3`   | Standard      |
+| `3/2`   | Classic photo |
+| `16/9`  | Widescreen    |
+| `21/9`  | Ultra-wide    |
+| `3/4`   | Portrait      |
+
+### Radius (`data-radius`)
+
+| Value       | Border radius          |
+| ----------- | ---------------------- |
+| *(default)* | `var(--radius-lg)`     |
+| `none`      | `0`                    |
+| `sm`        | `var(--radius-sm)`     |
+| `md`        | `var(--radius-md)`     |
+| `full`      | `9999px` (pill/circle) |
+
+## Attributes
+
+| Attribute      | Effect                                    |
+| -------------- | ----------------------------------------- |
+| `data-preview` | Enables click-to-preview lightbox         |
+| `data-ratio`   | Sets aspect ratio                         |
+| `data-fit`     | Sets object-fit mode                      |
+| `data-radius`  | Sets border radius variant                |
+
+## Lightbox
+
+When `data-preview` is set, clicking the image opens a fullscreen `<dialog>` lightbox with:
+- Zoom in / zoom out controls
+- Rotate left / rotate right
+- Reset to original
+- Close button and Escape key
+- Click backdrop to close
+
+The lightbox dialog is created once and shared by all preview-enabled images.
+
+## Accessibility
+
+- `<img>` must have a descriptive `alt` attribute
+- Decorative images should use `alt=""`
+- `<figcaption>` provides visible caption text
+- Lightbox dialog uses `aria-label="Image preview"`
+- Lightbox controls have `aria-label` attributes
+- Escape key closes lightbox (native `<dialog>` behavior)
+
+## Notes
+
+- Fallback is shown automatically when the image fails to load, using `:has()` to detect error state.
+- Use `loading="lazy"` on images below the fold for performance.
+- Lightbox supports keyboard: Escape closes, Tab navigates controls.
+- Multiple images with `data-preview` share a single dialog instance.
+# Image
+
+## Native basis
+
+`<img>` element wrapped in a `<figure>` with optional `<figcaption>`. Uses CSS `aspect-ratio` for controlled dimensions.
+
+## Native Web APIs
+
+- [`<figure>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/figure) — self-contained content with optional caption
+- [`<figcaption>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/figcaption) — caption for the figure
+- [`aspect-ratio`](https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio) — intrinsic aspect ratio control
+
+## Structure
+
+```html
+<!-- Basic image -->
+<figure class="image">
+  <img src="https://example.com/photo.jpg" alt="Description" />
+</figure>
+
+<!-- Image with caption -->
+<figure class="image">
+  <img src="https://example.com/photo.jpg" alt="Description" />
+  <figcaption class="image-caption">Photo caption text</figcaption>
+</figure>
+
+<!-- Image with aspect ratio -->
+<figure class="image" data-ratio="16/9">
+  <img src="https://example.com/photo.jpg" alt="Description" />
+</figure>
+```
+
+## Ratios (`data-ratio`)
+
+| Value   | Aspect ratio |
+|---------|-------------|
+| `1/1`   | Square       |
+| `4/3`   | Standard     |
+| `16/9`  | Widescreen   |
+| `21/9`  | Ultra-wide   |
+
+## Accessibility
+
+- `<img>` must have a descriptive `alt` attribute
+- Decorative images should use `alt=""`
+- `<figcaption>` provides visible caption text
+</script>
+</body>
+</html>

@@ -1,6 +1,51 @@
 // -- Toast -----------------------------------------------------
 // Programmatic toast notification API.
 // Exposes window.toast with show/success/warning/info/error/dismiss.
+// Named-state API (AGENTS.md "State API") bound to the region container:
+// its observable state is which toasts are visible, so 'default' clears the
+// region (same code path as window.toast.dismiss()) and getState() reports
+// the live toast count.
+
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const toastStates = ['default'];
+
+/**
+ * UI side of setState: 'default' dismisses every visible toast, returning
+ * the region to its authored (empty) state.
+ */
+function triggerStateChange(container, stateName, _config) {
+  if (stateName !== 'default') return;
+  container.querySelectorAll('.toast').forEach((el) => toastDismiss(el));
+}
+
+/** Registry-level API; pass the container explicitly. Unknown names throw. */
+export const toastApi = {
+  setState(container, stateName, config = {}) {
+    if (!toastStates.includes(stateName)) {
+      throw new Error(`toast: unknown state "${stateName}" (supported: ${toastStates.join(', ')})`);
+    }
+    triggerStateChange(container, stateName, config);
+    // state lives on the ELEMENT, not the module (one region per page, but
+    // SPA navigation may replace it)
+    container.dataset.stateName = stateName;
+    container._stateConfig = config;
+  },
+  getState(container) {
+    return {
+      name: container.dataset.stateName || 'default',
+      // live count — reflects window.toast.show() and auto-dismiss, not just setState
+      config: { ...container._stateConfig, count: container.querySelectorAll('.toast').length },
+    };
+  },
+};
+
+_defussShadcn.toastApi = toastApi;
+_defussShadcn.toastStates = toastStates;
 
 const DURATION = 4000;
 const MAX_VISIBLE = 3;
@@ -83,6 +128,11 @@ const toastCreate = (options) => {
 function init() {
   document.querySelectorAll('#toast-container:not([data-init])').forEach((container) => {
     container.dataset.init = '';
+    // bind-scope the api per region: `$('#toast-container').api.setState('default')`
+    container.api = {
+      setState: (stateName, config) => toastApi.setState(container, stateName, config),
+      getState: () => toastApi.getState(container),
+    };
     container.addEventListener('click', (e) => {
       const btn = e.target.closest('[data-toast-close],[data-toast-action]');
       if (!btn) return;

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>sidebar e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/sidebar/sidebar.css" />
+  </head>
+  <body style="padding:0;margin:0;display:flex;height:100vh;">
+    <!-- mirrors the doc page: collapsible rail with trigger + mobile dialog -->
+    <aside class="app-sidebar" id="demo-sidebar" data-state="expanded" style="position:relative;height:100%;">
+      <div class="sidebar-header">
+        <a class="sidebar-logo" href="#"><span class="sidebar-logo-text">MyApp</span></a>
+      </div>
+      <div class="sidebar-content">
+        <nav class="sidebar-nav">
+          <a class="sidebar-link" href="#"><span>Dashboard</span></a>
+          <a class="sidebar-link" href="#"><span>Inbox</span></a>
+        </nav>
+      </div>
+    </aside>
+
+    <button data-sidebar-trigger="demo-sidebar" aria-label="Toggle sidebar">Toggle</button>
+
+    <!-- mobile dialog (documented data-sidebar-mobile axis) -->
+    <button data-sidebar-mobile="demo-mobile" aria-label="Open menu">Menu</button>
+    <dialog id="demo-mobile" class="sidebar-mobile">
+      <button class="sidebar-mobile-close" aria-label="Close">Close</button>
+      <div class="sidebar-header">
+        <a class="sidebar-logo" href="#"><span class="sidebar-logo-text">MyApp</span></a>
+      </div>
+      <div class="sidebar-content">
+        <nav class="sidebar-nav"><a class="sidebar-link" href="#"><span>Home</span></a></nav>
+      </div>
+    </dialog>
+
+    <script type="module" src="/dist/components/sidebar/sidebar.js"></script>
+  </body>
+</html>

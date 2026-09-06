@@ -52,6 +52,19 @@
 | `default` | 2.5rem     |
 | `lg`      | 3rem       |
 
+## States
+
+The api is bound **per `.avatar` wrapper**. Declared states: `default`
+(image shown) · `error` (forced broken-image look — identical to a real
+network `error` event).
+
+```js
+document.querySelector('#my-avatar').api.setState('error');
+document.querySelector('#my-avatar').api.getState(); // { name: 'error', config: {} }
+```
+
+The registry global is `_defussShadcn.avatarApi` / `_defussShadcn.avatarStates`.
+
 ## Accessibility
 
 - `<img>` must have an `alt` attribute describing the user

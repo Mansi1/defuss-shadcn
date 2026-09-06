@@ -128,7 +128,7 @@
         <p class="text-sm font-medium mb-2 mt-6">Default</p>
         <div class="preview">
           <div class="context-menu-trigger" data-context-menu="demo-ctx">Right click here</div>
-          <div class="context-menu" id="demo-ctx" popover>
+          <div class="context-menu" id="demo-ctx" popover data-state-demo>
             <button class="context-menu-item" role="menuitem">Cut</button>
             <button class="context-menu-item" role="menuitem">Copy</button>
             <button class="context-menu-item" role="menuitem">Paste</button>
@@ -149,6 +149,17 @@
   &lt;button class="context-menu-item" role="menuitem"&gt;Copy&lt;/button&gt;
 &lt;/div&gt;</code></pre>
         </div>
+
+        <!-- -- States ------------------------------------ -->
+        <section style="margin-top:3rem;" id="states">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">States</h2>
+          <p class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;">Named states via the shared State API, driven per instance through the bound <code>api</code>:</p>
+          <ul class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;padding-left:1.25rem;">
+            <li><code>default</code> — closed (the authored state; right-click opens it)</li>
+            <li><code>open</code> — menu shown; <code>setState('open', { x, y })</code> positions it (viewport top-left by default, there is no pointer to anchor to)</li>
+          </ul>
+          <p class="text-sm text-muted-foreground">The demo element carries <code>data-state-demo</code>; <code>bun run screenshots</code> drives it via <code>el.api.setState(name)</code> and captures <code>screenshots/{mode}/context-menu-{state}.png</code>.</p>
+        </section>
 
         <!-- -- CSS --------------------------------------- -->
         <section style="margin-top:3rem;" id="source-css">
@@ -200,22 +211,95 @@
           <div style="position:relative;margin-top:0.5rem;">
             <button class="copy-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
             <pre><code class="language-javascript">// -- Context Menu ---------------------------------------------
-// Right-click context menu using the Popover API.
+// Right-click context menu using the Popover API, plus the named-state
+// API bound per menu popover, so agents/tests can open it without a real
+// right-click (AGENTS.md &quot;State API&quot;).
+
+// Shared preamble (AGENTS.md &quot;State API&quot;); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals, safeShowPopover } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const contextMenuStates = ['default', 'open'];
+
+/**
+ * UI side of setState (per menu popover): 'open' shows the menu at { x, y }
+ * (falling back to the top-left of the viewport — there is no pointer event
+ * to anchor to); 'default' hides it.
+ */
+function triggerStateChange(menu, stateName, config) {
+  switch (stateName) {
+    case 'default':
+      menu.hidePopover();
+      break;
+    case 'open': {
+      const x = Number(config?.x ?? 8);
+      const y = Number(config?.y ?? 8);
+      menu.style.position = 'fixed';
+      menu.style.top = `${y}px`;
+      menu.style.left = `${x}px`;
+      // deferred show: showPopover() while a previous exit transition is
+      // still running crashes the headless renderer (setState after Escape)
+      safeShowPopover(menu);
+      break;
+    }
+  }
+}
+
+/** Registry-level API; pass the menu popover explicitly. Unknown names throw. */
+export const contextMenuApi = {
+  setState(menu, stateName, config = {}) {
+    if (!contextMenuStates.includes(stateName)) {
+      throw new Error(`context-menu: unknown state &quot;${stateName}&quot; (supported: ${contextMenuStates.join(', ')})`);
+    }
+    triggerStateChange(menu, stateName, config);
+    // state lives on the ELEMENT, not the module (many menus per page)
+    menu.dataset.stateName = stateName;
+    menu._stateConfig = config;
+  },
+  getState(menu) {
+    // reflect reality: right-clicks and item clicks change the UI too
+    return {
+      name: menu.matches(':popover-open') ? 'open' : 'default',
+      config: menu._stateConfig ?? {},
+    };
+  },
+};
+
+_defussShadcn.contextMenuApi = contextMenuApi;
+_defussShadcn.contextMenuStates = contextMenuStates;
 
 function init() {
   document.querySelectorAll('[data-context-menu]:not([data-init])').forEach((trigger) =&gt; {
   trigger.dataset.init = '';
   const menu = document.getElementById(trigger.dataset.contextMenu);
   if (!menu) return;
+  // bind-scope the api per menu popover: `$('#my-ctx').api.setState('open', { x: 40, y: 40 })`
+  menu.api = {
+    setState: (stateName, config) =&gt; contextMenuApi.setState(menu, stateName, config),
+    getState: () =&gt; contextMenuApi.getState(menu),
+  };
   trigger.addEventListener('contextmenu', (e) =&gt; {
     e.preventDefault();
     menu.style.position = 'fixed';
     menu.style.top = `${e.clientY}px`;
     menu.style.left = `${e.clientX}px`;
-    menu.showPopover();
+    // showPopover() INSIDE the contextmenu event is instantly light-dismissed
+    // by the platform's own context-menu gesture (auto popover); deferring a
+    // frame lets the gesture finish first (rAF-then-show verified empirically)
+    requestAnimationFrame(() =&gt; safeShowPopover(menu));
+    menu.dataset.stateName = 'open';
   });
   menu.addEventListener('click', (e) =&gt; {
-    if (e.target.closest('.context-menu-item')) menu.hidePopover();
+    if (e.target.closest('.context-menu-item')) {
+      menu.hidePopover();
+      menu.dataset.stateName = 'default';
+    }
+  });
+  // right out of the top layer via Escape: keep the named state honest
+  menu.addEventListener('toggle', (e) =&gt; {
+    if (e.newState === 'closed') menu.dataset.stateName = 'default';
   });
 });
 }

@@ -1,18 +1,121 @@
-"use strict";
 /* -- Image component ----------------------------------------- */
 /* Fallback on error + lightbox preview for [data-preview].    */
+/* Named-state API bound per figure so agents/tests can show   */
+/* the fallback without a network failure (AGENTS.md "State     */
+/* API").                                                        */
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+/**
+ * Why: every interactive component needs the same preamble (global registry +
+ * `$` query alias). Single-sourced here instead of duplicated in 26 files;
+ * scripts/build.ts inlines the compiled functions into each shipped component
+ * .js so dist files stay isolated and copy-paste/CDN-ready. The function is
+ * idempotent: whichever component loads first wins, the rest are no-ops.
+ * Contract: AGENTS.md "State API"; types: src/types/defuss-shadcn.d.ts.
+ */
+function defussGlobals() {
+    globalThis._defussShadcn = globalThis._defussShadcn || {};
+    if (typeof globalThis.$ !== 'function')
+        globalThis.$ = document.querySelector.bind(document);
+    return globalThis._defussShadcn;
+}
+/**
+ * Why: calling showPopover() on a popover while its exit transition is still
+ * running — the exact setState('open') path right after a light dismiss,
+ * whose display:none is delayed by `transition: display … allow-discrete` —
+ * crashes the headless renderer (reproduced: headless Chromium dies outright,
+ * popover + nav-menu + dropdown + tooltip share the CSS pattern). Wait until
+ * the element's computed display has actually flipped to none (the exit
+ * committed), then show. A stable-open element polls to the cap and the
+ * guarded showPopover() is a harmless no-op. Inlined by build.ts like
+ * defussGlobals(); keep self-contained.
+ */
+function safeShowPopover(el) {
+    const show = () => {
+        try {
+            el.showPopover();
+        }
+        catch { /* already open */ }
+    };
+    const displayed = () => getComputedStyle(el).display !== 'none';
+    if (!displayed()) {
+        show();
+        return;
+    }
+    // displayed: either stably open (nothing to do) or mid-exit (must wait).
+    // Cap the poll at ~500ms — longer than any component's exit transition.
+    const deadline = performance.now() + 500;
+    const tick = () => {
+        if (!displayed() || performance.now() > deadline)
+            show();
+        else
+            requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+}
+const _defussShadcn = defussGlobals();
+const imageStates = ['default', 'error'];
+/**
+ * UI side of setState (per figure): 'error' marks the img like a failed load
+ * would (CSS then reveals .image-fallback); 'default' clears the mark.
+ */
+function triggerStateChange(figure, stateName, _config) {
+    const img = figure.querySelector('img');
+    if (!img)
+        return;
+    switch (stateName) {
+        case 'default':
+            delete img.dataset.error;
+            break;
+        case 'error':
+            img.dataset.error = '';
+            break;
+    }
+}
+/** Registry-level API; pass the figure explicitly. Unknown names throw. */
+export const imageApi = {
+    setState(figure, stateName, config = {}) {
+        if (!imageStates.includes(stateName)) {
+            throw new Error(`image: unknown state "${stateName}" (supported: ${imageStates.join(', ')})`);
+        }
+        triggerStateChange(figure, stateName, config);
+        // state lives on the ELEMENT, not the module (many images per page)
+        figure.dataset.stateName = stateName;
+        figure._stateConfig = config;
+    },
+    getState(figure) {
+        // reflect reality: load/error events flip it without setState()
+        const img = figure.querySelector('img');
+        return {
+            name: img && img.dataset.error !== undefined ? 'error' : 'default',
+            config: figure._stateConfig ?? {},
+        };
+    },
+};
+_defussShadcn.imageApi = imageApi;
+_defussShadcn.imageStates = imageStates;
 function init() {
     /* -- Fallback: mark images that fail to load ----------------- */
-    document.querySelectorAll('.image:not([data-init]) > img').forEach((img) => {
-        img.closest('.image').dataset.init = '';
+    document.querySelectorAll('.image:not([data-init])').forEach((figure) => {
+        figure.dataset.init = '';
+        // bind-scope the api per figure: `$('#hero').api.setState('error')`
+        figure.api = {
+            setState: (stateName, config) => imageApi.setState(figure, stateName, config),
+            getState: () => imageApi.getState(figure),
+        };
+        const img = figure.querySelector('img');
+        if (!img)
+            return;
         if (img.complete && img.naturalWidth === 0) {
             img.dataset.error = '';
         }
         img.addEventListener('error', () => {
             img.dataset.error = '';
+            figure.dataset.stateName = 'error';
         });
         img.addEventListener('load', () => {
             delete img.dataset.error;
+            figure.dataset.stateName = 'default';
         });
     });
 }

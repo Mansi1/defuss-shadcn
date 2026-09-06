@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>avatar e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/avatar/avatar.css" />
+  </head>
+  <body style="padding:2rem;display:flex;gap:1rem;align-items:center;">
+    <!-- mirrors the doc page: image avatar + fallback-only avatar + sizes.
+         Images use data: URIs so loads are deterministic and offline (an HTML
+         file as src would fail to decode and read as an error). -->
+    <span class="avatar" id="av-img">
+      <img class="avatar-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%236366f1'/%3E%3C/svg%3E" alt="solid color" />
+      <span class="avatar-fallback">IM</span>
+    </span>
+    <span class="avatar" id="av-fallback-only">
+      <span class="avatar-fallback">JD</span>
+    </span>
+    <span class="avatar" data-size="sm" id="av-sm">
+      <img class="avatar-image" src="https://this-host-does-not-exist.invalid/x.png" alt="broken" />
+      <span class="avatar-fallback">SM</span>
+    </span>
+    <span class="avatar" data-size="lg" id="av-lg">
+      <img class="avatar-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%2322c55e'/%3E%3C/svg%3E" alt="solid green" />
+      <span class="avatar-fallback">LG</span>
+    </span>
+
+    <script type="module" src="/dist/components/avatar/avatar.js"></script>
+  </body>
+</html>

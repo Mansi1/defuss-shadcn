@@ -115,6 +115,20 @@ Set `data-variant` on the `.toast` element.
 <div class="toast" role="status" data-variant="success">…</div>
 ```
 
+## States
+
+The api is bound to the **region container** (`#toast-container`). Its
+observable state is which toasts are visible. Declared states: `default`
+(dismisses every visible toast — the same path as `window.toast.dismiss()`).
+`getState().config.count` reports the live number of visible toasts.
+
+```js
+document.querySelector('#toast-container').api.setState('default');
+document.querySelector('#toast-container').api.getState(); // { name: 'default', config: { count: 0 } }
+```
+
+The registry global is `_defussShadcn.toastApi` / `_defussShadcn.toastStates`.
+
 ## Notes
 
 - The toast container should be a direct child of `<body>`

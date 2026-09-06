@@ -102,6 +102,20 @@
 | `Ctrl+B`     | Toggle sidebar collapse (Windows)     |
 | `Escape`     | Close mobile sidebar (native dialog)  |
 
+## States
+
+The api is bound **per `.app-sidebar`**. Declared states: `default`
+(expanded — the authored width) · `collapsed` (icon rail, via the
+documented `data-state="collapsed"` attribute).
+
+```js
+document.querySelector('#my-sidebar').api.setState('collapsed');
+document.querySelector('#my-sidebar').api.getState(); // { name: 'collapsed', config: {} }
+```
+
+Trigger clicks and Cmd/Ctrl+B keep `getState()` honest automatically.
+The registry global is `_defussShadcn.sidebarApi` / `_defussShadcn.sidebarStates`.
+
 ## Notes
 
 - **Mobile**: Desktop sidebar hidden below 768px. Use `<dialog class="sidebar-mobile">` for slide-in sheet.

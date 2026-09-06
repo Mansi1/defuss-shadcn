@@ -1,10 +1,69 @@
 /* -- Image component ----------------------------------------- */
 /* Fallback on error + lightbox preview for [data-preview].    */
+/* Named-state API bound per figure so agents/tests can show   */
+/* the fallback without a network failure (AGENTS.md "State     */
+/* API").                                                        */
+
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const imageStates = ['default', 'error'];
+
+/**
+ * UI side of setState (per figure): 'error' marks the img like a failed load
+ * would (CSS then reveals .image-fallback); 'default' clears the mark.
+ */
+function triggerStateChange(figure, stateName, _config) {
+  const img = figure.querySelector('img');
+  if (!img) return;
+  switch (stateName) {
+    case 'default':
+      delete img.dataset.error;
+      break;
+    case 'error':
+      img.dataset.error = '';
+      break;
+  }
+}
+
+/** Registry-level API; pass the figure explicitly. Unknown names throw. */
+export const imageApi = {
+  setState(figure, stateName, config = {}) {
+    if (!imageStates.includes(stateName)) {
+      throw new Error(`image: unknown state "${stateName}" (supported: ${imageStates.join(', ')})`);
+    }
+    triggerStateChange(figure, stateName, config);
+    // state lives on the ELEMENT, not the module (many images per page)
+    figure.dataset.stateName = stateName;
+    figure._stateConfig = config;
+  },
+  getState(figure) {
+    // reflect reality: load/error events flip it without setState()
+    const img = figure.querySelector('img');
+    return {
+      name: img && img.dataset.error !== undefined ? 'error' : 'default',
+      config: figure._stateConfig ?? {},
+    };
+  },
+};
+
+_defussShadcn.imageApi = imageApi;
+_defussShadcn.imageStates = imageStates;
 
 function init() {
 /* -- Fallback: mark images that fail to load ----------------- */
-document.querySelectorAll('.image:not([data-init]) > img').forEach((img) => {
-  img.closest('.image').dataset.init = '';
+document.querySelectorAll('.image:not([data-init])').forEach((figure) => {
+  figure.dataset.init = '';
+  // bind-scope the api per figure: `$('#hero').api.setState('error')`
+  figure.api = {
+    setState: (stateName, config) => imageApi.setState(figure, stateName, config),
+    getState: () => imageApi.getState(figure),
+  };
+  const img = figure.querySelector('img');
+  if (!img) return;
 
   if (img.complete && img.naturalWidth === 0) {
     img.dataset.error = '';
@@ -12,10 +71,12 @@ document.querySelectorAll('.image:not([data-init]) > img').forEach((img) => {
 
   img.addEventListener('error', () => {
     img.dataset.error = '';
+    figure.dataset.stateName = 'error';
   });
 
   img.addEventListener('load', () => {
     delete img.dataset.error;
+    figure.dataset.stateName = 'default';
   });
 });
 }

@@ -117,6 +117,19 @@ The lightbox dialog is created once and shared by all preview-enabled images.
 - Lightbox controls have `aria-label` attributes
 - Escape key closes lightbox (native `<dialog>` behavior)
 
+## States
+
+The api is bound **per `<figure class="image">`**. Declared states:
+`default` (loaded) · `error` (`.image-fallback` revealed, same as a failed
+load).
+
+```js
+document.querySelector('#hero-figure').api.setState('error');
+document.querySelector('#hero-figure').api.getState(); // { name: 'error', config: {} }
+```
+
+The registry global is `_defussShadcn.imageApi` / `_defussShadcn.imageStates`.
+
 ## Notes
 
 - Fallback is shown automatically when the image fails to load, using `:has()` to detect error state.

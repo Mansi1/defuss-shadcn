@@ -1,12 +1,77 @@
 // -- Avatar ---------------------------------------------------
-// Hides broken avatar images and shows the fallback.
+// Hides broken avatar images and shows the fallback, plus the named-state
+// API bound per .avatar wrapper, so agents/tests can show the fallback
+// without a network failure (AGENTS.md "State API").
+
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const avatarStates = ['default', 'error'];
+
+/**
+ * UI side of setState (per wrapper): 'error' forces the broken-image look
+ * (same DOM changes the error event makes); 'default' clears it, restoring
+ * the image view. Wrappers without an <img> have nothing to toggle.
+ */
+function triggerStateChange(wrapper, stateName, _config) {
+  const img = wrapper.querySelector('.avatar-image');
+  if (!img) return;
+  switch (stateName) {
+    case 'default':
+      img.removeAttribute('data-error');
+      img.style.display = '';
+      break;
+    case 'error':
+      img.setAttribute('data-error', '');
+      img.style.display = 'none';
+      break;
+  }
+}
+
+/** Registry-level API; pass the wrapper explicitly. Unknown names throw. */
+export const avatarApi = {
+  setState(wrapper, stateName, config = {}) {
+    if (!avatarStates.includes(stateName)) {
+      throw new Error(`avatar: unknown state "${stateName}" (supported: ${avatarStates.join(', ')})`);
+    }
+    triggerStateChange(wrapper, stateName, config);
+    // state lives on the ELEMENT, not the module (many avatars per page)
+    wrapper.dataset.stateName = stateName;
+    wrapper._stateConfig = config;
+  },
+  getState(wrapper) {
+    // reflect reality: a network failure flips it without setState()
+    const img = wrapper.querySelector('.avatar-image');
+    const errored = img ? img.hasAttribute('data-error') : true;
+    return {
+      name: errored ? 'error' : 'default',
+      config: wrapper._stateConfig ?? {},
+    };
+  },
+};
+
+_defussShadcn.avatarApi = avatarApi;
+_defussShadcn.avatarStates = avatarStates;
 
 function init() {
-  document.querySelectorAll('.avatar-image:not([data-init])').forEach((img) => {
+  document.querySelectorAll('.avatar:not([data-init])').forEach((wrapper) => {
+  wrapper.dataset.init = '';
+  // bind-scope the api per avatar: `$('#my-avatar').api.setState('error')`
+  wrapper.api = {
+    setState: (stateName, config) => avatarApi.setState(wrapper, stateName, config),
+    getState: () => avatarApi.getState(wrapper),
+  };
+  const img = wrapper.querySelector('.avatar-image');
+  if (!img) return;
   img.dataset.init = '';
   img.addEventListener('error', () => {
     img.setAttribute('data-error', '');
     img.style.display = 'none';
+    // network failure also moves the named state (keeps getState honest)
+    wrapper.dataset.stateName = 'error';
   });
 });
 }

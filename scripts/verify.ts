@@ -207,11 +207,9 @@ check(
 // api. Ratchet rollout: components listed in STATE_API_LEGACY predate the
 // contract and only warn — remove a name from the list as it is migrated, and
 // every NEW JS component must satisfy the contract from day one.
+// Migration complete: every JS component satisfies the State API contract —
+// keep this list empty as the ratchet (new components must comply from day one).
 const STATE_API_LEGACY = [
-  'avatar',
-  'context-menu', 'image',
-  'sidebar',
-  'toast',
 ];
 const STATE_API_PATTERNS: Array<[string, RegExp]> = [
   // preamble comes from the shared helper (build inlines it into dist .js);

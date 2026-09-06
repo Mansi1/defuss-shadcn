@@ -1,7 +1,93 @@
-"use strict";
 // -- Toast -----------------------------------------------------
 // Programmatic toast notification API.
 // Exposes window.toast with show/success/warning/info/error/dismiss.
+// Named-state API (AGENTS.md "State API") bound to the region container:
+// its observable state is which toasts are visible, so 'default' clears the
+// region (same code path as window.toast.dismiss()) and getState() reports
+// the live toast count.
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+/**
+ * Why: every interactive component needs the same preamble (global registry +
+ * `$` query alias). Single-sourced here instead of duplicated in 26 files;
+ * scripts/build.ts inlines the compiled functions into each shipped component
+ * .js so dist files stay isolated and copy-paste/CDN-ready. The function is
+ * idempotent: whichever component loads first wins, the rest are no-ops.
+ * Contract: AGENTS.md "State API"; types: src/types/defuss-shadcn.d.ts.
+ */
+function defussGlobals() {
+    globalThis._defussShadcn = globalThis._defussShadcn || {};
+    if (typeof globalThis.$ !== 'function')
+        globalThis.$ = document.querySelector.bind(document);
+    return globalThis._defussShadcn;
+}
+/**
+ * Why: calling showPopover() on a popover while its exit transition is still
+ * running — the exact setState('open') path right after a light dismiss,
+ * whose display:none is delayed by `transition: display … allow-discrete` —
+ * crashes the headless renderer (reproduced: headless Chromium dies outright,
+ * popover + nav-menu + dropdown + tooltip share the CSS pattern). Wait until
+ * the element's computed display has actually flipped to none (the exit
+ * committed), then show. A stable-open element polls to the cap and the
+ * guarded showPopover() is a harmless no-op. Inlined by build.ts like
+ * defussGlobals(); keep self-contained.
+ */
+function safeShowPopover(el) {
+    const show = () => {
+        try {
+            el.showPopover();
+        }
+        catch { /* already open */ }
+    };
+    const displayed = () => getComputedStyle(el).display !== 'none';
+    if (!displayed()) {
+        show();
+        return;
+    }
+    // displayed: either stably open (nothing to do) or mid-exit (must wait).
+    // Cap the poll at ~500ms — longer than any component's exit transition.
+    const deadline = performance.now() + 500;
+    const tick = () => {
+        if (!displayed() || performance.now() > deadline)
+            show();
+        else
+            requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+}
+const _defussShadcn = defussGlobals();
+const toastStates = ['default'];
+/**
+ * UI side of setState: 'default' dismisses every visible toast, returning
+ * the region to its authored (empty) state.
+ */
+function triggerStateChange(container, stateName, _config) {
+    if (stateName !== 'default')
+        return;
+    container.querySelectorAll('.toast').forEach((el) => toastDismiss(el));
+}
+/** Registry-level API; pass the container explicitly. Unknown names throw. */
+export const toastApi = {
+    setState(container, stateName, config = {}) {
+        if (!toastStates.includes(stateName)) {
+            throw new Error(`toast: unknown state "${stateName}" (supported: ${toastStates.join(', ')})`);
+        }
+        triggerStateChange(container, stateName, config);
+        // state lives on the ELEMENT, not the module (one region per page, but
+        // SPA navigation may replace it)
+        container.dataset.stateName = stateName;
+        container._stateConfig = config;
+    },
+    getState(container) {
+        return {
+            name: container.dataset.stateName || 'default',
+            // live count — reflects window.toast.show() and auto-dismiss, not just setState
+            config: { ...container._stateConfig, count: container.querySelectorAll('.toast').length },
+        };
+    },
+};
+_defussShadcn.toastApi = toastApi;
+_defussShadcn.toastStates = toastStates;
 const DURATION = 4000;
 const MAX_VISIBLE = 3;
 // Per-toast callbacks live in a WeakMap so the container's ONE delegated
@@ -103,6 +189,11 @@ const toastCreate = (options) => {
 function init() {
     document.querySelectorAll('#toast-container:not([data-init])').forEach((container) => {
         container.dataset.init = '';
+        // bind-scope the api per region: `$('#toast-container').api.setState('default')`
+        container.api = {
+            setState: (stateName, config) => toastApi.setState(container, stateName, config),
+            getState: () => toastApi.getState(container),
+        };
         container.addEventListener('click', (e) => {
             const btn = e.target.closest('[data-toast-close],[data-toast-action]');
             if (!btn)

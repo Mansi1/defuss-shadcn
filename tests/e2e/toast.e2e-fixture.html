@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>toast e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/button/button.css" />
+    <link rel="stylesheet" href="/dist/components/toast/toast.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: a live region element already in the page
+         (toast.ts reuses it) + buttons driving the programmatic API -->
+    <div id="toast-container" class="toast-container" aria-label="Notifications" data-position="bottom-right"></div>
+
+    <!-- mirrors the doc page variants demo. One button per CSS-implemented
+         variant (success/warning/info/destructive) — double-quoted config
+         values inside single-quoted attributes so each variant token appears
+         literally in the fixture (verify fixture↔CSS parity). -->
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+      <button class="btn" id="t-show" onclick="toast.show({ title: 'Event created', description: 'Monday, January 3rd at 6:00pm' })">Show</button>
+      <button class="btn" id="t-success" onclick='toast.show({ variant: "success", title: "Saved" })'>Success</button>
+      <button class="btn" id="t-warning" onclick='toast.show({ variant: "warning", title: "Heads up" })'>Warning</button>
+      <button class="btn" id="t-info" onclick='toast.show({ variant: "info", title: "FYI" })'>Info</button>
+      <button class="btn" id="t-destructive" onclick='toast.show({ variant: "destructive", title: "Something broke" })'>Destructive</button>
+    </div>
+
+    <script type="module" src="/dist/components/toast/toast.js"></script>
+  </body>
+</html>

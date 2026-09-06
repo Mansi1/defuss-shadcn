@@ -19,3 +19,17 @@ Popover API triggered by right-click.
   <button class="context-menu-item" role="menuitem">Paste</button>
 </div>
 ```
+
+## States
+
+The api is bound **per menu popover**. Declared states: `default` (closed)
+· `open` (shown; `{ x, y }` config positions it — viewport top-left when
+no pointer coordinates exist).
+
+```js
+document.querySelector('#my-ctx').api.setState('open', { x: 40, y: 40 });
+document.querySelector('#my-ctx').api.getState(); // { name: 'open', config: { x: 40, y: 40 } }
+```
+
+The registry global is `_defussShadcn.contextMenuApi` / `_defussShadcn.contextMenuStates` (camelCase).
+

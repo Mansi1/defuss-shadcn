@@ -83,6 +83,17 @@ defuss-shadcn/
 
 ## Critical rules
 
+### The verifier is authoritative
+
+`bun run verify` is the single source of truth for "is this done?". Its
+output — including every `fix:` line it prints on failure — overrides any
+interpretation of this file: when prose and verifier disagree, the verifier
+wins and its `fix:` line is the work to do. A build is only ever as good as
+its last green `verify` run; there is no flag that skips the gate. (The
+warn-ratchets it still reports, e.g. `STATE_API_LEGACY`, are named migration
+debt with an explicit removal path — not permission to ignore them.) The
+full rationale lives in [ARCH.md](ARCH.md).
+
 ### Native web platform first
 
 Every component starts from a native HTML element or browser API. If the browser

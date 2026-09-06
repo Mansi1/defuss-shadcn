@@ -351,14 +351,34 @@ check(
   'each declared state needs screenshots (both modes), doc page, skill and e2e coverage (AGENTS.md "State API" rule 7)',
 );
 
-// 13. version is consistent between package.json and the site header pill
+// 13. version is consistent: package.json ↔ the SITE_VERSION constant in
+// layout.ts, from which the header pill AND the footer render. Any OTHER
+// hard-coded v-semver literal in that file is stale by definition (the
+// footer read "v0.7.0" forever because it was a second, un-synced literal —
+// this check forbids that pattern instead of trusting the bump).
 const version = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')).version as string;
 const headerLayout = readFileSync(join(DOCS, 'js/layout.ts'), 'utf8');
-check(
-  'version consistency',
-  headerLayout.includes(`v${version}`) ? [] : [`js/layout.ts has no "v${version}" pill`],
-  'bump both together (deploy.sh does this) — or sync the pill manually',
-);
+{
+  const sv = headerLayout.match(/var SITE_VERSION = '([^']*)'/);
+  const versionProblems: string[] = [];
+  if (!sv) versionProblems.push("js/layout.ts lost the `var SITE_VERSION = 'v…'` constant");
+  else if (sv[1] !== `v${version}`)
+    versionProblems.push(`SITE_VERSION is ${sv[1]} but package.json says v${version} (header pill + footer both render this)`);
+  // every v-semver anywhere in the shell file must live on the SITE_VERSION
+  // assignment — pill/footer render the constant; the old footer kept its own
+  // 'v0.7.0' INSIDE a longer string where a quote-anchored regex misses it
+  headerLayout.split('\n').forEach((line, i) => {
+    if (/var SITE_VERSION =/.test(line)) return;
+    const hit = line.match(/\bv\d+\.\d+\.\d+\b/);
+    if (hit) versionProblems.push(`stale hard-coded ${hit[0]} at js/layout.ts:${i + 1} — render SITE_VERSION instead`);
+  });
+
+  check(
+    'version consistency',
+    versionProblems,
+    'set SITE_VERSION in src/documentation/js/layout.ts to v<package.json version> (deploy.sh does this) — header pill and footer derive from that single constant',
+  );
+}
 
 // 14. changelog injection marker survived edits
 check(

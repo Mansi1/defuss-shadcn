@@ -768,7 +768,7 @@ new MutationObserver(init).observe(document, { childList: true, subtree: true })
   <script type="module" src="../components/slider/slider.js"></script>
   <script type="module" src="../components/sortable/sortable.js"></script>
   <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
-  <script>lucide.createIcons();</script>
+  <script>globalThis.lucide?.createIcons();</script>
 <script type="text/plain" id="spec-md-content"># Sortable
 
 ## Native basis

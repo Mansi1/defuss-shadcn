@@ -9,6 +9,12 @@
     // globals live under globalThis._defussShadcn — never on window.
     globalThis._defussShadcn = globalThis._defussShadcn || {};
     const docs = (globalThis._defussShadcn.docs = globalThis._defussShadcn.docs || {});
+    // Single source of truth for the version shown in the header pill AND the
+    // footer. deploy.sh rewrites this one line per release; `verify`'s
+    // "version consistency" gate fails if it (or any other version literal in
+    // this file) drifts from package.json — the footer once froze an old number
+    // forever because it was a second, un-synchronised literal.
+    var SITE_VERSION = 'v0.7.14';
     /* -- Dark mode (must run before first paint) ----------------- */
     var saved = localStorage.getItem('defuss-shadcn-theme');
     var darkMQ = window.matchMedia('(prefers-color-scheme: dark)');
@@ -171,8 +177,8 @@
                     '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>' +
                     '</button>' +
                     '<a href="index.html" class="header-brand">' +
-                    '<span class="header-brand-name">shadcn<em>-html</em></span>' +
-                    '<span class="badge header-brand-version" data-variant="outline" style="font-family:var(--font-mono);">v0.7.14</span>' +
+                    '<span class="header-brand-name">defuss<em>-shadcn</em></span>' +
+                    '<span class="badge header-brand-version" data-variant="outline" style="font-family:var(--font-mono);">' + SITE_VERSION + '</span>' +
                     '</a>' +
                     '<div style="flex:1;"></div>' +
                     '<nav style="display:flex;align-items:center;gap:0.25rem;">' +
@@ -628,7 +634,7 @@
         /* Inject footer */
         if (layoutWrap) {
             layoutWrap.insertAdjacentHTML('afterend', '<footer class="site-footer">' +
-                '<p class="site-footer-tagline">v0.7.0 — Written in two days, entirely by an AI, directed entirely by a human. The future is weird!</p>' +
+                '<p class="site-footer-tagline">' + SITE_VERSION + ' — Written in two days, entirely by an AI, directed entirely by a human. The future is weird!</p>' +
                 '<p class="site-footer-tagline" style="margin-top:0;">My AIs are open to your AIs\' <a href="https://github.com/kyr0/defuss-shadcn/pulls" target="_blank" rel="noopener">PRs</a> — but that doesn\'t mean this dumb human will accept them.</p>' +
                 '<p>' +
                 'MIT Licensed' +

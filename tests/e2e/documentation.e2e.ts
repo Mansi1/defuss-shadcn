@@ -46,6 +46,12 @@ try {
       sections: document.querySelectorAll('site-nav .nav-section').length,
     }));
     assert.ok(counts.header, 'site-header did not render the brand');
+    // brand must read "defuss-shadcn" — the pre-fork "shadcn-html" regressed once
+    assert.equal(
+      await page.evaluate(() => document.querySelector('.header-brand-name')?.textContent?.trim()),
+      'defuss-shadcn',
+      'site header brand has the wrong name',
+    );
     assert.ok(counts.links > 50, `expected the full sidebar (>50 links), got ${counts.links}`);
     assert.ok(counts.sections >= 8, `expected >8 nav sections, got ${counts.sections}`);
   });

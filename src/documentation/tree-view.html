@@ -339,6 +339,61 @@
       color: var(--muted-foreground);
     }
   }
+}
+
+/* Accessibility: suppress motion for users who request it (REQUIRED for all
+   components — AGENTS.md &quot;Accessibility CSS&quot;). Near-zero duration instead of
+   `none` keeps transitionend/animationend (and discrete display flips)
+   firing so JS state machines that await them keep working. */
+@media (prefers-reduced-motion: reduce) {
+  @layer components {
+    .tree,
+    .tree *,
+    .tree::before,
+    .tree::after,
+    .tree *::before,
+    .tree *::after,
+    .tree::backdrop,
+    .tree-branch,
+    .tree-branch *,
+    .tree-branch::before,
+    .tree-branch::after,
+    .tree-branch *::before,
+    .tree-branch *::after,
+    .tree-branch::backdrop,
+    .tree-branch-trigger,
+    .tree-branch-trigger *,
+    .tree-branch-trigger::before,
+    .tree-branch-trigger::after,
+    .tree-branch-trigger *::before,
+    .tree-branch-trigger *::after,
+    .tree-branch-trigger::backdrop,
+    .tree-group,
+    .tree-group *,
+    .tree-group::before,
+    .tree-group::after,
+    .tree-group *::before,
+    .tree-group *::after,
+    .tree-group::backdrop,
+    .tree-item,
+    .tree-item *,
+    .tree-item::before,
+    .tree-item::after,
+    .tree-item *::before,
+    .tree-item *::after,
+    .tree-item::backdrop,
+    .tree-leaf,
+    .tree-leaf *,
+    .tree-leaf::before,
+    .tree-leaf::after,
+    .tree-leaf *::before,
+    .tree-leaf *::after,
+    .tree-leaf::backdrop {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
 }</code></pre>
           </div>
         </section>

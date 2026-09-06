@@ -445,6 +445,82 @@ toast.show({
     gap: 0.5rem;
     margin-top: 0.75rem;
   }
+}
+
+/* Accessibility: suppress motion for users who request it (REQUIRED for all
+   components — AGENTS.md &quot;Accessibility CSS&quot;). Near-zero duration instead of
+   `none` keeps transitionend/animationend (and discrete display flips)
+   firing so JS state machines that await them keep working. */
+@media (prefers-reduced-motion: reduce) {
+  @layer components {
+    .toast-container,
+    .toast-container *,
+    .toast-container::before,
+    .toast-container::after,
+    .toast-container *::before,
+    .toast-container *::after,
+    .toast-container::backdrop,
+    .toast,
+    .toast *,
+    .toast::before,
+    .toast::after,
+    .toast *::before,
+    .toast *::after,
+    .toast::backdrop,
+    .toast-description,
+    .toast-description *,
+    .toast-description::before,
+    .toast-description::after,
+    .toast-description *::before,
+    .toast-description *::after,
+    .toast-description::backdrop,
+    .toast-icon,
+    .toast-icon *,
+    .toast-icon::before,
+    .toast-icon::after,
+    .toast-icon *::before,
+    .toast-icon *::after,
+    .toast-icon::backdrop,
+    .toast-content,
+    .toast-content *,
+    .toast-content::before,
+    .toast-content::after,
+    .toast-content *::before,
+    .toast-content *::after,
+    .toast-content::backdrop,
+    .toast-text,
+    .toast-text *,
+    .toast-text::before,
+    .toast-text::after,
+    .toast-text *::before,
+    .toast-text *::after,
+    .toast-text::backdrop,
+    .toast-title,
+    .toast-title *,
+    .toast-title::before,
+    .toast-title::after,
+    .toast-title *::before,
+    .toast-title *::after,
+    .toast-title::backdrop,
+    .toast-close,
+    .toast-close *,
+    .toast-close::before,
+    .toast-close::after,
+    .toast-close *::before,
+    .toast-close *::after,
+    .toast-close::backdrop,
+    .toast-actions,
+    .toast-actions *,
+    .toast-actions::before,
+    .toast-actions::after,
+    .toast-actions *::before,
+    .toast-actions *::after,
+    .toast-actions::backdrop {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
 }</code></pre>
           </div>
         </section>

@@ -518,6 +518,75 @@
       background-color: var(--accent);
     }
   }
+}
+
+/* Accessibility: suppress motion for users who request it (REQUIRED for all
+   components — AGENTS.md &quot;Accessibility CSS&quot;). Near-zero duration instead of
+   `none` keeps transitionend/animationend (and discrete display flips)
+   firing so JS state machines that await them keep working. */
+@media (prefers-reduced-motion: reduce) {
+  @layer components {
+    .sheet,
+    .sheet *,
+    .sheet::before,
+    .sheet::after,
+    .sheet *::before,
+    .sheet *::after,
+    .sheet::backdrop,
+    .sheet-body,
+    .sheet-body *,
+    .sheet-body::before,
+    .sheet-body::after,
+    .sheet-body *::before,
+    .sheet-body *::after,
+    .sheet-body::backdrop,
+    .sheet-close-x,
+    .sheet-close-x *,
+    .sheet-close-x::before,
+    .sheet-close-x::after,
+    .sheet-close-x *::before,
+    .sheet-close-x *::after,
+    .sheet-close-x::backdrop,
+    .sheet-content,
+    .sheet-content *,
+    .sheet-content::before,
+    .sheet-content::after,
+    .sheet-content *::before,
+    .sheet-content *::after,
+    .sheet-content::backdrop,
+    .sheet-description,
+    .sheet-description *,
+    .sheet-description::before,
+    .sheet-description::after,
+    .sheet-description *::before,
+    .sheet-description *::after,
+    .sheet-description::backdrop,
+    .sheet-footer,
+    .sheet-footer *,
+    .sheet-footer::before,
+    .sheet-footer::after,
+    .sheet-footer *::before,
+    .sheet-footer *::after,
+    .sheet-footer::backdrop,
+    .sheet-header,
+    .sheet-header *,
+    .sheet-header::before,
+    .sheet-header::after,
+    .sheet-header *::before,
+    .sheet-header *::after,
+    .sheet-header::backdrop,
+    .sheet-title,
+    .sheet-title *,
+    .sheet-title::before,
+    .sheet-title::after,
+    .sheet-title *::before,
+    .sheet-title *::after,
+    .sheet-title::backdrop {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
 }</code></pre>
           </div>
         </section>

@@ -343,6 +343,68 @@
       cursor: not-allowed;
     }
   }
+}
+
+/* Accessibility: suppress motion for users who request it (REQUIRED for all
+   components — AGENTS.md &quot;Accessibility CSS&quot;). Near-zero duration instead of
+   `none` keeps transitionend/animationend (and discrete display flips)
+   firing so JS state machines that await them keep working. */
+@media (prefers-reduced-motion: reduce) {
+  @layer components {
+    .calendar,
+    .calendar *,
+    .calendar::before,
+    .calendar::after,
+    .calendar *::before,
+    .calendar *::after,
+    .calendar::backdrop,
+    .calendar-header,
+    .calendar-header *,
+    .calendar-header::before,
+    .calendar-header::after,
+    .calendar-header *::before,
+    .calendar-header *::after,
+    .calendar-header::backdrop,
+    .calendar-heading,
+    .calendar-heading *,
+    .calendar-heading::before,
+    .calendar-heading::after,
+    .calendar-heading *::before,
+    .calendar-heading *::after,
+    .calendar-heading::backdrop,
+    .calendar-nav,
+    .calendar-nav *,
+    .calendar-nav::before,
+    .calendar-nav::after,
+    .calendar-nav *::before,
+    .calendar-nav *::after,
+    .calendar-nav::backdrop,
+    .calendar-grid,
+    .calendar-grid *,
+    .calendar-grid::before,
+    .calendar-grid::after,
+    .calendar-grid *::before,
+    .calendar-grid *::after,
+    .calendar-grid::backdrop,
+    .calendar-day-label,
+    .calendar-day-label *,
+    .calendar-day-label::before,
+    .calendar-day-label::after,
+    .calendar-day-label *::before,
+    .calendar-day-label *::after,
+    .calendar-day-label::backdrop,
+    .calendar-day,
+    .calendar-day *,
+    .calendar-day::before,
+    .calendar-day::after,
+    .calendar-day *::before,
+    .calendar-day *::after,
+    .calendar-day::backdrop {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
 }</code></pre>
           </div>
         </section>

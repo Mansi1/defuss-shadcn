@@ -479,14 +479,10 @@ check(
 );
 
 // 18. accessibility CSS promises (AGENTS.md "Accessibility CSS"): any
-// component that animates must honor prefers-reduced-motion. Warn-ratchet:
-// 16 legacy components predate the rule; accordion/dialog are the reference
-// implementations and are held to it.
-const REDUCED_MOTION_LEGACY = [
-  'tooltip', 'calendar', 'progress', 'alert-dialog', 'skeleton', 'toast', 'number-input',
-  'spinner', 'file-input', 'context-menu', 'date-picker', 'table', 'collapsible',
-  'tree-view', 'select', 'sheet',
-];
+// component that animates must honor prefers-reduced-motion. Migration
+// complete — keep this list empty as the ratchet (new components must comply
+// from day one).
+const REDUCED_MOTION_LEGACY: string[] = [];
 const motionProblems: string[] = [];
 const motionWarnings: string[] = [];
 for (const c of componentDirs) {

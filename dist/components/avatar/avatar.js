@@ -109,12 +109,17 @@ function init() {
         if (!img)
             return;
         img.dataset.init = '';
-        img.addEventListener('error', () => {
+        // catch images that errored BEFORE this script ran (module scripts are
+        // deferred; a fast/local failure can beat init — image.ts does the same)
+        if (img.complete && img.naturalWidth === 0)
+            applyError();
+        img.addEventListener('error', applyError);
+        function applyError() {
             img.setAttribute('data-error', '');
             img.style.display = 'none';
             // network failure also moves the named state (keeps getState honest)
             wrapper.dataset.stateName = 'error';
-        });
+        }
     });
 }
 init();

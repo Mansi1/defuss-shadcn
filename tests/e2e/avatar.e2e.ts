@@ -33,6 +33,9 @@ async function check(label: string, fn: () => Promise<void>): Promise<void> {
 
 try {
   const page = await browser.newPage();
+  // deterministic network failure: abort .invalid-host requests instead of
+  // waiting on real DNS (slow/flaky when 26 chromiums run in parallel)
+  await page.route((url) => url.hostname.endsWith('.invalid'), (route) => route.abort('failed'));
   await page.goto(`${server.url}${FIXTURE}`);
 
   await check('avatar.js initialized wrappers (data-init)', async () => {

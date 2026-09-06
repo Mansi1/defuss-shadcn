@@ -79,3 +79,58 @@
     gap: 0.5rem;
   }
 }
+
+/* Accessibility: suppress motion for users who request it (REQUIRED for all
+   components — AGENTS.md "Accessibility CSS"). Near-zero duration instead of
+   `none` keeps transitionend/animationend (and discrete display flips)
+   firing so JS state machines that await them keep working. */
+@media (prefers-reduced-motion: reduce) {
+  @layer components {
+    .alert-dialog,
+    .alert-dialog *,
+    .alert-dialog::before,
+    .alert-dialog::after,
+    .alert-dialog *::before,
+    .alert-dialog *::after,
+    .alert-dialog::backdrop,
+    .alert-dialog-content,
+    .alert-dialog-content *,
+    .alert-dialog-content::before,
+    .alert-dialog-content::after,
+    .alert-dialog-content *::before,
+    .alert-dialog-content *::after,
+    .alert-dialog-content::backdrop,
+    .alert-dialog-header,
+    .alert-dialog-header *,
+    .alert-dialog-header::before,
+    .alert-dialog-header::after,
+    .alert-dialog-header *::before,
+    .alert-dialog-header *::after,
+    .alert-dialog-header::backdrop,
+    .alert-dialog-title,
+    .alert-dialog-title *,
+    .alert-dialog-title::before,
+    .alert-dialog-title::after,
+    .alert-dialog-title *::before,
+    .alert-dialog-title *::after,
+    .alert-dialog-title::backdrop,
+    .alert-dialog-description,
+    .alert-dialog-description *,
+    .alert-dialog-description::before,
+    .alert-dialog-description::after,
+    .alert-dialog-description *::before,
+    .alert-dialog-description *::after,
+    .alert-dialog-description::backdrop,
+    .alert-dialog-footer,
+    .alert-dialog-footer *,
+    .alert-dialog-footer::before,
+    .alert-dialog-footer::after,
+    .alert-dialog-footer *::before,
+    .alert-dialog-footer *::after,
+    .alert-dialog-footer::backdrop {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+}

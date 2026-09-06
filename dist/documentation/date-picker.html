@@ -216,6 +216,26 @@
       &amp;:hover { opacity: 1; }
     }
   }
+}
+
+/* Accessibility: suppress motion for users who request it (REQUIRED for all
+   components — AGENTS.md &quot;Accessibility CSS&quot;). Near-zero duration instead of
+   `none` keeps transitionend/animationend (and discrete display flips)
+   firing so JS state machines that await them keep working. */
+@media (prefers-reduced-motion: reduce) {
+  @layer components {
+    .date-input,
+    .date-input *,
+    .date-input::before,
+    .date-input::after,
+    .date-input *::before,
+    .date-input *::after,
+    .date-input::backdrop {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
 }</code></pre>
           </div>
         </section>

@@ -188,7 +188,7 @@ after touching any component — the shipped files themselves are asserted, so "
 compiles" is never mistaken for "it works". Every component ships one (the gate is
 hard), and its parity rule keeps fixture, docs and code in lockstep as they change.
 The documentation site itself is covered too ([`tests/e2e/documentation.e2e.ts`](tests/e2e/documentation.e2e.ts)):
-the intro page renders, the SPA router navigates, and the sidebar filter searches.
+the intro page renders, the SPA router navigates, and the header search opens the command palette (generated index, page + section results).
 
 ## Credits
 

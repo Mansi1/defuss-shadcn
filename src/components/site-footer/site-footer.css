@@ -1,0 +1,104 @@
+/* -- Site Footer (marketing) ---------------------------------------
+   Link columns + rule + brand/social/copyright row. Named .mk-footer
+   to avoid colliding with the doc site's own .site-footer chrome. */
+
+@layer components {
+  .mk-footer {
+    container: mk-footer / inline-size;
+    width: 100%;
+    background: var(--background);
+    color: var(--foreground);
+  }
+
+  .mk-footer-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding: 2.5rem 1.25rem;
+  }
+
+  .mk-footer-nav {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .mk-footer-col { display: flex; flex-direction: column; gap: 0.625rem; }
+
+  .mk-footer-heading {
+    margin: 0;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .mk-footer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+
+    & a {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: inherit;
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+
+      &:hover { text-decoration: underline; text-underline-offset: 3px; }
+      &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    }
+  }
+
+  .mk-footer-rule { width: 100%; }
+
+  .mk-footer-bottom { display: flex; flex-direction: column; gap: 2.25rem; }
+
+  .mk-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+    color: var(--primary);
+    text-decoration: none;
+
+    & svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
+  }
+
+  .mk-footer-brand-name { font-size: 0.875rem; font-weight: 500; white-space: nowrap; }
+
+  .mk-footer-meta { display: flex; flex-direction: column; gap: 1rem; }
+
+  .mk-footer-social {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--muted-foreground);
+
+    & a { display: flex; color: inherit; border-radius: var(--radius-sm); &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; } }
+    & svg { width: 1rem; height: 1rem; }
+  }
+
+  .mk-footer-copy { margin: 0; color: var(--muted-foreground); font-size: 0.875rem; }
+
+  @container mk-footer (min-width: 30rem) {
+    .mk-footer-nav { grid-template-columns: 1fr 1fr; }
+    .mk-footer-bottom { flex-direction: row; align-items: center; justify-content: space-between; }
+    .mk-footer-meta { flex-direction: row; align-items: center; gap: 1rem; }
+  }
+
+  @container mk-footer (min-width: 52rem) {
+    .mk-footer-inner { gap: 2.25rem; padding-inline: 2rem; }
+    .mk-footer-nav { grid-template-columns: repeat(4, 1fr); gap: 2.25rem; }
+  }
+
+  /* -- Accessibility ------------------------------------------- */
+  @media (forced-colors: active) {
+    .mk-footer-copy { color: CanvasText; }
+  }
+}

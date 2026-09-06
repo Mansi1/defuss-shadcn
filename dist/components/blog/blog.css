@@ -1,0 +1,122 @@
+/* -- Blog (marketing) ----------------------------------------------
+   Insights grid: media card with category/read-time meta, line-clamped
+   excerpt, and author row composed from the avatar component. */
+
+@layer components {
+  .mk-blog {
+    container: mk-blog / inline-size;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  .mk-blog-head { display: flex; gap: 1.25rem; align-items: flex-start; }
+
+  .mk-blog-head-copy {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 48rem;
+    text-align: left;
+  }
+
+  .mk-blog-eyebrow { color: var(--primary); font-size: 1rem; font-weight: 500; }
+
+  .mk-blog-title {
+    margin: 0;
+    font-size: 1.875rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  .mk-blog-desc { margin: 0; max-width: 42rem; color: var(--muted-foreground); font-size: 1rem; text-wrap: pretty; }
+
+  .mk-blog-see-all { display: none; margin-inline-start: auto; align-self: flex-end; flex-shrink: 0; }
+
+  .mk-blog-grid { display: grid; gap: 1.25rem; width: 100%; }
+
+  .mk-blog-card { display: flex; flex-direction: column; color: inherit; text-decoration: none; }
+
+  .mk-blog-media {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--muted);
+
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 150ms ease;
+    }
+  }
+
+  .mk-blog-card:hover .mk-blog-media img { opacity: 0.9; }
+
+  .mk-blog-body { display: flex; flex: 1; flex-direction: column; gap: 0.75rem; padding-block: 0.875rem; }
+
+  .mk-blog-meta { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+
+  .mk-blog-category { color: var(--primary); font-size: 0.875rem; font-weight: 500; }
+
+  .mk-blog-read { color: var(--muted-foreground); font-size: 0.875rem; }
+
+  .mk-blog-copy { display: grid; gap: 0.25rem; }
+
+  .mk-blog-card-title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  /* excerpt clamp: exactly 3 lines (source: line-clamp-3) */
+  .mk-blog-excerpt {
+    margin: 0;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    text-wrap: pretty;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .mk-blog-author { display: flex; align-items: center; gap: 0.5rem; margin-block-start: auto; }
+
+  .mk-blog-author-name { font-size: 0.875rem; font-weight: 500; }
+
+  .mk-blog-author-date { color: var(--muted-foreground); font-size: 0.75rem; }
+
+  @container mk-blog (min-width: 30rem) {
+    .mk-blog-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @container mk-blog (min-width: 52rem) {
+    .mk-blog-title { font-size: 2.25rem; }
+    .mk-blog-see-all { display: inline-flex; }
+    .mk-blog-grid { grid-template-columns: repeat(3, 1fr); gap: 2.25rem; }
+  }
+
+  /* -- Accessibility ------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .mk-blog-media img { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    .mk-blog-card { color: LinkText; }
+  }
+}

@@ -1,0 +1,59 @@
+/* -- Brand Logos (marketing) ---------------------------------------
+   "Trusted by" row: inline SVG marks inherit currentColor so logos
+   recolor with --muted-foreground under any theme. Wraps freely. */
+
+@layer components {
+  .mk-logos {
+    container: mk-logos / inline-size;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  .mk-logos-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    column-gap: 2.5rem;
+    row-gap: 1.75rem;
+  }
+
+  .mk-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+
+    & svg { width: 1.875rem; height: 1.875rem; aspect-ratio: 1; flex-shrink: 0; }
+  }
+
+  .mk-logo-name {
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    white-space: nowrap;
+  }
+
+  .mk-logos-caption {
+    margin: 0;
+    text-align: center;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+  }
+
+  @container mk-logos (min-width: 30rem) {
+    .mk-logo svg { width: 2.5rem; height: 2.5rem; }
+    .mk-logo-name { font-size: 1.25rem; }
+  }
+
+  /* -- Accessibility ------------------------------------------- */
+  @media (forced-colors: active) {
+    .mk-logo { color: CanvasText; }
+  }
+}

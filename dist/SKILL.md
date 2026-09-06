@@ -108,6 +108,24 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 **Screenshots:** screenshots/{light,dark}/badge.png
 **Skill:** [components/badge/component-skill.md](components/badge/component-skill.md)
 
+## Blog
+
+**Why:** Post cards are `<a>` + `<img>` + clamped text — line-clamp and aspect-ratio give the editorial layout for free.
+**When:** Insights/news teasers on a marketing page; the full article list is a table or card grid instead.
+**Files:** dist/components/blog/blog.css
+**Supported states:** default
+**Screenshots:** screenshots/{light,dark}/blog.png
+**Skill:** [components/blog/component-skill.md](components/blog/component-skill.md)
+
+## Brand Logos
+
+**Why:** Logos as currentColor SVGs recolor with the theme automatically — a row of marks needs zero behavior.
+**When:** "Trusted by" social proof band under a Hero — not for user-uploaded arbitrary images.
+**Files:** dist/components/brand-logos/brand-logos.css
+**Supported states:** default
+**Screenshots:** screenshots/{light,dark}/brand-logos.png
+**Skill:** [components/brand-logos/component-skill.md](components/brand-logos/component-skill.md)
+
 ## Breadcrumb
 
 **Why:** nav > ol markup with aria-current="page" — the accessibility comes free with the markup, not from JS.
@@ -243,6 +261,24 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 **Screenshots:** screenshots/{light,dark}/dropdown.png, screenshots/{light,dark}/dropdown-open.png
 **Skill:** [components/dropdown/component-skill.md](components/dropdown/component-skill.md)
 
+## FAQ
+
+**Why:** Icon-card answers stay visible — no disclosure widget to wire, so screen readers and crawlers see every answer.
+**When:** Support section on a marketing page; for many long Q&As use the Accordion (native <details>) instead.
+**Files:** dist/components/faq/faq.css
+**Supported states:** default
+**Screenshots:** screenshots/{light,dark}/faq.png
+**Skill:** [components/faq/component-skill.md](components/faq/component-skill.md)
+
+## Feature Details
+
+**Why:** Two-image feature split with a rule between — a grid with an auto-stretched divider column, no JS.
+**When:** "Benefits" section of a marketing page; for a feature list without imagery use cards instead.
+**Files:** dist/components/feature-details/feature-details.css
+**Supported states:** default
+**Screenshots:** screenshots/{light,dark}/feature-details.png
+**Skill:** [components/feature-details/component-skill.md](components/feature-details/component-skill.md)
+
 ## File Input
 
 **Why:** A <label> wrapping the native file input with styled drag-over and filled states.
@@ -260,6 +296,24 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 **Supported states:** default
 **Screenshots:** screenshots/{light,dark}/form.png
 **Skill:** [components/form/component-skill.md](components/form/component-skill.md)
+
+## Get In Touch
+
+**Why:** A bordered contact CTA card — avatar overlap is negative margins + outline, not positioning math.
+**When:** End-of-page "want to know more?" band; for an actual contact form use Form + Input components.
+**Files:** dist/components/get-in-touch/get-in-touch.css
+**Supported states:** default
+**Screenshots:** screenshots/{light,dark}/get-in-touch.png
+**Skill:** [components/get-in-touch/component-skill.md](components/get-in-touch/component-skill.md)
+
+## Hero
+
+**Why:** Headline, description, CTAs and a 5:3 showcase — all native flow layout, aspect-ratio and a real <button> for play.
+**When:** First section of a marketing page; not for app screens or dashboards.
+**Files:** dist/components/hero/hero.css
+**Supported states:** default
+**Screenshots:** screenshots/{light,dark}/hero.png
+**Skill:** [components/hero/component-skill.md](components/hero/component-skill.md)
 
 ## Icon
 
@@ -306,6 +360,15 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 **Screenshots:** screenshots/{light,dark}/navigation-menu.png, screenshots/{light,dark}/navigation-menu-open.png
 **Skill:** [components/navigation-menu/component-skill.md](components/navigation-menu/component-skill.md)
 
+## Newsletter
+
+**Why:** A real <form> with <input type="email"> — native validation, keyboard, and autofill come free.
+**When:** Sign-up band on a marketing page; for multi-field sign-up use the Form component.
+**Files:** dist/components/newsletter/newsletter.css
+**Supported states:** default
+**Screenshots:** screenshots/{light,dark}/newsletter.png
+**Skill:** [components/newsletter/component-skill.md](components/newsletter/component-skill.md)
+
 ## Number Input
 
 **Why:** Input plus stepper buttons bound to native min/max/step and arrow-key behavior.
@@ -332,6 +395,24 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 **Supported states:** default, open
 **Screenshots:** screenshots/{light,dark}/popover.png, screenshots/{light,dark}/popover-open.png
 **Skill:** [components/popover/component-skill.md](components/popover/component-skill.md)
+
+## Pricing
+
+**Why:** Plan cards are a stretch-aligned grid; the billing toggle is native radios plus :has(), so one checked input flips every plan with zero JS.
+**When:** Plans/tiers section of a marketing page; a single plan needs no grid — one card suffices.
+**Files:** dist/components/pricing/pricing.css
+**Supported states:** default
+**Screenshots:** screenshots/{light,dark}/pricing.png
+**Skill:** [components/pricing/component-skill.md](components/pricing/component-skill.md)
+
+## Product Showcase
+
+**Why:** A 5:3 media frame with a play affordance — aspect-ratio + one absolutely-centered real button, nothing else.
+**When:** Standalone product shot/video poster inside any marketing section; reuse of the Hero's media block.
+**Files:** dist/components/product-showcase/product-showcase.css
+**Supported states:** default
+**Screenshots:** screenshots/{light,dark}/product-showcase.png
+**Skill:** [components/product-showcase/component-skill.md](components/product-showcase/component-skill.md)
 
 ## Progress
 
@@ -396,6 +477,24 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 **Screenshots:** screenshots/{light,dark}/sidebar.png, screenshots/{light,dark}/sidebar-collapsed.png
 **Skill:** [components/sidebar/component-skill.md](components/sidebar/component-skill.md)
 
+## Site Footer
+
+**Why:** Link columns + social row is pure grid/flex markup in a <footer> landmark — no behavior to script.
+**When:** Bottom of marketing pages; the doc site's own footer is separate chrome (<footer> in layout.js).
+**Files:** dist/components/site-footer/site-footer.css
+**Supported states:** default
+**Screenshots:** screenshots/{light,dark}/site-footer.png
+**Skill:** [components/site-footer/component-skill.md](components/site-footer/component-skill.md)
+
+## Site Header
+
+**Why:** A marketing page header is pure layout — flexbox + a container query replace any JS show/hide of the nav.
+**When:** Top of a marketing/landing page — for the doc site's own chrome use <site-header> instead.
+**Files:** dist/components/site-header/site-header.css
+**Supported states:** default
+**Screenshots:** screenshots/{light,dark}/site-header.png
+**Skill:** [components/site-header/component-skill.md](components/site-header/component-skill.md)
+
 ## Skeleton
 
 **Why:** Shimmering placeholder blocks shaped like the content that will arrive.
@@ -441,6 +540,15 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 **Screenshots:** screenshots/{light,dark}/statistic.png
 **Skill:** [components/statistic/component-skill.md](components/statistic/component-skill.md)
 
+## Stats
+
+**Why:** Metric band = a grid of rule-led numbers; text alignment and tabular-nums do what a chart library would.
+**When:** "Trusted by teams everywhere" social proof with hard numbers; not a data dashboard.
+**Files:** dist/components/stats/stats.css
+**Supported states:** default
+**Screenshots:** screenshots/{light,dark}/stats.png
+**Skill:** [components/stats/component-skill.md](components/stats/component-skill.md)
+
 ## Steps
 
 **Why:** Ordered list of process steps with aria-current="step" on the active one.
@@ -476,6 +584,15 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 **Supported states:** default, active
 **Screenshots:** screenshots/{light,dark}/tabs.png, screenshots/{light,dark}/tabs-active.png
 **Skill:** [components/tabs/component-skill.md](components/tabs/component-skill.md)
+
+## Testimonials
+
+**Why:** A pull-quote plus photo cards with floating review overlays — backdrop-filter and stacking replace any JS layering.
+**When:** Social-proof band on a marketing page; for short quotes without photos a plain blockquote is enough.
+**Files:** dist/components/testimonials/testimonials.css
+**Supported states:** default
+**Screenshots:** screenshots/{light,dark}/testimonials.png
+**Skill:** [components/testimonials/component-skill.md](components/testimonials/component-skill.md)
 
 ## Textarea
 

@@ -1,0 +1,65 @@
+/* -- Newsletter (marketing) ----------------------------------------
+   Two-column sign-up band: copy left, inline email form right. The
+   form is a real <form> + <input type="email"> — browser validation
+   and the native keyboard work for free. */
+
+@layer components {
+  .mk-newsletter {
+    container: mk-newsletter / inline-size;
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  .mk-newsletter-layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 3rem;
+  }
+
+  .mk-newsletter-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 48rem;
+    text-align: left;
+  }
+
+  .mk-newsletter-title {
+    margin: 0;
+    font-size: 1.875rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  .mk-newsletter-desc { margin: 0; max-width: 42rem; color: var(--muted-foreground); font-size: 1rem; text-wrap: pretty; }
+
+  .mk-newsletter-form-col { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .mk-newsletter-form { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .mk-newsletter-form .input { width: 100%; }
+
+  .mk-newsletter-form .btn { width: 100%; }
+
+  .mk-newsletter-note { color: var(--muted-foreground); font-size: 0.75rem; }
+
+  @container mk-newsletter (min-width: 30rem) {
+    .mk-newsletter-layout { flex-direction: row; }
+    .mk-newsletter-form-col { align-self: flex-end; }
+    .mk-newsletter-form { flex-direction: row; }
+    .mk-newsletter-form .input { width: fit-content; }
+    .mk-newsletter-form .btn { width: auto; }
+  }
+
+  @container mk-newsletter (min-width: 52rem) {
+    .mk-newsletter-layout { gap: 4rem; }
+    .mk-newsletter-title { font-size: 2.25rem; }
+    .mk-newsletter-form-col { gap: 0.75rem; }
+  }
+}

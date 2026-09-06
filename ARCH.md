@@ -1,4 +1,4 @@
-# ARCH — How this framework scales without a human reviewer
+# ARCH — How this framework scales with AI
 
 defuss-shadcn is built for an era where **coding agents do the work**. The
 scaling bottleneck is no longer writing components — it is *trusting* them.
@@ -7,7 +7,7 @@ passes through mechanical quality gates designed by a human senior software engi
 
 The method has four parts.
 
-## 1. AGENTS.md — the philosophy layer
+## 1. AGENTS.md — the philosophy/instruction layer
 
 [`AGENTS.md`](AGENTS.md) tells a coding agent **how to work, what to
 implement where, and why**: the native-web-platform-first rules (`<dialog>`,
@@ -18,7 +18,7 @@ model reads before and while it works. Prose, however, is advisory: an agent
 can misread it, skip it, or claim compliance. That is exactly what the next
 layer is for.
 
-## 2. The verifier — the authority layer
+## 2. The deterministic verifier — an authority layer
 
 [`scripts/verify.ts`](scripts/verify.ts) is a custom, code-implemented audit
 of everything prose cannot guarantee: **41 check groups** over the shipped
@@ -131,3 +131,19 @@ the loop until the work is actually good* — which is precisely the point:
 human review does not scale to an army of agents, but a verifier that
 audits every byte, speaks repair instructions, and is the only door out
 does.
+
+---
+
+The human expert only reviews the code, documentation and visual representation after all quality gates have passed and the visual evidence has been captured - right before a new version is released.
+
+Should the human expert find any issues during this final review, the feedback is fed back into the loop, and the agents must address it before a new version can be released. If a regression or a new "unknown unknown" fail case is discovered, the human expert will either instruct the agent to add this to the AGENTS.md or let the agent implement yet another verifier logic to add a new static and deterministic quality gate, preventing the same issue from slipping through in future iterations.
+
+As for the Agent Harness, this method has a huge advantage compared to more automated or harness-native solutions:
+
+1. It doesn't matter what VLM model is used. As long as the model is capable enough, it can handle the task including multimodal reasoning and visual inspection of the screenshots.
+
+2. AGENTS.md and the verifier logic are decoupled from the specific VLM model. This means that improvements or changes to the VLM model do not require modifications to the agent's instructions or the verifier, ensuring long-term maintainability and flexibility.
+
+3. The human still has oversight over both the development process (and thus can intercept in case of errors or unexpected behavior) and the release process, ensuring that the quality gates are meaningful, implemented changes are safe and correct, and that the released version meets all of the desired standards, set by the human expert.
+
+4. Spec-driven development is absolutely possible by simply creating plans or bug reports in the ./issues folder - decoupling the agentic engineering process from any 3rd party project management tool, while still maintaining a clear and structured workflow for the agents to follow - even in case the harness fails right in the middle of an  implementation loop.

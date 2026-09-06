@@ -1,0 +1,88 @@
+/* -- FAQ (marketing) -----------------------------------------------
+   "Frequently asked questions" as an icon-card grid (each answer is
+   visible — no disclosure widget). Cards hold a muted icon tile and a
+   question/answer pair. Responsive columns follow container width. */
+
+@layer components {
+  .mk-faq {
+    container: mk-faq / inline-size;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  .mk-faq-head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 48rem;
+    text-align: left;
+  }
+
+  .mk-faq-eyebrow { color: var(--primary); font-size: 1rem; font-weight: 500; }
+
+  .mk-faq-title {
+    margin: 0;
+    font-size: 1.875rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  .mk-faq-grid { display: grid; gap: 3rem; }
+
+  .mk-faq-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    max-width: 36rem;
+    text-align: left;
+  }
+
+  .mk-faq-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--muted);
+
+    & svg { width: 1.5rem; height: 1.5rem; color: var(--primary); }
+  }
+
+  .mk-faq-text { display: flex; flex-direction: column; gap: 0.25rem; }
+
+  .mk-faq-question {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  .mk-faq-answer { margin: 0; color: var(--muted-foreground); font-size: 1rem; text-wrap: pretty; }
+
+  @container mk-faq (min-width: 30rem) {
+    .mk-faq-title { font-size: 2.25rem; }
+    .mk-faq-grid { grid-template-columns: 1fr 1fr; gap: 2.25rem 2.25rem; row-gap: 3rem; }
+  }
+
+  @container mk-faq (min-width: 52rem) {
+    .mk-faq-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  /* -- Accessibility ------------------------------------------- */
+  @media (forced-colors: active) {
+    .mk-faq-icon { border-color: CanvasText; }
+  }
+}

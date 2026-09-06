@@ -11,7 +11,9 @@
 
 **A UI component system that scales with AI.** Themeable components built on semantic HTML, modern CSS, and vanilla JavaScript. No framework. No build step for consumers — `dist/` is committed and ready to use as-is. The simplest possible foundation for AI-driven prototyping.
 
-29 of 55 components need no JavaScript — native HTML and modern CSS cover them entirely.
+42 of 68 components need no JavaScript — native HTML and modern CSS cover them entirely.
+
+The set includes 13 marketing blocks (Site Header, Hero, Pricing, Testimonials, Blog, Footer, …) — full-page sections composed from the same tokens and primitives, all CSS-only.
 
 **[Documentation & Live Demos →](https://kyr0.github.io/defuss-shadcn/)** · [Architecture (ARCH.md)](ARCH.md) · [Agent integration guide (dist/SKILL.md)](dist/SKILL.md)
 

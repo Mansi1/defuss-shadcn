@@ -144,6 +144,21 @@
         { heading: 'Application', items: [
                 { label: 'Sidebar', href: 'sidebar.html' },
             ] },
+        { heading: 'Marketing', items: [
+                { label: 'Site Header', href: 'site-header.html' },
+                { label: 'Hero', href: 'hero.html' },
+                { label: 'Product Showcase', href: 'product-showcase.html' },
+                { label: 'Brand Logos', href: 'brand-logos.html' },
+                { label: 'Feature Details', href: 'feature-details.html' },
+                { label: 'Testimonials', href: 'testimonials.html' },
+                { label: 'Stats', href: 'stats.html' },
+                { label: 'Pricing', href: 'pricing.html' },
+                { label: 'Blog', href: 'blog.html' },
+                { label: 'FAQ', href: 'faq.html' },
+                { label: 'Get In Touch', href: 'get-in-touch.html' },
+                { label: 'Newsletter', href: 'newsletter.html' },
+                { label: 'Site Footer', href: 'site-footer.html' },
+            ] },
     ];
     /* Pages that have been built (have a real doc page) */
     var BUILT = new Set([
@@ -163,6 +178,9 @@
         'breadcrumb.html', 'pagination.html', 'steps.html',
         'tabs.html', 'dropdown.html', 'navigation-menu.html',
         'scroll-area.html',
+        'site-header.html', 'hero.html', 'product-showcase.html', 'brand-logos.html',
+        'feature-details.html', 'testimonials.html', 'stats.html', 'pricing.html',
+        'blog.html', 'faq.html', 'get-in-touch.html', 'newsletter.html', 'site-footer.html',
         'carousel.html', 'sidebar.html', 'sortable.html',
     ]);
     /* Detect current filename */

@@ -958,6 +958,7 @@ The sidebar is ordered by dependency (primitives first):
 8. Overlays (Popover, Tooltip, Context Menu, Dialog, Sheet, Accordion, Command)
 9. Navigation (Breadcrumb, Pagination, Steps, Tabs, Dropdown Menu, Navigation Menu)
 10. Application (Sidebar)
+11. Marketing (Site Header, Hero, Product Showcase, Brand Logos, Feature Details, Testimonials, Stats, Pricing, Blog, FAQ, Get In Touch, Newsletter, Site Footer) — CSS-only page sections composed from the same tokens + primitives
 
 To reorder, edit the `NAV` array in `layout.js`.
 

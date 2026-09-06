@@ -1,0 +1,46 @@
+/* -- Product Showcase (marketing) ----------------------------------
+   Standalone 5:3 media frame with a centered play button — the hero's
+   media block extracted for reuse (video poster, product screenshot). */
+
+@layer components {
+  .mk-showcase {
+    container: mk-showcase / inline-size;
+    position: relative;
+    aspect-ratio: 5 / 3;
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--muted);
+
+    & img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  }
+
+  .mk-showcase-play {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 9999px;
+    background: var(--background);
+    box-shadow: var(--shadow-2xs);
+    cursor: pointer;
+
+    & svg { width: 1.5rem; height: 1.5rem; transition: scale 300ms ease; }
+    &:hover svg { scale: 1.1; }
+    &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  }
+
+  /* -- Accessibility ------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .mk-showcase-play svg { transition: none; }
+  }
+}

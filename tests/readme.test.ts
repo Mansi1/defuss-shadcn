@@ -8,11 +8,11 @@ import { readmeCssOnlyProblems } from '../scripts/lib/readme.ts';
  * function so these tests pin the contract (line present, numbers correct,
  * both files checked) without touching the filesystem.
  */
-const actual = { cssOnly: 29, total: 55 };
+const actual = { cssOnly: 42, total: 68 };
 
 describe('readmeCssOnlyProblems', () => {
   it('passes when the stated counts match the actual tree', () => {
-    const text = 'Some intro. **29 of 55 components need no JavaScript.** More text.';
+    const text = 'Some intro. **42 of 68 components need no JavaScript.** More text.';
     expect(readmeCssOnlyProblems(text, 'README.md', actual)).toEqual([]);
   });
 
@@ -25,7 +25,7 @@ describe('readmeCssOnlyProblems', () => {
     expect(problems).toHaveLength(1);
     expect(problems[0]).toContain('README.md');
     expect(problems[0]).toContain('28 of 54');
-    expect(problems[0]).toContain('29 of 55');
+    expect(problems[0]).toContain('42 of 68');
   });
 
   it('flags a missing line so the fix instruction points at both files', () => {
@@ -36,7 +36,7 @@ describe('readmeCssOnlyProblems', () => {
   });
 
   it('tolerates whitespace and casing variants of the claim', () => {
-    const text = '29 of 55 components need no javascript';
+    const text = '42 of 68 components need no javascript';
     expect(readmeCssOnlyProblems(text, 'x', actual)).toEqual([]);
   });
 });

@@ -1,0 +1,130 @@
+/* -- Feature Details (marketing) -----------------------------------
+   Section header + two large image features split by a rule + a row
+   of icon-led benefit cards. Column split only at container width;
+   stacked (rule omitted) below it. */
+
+@layer components {
+  .mk-features {
+    container: mk-features / inline-size;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  .mk-features-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 48rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .mk-features-eyebrow { color: var(--primary); font-size: 1rem; font-weight: 500; }
+
+  .mk-features-title {
+    margin: 0;
+    font-size: 1.875rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  .mk-features-desc {
+    margin: 0;
+    max-width: 42rem;
+    color: var(--muted-foreground);
+    font-size: 1rem;
+    text-wrap: pretty;
+  }
+
+  .mk-features-grid {
+    display: grid;
+    gap: 1.25rem;
+    width: 100%;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mk-feature {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-block: 1.25rem;
+  }
+
+  .mk-feature-copy { display: flex; flex: 1; flex-direction: column; gap: 0.375rem; }
+
+  .mk-feature-title {
+    margin: 0;
+    font-size: 1.875rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+
+  .mk-feature-desc { margin: 0; color: var(--muted-foreground); font-size: 1.125rem; text-wrap: pretty; }
+
+  .mk-feature-media {
+    position: relative;
+    aspect-ratio: 1;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background: var(--muted);
+
+    & img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  }
+
+  /* vertical rule between the two features (source swaps in a horizontal
+     separator below md; stacking already provides the visual break) */
+  .mk-feature-sep {
+    display: none;
+    width: 1px;
+    align-self: stretch;
+    background: var(--border);
+  }
+
+  .mk-feature-cards { display: grid; gap: 1.25rem; }
+
+  .mk-feature-card { display: flex; flex-direction: column; gap: 0.75rem; max-width: 36rem; }
+
+  .mk-feature-card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+
+    & svg { width: 1.5rem; height: 1.5rem; flex-shrink: 0; }
+  }
+
+  .mk-feature-card-desc { margin: 0; color: var(--muted-foreground); font-size: 1rem; text-wrap: pretty; }
+
+  @container mk-features (min-width: 30rem) {
+    .mk-features-title { font-size: 2.25rem; }
+    .mk-features-grid { grid-template-columns: 1fr auto 1fr; }
+    .mk-feature { padding-block: 2.25rem; }
+    .mk-feature-sep { display: block; }
+    .mk-feature-cards { grid-template-columns: 1fr 1fr; }
+  }
+
+  @container mk-features (min-width: 52rem) {
+    .mk-feature-cards { grid-template-columns: repeat(4, 1fr); gap: 2.25rem; }
+  }
+
+  /* -- Accessibility ------------------------------------------- */
+  @media (forced-colors: active) {
+    .mk-features-grid { border-bottom-color: CanvasText; }
+    .mk-feature-sep { background: CanvasText; }
+  }
+}

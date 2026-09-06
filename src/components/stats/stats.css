@@ -1,0 +1,88 @@
+/* -- Stats (marketing) ---------------------------------------------
+   Headline + rule-led metric grid beside a square photo. Each metric
+   uses border-left (source: `border-l pl-6`) and a link-style CTA. */
+
+@layer components {
+  .mk-stats {
+    /* the section is the query container; a container cannot query itself,
+       so the responsive grid lives on the inner layout element */
+    container: mk-stats / inline-size;
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  .mk-stats-layout { display: grid; gap: 2.25rem; }
+
+  .mk-stats-copy { display: flex; flex-direction: column; gap: 3rem; align-self: center; }
+
+  .mk-stats-head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 48rem;
+    text-align: left;
+  }
+
+  .mk-stats-title {
+    margin: 0;
+    font-size: 1.875rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  .mk-stats-desc { margin: 0; max-width: 42rem; color: var(--muted-foreground); font-size: 1rem; text-wrap: pretty; }
+
+  .mk-stats-grid { display: grid; gap: 1.25rem; }
+
+  .mk-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.125rem;
+    border-left: 1px solid var(--border);
+    padding-left: 1.5rem;
+  }
+
+  .mk-stat-value { font-size: 1.875rem; font-weight: 500; letter-spacing: -0.025em; font-variant-numeric: tabular-nums; }
+
+  .mk-stat-label { color: var(--muted-foreground); font-size: 1rem; text-wrap: pretty; }
+
+  /* link CTA flush-left inside the metric (source: `!px-0`) */
+  .mk-stats .mk-stat-link {
+    height: auto;
+    padding-inline: 0;
+    margin-block-start: 0.25rem;
+  }
+
+  .mk-stats-media {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--muted);
+    margin: 0;
+
+    & img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  }
+
+  @container mk-stats (min-width: 30rem) {
+    .mk-stats-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @container mk-stats (min-width: 52rem) {
+    .mk-stats-layout { grid-template-columns: 1fr 1fr; gap: 4rem; }
+    .mk-stats-copy { gap: 4rem; }
+    .mk-stats-title { font-size: 2.25rem; }
+    .mk-stats-grid { gap: 2.25rem 2.25rem; }
+  }
+
+  /* -- Accessibility ------------------------------------------- */
+  @media (forced-colors: active) {
+    .mk-stat { border-left-color: CanvasText; }
+  }
+}

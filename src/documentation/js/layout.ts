@@ -16,7 +16,7 @@
   // "version consistency" gate fails if it (or any other version literal in
   // this file) drifts from package.json — the footer once froze an old number
   // forever because it was a second, un-synchronised literal.
-  var SITE_VERSION = 'v0.7.15';
+  var SITE_VERSION = 'v0.7.16';
 
   /* -- Dark mode (must run before first paint) ----------------- */
   var saved = localStorage.getItem('defuss-shadcn-theme');
@@ -521,6 +521,19 @@
         var swap = function () {
           /* Swap main content */
           oldMain.innerHTML = newMain.innerHTML;
+
+          /* Migrate body-level overlays: dialogs/popovers live OUTSIDE
+             <main> (the documented "direct child of body" pattern —
+             dialog.html, sheet.html), so a main.innerHTML swap alone
+             leaves their triggers dead. Remove the previous page's and
+             adopt the new page's; component modules re-init them via
+             their MutationObserver. */
+          document.querySelectorAll('body > dialog, body > [popover]').forEach(function (el) {
+            if (!el.closest('site-header')) el.remove();
+          });
+          doc.querySelectorAll('body > dialog, body > [popover]').forEach(function (el) {
+            document.body.appendChild(document.importNode(el, true));
+          });
 
           /* Update document title */
           document.title = doc.title;

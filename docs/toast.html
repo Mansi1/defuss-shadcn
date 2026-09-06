@@ -333,6 +333,13 @@ _defussShadcn.toast.show({
 
   /* -- Toast ---------------------------------------------------- */
   .toast {
+    /* Top layer (popover=&quot;manual&quot;) bypasses the container's flex layout — the
+       UA sheet would CENTER every toast (inset:0 + margin:auto). Pin each toast
+       to its container's corner instead and stack via --toast-stack, which the
+       component JS measures (toast.ts stackToasts) since heights vary. */
+    position: fixed;
+    inset: auto;
+    margin: 0;
     background-color: var(--popover);
     color: var(--popover-foreground);
     border: 1px solid var(--border);
@@ -350,6 +357,16 @@ _defussShadcn.toast.show({
       opacity: 1;
       transform: translateY(0);
     }
+
+    /* -- Corner placement (top layer — see note above) ------------
+       --toast-stack: measured px offset of the stack below this toast;
+       the first toast is 0, so default bottom-right lands at the edge. */
+    [data-position=&quot;bottom-right&quot;] &amp; { bottom: calc(1rem + var(--toast-stack, 0px)); right: 1rem; }
+    [data-position=&quot;bottom-left&quot;] &amp; { bottom: calc(1rem + var(--toast-stack, 0px)); left: 1rem; }
+    [data-position=&quot;top-right&quot;] &amp; { top: calc(1rem + var(--toast-stack, 0px)); right: 1rem; }
+    [data-position=&quot;top-left&quot;] &amp; { top: calc(1rem + var(--toast-stack, 0px)); left: 1rem; }
+    [data-position=&quot;top-center&quot;] &amp; { top: calc(1rem + var(--toast-stack, 0px)); left: 50%; translate: -50% 0; }
+    [data-position=&quot;bottom-center&quot;] &amp; { bottom: calc(1rem + var(--toast-stack, 0px)); left: 50%; translate: -50% 0; }
 
     /* -- Variants ------------------------------------------------- */
     &amp;[data-variant=&quot;destructive&quot;] {
@@ -437,7 +454,11 @@ _defussShadcn.toast.show({
   }
 
   .toast-icon {
+    /* explicit size: SVGs without width/height render at a ~300px intrinsic
+       default, which blew up the whole toast */
     flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
     margin-top: 0.125rem;
   }
 
@@ -603,12 +624,25 @@ if (!toastContainer) {
   document.body.appendChild(toastContainer);
 }
 
+/** Stack offset for each visible toast: toasts render in the top layer
+ * (popover=&quot;manual&quot;), so the container's flex layout can't position them —
+ * CSS pins each to the corner and reads --toast-stack, which we measure here
+ * (px of newer toasts below it + 0.5rem gaps, matching the container gap). */
+const stackToasts = (container) =&gt; {
+  let offset = 0;
+  for (const t of container.querySelectorAll('.toast')) {
+    t.style.setProperty('--toast-stack', `${offset}px`);
+    offset += t.getBoundingClientRect().height + 8;
+  }
+};
+
 const toastDismiss = (el, callback) =&gt; {
   if (!el || !el.parentNode) return;
+  const container = el.parentNode;
   el.animate(
     [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(0.5rem)' }],
     { duration: 200, easing: 'ease', fill: 'forwards' }
-  ).finished.then(() =&gt; { try { el.hidePopover(); } catch {} el.remove(); if (callback) callback(); });
+  ).finished.then(() =&gt; { try { el.hidePopover(); } catch {} el.remove(); stackToasts(container); if (callback) callback(); });
 };
 
 const toastCreate = (options) =&gt; {
@@ -652,6 +686,7 @@ const toastCreate = (options) =&gt; {
     actionsDiv.appendChild(actionBtn); el.appendChild(actionsDiv);
   }
   toastContainer.appendChild(el); el.showPopover();
+  stackToasts(toastContainer);
   toastCallbacks.set(el, { onDismiss, action });
   if (duration !== Infinity) setTimeout(() =&gt; { toastDismiss(el, onDismiss); }, duration);
   const toasts = toastContainer.querySelectorAll('.toast');

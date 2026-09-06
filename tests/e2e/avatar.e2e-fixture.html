@@ -25,6 +25,13 @@
       <img class="avatar-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%2322c55e'/%3E%3C/svg%3E" alt="solid green" />
       <span class="avatar-fallback">LG</span>
     </span>
+    <!-- badge (status dot) sits half outside the circle — must NOT be clipped
+         (doc page "With Badge" mirrors this configuration) -->
+    <span class="avatar" id="av-badge">
+      <img class="avatar-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%23f59e0b'/%3E%3C/svg%3E" alt="amber" />
+      <span class="avatar-fallback">BD</span>
+      <span class="avatar-badge"></span>
+    </span>
 
     <script type="module" src="/dist/components/avatar/avatar.js"></script>
   </body>

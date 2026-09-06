@@ -141,6 +141,9 @@ The registry global is `_defussShadcn.toastApi` / `_defussShadcn.toastStates`.
 
 - The toast container should be a direct child of `<body>`
 - Toasts use `popover="manual"` so they don't auto-dismiss on outside click
+- Because `popover="manual"` renders each toast in the top layer (outside the
+  container's flex flow), CSS pins each toast to its container's corner and the
+  component JS sets a `--toast-stack` offset per toast — order stays newest-on-top
 - The stacking order is newest on top (CSS `flex-direction: column-reverse` for bottom positions)
 - Maximum visible toasts defaults to 3 — older toasts are dismissed
 - Swipe-to-dismiss can be added with touch event handling but is not required for MVP

@@ -123,6 +123,34 @@ try {
     assert.equal(await triggerText(page), 'Astro');
   });
 
+  await check('selection check: mask (not black data-URI image) + aligned rows', async () => {
+    // regression: a data: URI SVG resolves currentColor to BLACK as an image —
+    // the check was invisible in dark mode; and an in-flow ::before shifted the
+    // selected row's text out of alignment with the other rows
+    await page.click('#cb-demo .combobox-trigger');
+    await page.waitForFunction(() => document.querySelector('#cb-framework-popover')!.matches(':popover-open'));
+    const geom = await page.evaluate(() => {
+      const sel = document.querySelector('#cb-opt-astro')!;
+      const unsel = document.querySelector('#cb-opt-next')!;
+      const b = getComputedStyle(sel, '::before');
+      return {
+        mask: b.maskImage || b.webkitMaskImage || 'none',
+        bgImg: b.backgroundImage,
+        bgColor: b.backgroundColor,
+        selPad: getComputedStyle(sel).paddingInlineStart,
+        unselPad: getComputedStyle(unsel).paddingInlineStart,
+        pos: b.position,
+      };
+    });
+    assert.notEqual(geom.mask, 'none', 'check uses a mask so currentColor applies');
+    assert.match(geom.mask, /url\(/, 'mask-image is the check glyph');
+    assert.ok(!/svg/.test(geom.bgImg), 'no data-URI SVG background (renders black)');
+    assert.notEqual(geom.bgColor, 'rgba(0, 0, 0, 0)', 'background-color paints the mask');
+    assert.equal(geom.pos, 'absolute', 'check is absolutely positioned');
+    assert.equal(geom.selPad, geom.unselPad, 'selected row keeps the same indent');
+    await page.keyboard.press('Escape');
+  });
+
   await check('grouped listbox: labels, separators, disabled options', async () => {
     await page.click('#cb-grouped .combobox-trigger');
     await page.waitForFunction(() => document.querySelector('#cb-tz-popover')!.matches(':popover-open'));

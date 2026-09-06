@@ -51,6 +51,43 @@ try {
     assert.ok(Number(style.z) >= 50, 'above page content');
   });
 
+  await check('toast pins to its container corner (top layer bypasses the flex region)', async () => {
+    // toasts render in the top layer (popover="manual"), so the container's
+    // flex layout can't reach them — without explicit corner pinning the UA
+    // centers every toast in the viewport
+    await page.evaluate(() => globalThis._defussShadcn.toast!.show({ title: 'corner', duration: Infinity }));
+    await page.waitForFunction(() => !!document.querySelector('#toast-container .toast'));
+    // let the 200ms entrance transform settle (measures pin, not translateY)
+    await page.waitForTimeout(300);
+    const pos = await page.$eval('#toast-container .toast', (el) => {
+      const r = el.getBoundingClientRect();
+      return {
+        bottomGap: window.innerHeight - r.bottom,
+        rightGap: window.innerWidth - r.right,
+        stack: (el as HTMLElement).style.getPropertyValue('--toast-stack'),
+      };
+    });
+    assert.ok(pos.bottomGap >= 16 && pos.bottomGap < 30, `pinned near bottom (gap ${pos.bottomGap})`);
+    assert.ok(pos.rightGap >= 16 && pos.rightGap < 30, `pinned near right (gap ${pos.rightGap})`);
+    assert.equal(pos.stack, '0px', 'first toast sits at the edge');
+    await page.$eval('#toast-container', (el) => (el as HTMLElement).api!.setState('default'));
+    await page.waitForFunction(() => document.querySelectorAll('#toast-container .toast').length === 0);
+  });
+
+  await check('variant icon renders at 16px (not the SVG intrinsic default)', async () => {
+    // regression: generated icon SVGs have no width/height — without the CSS
+    // size they render ~300px and blow up the whole toast
+    await page.click('#t-success');
+    await page.waitForFunction(() => !!document.querySelector('#toast-container .toast .toast-icon'));
+    const size = await page.$eval('#toast-container .toast-icon', (el) => {
+      const r = el.getBoundingClientRect();
+      return `${Math.round(r.width)}x${Math.round(r.height)}`;
+    });
+    assert.equal(size, '16x16', `icon box ${size}`);
+    await page.$eval('#toast-container', (el) => (el as HTMLElement).api!.setState('default'));
+    await page.waitForFunction(() => document.querySelectorAll('#toast-container .toast').length === 0);
+  });
+
   await check('toast.show() renders a toast with title + description (role=status)', async () => {
     await page.click('#t-show');
     await page.waitForFunction(() => document.querySelectorAll('#toast-container .toast').length === 1);

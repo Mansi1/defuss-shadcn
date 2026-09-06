@@ -474,19 +474,32 @@
     cursor: pointer;
     outline: none;
     transition: background 100ms;
+    /* room for the selection check; the ::before is absolute (like
+       .dropdown-check) so unselected rows never shift horizontally */
+    padding-inline-start: 1.5rem;
+    position: relative;
 
     &amp;:hover, &amp;[data-highlighted] {
       background-color: var(--accent);
       color: var(--accent-foreground);
     }
 
+    /* Mask (not background-image): a data: URI SVG resolves currentColor to
+       BLACK when used as an image, making the check invisible in dark mode.
+       Masking paints it with background-color: currentColor — the real text
+       color, hover/foreground included. */
     &amp;[aria-selected=&quot;true&quot;]::before {
       content: '';
-      display: inline-block;
+      position: absolute;
+      inset-inline-start: 0.375rem;
+      top: 50%;
+      transform: translateY(-50%);
       width: 1rem;
       height: 1rem;
-      background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E&quot;);
-      background-size: contain;
+      background-color: currentColor;
+      mask-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E&quot;);
+      mask-size: contain;
+      mask-repeat: no-repeat;
       flex-shrink: 0;
     }
 

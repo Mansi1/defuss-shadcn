@@ -65,6 +65,26 @@ try {
     assert.equal(state.name, 'error', 'the network failure moved the named state');
   });
 
+  await check('badge dot is not clipped by the avatar circle', async () => {
+    const badge = await page.$eval('#av-badge', (el) => {
+      const b = el.querySelector('.avatar-badge')!.getBoundingClientRect();
+      const a = el.getBoundingClientRect();
+      return {
+        overflow: getComputedStyle(el).overflow,
+        // the dot's right edge extends past the square's edge (it's round-clipped
+        // area is inside); what must hold is the dot renders at full size —
+        // clipping would show it as a ≤2px sliver or 0-size
+        w: b.width,
+        h: b.height,
+        // dot center lies exactly on the circle's bottom-right edge
+        onEdge: Math.abs(b.right - a.right) < 1 && Math.abs(b.bottom - a.bottom) < 1,
+      };
+    });
+    assert.equal(badge.overflow, 'visible', 'avatars with badges must not clip');
+    assert.ok(badge.w >= 10 && badge.h >= 10, `dot renders full 10px (got ${badge.w}x${badge.h})`);
+    assert.ok(badge.onEdge, 'dot anchored at the circle edge');
+  });
+
   await check('sizes differ (sm < default < lg)', async () => {
     const [sm, def, lg] = await page.evaluate(() => [
       document.querySelector('#av-sm')!.getBoundingClientRect().width,

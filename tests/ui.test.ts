@@ -66,6 +66,31 @@ test('dialog component: trigger opens native <dialog>, close button closes it', 
   );
 });
 
+test('SPA router migrates body-level dialogs so triggers work after nav', async () => {
+  // regression: <dialog> demos live OUTSIDE <main> (direct children of body).
+  // The router swaps main.innerHTML only, so without migrating them the
+  // trigger click found no dialog and "nothing happened" after sidebar nav.
+  const { doc } = await openDocPage('index.html');
+  await waitFor(() => doc.querySelector('site-header button#theme-toggle'), 'shell to render');
+
+  await clickSelector(doc, 'site-nav a[href="dialog.html"]');
+  await waitFor(() => doc.querySelector('main h1')?.textContent?.includes('Dialog'), 'dialog page content');
+  await waitFor(() => doc.getElementById('demo-dialog'), 'migrated dialog in DOM');
+
+  const dialog = doc.getElementById('demo-dialog') as HTMLDialogElement;
+  expect(dialog.closest('main'), 'dialog must be adopted at body level').toBeNull();
+
+  await clickSelector(doc, '[data-dialog-trigger="demo-dialog"]');
+  await waitFor(() => dialog.open, 'dialog to open after SPA navigation');
+  await clickSelector(doc, '#demo-dialog [data-dialog-close]');
+  await waitFor(() => !dialog.open, 'dialog to close');
+
+  // navigating away must drop the previous page's dialogs (no duplicate ids)
+  await clickSelector(doc, 'site-nav a[href="sheet.html"]');
+  await waitFor(() => doc.querySelector('main h1')?.textContent?.includes('Sheet'), 'sheet page content');
+  expect(doc.getElementById('demo-dialog'), 'dialog of the previous page removed').toBeNull();
+});
+
 test('accordion single-open: opening one item closes its siblings', async () => {
   const { doc } = await openDocPage('accordion.html');
 

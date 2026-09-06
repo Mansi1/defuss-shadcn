@@ -45,6 +45,21 @@ try {
     assert.notEqual(style.bg, 'rgba(0, 0, 0, 0)', 'opaque popover surface');
   });
 
+  await check('menu opens only AFTER the right-button release (no light-dismiss on mouse-up)', async () => {
+    // regression: opening during the hold made the platform light-dismiss the
+    // auto popover the moment the button went up — the menu vanished on release
+    const box = (await page.locator('.context-menu-trigger').boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down({ button: 'right' });
+    await page.waitForTimeout(120);
+    assert.equal(await isOpen(page), false, 'menu must NOT open while the button is held');
+    await page.mouse.up({ button: 'right' });
+    await page.waitForFunction(() => document.querySelector('#demo-ctx')!.matches(':popover-open'));
+    assert.equal(await isOpen(page), true, 'menu survives the mouse-up');
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => !document.querySelector('#demo-ctx')!.matches(':popover-open'));
+  });
+
   await check('right-click opens the menu at the pointer', async () => {
     await page.click('.context-menu-trigger', { button: 'right' });
     await page.waitForFunction(() => document.querySelector('#demo-ctx')!.matches(':popover-open'));

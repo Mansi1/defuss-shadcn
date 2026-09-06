@@ -97,6 +97,23 @@
 
   <div style="margin-bottom:2.5rem;">
     <div class="flex items-center gap-3 mb-2">
+      <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0;">v0.7.16</h2>
+      <span class="badge" data-variant="outline" style="font-family:var(--font-mono);">2026-09-06</span>
+    </div>
+    <ul style="margin:0;padding-left:1.25rem;" class="text-sm text-muted-foreground flex flex-col gap-1">
+      <li>SPA router: body-level dialog/popover overlays are now migrated on page swaps — clicking dialog/sheet triggers after sidebar navigation did nothing before</li>
+      <li>context-menu: opens on the right-button release, not during the hold — the menu no longer light-dismisses itself on mouse-up</li>
+      <li>toast: pinned to its container corner (top layer bypasses the region's flex) + explicit 16px icon (un-sized SVG blew the toast up to ~300px)</li>
+      <li>avatar: status badge no longer clipped by overflow:hidden (fallback rounds itself instead)</li>
+      <li>combobox + dropdown: selection check/radio use a mask + currentColor — the data-URI SVG resolved currentColor to black and vanished on dark surfaces; selected row no longer shifts its text</li>
+      <li>table demo: avatar/name flex gap moved to the wrapping div (was dead style on the td)</li>
+      <li>collapsible demos: wrappers no longer shrink-wrap inside the flex preview (chevrons were jammed against uneven text)</li>
+      <li>e2e: regression checks for every fix above (hold-vs-release, toast corner + icon, badge clipping, mask indicators); dropdown fixture aligned with the documented .dropdown-check/.dropdown-radio markup</li>
+    </ul>
+  </div>
+
+  <div style="margin-bottom:2.5rem;">
+    <div class="flex items-center gap-3 mb-2">
       <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0;">v0.7.15</h2>
       <span class="badge" data-variant="outline" style="font-family:var(--font-mono);">September 06, 2026</span>
       <code class="changelog-hash" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted-foreground);">fe26cbd</code>

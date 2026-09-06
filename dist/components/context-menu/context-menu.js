@@ -98,6 +98,41 @@ export const contextMenuApi = {
 };
 _defussShadcn.contextMenuApi = contextMenuApi;
 _defussShadcn.contextMenuStates = contextMenuStates;
+/* One pending open across all triggers: { menu, x, y } captured on the
+   contextmenu event, consumed on the right-button pointerup. */
+let pendingOpen = null;
+/* Timestamp of the last right-button release (0 = never, i.e. page start) —
+   see the contextmenu handler: the gesture normally fires contextmenu at
+   button-DOWN (open must wait for the release), but some engines dispatch it
+   AFTER the pointerup — then the gesture is already over and opening is safe. */
+let lastRightUp = 0;
+/* Document-level open-on-release — registered once (AGENTS.md delegation
+   pattern). WHY release and not the contextmenu event itself: macOS fires
+   contextmenu at mouse-DOWN, and an auto popover shown while the right button
+   is still held is light-dismissed by the platform the moment it goes up —
+   the menu flashed open and vanished on mouse-up (verified in Chromium). */
+if (!document.__ctxMenuReleaseInit) {
+    document.__ctxMenuReleaseInit = true;
+    document.addEventListener('pointerup', (e) => {
+        if (e.button !== 2)
+            return;
+        lastRightUp = performance.now();
+        if (!pendingOpen)
+            return;
+        const { menu, x, y } = pendingOpen;
+        pendingOpen = null;
+        openMenuAt(menu, x, y);
+    });
+    document.addEventListener('pointercancel', () => { pendingOpen = null; });
+}
+/** Show a context menu fixed at the pointer coords. */
+function openMenuAt(menu, x, y) {
+    menu.style.position = 'fixed';
+    menu.style.top = `${y}px`;
+    menu.style.left = `${x}px`;
+    safeShowPopover(menu);
+    menu.dataset.stateName = 'open';
+}
 function init() {
     document.querySelectorAll('[data-context-menu]:not([data-init])').forEach((trigger) => {
         trigger.dataset.init = '';
@@ -111,14 +146,20 @@ function init() {
         };
         trigger.addEventListener('contextmenu', (e) => {
             e.preventDefault();
-            menu.style.position = 'fixed';
-            menu.style.top = `${e.clientY}px`;
-            menu.style.left = `${e.clientX}px`;
-            // showPopover() INSIDE the contextmenu event is instantly light-dismissed
-            // by the platform's own context-menu gesture (auto popover); deferring a
-            // frame lets the gesture finish first (rAF-then-show verified empirically)
-            requestAnimationFrame(() => safeShowPopover(menu));
-            menu.dataset.stateName = 'open';
+            // no pointer press (keyboard-synthesized, e.g. a11y tooling) → open next frame
+            if (e.pointerId === undefined || e.pointerId < 0) {
+                requestAnimationFrame(() => openMenuAt(menu, e.clientX, e.clientY));
+                return;
+            }
+            // right-button already released (gesture order: pointerup → contextmenu)
+            // → opening now can't be light-dismissed. lastRightUp===0 (page never saw a
+            // right release) must NOT qualify — otherwise early page loads take this
+            // branch for a still-held button (0 - now is meaningless).
+            if (lastRightUp > 0 && performance.now() - lastRightUp < 100) {
+                openMenuAt(menu, e.clientX, e.clientY);
+                return;
+            }
+            pendingOpen = { menu, x: e.clientX, y: e.clientY };
         });
         menu.addEventListener('click', (e) => {
             if (e.target.closest('.context-menu-item')) {

@@ -104,13 +104,25 @@ if (!toastContainer) {
     toastContainer.setAttribute('data-position', 'bottom-right');
     document.body.appendChild(toastContainer);
 }
+/** Stack offset for each visible toast: toasts render in the top layer
+ * (popover="manual"), so the container's flex layout can't position them —
+ * CSS pins each to the corner and reads --toast-stack, which we measure here
+ * (px of newer toasts below it + 0.5rem gaps, matching the container gap). */
+const stackToasts = (container) => {
+    let offset = 0;
+    for (const t of container.querySelectorAll('.toast')) {
+        t.style.setProperty('--toast-stack', `${offset}px`);
+        offset += t.getBoundingClientRect().height + 8;
+    }
+};
 const toastDismiss = (el, callback) => {
     if (!el || !el.parentNode)
         return;
+    const container = el.parentNode;
     el.animate([{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(0.5rem)' }], { duration: 200, easing: 'ease', fill: 'forwards' }).finished.then(() => { try {
         el.hidePopover();
     }
-    catch { } el.remove(); if (callback)
+    catch { } el.remove(); stackToasts(container); if (callback)
         callback(); });
 };
 const toastCreate = (options) => {
@@ -175,6 +187,7 @@ const toastCreate = (options) => {
     }
     toastContainer.appendChild(el);
     el.showPopover();
+    stackToasts(toastContainer);
     toastCallbacks.set(el, { onDismiss, action });
     if (duration !== Infinity)
         setTimeout(() => { toastDismiss(el, onDismiss); }, duration);

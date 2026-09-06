@@ -45,6 +45,26 @@ try {
     );
   });
 
+  await check('check/radio indicators use a mask (visible in dark mode)', async () => {
+    // regression: data: URI SVGs resolve currentColor to BLACK when used as
+    // background-image — the checks vanished on dark surfaces. A mask paints
+    // them with background-color: currentColor instead.
+    const geom = await page.evaluate(() => {
+      const chk = document.querySelector('.dropdown-check[aria-checked="true"]')!;
+      const rad = document.querySelector('.dropdown-radio[aria-checked="true"]')!;
+      const pick = (el: Element) => {
+        const b = getComputedStyle(el, '::before');
+        return { mask: b.maskImage || b.webkitMaskImage || 'none', svgBg: /svg/.test(b.backgroundImage), color: b.backgroundColor };
+      };
+      return { chk: pick(chk), rad: pick(rad) };
+    });
+    for (const [name, g] of Object.entries(geom)) {
+      assert.match(g.mask, /url\(/, `${name}: check glyph applied as mask-image`);
+      assert.ok(!g.svgBg, `${name}: no black data-URI SVG background`);
+      assert.notEqual(g.color, 'rgba(0, 0, 0, 0)', `${name}: background-color paints the mask`);
+    }
+  });
+
   await check('dropdown.css applied (menu surface)', async () => {
     const style = await page.$eval('#demo-dropdown', (el) => {
       const cs = getComputedStyle(el);
@@ -142,14 +162,14 @@ try {
     await page.waitForFunction(
       () => document.querySelectorAll('#demo-checks [data-highlighted]').length > 0,
     );
-    // open highlights the checkbox (first item); two steps reach the 2nd radio
+    // open highlights the first checkbox (Status Bar); two steps reach the radios
+    await page.keyboard.press('ArrowDown'); // -> Activity Bar checkbox
     await page.keyboard.press('ArrowDown'); // -> Default radio
-    await page.keyboard.press('ArrowDown'); // -> Text radio
     await page.keyboard.press('Enter');
     const checks = await page.$$eval('#demo-checks [role="menuitemradio"]', (els) =>
       els.map((el) => el.getAttribute('aria-checked')),
     );
-    assert.deepEqual(checks, ['false', 'true'], 'only the activated radio stays checked');
+    assert.deepEqual(checks, ['true', 'false'], 'only the activated radio stays checked');
     await page.keyboard.press('Escape');
   });
 

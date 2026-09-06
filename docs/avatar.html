@@ -324,9 +324,12 @@
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 9999px;
-    overflow: hidden;
     flex-shrink: 0;
     background-color: var(--muted);
+
+    /* No overflow:hidden: the badge dot sits half outside the circle (like
+       shadcn's -right-1 dot) and clipping cut it to a sliver. Circular
+       rendering comes from border-radius: inherit on image/fallback instead. */
 
     &amp;[data-size=&quot;sm&quot;] {
       width: 2rem;
@@ -360,6 +363,7 @@
     background-color: var(--muted);
     position: absolute;
     inset: 0;
+    border-radius: inherit; /* .avatar no longer clips — the fallback must round itself */
   }
 
   /* Hide fallback when image is loaded */

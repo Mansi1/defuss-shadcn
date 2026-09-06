@@ -186,9 +186,14 @@ compiles" is never mistaken for "it works". The rollout is in progress (`verify`
 the components still missing one) and its parity rule keeps fixture, docs and code in
 lockstep as they land.
 
-## Author
+## Credits
 
-Built by [Cody Lindley](https://kyr0.com)
+This project began as a fork of **[shadcn-html](https://github.com/codylindley/shadcn-html)** —
+credit to [Cody Lindley](https://github.com/codylindley) for the original idea and first
+implementation.
+
+Maintained by [Aron Homberg](https://aron-homberg.de) — the TypeScript build chain,
+State API, and the verifier-driven quality loop ([ARCH.md](ARCH.md)) described above.
 
 ## License
 

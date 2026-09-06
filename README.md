@@ -4,10 +4,16 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![No dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)
 ![HTML CSS JS](https://img.shields.io/badge/stack-HTML%20·%20CSS%20·%20JS-orange)
+[![npm version](https://img.shields.io/npm/v/defuss-shadcn.svg?logo=npm)](https://www.npmjs.com/package/defuss-shadcn)
+[![npm downloads](https://img.shields.io/npm/dm/defuss-shadcn.svg)](https://www.npmjs.com/package/defuss-shadcn)
+[![TypeScript definitions](https://img.shields.io/npm/types/defuss-shadcn.svg)](https://www.npmjs.com/package/defuss-shadcn)
+[![Socket Badge](https://badge.socket.dev/npm/package/defuss-shadcn/latest)](https://socket.dev/npm/package/defuss-shadcn)
 
 **A UI component system that scales with AI.** Themeable components built on semantic HTML, modern CSS, and vanilla JavaScript. No framework. No build step for consumers — `dist/` is committed and ready to use as-is. The simplest possible foundation for AI-driven prototyping.
 
-**[Documentation & Live Demos →](https://kyr0.github.io/defuss-shadcn/)**
+29 of 55 components need no JavaScript — native HTML and modern CSS cover them entirely.
+
+**[Documentation & Live Demos →](https://kyr0.github.io/defuss-shadcn/)** · [Architecture (ARCH.md)](ARCH.md) · [Agent integration guide (dist/SKILL.md)](dist/SKILL.md)
 
 ## What this is
 

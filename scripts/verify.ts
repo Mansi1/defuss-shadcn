@@ -14,6 +14,7 @@ import {
   SKILL_OUTPUT_FILE,
   SKILL_TEMPLATE_FILE,
 } from './lib/skill.ts';
+import { readmeCssOnlyProblems } from './lib/readme.ts';
 import { buildSkillText } from './lib/skill-files.ts';
 
 /**
@@ -858,7 +859,31 @@ check(
       'run `bun run build` (build.ts regenerates src/SKILL.md from SKILL_tpl.md + frontmatter; never edit SKILL.md by hand)',
     );
   }
-  
+
+  // 31. README/index "no JavaScript" stat: the docs advertise how many
+  // components ship no JS; the claim must match the actual component tree
+  // (a .ts source in src/components = ships a .js). Same gate for both
+  // files so the parity pair can never state different numbers.
+  {
+    const withJs = componentDirs.filter((c) => existsSync(join(COMPS, c, `${c}.ts`)));
+    const actual = { cssOnly: componentDirs.length - withJs.length, total: componentDirs.length };
+    const statFix = `update the "**N of M components need no JavaScript**" line in README.md AND src/documentation/index.html (within the 15-min parity window) to match the component tree (${actual.cssOnly} of ${actual.total})`;
+    check(
+      'README CSS-only stat',
+      readmeCssOnlyProblems(readFileSync(join(ROOT, 'README.md'), 'utf8'), 'README.md', actual),
+      statFix,
+    );
+    check(
+      'index CSS-only stat',
+      readmeCssOnlyProblems(
+        readFileSync(join(DOCS, 'index.html'), 'utf8'),
+        'src/documentation/index.html',
+        actual,
+      ),
+      statFix,
+    );
+  }
+
   console.log(
   failed
     ? `\nverify: FAILED (${failed} check group(s), ${warned} warning group(s))`

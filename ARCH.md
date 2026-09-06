@@ -68,7 +68,7 @@ to ignore it. The two files are one system: prose explains the *why*, the
 verifier enforces the *what*, and prose points at the verifier as the final
 word (`bun run verify` is the single "am I done?" question).
 
-## 4. The surrounding gates — verification is not enough by itself
+## 4. The surrounding gates — suppressing hallucination, AI slop and overstating claims
 
 The verifier checks *consistency*. The loop wraps it with gates that check
 *behavior, quality, and appearance*:

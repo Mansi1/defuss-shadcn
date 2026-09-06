@@ -104,6 +104,17 @@
     </a>
   </div>
 
+  <!-- Dogfooding: the PUBLISHED site (docs/ via sync-docs.ts) loads every
+       component CSS/JS and the theme straight from the jsDelivr CDN, exactly
+       as README.md's "Via CDN" quick start shows. If this page renders, the
+       CDN install works — the docs are their own proof. -->
+  <p class="text-xs text-muted-foreground mb-8" style="max-width:36rem;">
+    This documentation dogfoods the system: on the published site every component
+    stylesheet, script, and theme you see styled here is loaded straight from the
+    jsDelivr CDN — the same URLs as the <a href="installation.html" style="text-decoration:underline;text-underline-offset:3px;">CDN quick start</a>.
+    Every demo that renders correctly is proof that the CDN install works in general.
+  </p>
+
   <!-- Pillars -->
   <div class="grid gap-4 mb-12" style="grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));">
     <div class="card">
@@ -129,6 +140,18 @@
           <h3 class="card-title" style="font-size:0.9375rem;">Component Skills</h3>
         </div>
         <p class="card-description" style="font-size:0.8125rem;">Every component includes a structured skill — markup, variants, ARIA, and wiring conventions — grounded in web standards.</p>
+      </div>
+      <div style="height:1.25rem;"></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="flex items-center gap-2 mb-3">
+          <div style="width:1.875rem;height:1.875rem;background:var(--primary);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--primary-foreground)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <h3 class="card-title" style="font-size:0.9375rem;">Observable state</h3>
+        </div>
+        <p class="card-description" style="font-size:0.8125rem;">Interactive components expose a State API (<code style="font-size:0.75rem;">el.api.setState('open')</code>), so agents and tests can drive every documented state by name.</p>
       </div>
       <div style="height:1.25rem;"></div>
     </div>

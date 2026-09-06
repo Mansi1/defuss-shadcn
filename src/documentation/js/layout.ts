@@ -305,7 +305,7 @@
       html += '<div class="sidebar-author">' +
         '<hr style="border:none;border-top:1px solid var(--sidebar-border);margin:0 0.75rem 0.875rem;">' +
         '<p style="padding:0 0.75rem 0;margin:0;font-size:0.75rem;color:var(--muted-foreground);line-height:1.6;">' +
-          'Built by <a href="https://kyr0.com" target="_blank" rel="noopener" style="color:var(--foreground);text-decoration:underline;text-underline-offset:3px;font-weight:500;">Cody Lindley</a>' +
+          'Original idea & first implementation by <a href="https://github.com/codylindley" target="_blank" rel="noopener" style="color:var(--foreground);text-decoration:underline;text-underline-offset:3px;font-weight:500;">Cody Lindley</a> · maintained by <a href="https://aron-homberg.de" target="_blank" rel="noopener" style="color:var(--foreground);text-decoration:underline;text-underline-offset:3px;font-weight:500;">Aron Homberg</a>' +
         '</p>' +
       '</div>';
       html += '</aside>';

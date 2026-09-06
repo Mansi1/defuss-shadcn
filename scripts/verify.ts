@@ -679,6 +679,34 @@ check(
   'use globalThis and scope the name under globalThis._defussShadcn (AGENTS.md "No window globals")',
 );
 
+// 26. README ↔ index.html parity: the intro pillar lists must say the same
+// thing. README.md leads with `- **Name**` bullets (intro section, before the
+// first `##` heading); index.html renders the same pillars as card-title h3s.
+// They diverged once ("Observable state" went into the README only) — now the
+// gate catches it, and AGENTS.md demands both files change together.
+{
+  const readme = readFileSync(join(ROOT, 'README.md'), 'utf8');
+  // the pillar bullets live under "## What this is", i.e. between the first
+  // `##` and "## Quick start" — scan exactly that range
+  const intro = readme.slice(0, readme.search(/^## Quick start$/m));
+  const readmePillars = [...intro.matchAll(/^- \*\*(.+?)\*\*/gm)].map((m) => m[1].trim());
+  const indexHtml = readFileSync(join(DOCS, 'index.html'), 'utf8');
+  // pillar cards are the only card-title h3s on the page today
+  const indexPillars = [...indexHtml.matchAll(/<h3 class="card-title"[^>]*>([^<]+)<\/h3>/g)].map((m) =>
+    m[1].trim(),
+  );
+  const missing = readmePillars.filter((p) => !indexPillars.includes(p));
+  const extra = indexPillars.filter((p) => !readmePillars.includes(p));
+  check(
+    'README ↔ index parity',
+    [
+      ...missing.map((p) => `index.html card missing for README pillar "${p}"`),
+      ...extra.map((p) => `README bullet missing for index.html card "${p}"`),
+    ],
+    'keep README.md intro bullets and documentation/index.html pillar cards in sync (AGENTS.md "README ↔ index parity") — change both files together',
+  );
+}
+
 console.log(
   failed
     ? `\nverify: FAILED (${failed} check group(s), ${warned} warning group(s))`

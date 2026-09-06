@@ -98,6 +98,20 @@ warn-ratchets it still reports, e.g. `STATE_API_LEGACY`, are named migration
 debt with an explicit removal path — not permission to ignore them.) The
 full rationale lives in [ARCH.md](ARCH.md).
 
+### README ↔ index parity
+
+`README.md` (intro pillar bullets) and `src/documentation/index.html` (pillar
+cards) describe the same system to humans and to browser users — **when you
+update either, update the other in the same commit.** The intro bullets
+(`- **Name** — …`, under "What this is" and before "Quick start") and the index pillar cards
+(`<h3 class="card-title">`) must list the same set of pillars; the index page
+also carries the "this site loads its assets from the jsDelivr CDN, exactly
+as README's Via CDN quick start shows — if it renders, the CDN install works"
+dogfooding note, which must stay true if the CDN strategy in
+[`scripts/lib/mirror.ts`](scripts/lib/mirror.ts) ever changes. `verify`'s
+`README ↔ index parity` check enforces the pillar set (hard gate); the
+prose pairing is yours to maintain.
+
 ### Native web platform first
 
 Every component starts from a native HTML element or browser API. If the browser

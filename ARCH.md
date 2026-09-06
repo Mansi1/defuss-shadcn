@@ -21,7 +21,7 @@ layer is for.
 ## 2. The verifier — the authority layer
 
 [`scripts/verify.ts`](scripts/verify.ts) is a custom, code-implemented audit
-of everything prose cannot guarantee: **34 check groups** over the shipped
+of everything prose cannot guarantee: **35 check groups** over the shipped
 tree — skills exist, doc pages exist, tokens are tweakcn-compatible, snippets
 match source, dist is a 1:1 build of src, every declared state has a
 screenshot/skill/doc/e2e artifact, cross-page imports are complete, links
@@ -75,7 +75,7 @@ The verifier checks *consistency*. The loop wraps it with gates that check
 | Lint | oxlint (`bun run lint`) | src/, tests/, scripts/ stay warning-clean |
 | Type-check | strict `tsc --noEmit` | tests/ and scripts/ compile |
 | Unit/integration | Vitest browser mode (`bun run test:run`) | real doc pages in a real Chromium iframe behave |
-| E2E | 55 standalone Playwright scripts (`bun run e2e`) | every component's documented surface — interactions, keyboard, computed CSS |
+| E2E | 56 standalone Playwright scripts (`bun run e2e`) | every component's documented surface — interactions, keyboard, computed CSS — plus the doc site itself (renders, SPA nav, search) |
 | Screenshots | `bun run screenshots` | every declared **state × light/dark** PNG exists, is fresh vs. its input fingerprint, and the render manifest hash-detects drift |
 | Git hygiene | verify check #23 | every verified byte is committed — what CI/other agents see is exactly what passed |
 
@@ -105,7 +105,7 @@ flowchart TD
     B --> C["make build"]
     subgraph GATES["mechanical quality gates (no human in the loop)"]
         direction LR
-        L["oxlint<br/>typecheck"] --> P["compile src → dist<br/>1:1 build"] --> SS["screenshots<br/>every state × light/dark<br/>fingerprint-fresh"] --> V["verify.ts<br/>34 consistency gates<br/>incl. 'working tree committed'"] --> Q["Vitest UI tests<br/>55 Playwright e2e"]
+        L["oxlint<br/>typecheck"] --> P["compile src → dist<br/>1:1 build"] --> SS["screenshots<br/>every state × light/dark<br/>fingerprint-fresh"] --> V["verify.ts<br/>35 consistency gates<br/>incl. 'working tree committed'"] --> Q["Vitest UI tests<br/>56 Playwright e2e"]
     end
     C --> GATES
 

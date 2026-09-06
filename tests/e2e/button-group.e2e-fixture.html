@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>button-group e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/button/button.css" />
+    <link rel="stylesheet" href="/dist/components/button-group/button-group.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: horizontal group, separator, vertical group -->
+    <div class="btn-group" id="bg-horizontal">
+      <button class="btn" id="bg-left">Left</button>
+      <button class="btn" id="bg-right">Right</button>
+    </div>
+
+    <div class="btn-group" id="bg-separator">
+      <button class="btn">Copy</button>
+      <span role="separator"></span>
+      <button class="btn">Paste</button>
+    </div>
+
+    <div class="btn-group" id="bg-vertical" data-orientation="vertical">
+      <button class="btn" id="bg-v-top">Bold</button>
+      <button class="btn" id="bg-v-bottom">Italic</button>
+    </div>
+  </body>
+</html>

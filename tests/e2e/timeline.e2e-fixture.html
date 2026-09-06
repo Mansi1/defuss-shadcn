@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>timeline e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/timeline/timeline.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: dotted rail with an active dot + title/content -->
+    <ul class="timeline" id="tl-demo">
+      <li class="timeline-item" id="tl-item-1">
+        <span class="timeline-dot" data-variant="active"></span>
+        <div class="timeline-content">
+          <p class="timeline-title">Deployed</p>
+          <p class="timeline-description">Production release v1.2.0</p>
+        </div>
+      </li>
+      <li class="timeline-item" id="tl-item-2">
+        <span class="timeline-dot"></span>
+        <div class="timeline-content">
+          <p class="timeline-title">Queued</p>
+        </div>
+      </li>
+    </ul>
+  </body>
+</html>

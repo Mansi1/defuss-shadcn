@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>checkbox e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/checkbox/checkbox.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: plain, checked, indeterminate, disabled, invalid, item rows -->
+    <div class="checkbox-item">
+      <input type="checkbox" class="checkbox" id="cb-plain" />
+      <label for="cb-plain">Plain</label>
+    </div>
+    <div class="checkbox-item">
+      <input type="checkbox" class="checkbox" id="cb-checked" checked />
+      <label for="cb-checked">Checked</label>
+    </div>
+    <div class="checkbox-item">
+      <input type="checkbox" class="checkbox" id="cb-indet" />
+      <label for="cb-indet">Indeterminate</label>
+    </div>
+    <div class="checkbox-item">
+      <input type="checkbox" class="checkbox" id="cb-disabled" disabled />
+      <label for="cb-disabled">Disabled</label>
+    </div>
+    <div class="checkbox-item">
+      <input type="checkbox" class="checkbox" id="cb-invalid" aria-invalid="true" />
+      <label for="cb-invalid">Invalid</label>
+    </div>
+    <div class="checkbox-item-block">
+      <input type="checkbox" class="checkbox" id="cb-block" />
+      <label for="cb-block">Block item with a longer description that wraps underneath</label>
+    </div>
+
+    <script>
+      // indeterminate is a JS-only property (no HTML attribute) — set it once
+      document.getElementById('cb-indet').indeterminate = true;
+    </script>
+  </body>
+</html>

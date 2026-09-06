@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>collapsible e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/collapsible/collapsible.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: native <details> disclosure (CSS-only component) -->
+    <details class="collapsible" id="cl-closed">
+      <summary class="collapsible-trigger">
+        Trigger
+        <svg class="collapsible-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 15 5 5 5-5" /></svg>
+      </summary>
+      <div class="collapsible-content">Collapsible content here.</div>
+    </details>
+
+    <details class="collapsible" id="cl-open" open style="margin-top:1rem;">
+      <summary class="collapsible-trigger">
+        Open trigger
+        <svg class="collapsible-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 15 5 5 5-5" /></svg>
+      </summary>
+      <div class="collapsible-content">Visible content.</div>
+    </details>
+  </body>
+</html>

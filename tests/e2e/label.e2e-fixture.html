@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>label e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/label/label.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: plain label + hint, explicit data-disabled,
+         and the :has(+ :disabled) sibling dimming (no JS involved) -->
+    <label class="label" id="lb-plain" for="in-1">Email <span class="label-hint">(optional)</span></label>
+    <input id="in-1" />
+
+    <label class="label" id="lb-disabled" data-disabled for="in-2">Disabled label</label>
+    <input id="in-2" />
+
+    <label class="label" id="lb-sibling" for="in-3">Sibling dimming</label>
+    <input id="in-3" disabled />
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>radio e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/radio/radio.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: vertical group, horizontal group, card, block, invalid -->
+    <fieldset class="radio-group" id="rg-vertical">
+      <legend>Vertical</legend>
+      <div class="radio-item">
+        <input type="radio" name="v" class="radio" id="r-default" />
+        <label for="r-default">Default</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="v" class="radio" id="r-checked" checked />
+        <label for="r-checked">Checked</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="v" class="radio" id="r-disabled" disabled />
+        <label for="r-disabled">Disabled</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="v" class="radio" id="r-invalid" aria-invalid="true" />
+        <label for="r-invalid">Invalid</label>
+      </div>
+    </fieldset>
+
+    <fieldset class="radio-group" id="rg-horizontal" data-orientation="horizontal" style="margin-top:1rem;">
+      <legend>Horizontal</legend>
+      <div class="radio-item"><input type="radio" name="h" class="radio" id="r-h1" /><label for="r-h1">One</label></div>
+      <div class="radio-item"><input type="radio" name="h" class="radio" id="r-h2" /><label for="r-h2">Two</label></div>
+    </fieldset>
+
+    <div class="radio-item-block" style="margin-top:1rem;max-width:20rem;">
+      <input type="radio" name="b" class="radio" id="r-block" />
+      <label for="r-block">Feature</label>
+      <span class="radio-description">A description under the label, in the second grid column.</span>
+    </div>
+  </body>
+</html>

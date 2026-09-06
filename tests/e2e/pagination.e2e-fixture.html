@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>pagination e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/pagination/pagination.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: links, prev/next, active, ellipsis, disabled -->
+    <nav class="pagination" aria-label="Pagination">
+      <ul class="pagination-list">
+        <li><a class="pagination-prev" href="#">Prev</a></li>
+        <li><a class="pagination-link" id="pg-link" href="#">1</a></li>
+        <li><a class="pagination-link pagination-active" id="pg-active" href="#" aria-current="page">2</a></li>
+        <li><span class="pagination-ellipsis" id="pg-ellipsis"><span>…</span></span></li>
+        <li><a class="pagination-link" id="pg-disabled" href="#" aria-disabled="true">9</a></li>
+        <li><a class="pagination-next" id="pg-next" href="#">Next</a></li>
+      </ul>
+    </nav>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+import assert from 'node:assert/strict';
+import { cssSmoke } from './lib/css-smoke.ts';
+
+/**
+ * Why: button-group is CSS-only — it stitches sibling buttons into one
+ * control. Verify the inline-flex stretch, the -1px overlap that hides the
+ * shared border, the square inner corners, the 1px separator, and the
+ * vertical orientation switch.
+ */
+await cssSmoke('button-group', [
+  {
+    label: '.btn-group is inline-flex with stretched children',
+    selector: '#bg-horizontal',
+    css: { display: 'inline-flex', 'align-items': 'stretch' },
+  },
+  {
+    label: 'adjacent buttons overlap by -1px (single shared border)',
+    selector: '#bg-right',
+    css: { 'margin-inline-start': '-1px' },
+  },
+  {
+    label: 'inner corners are squared off, outer corners keep the radius',
+    run: async (page) => {
+      const corners = await page.evaluate(() => {
+        const left = getComputedStyle(document.querySelector('#bg-left')!);
+        const right = getComputedStyle(document.querySelector('#bg-right')!);
+        return {
+          leftStart: left.borderStartStartRadius,
+          leftEnd: left.borderStartEndRadius,
+          rightStart: right.borderStartStartRadius,
+          rightEnd: right.borderStartEndRadius,
+        };
+      });
+      // --radius: 0.625rem (10px) in the default token file → --radius-md: 8px
+      assert.equal(corners.leftStart, '8px', 'first keeps outer --radius-md');
+      assert.equal(corners.leftEnd, '0px', 'first has square inner edge');
+      assert.equal(corners.rightStart, '0px', 'second has square inner edge');
+      assert.notEqual(corners.rightEnd, '0px', 'last keeps outer radius');
+    },
+  },
+  {
+    label: 'role=separator renders a 1px stretch rule',
+    selector: '#bg-separator [role="separator"]',
+    css: { width: '1px' },
+  },
+  {
+    label: 'data-orientation="vertical" stacks the group',
+    selector: '#bg-vertical',
+    css: { 'flex-direction': 'column', 'align-items': 'stretch' },
+  },
+]);

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>form e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/form/form.css" />
+    <link rel="stylesheet" href="/dist/components/label/label.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: stacked form, horizontal field, inline row, fieldset -->
+    <form class="form" id="fm-root">
+      <div class="form-field" id="fm-stack">
+        <label class="label" for="f1">Email</label>
+        <input id="f1" />
+      </div>
+      <div class="form-field" id="fm-horizontal" data-orientation="horizontal">
+        <label class="label" for="f2">Name</label>
+        <input id="f2" />
+      </div>
+      <div class="form-field-inline" id="fm-inline">
+        <label class="label" for="f3">Subscribe</label>
+        <input type="checkbox" id="f3" />
+      </div>
+      <fieldset class="form-fieldset" id="fm-fieldset">
+        <legend>Group</legend>
+        <div class="form-group" id="fm-group">
+          <div class="form-field"><label class="label" for="f4">A</label></div>
+          <div class="form-field"><label class="label" for="f5">B</label></div>
+        </div>
+      </fieldset>
+      <div class="form-actions" id="fm-actions"><button type="button">Save</button></div>
+    </form>
+  </body>
+</html>

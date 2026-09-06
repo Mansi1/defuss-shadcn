@@ -435,13 +435,12 @@
 
     &amp;::placeholder { color: var(--muted-foreground); }
 
-    &amp;:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
     /* -- Readonly state -------------------------------------- */
-    &amp;:read-only:not([type=&quot;file&quot;]) {
+    /* :not(:disabled) is load-bearing: a disabled input ALSO matches
+       :read-only, and this rule's specificity (class + pseudo + :not attr)
+       outranks the plain :disabled below — without the exclusion, disabled
+       controls would render with the readonly look (0.7/default). */
+    &amp;:read-only:not([type=&quot;file&quot;], :disabled) {
       background: var(--muted);
       cursor: default;
       opacity: 0.7;
@@ -450,6 +449,11 @@
         border-color: var(--input);
         box-shadow: var(--shadow-xs);
       }
+    }
+
+    &amp;:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     /* -- Invalid state --------------------------------------- */

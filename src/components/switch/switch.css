@@ -3,6 +3,7 @@
 @layer components {
   .switch {
     appearance: none;
+    margin: 0; /* kill the UA's ~4px input margin — breaks flex/grid rhythm */
     width: 2.25rem;
     height: 1.25rem;
     border-radius: 9999px;

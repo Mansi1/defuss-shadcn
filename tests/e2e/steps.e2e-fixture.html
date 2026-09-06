@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>steps e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/steps/steps.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: complete/current/pending statuses, sizes, vertical -->
+    <ol class="steps" id="st-horizontal">
+      <li class="step" data-status="complete">
+        <span class="step-indicator">1</span>
+        <div class="step-content"><p class="step-title">Cart</p></div>
+      </li>
+      <li class="step" data-status="current">
+        <span class="step-indicator">2</span>
+        <div class="step-content"><p class="step-title">Shipping</p></div>
+      </li>
+      <li class="step" id="st-pending">
+        <span class="step-indicator">3</span>
+        <div class="step-content"><p class="step-title">Done</p></div>
+      </li>
+    </ol>
+
+    <ol class="steps" id="st-sm" data-size="sm" style="margin-top:2rem;">
+      <li class="step"><span class="step-indicator">1</span></li>
+      <li class="step"><span class="step-indicator">2</span></li>
+    </ol>
+    <ol class="steps" id="st-lg" data-size="lg" style="margin-top:2rem;">
+      <li class="step"><span class="step-indicator">1</span></li>
+      <li class="step"><span class="step-indicator">2</span></li>
+    </ol>
+
+    <ol class="steps" id="st-vertical" data-orientation="vertical" style="margin-top:2rem;max-width:16rem;">
+      <li class="step"><span class="step-indicator">1</span></li>
+      <li class="step"><span class="step-indicator">2</span></li>
+    </ol>
+  </body>
+</html>

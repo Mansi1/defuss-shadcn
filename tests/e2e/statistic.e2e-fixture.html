@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>statistic e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/statistic/statistic.css" />
+  </head>
+  <body style="padding:2rem;display:grid;gap:1.5rem;justify-items:start;">
+    <!-- mirrors the doc page: title/value/description + up & down trends -->
+    <div class="statistic" id="st-demo">
+      <p class="statistic-title">Total Revenue</p>
+      <p class="statistic-value">$1,250.50</p>
+      <p class="statistic-description">
+        <span class="statistic-trend" data-trend="up">+20.1%</span>
+        from last month
+      </p>
+    </div>
+    <div class="statistic">
+      <p class="statistic-title">Refunds</p>
+      <p class="statistic-value">$320</p>
+      <p class="statistic-description"><span class="statistic-trend" data-trend="down">-3.1%</span></p>
+    </div>
+  </body>
+</html>

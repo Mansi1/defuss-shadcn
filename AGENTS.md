@@ -708,22 +708,19 @@ Per-component smoke tests live in `tests/e2e/` and run with **plain Playwright**
   `accordion.e2e.ts` is the reference template.
 
 `tests/e2e/run.ts` globs and runs every `*.e2e.ts` in isolated child processes.
-When adding a component, add both files (see the accordion pair as the template).
+When adding a component, add both files. Interactive components follow the
+`accordion.e2e.{ts,fixture.html}` template (drive `api.setState` + interactions);
+CSS-only components use the shared `tests/e2e/lib/css-smoke.ts` runner — the
+assertions are data (literal computed px values, pairwise-distinct token colors,
+`run` escape hatch for pseudo-states), see `tests/e2e/badge.e2e.ts`.
 
-### Migration order (legacy components)
+### Legacy rollouts (complete)
 
-`verify` warns about two overlapping rollouts — 24 components missing the State
-API, 53 missing e2e files. **Always refactor the source first, then write the
-e2e test**, never the other way round:
-
-1. refactor `{name}.ts` to the State API (AGENTS.md "State API"), update the
-   skill's `## States` + doc page (`<code>` per state + `data-state-demo` anchor),
-   run `bun run screenshots`, remove the name from `STATE_API_LEGACY` — commit
-2. then write `{name}.e2e-fixture.html` + `{name}.e2e.ts` covering the now-final
-   surface (every variant/size/state) — commit
-
-The fixture encodes the component's declared surface; writing it before the
-refactor means rewriting the test (and its state assertions) immediately after.
+Every component now ships the State API (interactive ones) and an e2e pair —
+the `STATE_API_LEGACY` / e2e warn-ratchets in `scripts/verify.ts` are empty and
+the checks are hard gates. New components must land compliant from day one:
+source → skill `## States` + doc page (`<code>` per state + `data-state-demo`
+anchor) → `bun run screenshots` → e2e fixture + test, ideally in one commit.
 
 ### Docs ↔ E2E parity (REQUIRED)
 

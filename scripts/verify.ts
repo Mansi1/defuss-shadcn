@@ -60,18 +60,17 @@ check(
   `copy src/documentation/badge.html as template`,
 );
 
-// 3. every component has an e2e smoke test (warn: rollout in progress)
-// Order matters: the e2e fixture/assertions encode the component's documented
-// surface (incl. State API states) — writing them before the source is
-// refactored means rewriting the test afterwards. Source first, then e2e.
+// 3. every component has an e2e smoke test — rollout complete, hard gate.
+// The fixture/assertions encode the component's documented surface (incl.
+// State API states), so new components land with source + fixture + test
+// together (AGENTS.md "Docs ↔ E2E parity").
 const missingE2e = componentDirs
   .filter((c) => !existsSync(join(E2E, `${c}.e2e.ts`)))
   .map((c) => `tests/e2e/${c}.e2e.ts missing`);
 check(
   'e2e smoke tests',
   missingE2e,
-  'per component: 1) refactor source to State API + docs/skill (see "state API" warning), 2) THEN add fixture + test per tests/e2e/accordion.e2e.{ts,fixture.html} template, 3) `bun run e2e`',
-  true,
+  'add fixture + test: interactive components follow tests/e2e/accordion.e2e.{ts,fixture.html}; CSS-only components use tests/e2e/lib/css-smoke.ts (see tests/e2e/badge.e2e.ts). Then `bun run e2e`',
 );
 
 // 4. component CSS uses only defined tokens (tweakcn shape) or local defs

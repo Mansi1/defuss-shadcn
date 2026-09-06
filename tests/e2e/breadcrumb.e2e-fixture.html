@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>breadcrumb e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/breadcrumb/breadcrumb.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: nav > ol > links, separators, ellipsis, current page -->
+    <nav aria-label="Breadcrumb">
+      <ol class="breadcrumb-list">
+        <li class="breadcrumb-item"><a class="breadcrumb-link" href="#">Home</a></li>
+        <li class="breadcrumb-item"><span class="breadcrumb-separator" aria-hidden="true">/</span></li>
+        <li class="breadcrumb-item"><span class="breadcrumb-ellipsis" aria-hidden="true">…</span></li>
+        <li class="breadcrumb-item"><span class="breadcrumb-separator" aria-hidden="true">/</span></li>
+        <li class="breadcrumb-item"><span class="breadcrumb-page" aria-current="page">Current</span></li>
+      </ol>
+    </nav>
+  </body>
+</html>

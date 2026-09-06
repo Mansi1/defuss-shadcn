@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>table e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/table/table.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: container > caption/thead/tbody/tfoot -->
+    <div class="table-container" id="tb-wide" style="max-width:600px;">
+      <table class="table">
+        <caption class="table-caption">A captioned table</caption>
+        <thead>
+          <tr class="table-row">
+            <th class="table-head">Header</th>
+            <th class="table-head">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-row"><td class="table-cell">Invoice 1</td><td class="table-cell">$250</td></tr>
+        </tbody>
+        <tfoot>
+          <tr class="table-row"><td class="table-cell">Total</td><td class="table-cell">$250</td></tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="table-container" id="tb-narrow" style="max-width:400px;margin-top:1rem;">
+      <table class="table">
+        <thead><tr><th class="table-cell">H</th></tr></thead>
+        <tbody><tr><td class="table-cell">cell</td></tr></tbody>
+      </table>
+    </div>
+  </body>
+</html>

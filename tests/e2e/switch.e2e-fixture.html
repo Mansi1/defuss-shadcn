@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>switch e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/switch/switch.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: off, on, sm, disabled, invalid -->
+    <div class="switch-item"><input type="checkbox" role="switch" class="switch" id="sw-off" /></div>
+    <div class="switch-item"><input type="checkbox" role="switch" class="switch" id="sw-on" checked /></div>
+    <div class="switch-item"><input type="checkbox" role="switch" class="switch" id="sw-sm" data-size="sm" /></div>
+    <div class="switch-item"><input type="checkbox" role="switch" class="switch" id="sw-disabled" disabled /></div>
+    <div class="switch-item"><input type="checkbox" role="switch" class="switch" id="sw-invalid" aria-invalid="true" /></div>
+  </body>
+</html>

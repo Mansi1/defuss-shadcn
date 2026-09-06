@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>input e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/input/input.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: default, disabled, readonly, invalid -->
+    <input class="input" id="in-default" placeholder="Placeholder" />
+    <input class="input" id="in-disabled" disabled value="Disabled" />
+    <input class="input" id="in-readonly" readonly value="Readonly" />
+    <input class="input" id="in-invalid" aria-invalid="true" value="Invalid" />
+    <input class="input" id="in-sm" data-size="sm" value="Small" />
+    <input class="input" id="in-lg" data-size="lg" value="Large" />
+  </body>
+</html>

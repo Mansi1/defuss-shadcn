@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>alert e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/alert/alert.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: default + destructive alerts with all children -->
+    <div class="alert" id="al-default">
+      <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg>
+      <div class="alert-content">
+        <p class="alert-title">Heads up!</p>
+        <p class="alert-description">You can add components to your app.</p>
+      </div>
+      <div class="alert-action"><button class="btn">Action</button></div>
+    </div>
+    <div class="alert" id="al-destructive" data-variant="destructive">
+      <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg>
+      <div class="alert-content">
+        <p class="alert-title">Error</p>
+        <p class="alert-description">Your session has expired.</p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>select e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/select/select.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- mirrors the doc page: default, disabled, invalid, both sizes (parity) -->
+    <select class="select" id="se-default">
+      <option>Choose…</option>
+      <option>One</option>
+    </select>
+    <select class="select" id="se-disabled" disabled style="margin-top:1rem;">
+      <option>Disabled</option>
+    </select>
+    <select class="select" id="se-invalid" aria-invalid="true" style="margin-top:1rem;">
+      <option>Invalid</option>
+    </select>
+    <select class="select" id="se-sm" data-size="sm" style="margin-top:1rem;">
+      <option>Small</option>
+    </select>
+    <select class="select" id="se-lg" data-size="lg" style="margin-top:1rem;">
+      <option>Large</option>
+    </select>
+  </body>
+</html>

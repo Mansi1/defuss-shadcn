@@ -308,6 +308,7 @@
 @layer components {
   .checkbox {
     appearance: none;
+    margin: 0; /* kill the UA's ~4px input margin — breaks flex/grid rhythm */
     width: 1.125rem;
     height: 1.125rem;
     border: 1px solid var(--border);

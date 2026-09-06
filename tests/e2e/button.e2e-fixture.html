@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>button e2e fixture</title>
+    <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <link rel="stylesheet" href="/dist/components/button/button.css" />
+  </head>
+  <body style="padding:2rem;">
+    <!-- every documented variant + size (verify fixture↔CSS parity) -->
+    <button class="btn" id="bt-default" data-variant="default">Default</button>
+    <button class="btn" id="bt-secondary" data-variant="secondary">Secondary</button>
+    <button class="btn" id="bt-outline" data-variant="outline">Outline</button>
+    <button class="btn" id="bt-ghost" data-variant="ghost">Ghost</button>
+    <button class="btn" id="bt-destructive" data-variant="destructive">Destructive</button>
+    <button class="btn" id="bt-link" data-variant="link">Link</button>
+
+    <button class="btn" id="bt-xs" data-size="xs">xs</button>
+    <button class="btn" id="bt-sm" data-size="sm">sm</button>
+    <button class="btn" id="bt-lg" data-size="lg">lg</button>
+    <button class="btn" id="bt-icon" data-size="icon" aria-label="icon">+</button>
+    <button class="btn" id="bt-icon-xs" data-size="icon-xs" aria-label="icon-xs">+</button>
+    <button class="btn" id="bt-icon-sm" data-size="icon-sm" aria-label="icon-sm">+</button>
+    <button class="btn" id="bt-icon-lg" data-size="icon-lg" aria-label="icon-lg">+</button>
+
+    <button class="btn" id="bt-disabled" disabled>Disabled</button>
+    <button class="btn" id="bt-aria-disabled" aria-disabled="true">aria-disabled</button>
+  </body>
+</html>

@@ -142,6 +142,27 @@ are neither identical nor within **15 minutes** of each other, the build fails
 as "un-synced edit" — forcing you to land them together. Wording parity itself
 is yours to maintain (no automated text diff; the window is the backstop).
 
+### Changelog (two-commit rule)
+
+Every version in `package.json` needs an entry in
+[`src/documentation/changelog.html`](src/documentation/changelog.html) listing
+**all commit messages** of that release (deploy.sh generates them since the
+last tag; v0.7.14 was the first release after the fork from
+codylindley/shadcn-html, so its entry documents the fork). Each entry shows
+either the release date badge or — once the version is actually **committed** —
+the short git hash of the commit that added the entry, embedded as
+`<code class="changelog-hash">abc1234</code>`. The hash is unknowable before
+that commit exists, so authoring an entry is inherently **two commits**:
+
+1. commit the entry (with date badge),
+2. commit that commit's short hash into the entry.
+
+`verify`'s `changelog ↔ version` gate fails when the committed `package.json`
+version has no entry (or a hash-less / message-less entry for that version);
+its `fix:` line states the two-commit instruction. `scripts/deploy.sh`
+automates the whole flow. Legacy entries (v0.7.13-alpha and earlier) keep
+date-only badges — the hash requirement applies from this rule onward.
+
 ### Native web platform first
 
 Every component starts from a native HTML element or browser API. If the browser

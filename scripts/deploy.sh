@@ -12,9 +12,11 @@ set -euo pipefail
 #
 # This is a RELEASE deploy. It:
 #   1. Bumps the version in package.json and layout.js
-#   2. Generates a changelog entry from git commits
-#   3. Commits and pushes to dev
-#   4. Merges dev → main and pushes
+#   2. Generates a changelog entry from git commits (all messages since the
+#      last release)
+#   3. Commits to dev, then a SECOND commit embeds that commit's short hash
+#      into the changelog entry (verify's "changelog ↔ version" two-commit rule)
+#   4. Pushes dev, merges dev → main and pushes
 #   5. Creates a git tag
 #
 # For non-release changes (README, doc fixes, etc.), use:
@@ -82,8 +84,12 @@ sed -i '' "s/v${FULL_VERSION}/v${NEW_VERSION}/g" src/documentation/js/layout.ts
 
 echo "✅ Updated version in package.json and layout.ts (header pill + footer)"
 
-# Generate changelog entry from git commits since last tag
-# (same rule: inject into the SOURCE page; make build below mirrors it to dist/ + docs/)
+# Generate changelog entry from git commits since last tag.
+# Two-commit rule (verify's "changelog ↔ version" gate): the entry goes in
+# with the version bump, then a SECOND commit embeds this commit's short hash
+# into the entry as <code class="changelog-hash">…</code> — proof of when the
+# entry was authored. (same rule: inject into the SOURCE page; make build
+# below mirrors it to dist/ + docs/)
 CHANGELOG_FILE="src/documentation/changelog.html"
 LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
 DATE=$(date +"%B %d, %Y")
@@ -131,9 +137,29 @@ echo "✅ Added changelog entry for v${NEW_VERSION}"
 # is a screenshot input), docs mirror, verify, tests, e2e (same gates as CI).
 make build
 
-# Commit the version bump on dev and push (generated trees included: dist/, docs/)
+# Two-commit rule (verify's "changelog ↔ version" gate): first commit the
+# changelog entry WHILE the old version is still in package.json (so every
+# commit on dev stays verify-green), then a second commit stamps that commit's
+# short hash into the entry and lands the version bump.
+git add src/documentation/changelog.html dist/documentation/changelog.html docs/changelog.html
+git commit -m "docs(changelog): add v${NEW_VERSION} entry"
+ENTRY_HASH=$(git rev-parse --short HEAD)
+
+# Stamp the entry-authoring commit hash into the entry's header line (right
+# after the date badge) and rebuild the generated trees for the bump commit.
+node -e "
+  const fs = require('fs');
+  const file = '${CHANGELOG_FILE}';
+  let html = fs.readFileSync(file, 'utf8');
+  const anchor = new RegExp('(v' + '${NEW_VERSION}'.replace(/[.]/g, '\\\\.') + '</h2>[\\\\s\\\\S]*?</span>)');
+  if (!anchor.test(html)) { console.error('changelog: v${NEW_VERSION} header not found for hash injection'); process.exit(1); }
+  html = html.replace(anchor, '\$1 <code class=\"changelog-hash\">${ENTRY_HASH}</code>');
+  fs.writeFileSync(file, html);
+"
+bun scripts/build.ts && bun scripts/sync-docs.ts
+
 git add package.json src/documentation/js/layout.ts src/documentation/changelog.html dist/ docs/
-git commit -m "chore: bump version to v${NEW_VERSION}"
+git commit -m "chore: bump version to v${NEW_VERSION} (changelog ${ENTRY_HASH})"
 git push origin dev
 
 # Merge into main and push

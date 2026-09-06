@@ -97,6 +97,45 @@
 
   <div style="margin-bottom:2.5rem;">
     <div class="flex items-center gap-3 mb-2">
+      <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0;">v0.7.14</h2>
+      <span class="badge" data-variant="outline" style="font-family:var(--font-mono);">September 06, 2026</span>
+    </div>
+    <ul style="margin:0;padding-left:1.25rem;" class="text-sm text-muted-foreground flex flex-col gap-1">
+      <li>First release as defuss-shadcn — forked from codylindley/shadcn-html (original idea and implementation by Cody Lindley) at commit f6d308d, September 05, 2026; v0.7.14 continues the original v0.7.13-alpha line and every commit below is post-fork work</li>
+      <li>README: doc-site e2e covers the command-palette search, not the removed sidebar filter</li>
+      <li>docs search: header box opens the command palette, fed by a generated index</li>
+      <li>docs search box moves into the header, next to the version badge</li>
+      <li>footer credit + tagline rewritten (user copy); sidebar author block removed</li>
+      <li>docs header brand fixed (shadcn-html -> defuss-shadcn); footer can never go stale again</li>
+      <li>sync README ↔ index.html hero sentence; add commit-window gate</li>
+      <li>index.html dogfoods the CDN install; README↔index parity rule + gate; docs e2e</li>
+      <li>docs/ publishes only the documentation site (no more full dist/ copy)</li>
+      <li>README: credits — forked from codylindley/shadcn-html (original idea and implementation by Cody Lindley); the Author line conflated the two people (kyr0.com is Aron Homberg)</li>
+      <li>no window globals: everything lives under globalThis._defussShadcn (AGENTS.md)</li>
+      <li>README: point to ARCH.md, drop stale rollout-gap note (ratchets now empty)</li>
+      <li>ARCH.md: the self-verification proof loop, documented</li>
+      <li>e2e coverage for all 29 CSS-only components (rollout complete)</li>
+      <li>all 16 legacy components: honor prefers-reduced-motion (accessibility CSS)</li>
+      <li>avatar, image, sidebar, toast, context-menu: State API + e2e (batch 6, final legacy five)</li>
+      <li>calendar, color-picker, combobox, tree-view: State API + e2e (batch 5)</li>
+      <li>slider, number-input, carousel, sortable: State API + e2e (batch 4)</li>
+      <li>tabs, toggle, toggle-group, toolbar: State API + e2e (batch 3)</li>
+      <li>sheet, alert-dialog, command, navigation-menu: State API + e2e (batch 2)</li>
+      <li>popover, tooltip, dropdown: State API + e2e (batch 1)</li>
+      <li>README: document State API, TypeScript test tree, screenshots, expanded verify contract, docs/ mirror</li>
+      <li>docs: mirror dist/ → docs/ for GitHub Pages; typecheck + mirror freshness in verify</li>
+      <li>tests: port e2e runner, server, helpers and suites to TypeScript</li>
+      <li>verify: 8 new Pareto checks (escaping sentinel, reduced-motion, init idempotency, doc refs, linkedom link check, fixture↔CSS parity, portable paths, render drift)</li>
+      <li>verify+AGENTS: mandate refactor-source-first, then-e2e migration order</li>
+      <li>verify: state API messages give explicit refactor directive for missing states array</li>
+      <li>verify: code↔skill↔docs variant parity + uncommitted-tree warning</li>
+      <li>wip</li>
+      <li>initial after refactoring of fork</li>
+    </ul>
+  </div>
+
+  <div style="margin-bottom:2.5rem;">
+    <div class="flex items-center gap-3 mb-2">
       <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0;">v0.7.13-alpha</h2>
       <span class="badge" data-variant="outline" style="font-family:var(--font-mono);">April 19, 2026</span>
     </div>

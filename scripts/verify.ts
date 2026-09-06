@@ -7,6 +7,7 @@ import { auditUtilities, walk } from './lib/audit.ts';
 import { componentFingerprints, declaredStates } from './lib/inputs.ts';
 import { snippetDrifts } from './lib/snippets.ts';
 import { mirrorHashes } from './lib/mirror.ts';
+import { changelogProblems, FIX_TWO_COMMITS, parseChangelogEntries, type CommitInfo } from './lib/changelog.ts';
 
 /**
  * Why: one static, fast gate that proves the repo is self-consistent after any
@@ -779,6 +780,43 @@ check(
         ? owned.map((c) => `dialog.ts claims dialog.${c} too — add :not(.${c}) to its init() selector`)
         : ['dialog.ts lost the dialog:not(...) init selector — verify cannot check ownership'],
       'components own their dialogs (backdrop close, focus, filtering); dialog.js must :not-exclude each one — see AGENTS.md "Each component owns its dialog"',
+    );
+  }
+
+  // 29. changelog ↔ version: the version COMMITTED in package.json must have an
+  // entry in changelog.html — a release cut without a changelog is invisible to
+  // readers, which happened to v0.7.14. Each entry carries the commit messages
+  // of its release, and once the version is committed the changelog commit's
+  // git hash is available too, so the entry must embed it as
+  // <code class="changelog-hash"> (legacy entries predating this rule keep
+  // their date badge). A missing entry means a two-commit fix: commit the
+  // entry, then commit that commit's short hash into the entry itself.
+  {
+    const pkgAtHead = Bun.spawnSync({ cmd: ['git', 'show', 'HEAD:package.json'], cwd: ROOT });
+    let committedVersion: string | null = null;
+    try {
+      committedVersion = pkgAtHead.exitCode === 0 ? (JSON.parse(pkgAtHead.stdout.toString()).version as string) : null;
+    } catch {
+      committedVersion = null; // unreadable HEAD manifest → treated as "no git" (warn, not fail)
+    }
+    /** Resolve a short hash against this repo and report whether it touched the changelog. */
+    const resolveCommit = (hash: string): CommitInfo => {
+      if (Bun.spawnSync({ cmd: ['git', 'cat-file', '-e', `${hash}^{commit}`], cwd: ROOT }).exitCode !== 0) return null;
+      const files = Bun.spawnSync({ cmd: ['git', 'show', '--name-only', '--format=', hash], cwd: ROOT }).stdout.toString();
+      return { exists: true, touchesChangelog: files.includes('documentation/changelog.html') };
+    };
+    const { problems, warnings } = changelogProblems({
+      entries: parseChangelogEntries(readFileSync(join(DOCS, 'changelog.html'), 'utf8')),
+      committedVersion,
+      worktreeVersion: version,
+      resolveCommit,
+    });
+    check('changelog ↔ version', problems, FIX_TWO_COMMITS);
+    check(
+      'changelog pending bump',
+      warnings,
+      'add the entry for the bumped version NOW — commit it, then commit that commit\'s hash into the entry (AGENTS.md "Changelog") — before the version bump itself is committed',
+      true,
     );
   }
   

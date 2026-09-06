@@ -63,6 +63,7 @@ defuss-shadcn/
 │   ├── verify.ts                      ← static consistency gate (runs at end of build; `bun run verify`)
 │   ├── sync-docs.ts                   ← mirror dist/documentation → docs/ (CDN-rewritten; `bun run docs`)
 │   ├── lib/mirror.ts                  ← shared docs/ mirror transform (sync-docs + verify compare against it)
+│   ├── lib/search-index.ts            ← docs search index generator (build.ts regenerates it every build)
 │   ├── create-screenshots.ts          ← parallel default-state screenshots for agent inspection
 │   ├── lib/audit.ts                   ← undefined-utility audit (used by verify)
 │   ├── lib/snippets.ts                ← shared snippet drift/replace logic (syncers + verify)
@@ -97,6 +98,25 @@ its last green `verify` run; there is no flag that skips the gate. (The
 warn-ratchets it still reports, e.g. `STATE_API_LEGACY`, are named migration
 debt with an explicit removal path — not permission to ignore them.) The
 full rationale lives in [ARCH.md](ARCH.md).
+
+### Each component owns its dialog
+
+`dialog.js`'s init claims plain `<dialog>` elements for backdrop-click close —
+via a `dialog:not(.alert-dialog):not(.sheet):not(.command):not([data-init])`
+selector. **Any component that ships its own `<dialog class="…">` with custom
+behavior must be `:not()`-excluded there**, or dialog.js (loaded before every
+component script on all doc pages) stamps `data-init` first and the real
+owner's init silently skips the element — the docs search palette was dead
+exactly this way once. `verify`'s `dialog ownership boundary` gate enforces
+the exclusion list for the three dialog owners (alert-dialog, sheet, command);
+extend the list in both places when a fourth appears.
+
+The docs header search is the shipped command component itself: clicking the
+input (or ⌘/Ctrl+K) opens `<dialog class="command" id="docs-palette">`, fed by
+the build-time index (`scripts/lib/search-index.ts` → `js/search-index.js`,
+NAV entries + every page `<h2>` with TOC-compatible ids). The trigger is
+click/Enter only — never `focus`: `dialog.close()` restores focus to the
+opener synchronously, which would bounce the palette open again.
 
 ### README ↔ index parity
 

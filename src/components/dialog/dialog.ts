@@ -55,7 +55,10 @@ function init() {
       dialog.showModal();
     });
   });
-  document.querySelectorAll('dialog:not(.alert-dialog):not(.sheet):not([data-init])').forEach((dialog) => {
+  /* .command excluded: the command component owns its dialogs (own backdrop
+     close, filtering, focus). Without this, dialog.js — which loads first —
+     claims them via data-init and command.js's init silently skips them. */
+  document.querySelectorAll('dialog:not(.alert-dialog):not(.sheet):not(.command):not([data-init])').forEach((dialog) => {
     dialog.dataset.init = '';
     // bind-scope the api per instance: `$('#confirm').api.setState('open')`
     dialog.api = {

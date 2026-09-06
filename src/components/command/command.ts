@@ -90,12 +90,14 @@ document.querySelectorAll('dialog.command:not([data-init])').forEach((dialog) =>
     const list = dialog.querySelector('.command-list');
     const empty = dialog.querySelector('.command-empty');
     if (!input || !list) return;
-    const items = Array.from(list.querySelectorAll('.command-item'));
     let highlightIndex = -1;
 
+    // query the LIVE list on every filter (KISS): item nodes may be replaced
+    // after init (e.g. the docs palette feeds itself from a generated index),
+    // a cached snapshot would silently keep filtering detached nodes
     const filter = (q) => {
       const query = q.toLowerCase(); let hasVisible = false;
-      items.forEach((item) => {
+      list.querySelectorAll('.command-item').forEach((item) => {
         const match = !query || item.textContent.toLowerCase().includes(query);
         item.hidden = !match; if (match) hasVisible = true;
       });

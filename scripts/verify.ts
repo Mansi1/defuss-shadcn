@@ -760,9 +760,29 @@ check(
     problems,
     'update README.md and src/documentation/index.html in the same commit (or within 15 min of each other) so their shared claims stay true (AGENTS.md "README ↔ index parity")',
   );
-}
-
-console.log(
+  }
+  
+  // 28. component boundary: dialog.js init() claims dialogs generically via a
+  // :not(...) selector — every component that owns its own <dialog> (command,
+  // alert-dialog, sheet) must be excluded there, or dialog.js — loaded first on
+  // every page — stamps data-init and the real owner's init() silently skips
+  // the element (this exact bug disabled the docs search palette once).
+  {
+    const dialogSrc = readFileSync(join(COMPS, 'dialog', 'dialog.ts'), 'utf8');
+    const claim = dialogSrc.match(/querySelectorAll\((['"])dialog:not\([\s\S]*?\1\)/);
+    const owned = ['alert-dialog', 'sheet', 'command'].filter(
+      (c) => claim && !claim[0].includes(`not(.${c})`),
+    );
+    check(
+      'dialog ownership boundary',
+      claim
+        ? owned.map((c) => `dialog.ts claims dialog.${c} too — add :not(.${c}) to its init() selector`)
+        : ['dialog.ts lost the dialog:not(...) init selector — verify cannot check ownership'],
+      'components own their dialogs (backdrop close, focus, filtering); dialog.js must :not-exclude each one — see AGENTS.md "Each component owns its dialog"',
+    );
+  }
+  
+  console.log(
   failed
     ? `\nverify: FAILED (${failed} check group(s), ${warned} warning group(s))`
     : `\nverify: OK${warned ? ` (${warned} warning group(s))` : ''}`,

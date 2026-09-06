@@ -185,12 +185,13 @@
             '<span class="header-brand-name">defuss<em>-shadcn</em></span>' +
             '<span class="badge header-brand-version" data-variant="outline" style="font-family:var(--font-mono);">' + SITE_VERSION + '</span>' +
           '</a>' +
-          /* Nav filter lives in the header (next to the version badge) but its
-             logic binds in <site-nav>, which filters the sidebar links. The
-             header upgrades first, so the input exists when the nav renders. */
+          /* Search trigger next to the version badge: focusing (or clicking)
+             it opens the site's own <dialog class="command"> palette below,
+             which IS the search. The input never receives keystrokes — it
+             blurs the moment the modal takes focus. */
           '<div class="header-search" role="search">' +
-            '<input type="text" class="nav-filter-input" placeholder="Filter components..." ' +
-              'aria-label="Filter components" autocomplete="off" spellcheck="false">' +
+            '<input type="text" class="header-search-input" placeholder="Search docs… (⌘K)" ' +
+              'aria-label="Search documentation" autocomplete="off" readonly>' +
           '</div>' +
           '<div style="flex:1;"></div>' +
           '<nav style="display:flex;align-items:center;gap:0.25rem;">' +
@@ -214,7 +215,21 @@
             '<button class="theme-reset-btn" id="theme-reset-btn">Reset</button>' +
           '</div>' +
           '<div class="theme-grid" id="theme-grid"></div>' +
-        '</div>';
+        '</div>' +
+        /* Docs-wide search palette — the shipped command component, fed by
+           the generated search index (scripts/lib/search-index.ts →
+           js/search-index.js). First dialog.command in document order, so
+           command.js's Cmd/Ctrl+K targets it, not any in-page demo. */
+        '<dialog id="docs-palette" class="command" aria-label="Search documentation">' +
+          '<div class="command-content">' +
+            '<div class="command-input-wrapper">' +
+              '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>' +
+              '<input class="command-input" type="text" placeholder="Search documentation…" autocomplete="off" autocorrect="off" spellcheck="false">' +
+            '</div>' +
+            '<div class="command-list" id="docs-palette-list"></div>' +
+            '<div class="command-empty" hidden>No results found.</div>' +
+          '</div>' +
+        '</dialog>';
 
       /* Build theme swatches */
       var grid = this.querySelector('#theme-grid');
@@ -274,7 +289,79 @@
           if (docs.applyTheme) docs.applyTheme('default');
         });
       }
+
+      /* -- Search palette --------------------------------------- */
+      /* The header input is a trigger, not a field: clicking it (or Enter/
+         Space while focused) opens the <dialog class="command"> palette
+         above, whose own input receives the query (the command component
+         filters/highlights/keys natively). Deliberately NOT a focus trigger:
+         dialog.close() restores focus to the opener synchronously, so a
+         focus handler would bounce the palette open on every close.
+         Items come from the build-time search index
+         (scripts/lib/search-index.ts). */
+      var list = this.querySelector('#docs-palette-list');
+      var dialog = this.querySelector('#docs-palette');
+      var trigger = this.querySelector('.header-search-input');
+      var searchWrap = this.querySelector('.header-search');
+      if (list && dialog && trigger && searchWrap) {
+        var index = (globalThis._defussShadcn.docs && globalThis._defussShadcn.docs.searchIndex) || [];
+        var esc = function (s) { return s.replace(/&/g, '&').replace(/</g, '<').replace(/"/g, '"'); };
+        var html = '';
+        var group = null;
+        index.forEach(function (e) {
+          if (e.s !== group) {
+            if (group !== null) html += '</div>';
+            group = e.s;
+            html += '<div class="command-group"><p class="command-group-heading">' + esc(group) + '</p>';
+          }
+          html += '<button class="command-item" type="button" data-href="' + esc(e.h) + '">' + esc(e.t) + '</button>';
+        });
+        if (group !== null) html += '</div>';
+        list.innerHTML = html;
+
+        var openPalette = function () {
+          if (dialog.open) return;
+          dialog.showModal();
+          var cmdInput = dialog.querySelector('.command-input');
+          if (cmdInput) cmdInput.focus();
+        };
+        searchWrap.addEventListener('click', openPalette);
+        trigger.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault(); // Space would otherwise do nothing on a readonly input
+            openPalette();
+          }
+        });
+
+        /* Navigate after the command component closes the dialog on item
+           click (its own Enter handler synthesizes this same click). */
+        dialog.addEventListener('click', function (e) {
+          var item = e.target.closest('.command-item');
+          if (!item) return;
+          var href = item.getAttribute('data-href') || '';
+          var hashAt = href.indexOf('#');
+          var page = hashAt === -1 ? href : href.slice(0, hashAt);
+          var id = hashAt === -1 ? '' : href.slice(hashAt + 1);
+          if (page === currentPage) {
+            if (id) { var el = document.getElementById(id); if (el) el.scrollIntoView({ block: 'start' }); }
+            else window.scrollTo(0, 0);
+          } else {
+            navigateTo(page, true);
+            if (id) scrollToWhenReady(id, 0);
+          }
+        });
+      }
     }
+  }
+
+  /* The SPA swap is async; poll briefly for the target heading.
+     ponytail: 100ms × 20 — swap normally lands <200ms; upgrade path is a
+     hook on navigateTo's completion, not needed while the docs stay static. */
+  function scrollToWhenReady(id, attempt) {
+    var el = document.getElementById(id);
+    if (el) { el.scrollIntoView({ block: 'start' }); return; }
+    if (attempt > 20) return;
+    setTimeout(function () { scrollToWhenReady(id, attempt + 1); }, 100);
   }
 
   /* -- <site-nav> --------------------------------------------- */
@@ -302,36 +389,6 @@
       html += '</aside>';
       this.innerHTML = html;
 
-      /* -- Filter logic --------------------------------------- */
-      /* The input itself lives in <site-header> (next to the version badge);
-         <site-header> upgrades first, so it exists by the time we render. */
-      var input = document.querySelector('.nav-filter-input');
-      var sections = this.querySelectorAll('.nav-section');
-      if (input && sections.length) {
-        input.addEventListener('input', function () {
-          var q = input.value.toLowerCase().trim();
-          /* Skip the first section (Overview) — always visible */
-          for (var s = 1; s < sections.length; s++) {
-            var sec = sections[s];
-            var links = sec.querySelectorAll('.nav-link');
-            var anyVisible = false;
-            for (var l = 0; l < links.length; l++) {
-              var match = !q || links[l].textContent.toLowerCase().indexOf(q) !== -1;
-              links[l].style.display = match ? '' : 'none';
-              if (match) anyVisible = true;
-            }
-            sec.style.display = anyVisible ? '' : 'none';
-          }
-        });
-        /* Focus shortcut: Cmd/Ctrl+K focuses the filter */
-        document.addEventListener('keydown', function (e) {
-          if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-            e.preventDefault();
-            input.focus();
-            input.select();
-          }
-        });
-      }
     }
   }
 

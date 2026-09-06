@@ -18,6 +18,7 @@
   <script src="js/themes.js"></script>
   <script src="js/theme-switcher.js"></script>
   <script src="js/layout.js"></script>
+  <script src="js/search-index.js"></script>
   <link rel="stylesheet" href="../theme/default-semantic-tokens.css">
   <link rel="stylesheet" href="css/docs-theme.css">
   <link rel="stylesheet" href="css/docs-utilities.css">
@@ -323,8 +324,10 @@ new MutationObserver(init).observe(document, { childList: true, subtree: true })
     <div style="padding:0.625rem 1rem;background:var(--muted);border-bottom:1px solid var(--border);">
       <span style="font-size:0.75rem;font-family:var(--font-mono);color:var(--muted-foreground);">any of these work</span>
     </div>
-    <pre style="border-radius:0;border:none;margin:0;background:transparent;flex:1;overflow:hidden;"><code class="language-bash">npx serve .
-npx vite .
+    <pre style="border-radius:0;border:none;margin:0;background:transparent;flex:1;overflow:hidden;"><code class="language-bash">make dev              # this repo: Vite dev server on :3000
+bun run dev           # same, without make
+bunx vite .           # bare Vite against dist/ in another project
+bunx serve dist/      # any static server works
 python3 -m http.server</code></pre>
   </div>
 

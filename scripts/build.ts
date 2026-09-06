@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 import { cpSync, existsSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { buildSearchIndexText } from './lib/search-index.ts';
 
 /**
  * Why: the whole build — `bun run build` produces dist/ from src/ 1:1.
@@ -24,6 +25,12 @@ const SHARED_IMPORT = /import \{[^}]+\} from '\.\.\/\.\.\/shared\/state-api\.js'
 
 // fresh tree so deleted sources never linger in dist/
 rmSync(DIST, { recursive: true, force: true });
+
+// 0. regenerate the docs search index into src/ BEFORE copying, so the palette
+// index in dist/ (and the docs/ mirror) can never lag the doc pages. The
+// source of truth is the NAV array + every page's <h2>s, both of which live
+// in src/, so this is a pure function of the tree we're about to copy.
+writeFileSync(join(SRC, 'documentation/js/search-index.js'), buildSearchIndexText());
 
 // 1. TypeScript → JavaScript (emits straight into dist/, same structure)
 const tsc = Bun.spawnSync({

@@ -114,53 +114,103 @@ try {
     assert.doesNotMatch(title, /Badge/, 'history back did not restore the intro');
   });
 
-  await check('nav filter (search) hides non-matching links, keeps Overview', async () => {
-    // the input lives in the header (next to the version badge) and its logic
-    // filters the sidebar — pin the placement so it can't silently migrate back
+  await check('search: clicking the header input opens the command palette with the index', async () => {
+    // header input is a trigger (readonly) that opens the docs-wide
+    // <dialog class="command">; the palette's items come from the generated
+    // search index (pages + every h2). Pin the whole contract.
     assert.ok(
       await page.evaluate(
-        () => !!document.querySelector('.site-header .header-search .nav-filter-input') &&
+        () =>
+          !!document.querySelector('.site-header .header-search .header-search-input[readonly]') &&
           !document.querySelector('site-nav .nav-filter-input'),
       ),
-      'search box is not (only) in the header',
+      'search trigger missing in header (or a stale sidebar filter exists)',
     );
-    const input = page.locator('.nav-filter-input');
-    await input.fill('badge');
-    const vis = await page.evaluate(() => {
-      const link = (href: string) =>
-        getComputedStyle(document.querySelector(`site-nav a.nav-link[href="${href}"]`)!).display !== 'none';
-      const sections = [...document.querySelectorAll('site-nav .nav-section')];
+    await page.click('.header-search-input');
+    await page.waitForFunction(
+      () => (document.getElementById('docs-palette') as HTMLDialogElement | null)?.open,
+      undefined, { timeout: 5_000 },
+    );
+    const stats = await page.evaluate(() => {
+      const items = document.querySelectorAll('#docs-palette-list .command-item');
       return {
-        badge: link('badge.html'),
-        dialog: link('dialog.html'),
-        overviewVisible: getComputedStyle(sections[0]).display !== 'none',
+        items: items.length,
+        groups: document.querySelectorAll('#docs-palette-list .command-group').length,
+        // generated index must carry pages AND h2 sections; 55 pages + 200 sections
+        withHref: [...items].filter((i) => i.getAttribute('data-href')).length,
       };
     });
-    assert.ok(vis.badge, 'matching link (Badge) was hidden by the filter');
-    assert.ok(!vis.dialog, 'non-matching link (Dialog) stayed visible');
-    assert.ok(vis.overviewVisible, 'Overview section must never be filtered away');
+    assert.ok(stats.items > 250, `palette index too small: ${stats.items}`);
+    assert.equal(stats.items, stats.withHref, 'some palette items have no data-href');
+    assert.ok(stats.groups >= 10, `expected grouped entries, got ${stats.groups}`);
+  });
 
-    // case-insensitivity + clear restores everything
-    await input.fill('DIALOG');
-    assert.equal(
-      await page.evaluate(() =>
-        getComputedStyle(document.querySelector('site-nav a.nav-link[href="dialog.html"]')!).display !== 'none'),
-      true,
-      'filter is not case-insensitive',
+  await check('search: query filters items; Enter navigates to the page', async () => {
+    // 'combobox' matches exactly one entry — the page itself — so Enter's
+    // click target is unambiguous ('accordion' would first hit the earlier
+    // "Accordion animations" section entry)
+    const cmdInput = page.locator('#docs-palette .command-input');
+    await cmdInput.fill('combobox');
+    const filtered = await page.evaluate(() => {
+      const visible = [...document.querySelectorAll('#docs-palette-list .command-item')]
+        .filter((i) => !i.hasAttribute('hidden'))
+        .map((i) => ({ text: i.textContent?.trim() ?? '', href: i.getAttribute('data-href') }));
+      const hl = document.querySelector('#docs-palette-list [data-highlighted]');
+      return { visible, hlHref: hl?.getAttribute('data-href') };
+    });
+    assert.deepEqual(filtered.visible.map((v) => v.href), ['combobox.html'], 'filter should leave exactly the Combobox page entry');
+    assert.equal(filtered.hlHref, 'combobox.html', 'first match must be auto-highlighted');
+    await page.keyboard.press('Enter'); // command.js: Enter clicks the highlighted item
+    await page.waitForFunction(() => /Combobox/.test(document.title), undefined, { timeout: 5_000 });
+    assert.ok(
+      await page.evaluate(() => !(document.getElementById('docs-palette') as HTMLDialogElement).open),
+      'palette did not close on navigate',
     );
-    await input.fill('');
     assert.equal(
-      await page.evaluate(() =>
-        [...document.querySelectorAll('site-nav .nav-link')].every((a) => getComputedStyle(a).display !== 'none')),
-      true,
-      'clearing the filter did not restore all links',
+      await page.evaluate(() => document.querySelector('.nav-link.active')?.getAttribute('href')),
+      'combobox.html', 'SPA nav did not mark the new page active',
     );
   });
 
-  await check('Ctrl/Cmd+K focuses the filter (search shortcut)', async () => {
+  await check('search: section result navigates SPA + scrolls to the heading', async () => {
+    // item-click already closed the palette; its focus-restore sets a short
+    // suppress window — wait past it before re-opening via the trigger
+    await page.waitForTimeout(300);
+    await page.click('.header-search-input');
+    await page.waitForFunction(() => (document.getElementById('docs-palette') as HTMLDialogElement).open, undefined, { timeout: 5_000 });
+    const cmdInput = page.locator('#docs-palette .command-input');
+    await cmdInput.fill('quick start'); // a section heading, not any page label
+    const hit = page.locator('#docs-palette-list .command-item:not([hidden])').first();
+    const href = await hit.getAttribute('data-href');
+    assert.ok(href && href.startsWith('installation.html#'), `expected an installation section hit, got ${href}`);
+    await hit.click();
+    const id = href!.slice(href!.indexOf('#') + 1);
+    // SPA swap is async (scrollToWhenReady polls up to 2s) — wait for the element
+    await page.waitForFunction(
+      (sectionId: string) => {
+        const el = document.getElementById(sectionId);
+        return !!el && Math.abs(el.getBoundingClientRect().top) < 300;
+      },
+      id, { timeout: 5_000 },
+    );
+  });
+
+  await check('Ctrl/Cmd+K opens the palette anywhere on the page', async () => {
     await page.keyboard.press('Control+k');
-    const focused = await page.evaluate(() => document.activeElement?.classList.contains('nav-filter-input'));
-    assert.ok(focused, 'Ctrl+K did not focus the nav filter');
+    await page.waitForFunction(
+      () => (document.getElementById('docs-palette') as HTMLDialogElement).open,
+      undefined, { timeout: 5_000 },
+    );
+    const focused = await page.evaluate(() => document.activeElement?.classList.contains('command-input'));
+    assert.ok(focused, 'Ctrl+K opened the palette but did not focus its input');
+    // Escape closes without instantly reopening via the trigger-restore focus
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => !(document.getElementById('docs-palette') as HTMLDialogElement).open, undefined, { timeout: 5_000 });
+    await page.waitForTimeout(250); // past the trigger-restore suppress window
+    assert.ok(
+      await page.evaluate(() => !(document.getElementById('docs-palette') as HTMLDialogElement).open),
+      'palette reopened itself after Escape (trigger-focus loop)',
+    );
   });
 
   await check('no first-party page errors during the whole run', async () => {

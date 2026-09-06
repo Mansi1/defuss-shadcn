@@ -21,7 +21,7 @@ layer is for.
 ## 2. The verifier — the authority layer
 
 [`scripts/verify.ts`](scripts/verify.ts) is a custom, code-implemented audit
-of everything prose cannot guarantee: **36 check groups** over the shipped
+of everything prose cannot guarantee: **37 check groups** over the shipped
 tree — skills exist, doc pages exist, tokens are tweakcn-compatible, snippets
 match source, dist is a 1:1 build of src, every declared state has a
 screenshot/skill/doc/e2e artifact, cross-page imports are complete, links
@@ -105,7 +105,7 @@ flowchart TD
     B --> C["make build"]
     subgraph GATES["mechanical quality gates (no human in the loop)"]
         direction LR
-        L["oxlint<br/>typecheck"] --> P["compile src → dist<br/>1:1 build"] --> SS["screenshots<br/>every state × light/dark<br/>fingerprint-fresh"] --> V["verify.ts<br/>36 consistency gates<br/>incl. 'working tree committed'"] --> Q["Vitest UI tests<br/>56 Playwright e2e"]
+        L["oxlint<br/>typecheck"] --> P["compile src → dist<br/>1:1 build"] --> SS["screenshots<br/>every state × light/dark<br/>fingerprint-fresh"] --> V["verify.ts<br/>37 consistency gates<br/>incl. 'working tree committed'"] --> Q["Vitest UI tests<br/>56 Playwright e2e"]
     end
     C --> GATES
 

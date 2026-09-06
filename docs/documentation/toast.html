@@ -93,7 +93,7 @@
         </div>
         <h1 style="font-family:var(--font-display);font-size:2.5rem;font-weight:400;letter-spacing:-0.035em;margin:0 0 0.75rem;">Toast</h1>
         <p class="text-muted-foreground leading-relaxed mb-6">
-          Transient notification using <code>popover="manual"</code>. Imperative <code>toast.show()</code> API
+          Transient notification using <code>popover="manual"</code>. Imperative <code>_defussShadcn.toast.show()</code> API
           with auto-dismiss, stacking, destructive variant, and action buttons.
         </p>
         <!-- Component Skill -->
@@ -157,10 +157,10 @@
 
         <!-- -- Example: Default ----------------------------------- -->
           <p class="text-sm font-medium mb-2 mt-6">Default</p>
-          <p class="text-xs text-muted-foreground mb-3">Basic toast with title and description via <code>toast.show()</code>.</p>
+          <p class="text-xs text-muted-foreground mb-3">Basic toast with title and description via <code>_defussShadcn.toast.show()</code>.</p>
           <div class="preview" style="gap:0.75rem;">
             <button class="btn" data-variant="default"
-                    onclick="toast.show({ title: 'Event created', description: 'Monday, January 3rd at 6:00pm' })">
+                    onclick="_defussShadcn.toast.show({ title: 'Event created', description: 'Monday, January 3rd at 6:00pm' })">
               Show Toast
             </button>
           </div>
@@ -170,12 +170,12 @@
               Copy
             </button>
             <pre><code class="language-markup">&lt;button class="btn" data-variant="default"
-        onclick="toast.show({ title: 'Event created', description: 'Monday, January 3rd at 6:00pm' })"&gt;
+        onclick="_defussShadcn.toast.show({ title: 'Event created', description: 'Monday, January 3rd at 6:00pm' })"&gt;
   Show Toast
 &lt;/button&gt;
 
 &lt;script&gt;
-toast.show({
+_defussShadcn.toast.show({
   title: 'Event created',
   description: 'Monday, January 3rd at 6:00pm'
 });
@@ -184,22 +184,22 @@ toast.show({
 
         <!-- -- Example: Variants ---------------------------------- -->
           <p class="text-sm font-medium mb-2 mt-6">Variants</p>
-          <p class="text-xs text-muted-foreground mb-3">Semantic variants add a colored border and icon. Use <code>toast.success()</code>, <code>toast.warning()</code>, <code>toast.info()</code>, or <code>toast.error()</code>.</p>
+          <p class="text-xs text-muted-foreground mb-3">Semantic variants add a colored border and icon. Use <code>_defussShadcn.toast.success()</code>, <code>_defussShadcn.toast.warning()</code>, <code>_defussShadcn.toast.info()</code>, or <code>_defussShadcn.toast.error()</code>.</p>
           <div class="preview" style="gap:0.75rem;flex-wrap:wrap;">
             <button class="btn" data-variant="outline"
-                    onclick="toast.success({ title: 'Success', description: 'Your changes have been saved.' })">
+                    onclick="_defussShadcn.toast.success({ title: 'Success', description: 'Your changes have been saved.' })">
               Success
             </button>
             <button class="btn" data-variant="outline"
-                    onclick="toast.warning({ title: 'Warning', description: 'Your session will expire in 5 minutes.' })">
+                    onclick="_defussShadcn.toast.warning({ title: 'Warning', description: 'Your session will expire in 5 minutes.' })">
               Warning
             </button>
             <button class="btn" data-variant="outline"
-                    onclick="toast.info({ title: 'Info', description: 'A new version is available for download.' })">
+                    onclick="_defussShadcn.toast.info({ title: 'Info', description: 'A new version is available for download.' })">
               Info
             </button>
             <button class="btn" data-variant="destructive"
-                    onclick="toast.error({ title: 'Error', description: 'Something went wrong. Please try again.' })">
+                    onclick="_defussShadcn.toast.error({ title: 'Error', description: 'Something went wrong. Please try again.' })">
               Error
             </button>
           </div>
@@ -209,30 +209,30 @@ toast.show({
               Copy
             </button>
             <pre><code class="language-markup">&lt;button class="btn" data-variant="outline"
-        onclick="toast.success({ title: 'Success', description: 'Your changes have been saved.' })"&gt;
+        onclick="_defussShadcn.toast.success({ title: 'Success', description: 'Your changes have been saved.' })"&gt;
   Success
 &lt;/button&gt;
 
 &lt;button class="btn" data-variant="outline"
-        onclick="toast.warning({ title: 'Warning', description: 'Your session will expire in 5 minutes.' })"&gt;
+        onclick="_defussShadcn.toast.warning({ title: 'Warning', description: 'Your session will expire in 5 minutes.' })"&gt;
   Warning
 &lt;/button&gt;
 
 &lt;button class="btn" data-variant="outline"
-        onclick="toast.info({ title: 'Info', description: 'A new version is available for download.' })"&gt;
+        onclick="_defussShadcn.toast.info({ title: 'Info', description: 'A new version is available for download.' })"&gt;
   Info
 &lt;/button&gt;
 
 &lt;button class="btn" data-variant="destructive"
-        onclick="toast.error({ title: 'Error', description: 'Something went wrong.' })"&gt;
+        onclick="_defussShadcn.toast.error({ title: 'Error', description: 'Something went wrong.' })"&gt;
   Error
 &lt;/button&gt;
 
 &lt;script&gt;
-toast.success({ title: 'Success', description: 'Your changes have been saved.' });
-toast.warning({ title: 'Warning', description: 'Your session will expire in 5 minutes.' });
-toast.info({ title: 'Info', description: 'A new version is available for download.' });
-toast.error({ title: 'Error', description: 'Something went wrong.' });
+_defussShadcn.toast.success({ title: 'Success', description: 'Your changes have been saved.' });
+_defussShadcn.toast.warning({ title: 'Warning', description: 'Your session will expire in 5 minutes.' });
+_defussShadcn.toast.info({ title: 'Info', description: 'A new version is available for download.' });
+_defussShadcn.toast.error({ title: 'Error', description: 'Something went wrong.' });
 &lt;/script&gt;</code></pre>
           </div>
 
@@ -241,7 +241,7 @@ toast.error({ title: 'Error', description: 'Something went wrong.' });
           <p class="text-xs text-muted-foreground mb-3">Pass a <code>description</code> for a secondary line of detail below the title.</p>
           <div class="preview" style="gap:0.75rem;">
             <button class="btn" data-variant="outline"
-                    onclick="toast.show({ title: 'Scheduled', description: 'Your report will be generated at 9:00 AM tomorrow.' })">
+                    onclick="_defussShadcn.toast.show({ title: 'Scheduled', description: 'Your report will be generated at 9:00 AM tomorrow.' })">
               Show Toast
             </button>
           </div>
@@ -251,12 +251,12 @@ toast.error({ title: 'Error', description: 'Something went wrong.' });
               Copy
             </button>
             <pre><code class="language-markup">&lt;button class="btn" data-variant="outline"
-        onclick="toast.show({ title: 'Scheduled', description: 'Your report will be generated at 9:00 AM tomorrow.' })"&gt;
+        onclick="_defussShadcn.toast.show({ title: 'Scheduled', description: 'Your report will be generated at 9:00 AM tomorrow.' })"&gt;
   Show Toast
 &lt;/button&gt;
 
 &lt;script&gt;
-toast.show({
+_defussShadcn.toast.show({
   title: 'Scheduled',
   description: 'Your report will be generated at 9:00 AM tomorrow.'
 });
@@ -268,7 +268,7 @@ toast.show({
           <p class="text-xs text-muted-foreground mb-3">Add an <code>action</code> object with <code>label</code> and <code>onClick</code> to render an action button inside the toast.</p>
           <div class="preview" style="gap:0.75rem;">
             <button class="btn" data-variant="outline"
-                    onclick="toast.show({ title: 'Changes saved', description: 'Your profile has been updated.', action: { label: 'Undo', onClick: () => toast.show('Undone!') } })">
+                    onclick="_defussShadcn.toast.show({ title: 'Changes saved', description: 'Your profile has been updated.', action: { label: 'Undo', onClick: () => _defussShadcn.toast.show('Undone!') } })">
               Show Toast
             </button>
           </div>
@@ -278,17 +278,17 @@ toast.show({
               Copy
             </button>
             <pre><code class="language-markup">&lt;button class="btn" data-variant="outline"
-        onclick="toast.show({ title: 'Changes saved', description: 'Your profile has been updated.', action: { label: 'Undo', onClick: () =&gt; toast.show('Undone!') } })"&gt;
+        onclick="_defussShadcn.toast.show({ title: 'Changes saved', description: 'Your profile has been updated.', action: { label: 'Undo', onClick: () =&gt; _defussShadcn.toast.show('Undone!') } })"&gt;
   Show Toast
 &lt;/button&gt;
 
 &lt;script&gt;
-toast.show({
+_defussShadcn.toast.show({
   title: 'Changes saved',
   description: 'Your profile has been updated.',
   action: {
     label: 'Undo',
-    onClick: () =&gt; toast.show('Undone!')
+    onClick: () =&gt; _defussShadcn.toast.show('Undone!')
   }
 });
 &lt;/script&gt;</code></pre>
@@ -298,7 +298,7 @@ toast.show({
           <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">States</h2>
           <p class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;">The named-state API is bound to the region container (<code>#toast-container</code>):</p>
           <ul class="text-sm text-muted-foreground" style="margin:0 0 0.75rem;padding-left:1.25rem;">
-            <li><code>default</code> — no visible toasts: <code>setState('default')</code> dismisses everything (the same path as <code>window.toast.dismiss()</code>); <code>getState().config.count</code> reports the live number of visible toasts</li>
+            <li><code>default</code> — no visible toasts: <code>setState('default')</code> dismisses everything (the same path as <code>window._defussShadcn.toast.dismiss()</code>); <code>getState().config.count</code> reports the live number of visible toasts</li>
           </ul>
           <p class="text-sm text-muted-foreground">The region element carries <code>data-state-demo</code>; <code>bun run screenshots</code> drives it via <code>el.api.setState(name)</code>.</p>
         </section>
@@ -528,7 +528,7 @@ toast.show({
         <!-- -- JavaScript -------------------------------- -->
         <section style="margin-top:3rem;" id="source-js">
           <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.025em;margin:0 0 0.375rem;">JavaScript <a href="../components/toast/toast.js" target="_blank" style="font-size:0.75rem;font-weight:400;color:var(--muted-foreground);text-decoration:underline;text-underline-offset:3px;margin-left:0.5rem;">view file</a></h2>
-          <p class="text-muted-foreground text-sm mb-4">Imperative <code>toast.show()</code> API with auto-dismiss, stacking (max 3 visible), variant icons, and action buttons. Container is auto-created if not present in the DOM.</p>
+          <p class="text-muted-foreground text-sm mb-4">Imperative <code>_defussShadcn.toast.show()</code> API with auto-dismiss, stacking (max 3 visible), variant icons, and action buttons. Container is auto-created if not present in the DOM.</p>
           <div style="position:relative;margin-top:0.5rem;">
             <button class="copy-btn">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
@@ -536,10 +536,11 @@ toast.show({
             </button>
             <pre><code class="language-javascript">// -- Toast -----------------------------------------------------
 // Programmatic toast notification API.
-// Exposes window.toast with show/success/warning/info/error/dismiss.
+// Exposes _defussShadcn.toast with show/success/warning/info/error/dismiss
+// (AGENTS.md &quot;No window globals&quot; — everything lives under the one namespace).
 // Named-state API (AGENTS.md &quot;State API&quot;) bound to the region container:
 // its observable state is which toasts are visible, so 'default' clears the
-// region (same code path as window.toast.dismiss()) and getState() reports
+// region (same code path as toast.dismiss()) and getState() reports
 // the live toast count.
 
 // Shared preamble (AGENTS.md &quot;State API&quot;); build.ts inlines it into the
@@ -574,7 +575,7 @@ export const toastApi = {
   getState(container) {
     return {
       name: container.dataset.stateName || 'default',
-      // live count — reflects window.toast.show() and auto-dismiss, not just setState
+      // live count — reflects _defussShadcn.toast.show() and auto-dismiss, not just setState
       config: { ...container._stateConfig, count: container.querySelectorAll('.toast').length },
     };
   },
@@ -684,7 +685,7 @@ function init() {
 init();
 new MutationObserver(init).observe(document.body, { childList: true, subtree: true });
 
-window.toast = {
+_defussShadcn.toast = {
   show: toastCreate,
   success: (o) =&gt; toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'success' })),
   warning: (o) =&gt; toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'warning' })),

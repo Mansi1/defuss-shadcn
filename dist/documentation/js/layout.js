@@ -5,6 +5,10 @@
 // Loaded synchronously in <head> so elements render without FOUC.
 (function () {
     'use strict';
+    // Single-namespace globals (AGENTS.md "No window globals"): this file's
+    // globals live under globalThis._defussShadcn — never on window.
+    globalThis._defussShadcn = globalThis._defussShadcn || {};
+    const docs = (globalThis._defussShadcn.docs = globalThis._defussShadcn.docs || {});
     /* -- Dark mode (must run before first paint) ----------------- */
     var saved = localStorage.getItem('defuss-shadcn-theme');
     var darkMQ = window.matchMedia('(prefers-color-scheme: dark)');
@@ -25,27 +29,27 @@
             sun.style.display = e.matches ? 'none' : 'block';
         if (moon)
             moon.style.display = e.matches ? 'block' : 'none';
-        if (window.applyTheme && window.__activeColorTheme && window.__activeColorTheme !== 'default') {
-            window.applyTheme(window.__activeColorTheme);
+        if (docs.applyTheme && docs.__activeColorTheme && docs.__activeColorTheme !== 'default') {
+            docs.applyTheme(docs.__activeColorTheme);
         }
-        if (window.updateFavicon)
-            window.updateFavicon();
+        if (docs.updateFavicon)
+            docs.updateFavicon();
     });
     /* -- SPA page-ready helper ----------------------------------- */
-    /* Doc-site scripts (site.js) call window.onPageReady(fn)      */
+    /* Doc-site scripts (site.js) call docs.onPageReady(fn)      */
     /* to register functions that run on initial load AND after     */
     /* each SPA navigation. Component modules auto-reinitialize    */
     /* via MutationObserver when the DOM changes.                  */
     var domReady = false;
     document.addEventListener('DOMContentLoaded', function () { domReady = true; });
-    window.onPageReady = function (fn) {
+    docs.onPageReady = function (fn) {
         if (domReady) {
             fn();
         }
         else {
             document.addEventListener('DOMContentLoaded', fn);
         }
-        (window.__spaInits = window.__spaInits || []).push(fn);
+        (docs.__spaInits = docs.__spaInits || []).push(fn);
     };
     /* -- Navigation data ---------------------------------------- */
     var NAV = [
@@ -195,9 +199,9 @@
                     '</div>';
             /* Build theme swatches */
             var grid = this.querySelector('#theme-grid');
-            if (grid && window.THEMES) {
-                var activeId = window.__activeColorTheme || 'default';
-                window.THEMES.forEach(function (t) {
+            if (grid && docs.THEMES) {
+                var activeId = docs.__activeColorTheme || 'default';
+                docs.THEMES.forEach(function (t) {
                     var btn = document.createElement('button');
                     btn.className = 'theme-swatch' + (t.id === activeId ? ' active' : '');
                     btn.setAttribute('data-theme-id', t.id);
@@ -232,8 +236,8 @@
                     });
                     btn.appendChild(colors);
                     btn.addEventListener('click', function () {
-                        if (window.applyTheme)
-                            window.applyTheme(t.id);
+                        if (docs.applyTheme)
+                            docs.applyTheme(t.id);
                         var popover = document.getElementById('theme-popover');
                         if (popover)
                             popover.hidePopover();
@@ -245,8 +249,8 @@
             var resetBtn = this.querySelector('#theme-reset-btn');
             if (resetBtn) {
                 resetBtn.addEventListener('click', function () {
-                    if (window.applyTheme)
-                        window.applyTheme('default');
+                    if (docs.applyTheme)
+                        docs.applyTheme('default');
                 });
             }
         }
@@ -468,7 +472,7 @@
                 window.scrollTo(0, 0);
                 /* Re-initialize all page-ready handlers */
                 /* (doc tabs, hljs, copy buttons, lucide, etc.) */
-                (window.__spaInits || []).forEach(function (fn) { fn(); });
+                (docs.__spaInits || []).forEach(function (fn) { fn(); });
                 /* Component ES modules auto-reinitialize via MutationObserver */
                 /* when the DOM changes — no script re-import needed.         */
                 navigating = false;
@@ -652,7 +656,7 @@
         }
     });
     /* Per-page init (runs on DOMContentLoaded + after each SPA navigation) */
-    window.onPageReady(function () {
+    docs.onPageReady(function () {
         buildToc();
         buildPrevNext();
     });

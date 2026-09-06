@@ -17,11 +17,11 @@
          values inside single-quoted attributes so each variant token appears
          literally in the fixture (verify fixture↔CSS parity). -->
     <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-      <button class="btn" id="t-show" onclick="toast.show({ title: 'Event created', description: 'Monday, January 3rd at 6:00pm' })">Show</button>
-      <button class="btn" id="t-success" onclick='toast.show({ variant: "success", title: "Saved" })'>Success</button>
-      <button class="btn" id="t-warning" onclick='toast.show({ variant: "warning", title: "Heads up" })'>Warning</button>
-      <button class="btn" id="t-info" onclick='toast.show({ variant: "info", title: "FYI" })'>Info</button>
-      <button class="btn" id="t-destructive" onclick='toast.show({ variant: "destructive", title: "Something broke" })'>Destructive</button>
+      <button class="btn" id="t-show" onclick="_defussShadcn.toast.show({ title: 'Event created', description: 'Monday, January 3rd at 6:00pm' })">Show</button>
+      <button class="btn" id="t-success" onclick='_defussShadcn.toast.show({ variant: "success", title: "Saved" })'>Success</button>
+      <button class="btn" id="t-warning" onclick='_defussShadcn.toast.show({ variant: "warning", title: "Heads up" })'>Warning</button>
+      <button class="btn" id="t-info" onclick='_defussShadcn.toast.show({ variant: "info", title: "FYI" })'>Info</button>
+      <button class="btn" id="t-destructive" onclick='_defussShadcn.toast.show({ variant: "destructive", title: "Something broke" })'>Destructive</button>
     </div>
 
     <script type="module" src="/dist/components/toast/toast.js"></script>

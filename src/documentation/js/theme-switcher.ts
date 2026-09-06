@@ -6,6 +6,11 @@
 (function () {
   'use strict';
 
+  // Single-namespace globals (AGENTS.md "No window globals"): this file's
+  // globals live under globalThis._defussShadcn — never on window.
+  globalThis._defussShadcn = globalThis._defussShadcn || {};
+  const docs = (globalThis._defussShadcn.docs = globalThis._defussShadcn.docs || {});
+
   var STORAGE_KEY = 'defuss-shadcn-color-theme';
 
   // Token keys we apply (excludes fonts, shadows, spacing, letter-spacing)
@@ -27,9 +32,9 @@
   ];
 
   function getThemeById(id) {
-    if (!window.THEMES) return null;
-    for (var i = 0; i < window.THEMES.length; i++) {
-      if (window.THEMES[i].id === id) return window.THEMES[i];
+    if (!docs.THEMES) return null;
+    for (var i = 0; i < docs.THEMES.length; i++) {
+      if (docs.THEMES[i].id === id) return docs.THEMES[i];
     }
     return null;
   }
@@ -42,7 +47,7 @@
 
     if (!themeId || themeId === 'default') {
       localStorage.removeItem(STORAGE_KEY);
-      window.__activeColorTheme = 'default';
+      docs.__activeColorTheme = 'default';
       updateActiveState();
       updateFavicon();
       return;
@@ -75,10 +80,10 @@
     }
 
     // Store the full theme data for mode switches
-    window.__activeThemeData = theme;
+    docs.__activeThemeData = theme;
 
     localStorage.setItem(STORAGE_KEY, themeId);
-    window.__activeColorTheme = themeId;
+    docs.__activeColorTheme = themeId;
     updateActiveState();
     updateFavicon();
   }
@@ -92,12 +97,12 @@
     });
     root.style.removeProperty('--radius');
 
-    window.__activeThemeData = null;
+    docs.__activeThemeData = null;
   }
 
   function updateActiveState() {
     var swatches = document.querySelectorAll('.theme-swatch');
-    var active = window.__activeColorTheme || 'default';
+    var active = docs.__activeColorTheme || 'default';
     for (var i = 0; i < swatches.length; i++) {
       var id = swatches[i].getAttribute('data-theme-id');
       swatches[i].classList.toggle('active', id === active);
@@ -127,26 +132,26 @@
   var saved = localStorage.getItem(STORAGE_KEY);
   if (saved && saved !== 'default') {
     // Defer until THEMES is available (themes.js loads before this)
-    if (window.THEMES) {
+    if (docs.THEMES) {
       applyTheme(saved);
     } else {
-      window.__pendingTheme = saved;
+      docs.__pendingTheme = saved;
     }
   }
-  window.__activeColorTheme = saved || 'default';
+  docs.__activeColorTheme = saved || 'default';
 
   // Expose globally for the UI
-  window.applyTheme = applyTheme;
-  window.resetTheme = resetTheme;
-  window.updateThemeActiveState = updateActiveState;
-  window.updateFavicon = updateFavicon;
+  docs.applyTheme = applyTheme;
+  docs.resetTheme = resetTheme;
+  docs.updateThemeActiveState = updateActiveState;
+  docs.updateFavicon = updateFavicon;
 
   // If themes.js loaded after this, apply pending theme
   // Also set initial favicon once DOM is ready
   document.addEventListener('DOMContentLoaded', function () {
-    if (window.__pendingTheme && window.THEMES) {
-      applyTheme(window.__pendingTheme);
-      delete window.__pendingTheme;
+    if (docs.__pendingTheme && docs.THEMES) {
+      applyTheme(docs.__pendingTheme);
+      delete docs.__pendingTheme;
     }
     updateFavicon();
   });

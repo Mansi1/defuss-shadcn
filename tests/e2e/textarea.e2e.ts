@@ -30,7 +30,7 @@ await cssSmoke('textarea', [
       await page.click('#ta-default');
       await page.waitForTimeout(200); // border-color transitions 150ms
       const [normal, focused] = await page.evaluate(() => {
-        const el = document.querySelector('#ta-default')!;
+        const el = document.querySelector<HTMLTextAreaElement>('#ta-default')!;
         const focusedBorder = getComputedStyle(el).borderTopColor;
         el.blur();
         return [getComputedStyle(el).borderTopColor, focusedBorder];

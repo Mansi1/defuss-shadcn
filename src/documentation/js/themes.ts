@@ -1,3 +1,10 @@
+// Single-namespace globals (AGENTS.md "No window globals"): this file's
+// globals live under globalThis._defussShadcn — never on window. Classic
+// script, so no `const docs` alias here (that would create a global lexical
+// binding); assign through the namespace directly.
+globalThis._defussShadcn = globalThis._defussShadcn || {};
+globalThis._defussShadcn.docs = globalThis._defussShadcn.docs || {};
+
 // -- themes.js -----------------------------------------------
 // All available themes from tweakcn.com built-in presets.
 // Each theme has light and dark token overrides that map
@@ -5,10 +12,10 @@
 // Font, shadow, spacing, and tracking tokens are excluded
 // to avoid layout shifts on the doc site.
 
-// Explicit global (not `var`): consumed as window.THEMES by theme-switcher.js
+// Explicit global (not `var`): consumed as docs.THEMES by theme-switcher.js
 // and layout.js; the assignment keeps the cross-file contract while satisfying
 // oxlint's no-unused-vars.
-window.THEMES = [
+globalThis._defussShadcn.docs.THEMES = [
   {
     id: "default",
     label: "Default"

@@ -208,8 +208,7 @@ check(
 // every NEW JS component must satisfy the contract from day one.
 // Migration complete: every JS component satisfies the State API contract —
 // keep this list empty as the ratchet (new components must comply from day one).
-const STATE_API_LEGACY = [
-];
+const STATE_API_LEGACY: string[] = [];
 const STATE_API_PATTERNS: Array<[string, RegExp]> = [
   // preamble comes from the shared helper (build inlines it into dist .js);
   // inline globals still accepted so hand-rolled/legacy styles pass too
@@ -404,13 +403,14 @@ check(
 
 // 15b. strict type-check of the tooling/test trees (bun run typecheck). The
 // e2e rollout is all test code — a type error must not survive to CI. ~0.3 s.
+// NOTE: tsc writes diagnostics to STDOUT — reading only stderr silently passed
+// every failure (fixed after 12 real errors slipped past the gate).
 const typecheck = Bun.spawnSync({ cmd: ['bun', 'run', 'typecheck'], cwd: ROOT });
 check(
   'typecheck',
   typecheck.exitCode === 0
     ? []
-    : typecheck.stderr
-        .toString()
+    : `${typecheck.stdout?.toString() ?? ''}\n${typecheck.stderr?.toString() ?? ''}`
         .split('\n')
         .filter((l) => /\w+\.\w+\(\d+,\d+\): error/.test(l))
         .slice(0, 8),
@@ -658,6 +658,24 @@ check(
   driftProblems,
   'inspect the PNG against the component (external asset/browser change?) — or recapture with `bun run screenshots --force` once intentional',
   true,
+);
+
+// 25. no window globals (AGENTS.md "No window globals"): application globals
+// live on globalThis under _defussShadcn — window is the browser-only alias
+// (breaks isomorphic runtimes) and a collision magnet on hosts we don't own.
+// Vendor globals (lucide, marked, …) are owned by their vendors: reads via
+// globalThis.* are fine; assignments to window.* anywhere in src/ are not.
+const windowProblems: string[] = [];
+for (const f of walk(SRC, ['.ts', '.js'])) {
+  const src = readFileSync(f, 'utf8');
+  for (const m of src.matchAll(/\bwindow\s*(?:\.|[\['])\s*([A-Za-z_$][\w$]*)\s*(=|\+=|-=)/g)) {
+    windowProblems.push(`${relative(ROOT, f)} assigns window.${m[1]}`);
+  }
+}
+check(
+  'no window globals',
+  windowProblems,
+  'use globalThis and scope the name under globalThis._defussShadcn (AGENTS.md "No window globals")',
 );
 
 console.log(

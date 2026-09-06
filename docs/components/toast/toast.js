@@ -1,9 +1,10 @@
 // -- Toast -----------------------------------------------------
 // Programmatic toast notification API.
-// Exposes window.toast with show/success/warning/info/error/dismiss.
+// Exposes _defussShadcn.toast with show/success/warning/info/error/dismiss
+// (AGENTS.md "No window globals" — everything lives under the one namespace).
 // Named-state API (AGENTS.md "State API") bound to the region container:
 // its observable state is which toasts are visible, so 'default' clears the
-// region (same code path as window.toast.dismiss()) and getState() reports
+// region (same code path as toast.dismiss()) and getState() reports
 // the live toast count.
 // Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
 // shipped .js, so this import never appears in dist/.
@@ -81,7 +82,7 @@ export const toastApi = {
     getState(container) {
         return {
             name: container.dataset.stateName || 'default',
-            // live count — reflects window.toast.show() and auto-dismiss, not just setState
+            // live count — reflects _defussShadcn.toast.show() and auto-dismiss, not just setState
             config: { ...container._stateConfig, count: container.querySelectorAll('.toast').length },
         };
     },
@@ -214,7 +215,7 @@ function init() {
 }
 init();
 new MutationObserver(init).observe(document.body, { childList: true, subtree: true });
-window.toast = {
+_defussShadcn.toast = {
     show: toastCreate,
     success: (o) => toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'success' })),
     warning: (o) => toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'warning' })),

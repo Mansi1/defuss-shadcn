@@ -16,6 +16,19 @@ const server = startServer();
 const browser = await chromium.launch();
 
 const branchOpen = (page: Page, id: string) => page.$eval(`#${id}`, (el) => (el as HTMLDetailsElement).open);
+/**
+ * Why: checkVisibility() on content inside <details> can return the stale
+ * ::details-content content-visibility for a frame after the open flip —
+ * observable as a flake when 26 chromiums load at once. Poll with a short
+ * bound: the assertion stays exact (visible must become `want`), the wait
+ * just absorbs Chromium's invalidation latency.
+ */
+const leafVisible = (page: Page, want: boolean) =>
+  page.waitForFunction(
+    (v) => document.querySelector('#tv-demo .tree-leaf')!.checkVisibility() === v,
+    want,
+    { timeout: 2000 },
+  );
 const expandedOf = (page: Page, id: string) =>
   page.$eval(`#${id}`, (el) => el.closest('[role="treeitem"]')!.getAttribute('aria-expanded'));
 const focusText = (page: Page) =>
@@ -56,8 +69,7 @@ try {
   });
 
   await check('leaf hidden inside the closed branch becomes visible on expand', async () => {
-    const visibleBefore = await page.$eval('#tv-demo .tree-leaf', (el) => el.checkVisibility());
-    assert.equal(visibleBefore, false, 'button.tsx hidden while its branch is closed');
+    await leafVisible(page, false); // hidden while its branch is closed
     await page.click('#tv-components > .tree-branch-trigger');
     // <details> fires `toggle` asynchronously — wait for the (slower) ARIA
     // sync rather than the synchronous `open` flip
@@ -69,8 +81,7 @@ try {
           .getAttribute('aria-expanded') === 'true',
     );
     assert.equal(await branchOpen(page, 'tv-components'), true);
-    const visibleAfter = await page.$eval('#tv-demo .tree-leaf', (el) => el.checkVisibility());
-    assert.equal(visibleAfter, true);
+    await leafVisible(page, true);
   });
 
   await check('ArrowRight expands / ArrowLeft collapses the focused branch', async () => {

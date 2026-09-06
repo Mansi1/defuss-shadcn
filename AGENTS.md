@@ -243,6 +243,32 @@ if (!document.__myComponentInit) {
 }
 ```
 
+### No window globals (REQUIRED)
+
+Never define or read application globals on `window` — use `globalThis`, and keep
+every name under the single namespace `globalThis._defussShadcn`:
+
+```js
+globalThis._defussShadcn = globalThis._defussShadcn || {};   // idempotent bootstrap
+globalThis._defussShadcn.toast = { show, success, dismiss }; // public imperative API
+```
+
+- Components expose their State API as `_defussShadcn.{name}Api` / `{name}States`
+  (see "State API" below); a component's additional public imperative API lives
+  under `_defussShadcn.{name}` — never as a bare global. Example: the toast
+  factory is `_defussShadcn.toast.show(...)`, **not** `window.toast = { … }`.
+- Doc-site-only scripts (not shipped) share the same discipline under
+  `_defussShadcn.docs` (theme registry, SPA hooks: `THEMES`, `applyTheme`,
+  `onPageReady`, …).
+- Third-party CDN globals (`lucide`, `marked`) are owned by their vendors — read
+  them via `globalThis.*`; never assign to `window`.
+
+**Why:** `window` is a browser-only alias; `globalThis` is the one canonical
+global object and works unchanged in Workers and other runtimes (see the
+isomorphic rule). Scoping everything under `_defussShadcn` keeps a
+copy-paste/CDN-shipped system collision-free on hosts we do not control.
+`scripts/verify.ts` fails the build on any `window.x =` assignment in `src/`.
+
 ### Each component is a self-contained folder
 
 Each component at `dist/components/{name}/` contains:

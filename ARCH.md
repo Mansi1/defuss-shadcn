@@ -21,7 +21,7 @@ layer is for.
 ## 2. The verifier — the authority layer
 
 [`scripts/verify.ts`](scripts/verify.ts) is a custom, code-implemented audit
-of everything prose cannot guarantee: **33 check groups** over the shipped
+of everything prose cannot guarantee: **34 check groups** over the shipped
 tree — skills exist, doc pages exist, tokens are tweakcn-compatible, snippets
 match source, dist is a 1:1 build of src, every declared state has a
 screenshot/skill/doc/e2e artifact, cross-page imports are complete, links
@@ -42,6 +42,19 @@ Two properties make the verifier the loop's backbone:
   verifier does not merely reject; it converts any agent into a
   self-correcting one. The agent's job reduces to: *edit → run → do what
   the output says → repeat.*
+- **Because it is authoritative, its instructions *generate* missing
+  artifacts.** The checks are coverage requirements, not style nits: add a
+  component and the gates immediately demand its doc page, skill, State-API
+  states, screenshots per state, and e2e pair — each with a `fix:` line
+  naming the template to copy. The agent is therefore *triggered to write
+  new tests* (and docs, and fixtures) it never planned to write: the task
+  list comes from the verifier, not from the agent's memory of the
+  conventions. This is how this repo's own test suite grew — the e2e rollout
+  was nothing but a green-then-red-then-green walk down the
+  `e2e smoke tests: tests/e2e/{name}.e2e.ts missing` list until all 55
+  pairs existed and the ratchet could be promoted to a hard gate. Coverage
+  is self-propagating: a future agent cannot silently skip a test, because
+  "test missing" is itself a build failure with instructions attached.
 
 ## 3. AGENTS.md defers: verifier output is authoritative
 
@@ -92,7 +105,7 @@ flowchart TD
     B --> C["make build"]
     subgraph GATES["mechanical quality gates (no human in the loop)"]
         direction LR
-        L["oxlint<br/>typecheck"] --> P["compile src → dist<br/>1:1 build"] --> SS["screenshots<br/>every state × light/dark<br/>fingerprint-fresh"] --> V["verify.ts<br/>33 consistency gates<br/>incl. 'working tree committed'"] --> Q["Vitest UI tests<br/>55 Playwright e2e"]
+        L["oxlint<br/>typecheck"] --> P["compile src → dist<br/>1:1 build"] --> SS["screenshots<br/>every state × light/dark<br/>fingerprint-fresh"] --> V["verify.ts<br/>34 consistency gates<br/>incl. 'working tree committed'"] --> Q["Vitest UI tests<br/>55 Playwright e2e"]
     end
     C --> GATES
 

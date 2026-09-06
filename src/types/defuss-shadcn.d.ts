@@ -16,10 +16,31 @@ interface DefussShadcnComponentState {
   config: Record<string, unknown>;
 }
 
-/** Registry populated by components: `_defussShadcn.dialogApi`, `_defussShadcn.dialogStates`, … */
+/** Options accepted by the toast imperative API (see src/components/toast/toast.ts). */
+interface DefussShadcnToastOptions {
+  title?: string;
+  description?: string;
+  variant?: string;
+  duration?: number;
+  action?: { label: string; onClick: () => void };
+  onDismiss?: () => void;
+}
+
+/** Public imperative API a component may expose as `_defussShadcn.{name}`. */
+interface DefussShadcnToastApi {
+  show(options: string | DefussShadcnToastOptions): HTMLElement;
+  success(options: string | DefussShadcnToastOptions): HTMLElement;
+  warning(options: string | DefussShadcnToastOptions): HTMLElement;
+  info(options: string | DefussShadcnToastOptions): HTMLElement;
+  error(options: string | DefussShadcnToastOptions): HTMLElement;
+  dismiss(): void;
+}
+
+/** Registry populated by components: `_defussShadcn.dialogApi`, `_defussShadcn.toast`, … */
 interface DefussShadcnRegistry {
   [key: `${string}Api`]: DefussShadcnComponentApi | undefined;
   [key: `${string}States`]: readonly string[] | undefined;
+  toast?: DefussShadcnToastApi;
   [key: string]: unknown;
 }
 

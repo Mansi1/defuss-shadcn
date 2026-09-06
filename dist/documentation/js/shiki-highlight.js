@@ -1,3 +1,7 @@
+// Single-namespace globals (AGENTS.md "No window globals"): this file's
+// globals live under globalThis._defussShadcn — never on window.
+globalThis._defussShadcn = globalThis._defussShadcn || {};
+const docs = (globalThis._defussShadcn.docs = globalThis._defussShadcn.docs || {});
 // -- shiki-highlight.js ----------------------------------------
 // Doc-site syntax highlighting via Shiki CDN.
 // Loaded as <script type="module"> — highlights all <pre><code> blocks.
@@ -56,10 +60,10 @@ async function highlightAll() {
 // Highlight on initial load
 highlightAll();
 // Expose globally for spec modal and SPA re-init
-window.__shikiHighlightAll = highlightAll;
+docs.__shikiHighlightAll = highlightAll;
 // Re-highlight after SPA navigation
-if (window.onPageReady) {
-    window.onPageReady(function () {
+if (docs.onPageReady) {
+    docs.onPageReady(function () {
         highlightAll();
     });
 }

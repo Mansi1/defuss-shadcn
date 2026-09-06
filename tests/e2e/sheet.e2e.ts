@@ -27,7 +27,8 @@ async function open(page: Page, id: string): Promise<void> {
       new Promise<void>((resolve) => {
         // transitionend fires per property (opacity + transform) — wait for transform
         if (!el.classList.contains('sheet')) return resolve();
-        const done = (ev: TransitionEvent) => {
+        const done = (ev: Event) => {
+          if (!(ev instanceof TransitionEvent)) return;
           if (ev.propertyName === 'transform') {
             el.removeEventListener('transitionend', done);
             resolve();

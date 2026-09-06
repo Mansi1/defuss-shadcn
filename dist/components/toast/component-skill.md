@@ -119,7 +119,7 @@ Set `data-variant` on the `.toast` element.
 
 The api is bound to the **region container** (`#toast-container`). Its
 observable state is which toasts are visible. Declared states: `default`
-(dismisses every visible toast — the same path as `window.toast.dismiss()`).
+(dismisses every visible toast — the same path as `_defussShadcn.toast.dismiss()`).
 `getState().config.count` reports the live number of visible toasts.
 
 ```js

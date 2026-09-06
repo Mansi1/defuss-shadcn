@@ -5,7 +5,7 @@ import { startServer } from './server.ts';
 /**
  * Why: E2E smoke test for the shipped toast component. Loads the fixture
  * (existing #toast-container + variant buttons, mirroring the doc page) over
- * HTTP in a real browser, then verifies the programmatic window.toast API
+ * HTTP in a real browser, then verifies the programmatic _defussShadcn.toast API
  * (show/variants/roles), the delegated close button, the MAX_VISIBLE trim,
  * and the region's named State API (setState('default') clears; getState()
  * reports the live count) — the same files consumers copy from dist/,
@@ -94,7 +94,7 @@ try {
   });
 
   await check(`more than ${MAX_VISIBLE} toasts trims the oldest`, async () => {
-    await page.evaluate(() => (window as any).toast.show('fourth'));
+    await page.evaluate(() => globalThis._defussShadcn.toast!.show('fourth'));
     await page.waitForFunction(
       (max) => document.querySelectorAll('#toast-container .toast').length <= max,
       MAX_VISIBLE,
@@ -106,7 +106,7 @@ try {
     // deterministic stage: clear the region, then one non-expiring toast
     await page.$eval('#toast-container', (el) => (el as HTMLElement).api!.setState('default'));
     await page.waitForFunction(() => document.querySelectorAll('#toast-container .toast').length === 0);
-    await page.evaluate(() => (window as any).toast.show({ title: 'closeme', duration: Infinity }));
+    await page.evaluate(() => globalThis._defussShadcn.toast!.show({ title: 'closeme', duration: Infinity }));
     await page.waitForFunction(() => !!document.querySelector('#toast-container .toast .toast-close'));
     await page.click('#toast-container .toast .toast-close');
     await page.waitForFunction(() => document.querySelectorAll('#toast-container .toast').length === 0);
@@ -115,7 +115,7 @@ try {
   await check('action button runs onClick and dismisses', async () => {
     await page.evaluate(() => {
       (window as any).__clicked = false;
-      (window as any).toast.show({
+      globalThis._defussShadcn.toast!.show({
         title: 'Archive',
         action: { label: 'Undo', onClick: () => ((window as any).__clicked = true) },
         duration: Infinity, // keep it until we act
@@ -130,8 +130,8 @@ try {
   // -- State API (AGENTS.md "State API") --------------------------------------
   await check("state API: setState('default') dismisses every visible toast", async () => {
     await page.evaluate(() => {
-      (window as any).toast.show({ title: 'a', duration: Infinity });
-      (window as any).toast.show({ title: 'b', duration: Infinity });
+      globalThis._defussShadcn.toast!.show({ title: 'a', duration: Infinity });
+      globalThis._defussShadcn.toast!.show({ title: 'b', duration: Infinity });
     });
     await page.waitForFunction(() => document.querySelectorAll('#toast-container .toast').length === 2);
     const mid = await page.$eval('#toast-container', (el) => (el as HTMLElement).api!.getState());
@@ -141,7 +141,7 @@ try {
   });
 
   await check('state API: getState name stays default and count is live', async () => {
-    await page.evaluate(() => (window as any).toast.show({ title: 'counted', duration: Infinity }));
+    await page.evaluate(() => globalThis._defussShadcn.toast!.show({ title: 'counted', duration: Infinity }));
     await page.waitForFunction(() => document.querySelectorAll('#toast-container .toast').length === 1);
     const state = await page.$eval('#toast-container', (el) => (el as HTMLElement).api!.getState());
     assert.equal(state.name, 'default');

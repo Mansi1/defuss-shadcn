@@ -18,7 +18,7 @@ const browser = await chromium.launch();
 /** Wait until the IntersectionObserver has settled on `index`. */
 async function waitForIndex(page: Page, id: string, index: number): Promise<void> {
   await page.waitForFunction(
-    (args) => document.querySelector(`#${args[0]}`)!.dataset.currentIndex === String(args[1]),
+    (args) => (document.querySelector(`#${args[0]}`) as HTMLElement).dataset.currentIndex === String(args[1]),
     [id, index] as const,
   );
 }

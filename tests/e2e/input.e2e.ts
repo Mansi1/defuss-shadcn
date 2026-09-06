@@ -50,7 +50,7 @@ await cssSmoke('input', [
       await page.click('#in-default');
       await page.waitForTimeout(200); // border-color transitions 150ms
       const [blurred, focused] = await page.evaluate(() => {
-        const def = document.querySelector('#in-default')!;
+        const def = document.querySelector<HTMLInputElement>('#in-default')!;
         const focusedBorder = getComputedStyle(def).borderTopColor;
         def.blur();
         return [getComputedStyle(def).borderTopColor, focusedBorder];

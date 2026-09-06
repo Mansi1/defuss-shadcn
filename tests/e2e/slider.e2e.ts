@@ -51,7 +51,7 @@ try {
       () =>
         [...document.styleSheets]
           .flatMap((s) => [...(s.cssRules ?? [])])
-          .flatMap((r) => (r instanceof CSSNestedDeclarations ? [] : [...(r.cssRules ?? [r])]))
+          .flatMap((r) => (r instanceof CSSNestedDeclarations ? [] : [...(r instanceof CSSGroupingRule ? r.cssRules : [r])]))
           .map((r) => r.cssText)
           .find((t) => t.includes('::-webkit-slider-runnable-track') && t.includes('linear-gradient')) ?? '',
     );

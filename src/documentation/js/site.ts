@@ -7,6 +7,11 @@
 (function () {
   'use strict';
 
+  // Single-namespace globals (AGENTS.md "No window globals"): this file's
+  // globals live under globalThis._defussShadcn — never on window.
+  globalThis._defussShadcn = globalThis._defussShadcn || {};
+  const docs = (globalThis._defussShadcn.docs = globalThis._defussShadcn.docs || {});
+
   function toggleDark() {
     var isDark = document.documentElement.classList.contains('dark');
     document.documentElement.classList.toggle('dark', !isDark);
@@ -15,11 +20,11 @@
     document.getElementById('icon-moon').style.display = isDark ? 'none'  : 'block';
     localStorage.setItem('defuss-shadcn-theme', isDark ? 'light' : 'dark');
     // Re-apply color theme for the new mode
-    if (window.__activeColorTheme && window.__activeColorTheme !== 'default' && window.applyTheme) {
-      window.applyTheme(window.__activeColorTheme);
+    if (docs.__activeColorTheme && docs.__activeColorTheme !== 'default' && docs.applyTheme) {
+      docs.applyTheme(docs.__activeColorTheme);
     }
     // Update favicon for new mode
-    if (window.updateFavicon) window.updateFavicon();
+    if (docs.updateFavicon) docs.updateFavicon();
   }
 
   // -- Token swatches (theming page only) ------------------
@@ -173,7 +178,8 @@
     });
 
     // Lucide icons
-    if (window.lucide) lucide.createIcons();
+    // vendor CDN globals: read via globalThis, never assign (AGENTS.md)
+    if (globalThis.lucide) globalThis.lucide.createIcons();
 
     // Token swatches
     initTokenSwatches();
@@ -184,7 +190,7 @@
 
   // Register content initializer with SPA router
   // (runs on initial load AND after each SPA navigation)
-  window.onPageReady(initPageContent);
+  docs.onPageReady(initPageContent);
 
   // -- Spec modal viewer (runs once, uses delegation) ------
   function initSpecModal() {
@@ -242,10 +248,10 @@
     });
 
     function renderSpec(md, body) {
-      if (window.marked) {
-        body.innerHTML = marked.parse(md);
+      if (globalThis.marked) {
+        body.innerHTML = globalThis.marked.parse(md);
         // Shiki highlighting for spec modal code blocks
-        if (window.__shikiHighlightAll) window.__shikiHighlightAll();
+        if (docs.__shikiHighlightAll) docs.__shikiHighlightAll();
       } else {
         var pre = document.createElement('pre');
         pre.style.whiteSpace = 'pre-wrap';

@@ -115,6 +115,15 @@ try {
   });
 
   await check('nav filter (search) hides non-matching links, keeps Overview', async () => {
+    // the input lives in the header (next to the version badge) and its logic
+    // filters the sidebar — pin the placement so it can't silently migrate back
+    assert.ok(
+      await page.evaluate(
+        () => !!document.querySelector('.site-header .header-search .nav-filter-input') &&
+          !document.querySelector('site-nav .nav-filter-input'),
+      ),
+      'search box is not (only) in the header',
+    );
     const input = page.locator('.nav-filter-input');
     await input.fill('badge');
     const vis = await page.evaluate(() => {

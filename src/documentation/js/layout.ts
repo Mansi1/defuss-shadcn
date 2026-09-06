@@ -185,6 +185,13 @@
             '<span class="header-brand-name">defuss<em>-shadcn</em></span>' +
             '<span class="badge header-brand-version" data-variant="outline" style="font-family:var(--font-mono);">' + SITE_VERSION + '</span>' +
           '</a>' +
+          /* Nav filter lives in the header (next to the version badge) but its
+             logic binds in <site-nav>, which filters the sidebar links. The
+             header upgrades first, so the input exists when the nav renders. */
+          '<div class="header-search" role="search">' +
+            '<input type="text" class="nav-filter-input" placeholder="Filter components..." ' +
+              'aria-label="Filter components" autocomplete="off" spellcheck="false">' +
+          '</div>' +
           '<div style="flex:1;"></div>' +
           '<nav style="display:flex;align-items:center;gap:0.25rem;">' +
             '<a href="https://github.com/kyr0/defuss-shadcn" target="_blank" rel="noopener" class="header-action">' +
@@ -290,30 +297,15 @@
           html += '<a class="' + cls + '" href="' + item.href + '" style="display:flex;align-items:center;gap:0.375rem;">' + item.label + badge + '</a>';
         });
         html += '</div>';
-        /* Insert filter input after Overview section */
-        if (i === 0) {
-          html += '<div class="nav-filter-wrap" style="padding:0 0.375rem 0.75rem;">' +
-            '<input type="text" class="nav-filter-input" placeholder="Filter components..." ' +
-              'aria-label="Filter components" autocomplete="off" spellcheck="false" ' +
-              'style="' +
-                'width:100%;box-sizing:border-box;' +
-                'padding:0.375rem 0.625rem;' +
-                'font-size:0.8125rem;font-family:var(--font-sans);' +
-                'border:1px solid var(--sidebar-border);' +
-                'border-radius:var(--radius-md);' +
-                'background:var(--sidebar);' +
-                'color:var(--foreground);' +
-                'outline:none;' +
-              '">' +
-          '</div>';
-        }
       });
       html += '</div>';
       html += '</aside>';
       this.innerHTML = html;
 
       /* -- Filter logic --------------------------------------- */
-      var input = this.querySelector('.nav-filter-input');
+      /* The input itself lives in <site-header> (next to the version badge);
+         <site-header> upgrades first, so it exists by the time we render. */
+      var input = document.querySelector('.nav-filter-input');
       var sections = this.querySelectorAll('.nav-section');
       if (input && sections.length) {
         input.addEventListener('input', function () {

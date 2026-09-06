@@ -162,7 +162,8 @@ of every build) and the contract every coding agent must satisfy. It checks, amo
 - **quality** — token boundary rule (only tweakcn-defined `var(--*)`), undefined utility
   classes, `prefers-reduced-motion` coverage, init idempotency (double-binding guard),
   dead links (parsed with linkedom), portable paths (no machine-absolute paths),
-  strict typecheck, render drift (screenshot pixels changed without input changes)
+  strict typecheck, render drift (screenshot pixels changed without input changes),
+  theme sidebar contrast (every preset's nav text reaches WCAG AA on its real background)
 - **hygiene** — working tree committed, so a green build is a committed build
 
 Every failing check prints the offending files **and the exact fix** — the verifier is

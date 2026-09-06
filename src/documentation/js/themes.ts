@@ -132,7 +132,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "chart-1": "#4ade80", "chart-2": "#8c5cff", "chart-3": "#fca5a5", "chart-4": "#5993f4", "chart-5": "#a0a0a0",
         sidebar: "#161618", "sidebar-foreground": "#f0f0f0",
         "sidebar-primary": "#8c5cff", "sidebar-primary-foreground": "#ffffff",
-        "sidebar-accent": "#2a2c33", "sidebar-accent-foreground": "#8c5cff",
+        "sidebar-accent": "#2a2c33", "sidebar-accent-foreground": "#a78bff",
         "sidebar-border": "#33353a", "sidebar-ring": "#8c5cff"
       }
     }
@@ -154,7 +154,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "chart-1": "#8839ef", "chart-2": "#04a5e5", "chart-3": "#40a02b", "chart-4": "#fe640b", "chart-5": "#dc8a78",
         sidebar: "#e6e9ef", "sidebar-foreground": "#4c4f69",
         "sidebar-primary": "#8839ef", "sidebar-primary-foreground": "#ffffff",
-        "sidebar-accent": "#04a5e5", "sidebar-accent-foreground": "#ffffff",
+        "sidebar-accent": "#0e6da3", "sidebar-accent-foreground": "#fdf2f8",
         "sidebar-border": "#bcc0cc", "sidebar-ring": "#8839ef",
         radius: "0.35rem"
       },
@@ -193,7 +193,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "chart-1": "#1e9df1", "chart-2": "#00b87a", "chart-3": "#f7b928", "chart-4": "#17bf63", "chart-5": "#e0245e",
         sidebar: "#f7f8f8", "sidebar-foreground": "#0f1419",
         "sidebar-primary": "#1e9df1", "sidebar-primary-foreground": "#ffffff",
-        "sidebar-accent": "#E3ECF6", "sidebar-accent-foreground": "#1e9df1",
+        "sidebar-accent": "#E3ECF6", "sidebar-accent-foreground": "#0b5f96",
         "sidebar-border": "#e1e8ed", "sidebar-ring": "#1da1f2",
         radius: "1.3rem"
       },
@@ -310,7 +310,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "chart-1": "#A37764", "chart-2": "#8A655A", "chart-3": "#C39E88", "chart-4": "#BAAB92", "chart-5": "#A28777",
         sidebar: "#ebd6cb", "sidebar-foreground": "#56453F",
         "sidebar-primary": "#A37764", "sidebar-primary-foreground": "#FFFFFF",
-        "sidebar-accent": "#C39E88", "sidebar-accent-foreground": "#ffffff",
+        "sidebar-accent": "#C39E88", "sidebar-accent-foreground": "#3a2a1e",
         "sidebar-border": "#A28777", "sidebar-ring": "#A37764",
         radius: "0.5rem"
       },
@@ -427,7 +427,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "chart-1": "#86a7c8", "chart-2": "#eea591", "chart-3": "#5a7ca6", "chart-4": "#466494", "chart-5": "#334c82",
         sidebar: "#dddfe2", "sidebar-foreground": "#333333",
         "sidebar-primary": "#e05d38", "sidebar-primary-foreground": "#ffffff",
-        "sidebar-accent": "#d6e4f0", "sidebar-accent-foreground": "#1e3a8a",
+        "sidebar-accent": "#adc4da", "sidebar-accent-foreground": "#1e3a8a",
         "sidebar-border": "#e5e7eb", "sidebar-ring": "#e05d38",
         radius: "0.75rem"
       },
@@ -483,7 +483,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "chart-1": "#81c784", "chart-2": "#66bb6a", "chart-3": "#4caf50", "chart-4": "#43a047", "chart-5": "#388e3c",
         sidebar: "#1c2a1f", "sidebar-foreground": "#f0ebe5",
         "sidebar-primary": "#4caf50", "sidebar-primary-foreground": "#0a1f0c",
-        "sidebar-accent": "#388e3c", "sidebar-accent-foreground": "#f0ebe5",
+        "sidebar-accent": "#1b5e20", "sidebar-accent-foreground": "#f0ebe5",
         "sidebar-border": "#3e4a3d", "sidebar-ring": "#4caf50"
       }
     }
@@ -934,7 +934,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "chart-1": "#b71c1c", "chart-2": "#556b2f", "chart-3": "#4682b4", "chart-4": "#ff6f00", "chart-5": "#8d6e63",
         sidebar: "#b0b0b0", "sidebar-foreground": "#1f1f1f",
         "sidebar-primary": "#b71c1c", "sidebar-primary-foreground": "#ffffff",
-        "sidebar-accent": "#4682b4", "sidebar-accent-foreground": "#ffffff",
+        "sidebar-accent": "#2f5f85", "sidebar-accent-foreground": "#ffffff",
         "sidebar-border": "#505050", "sidebar-ring": "#b71c1c",
         radius: "0px"
       },
@@ -1263,7 +1263,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "chart-1": "#34d399", "chart-2": "#2dd4bf", "chart-3": "#22c55e", "chart-4": "#10b981", "chart-5": "#059669",
         sidebar: "#1e293b", "sidebar-foreground": "#d1d5db",
         "sidebar-primary": "#34d399", "sidebar-primary-foreground": "#0f172a",
-        "sidebar-accent": "#374151", "sidebar-accent-foreground": "#a1a1aa",
+        "sidebar-accent": "#374151", "sidebar-accent-foreground": "#c7c9cf",
         "sidebar-border": "#4b5563", "sidebar-ring": "#34d399"
       }
     }
@@ -1285,7 +1285,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "chart-1": "#268bd2", "chart-2": "#2aa198", "chart-3": "#d33682", "chart-4": "#cb4b16", "chart-5": "#dc322f",
         sidebar: "#fdf6e3", "sidebar-foreground": "#073642",
         "sidebar-primary": "#d33682", "sidebar-primary-foreground": "#ffffff",
-        "sidebar-accent": "#2aa198", "sidebar-accent-foreground": "#ffffff",
+        "sidebar-accent": "#177f78", "sidebar-accent-foreground": "#ffffff",
         "sidebar-border": "#839496", "sidebar-ring": "#d33682",
         radius: "0.25rem"
       },
@@ -1302,7 +1302,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "chart-1": "#268bd2", "chart-2": "#2aa198", "chart-3": "#d33682", "chart-4": "#cb4b16", "chart-5": "#dc322f",
         sidebar: "#002b36", "sidebar-foreground": "#93a1a1",
         "sidebar-primary": "#d33682", "sidebar-primary-foreground": "#ffffff",
-        "sidebar-accent": "#2aa198", "sidebar-accent-foreground": "#ffffff",
+        "sidebar-accent": "#177f78", "sidebar-accent-foreground": "#ffffff",
         "sidebar-border": "#586e75", "sidebar-ring": "#d33682"
       }
     }
@@ -1324,7 +1324,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "chart-1": "#6c5ce7", "chart-2": "#8e44ad", "chart-3": "#4b0082", "chart-4": "#6495ed", "chart-5": "#4682b4",
         sidebar: "#f9f9f9", "sidebar-foreground": "#333333",
         "sidebar-primary": "#6c5ce7", "sidebar-primary-foreground": "#ffffff",
-        "sidebar-accent": "#8b9467", "sidebar-accent-foreground": "#ffffff",
+        "sidebar-accent": "#8b9467", "sidebar-accent-foreground": "#1f2114",
         "sidebar-border": "#d4d4d4", "sidebar-ring": "#6c5ce7",
         radius: "0.5rem"
       },
@@ -1341,7 +1341,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "chart-1": "#6c5ce7", "chart-2": "#8e44ad", "chart-3": "#4b0082", "chart-4": "#6495ed", "chart-5": "#4682b4",
         sidebar: "#1a1d23", "sidebar-foreground": "#e5e5e5",
         "sidebar-primary": "#6c5ce7", "sidebar-primary-foreground": "#ffffff",
-        "sidebar-accent": "#6495ed", "sidebar-accent-foreground": "#e5e5e5",
+        "sidebar-accent": "#31527f", "sidebar-accent-foreground": "#e5e5e5",
         "sidebar-border": "#444444", "sidebar-ring": "#6c5ce7"
       }
     }
@@ -1363,7 +1363,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "chart-1": "#ffc0cb", "chart-2": "#87ceeb", "chart-3": "#ffff00", "chart-4": "#ff99cc", "chart-5": "#33cc33",
         sidebar: "#f7f9fa", "sidebar-foreground": "#333333",
         "sidebar-primary": "#ffc0cb", "sidebar-primary-foreground": "#000000",
-        "sidebar-accent": "#ffff00", "sidebar-accent-foreground": "#000000",
+        "sidebar-accent": "#f0b429", "sidebar-accent-foreground": "#000000",
         "sidebar-border": "#d4d4d4", "sidebar-ring": "#ffc0cb",
         radius: "0.5rem"
       },
@@ -1419,7 +1419,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "chart-1": "#34a85a", "chart-2": "#4682b4", "chart-3": "#6495ed", "chart-4": "#66d9ef", "chart-5": "#1a9641",
         sidebar: "#1a1d23", "sidebar-foreground": "#e5e5e5",
         "sidebar-primary": "#34a85a", "sidebar-primary-foreground": "#ffffff",
-        "sidebar-accent": "#6495ed", "sidebar-accent-foreground": "#e5e5e5",
+        "sidebar-accent": "#31527f", "sidebar-accent-foreground": "#e5e5e5",
         "sidebar-border": "#444444", "sidebar-ring": "#34a85a"
       }
     }

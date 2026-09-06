@@ -15,6 +15,7 @@ import {
   SKILL_TEMPLATE_FILE,
 } from './lib/skill.ts';
 import { readmeCssOnlyProblems } from './lib/readme.ts';
+import { parseThemes, defaultTokenModes, sidebarContrastProblems } from './lib/contrast.ts';
 import { buildSkillText } from './lib/skill-files.ts';
 
 /**
@@ -881,6 +882,25 @@ check(
         actual,
       ),
       statFix,
+    );
+  }
+
+  // 32. theme contrast: the doc-site sidebar must stay readable under every
+  // theme preset. Text tokens must reach WCAG AA against the background
+  // they actually sit on (--sidebar / --sidebar-accent) — themes whose
+  // sidebar-accent pairs failed this shipped invisible active nav links.
+  {
+    const themes = parseThemes(readFileSync(join(DOCS, 'js/themes.ts'), 'utf8'));
+    // the "default" theme isn't in themes.ts — fold the shipped token file in
+    const defaultModes = defaultTokenModes(readFileSync(join(SRC, 'theme/default-semantic-tokens.css'), 'utf8'));
+    const problems = sidebarContrastProblems([
+      ...themes,
+      { id: 'default', label: 'Default', modes: defaultModes },
+    ]);
+    check(
+      'theme sidebar contrast',
+      problems,
+      'raise the flagged theme token(s) in src/documentation/js/themes.ts (or src/theme/default-semantic-tokens.css) until the sidebar text pair reaches WCAG AA (>=4.5) — the measured pairs are pinned by tests/contrast.test.ts',
     );
   }
 

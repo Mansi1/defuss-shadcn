@@ -61,7 +61,9 @@ html { scroll-padding-top: 4rem; }
   font-size: 0.75rem; font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--primary);
+  /* sidebar-scoped token: section headings sit on --sidebar; --primary is
+     only paired against --background and fails on most theme presets */
+  color: var(--sidebar-foreground);
   padding: 0 0.75rem;
   margin: 0 0 0.375rem;
 }
@@ -124,7 +126,10 @@ main {
   margin-bottom: 2px;
   border-radius: var(--radius-md);
   font-size: 0.875rem;
-  color: var(--muted-foreground);
+  /* sidebar-scoped tokens: the nav sits on --sidebar, so its text must be
+     paired with --sidebar, not with the page-level muted/primary/accent
+     tokens (theme authors pair those against --background only) */
+  color: var(--sidebar-foreground);
   text-decoration: none;
   cursor: pointer;
   border: none;
@@ -135,8 +140,8 @@ main {
   transition: all 120ms;
   line-height: 1.6;
 }
-.nav-link:hover { color: var(--foreground); background: var(--accent); }
-.nav-link.active { color: var(--primary); font-weight: 500; background: var(--accent); }
+.nav-link:hover { color: var(--sidebar-foreground); background: var(--sidebar-accent); }
+.nav-link.active { color: var(--sidebar-accent-foreground); font-weight: 500; background: var(--sidebar-accent); }
 .nav-link.disabled {
   opacity: 0.4;
   pointer-events: none;

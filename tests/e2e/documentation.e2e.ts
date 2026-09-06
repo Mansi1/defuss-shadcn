@@ -213,6 +213,67 @@ try {
     );
   });
 
+  await check('active nav link stays readable under theme presets (computed contrast >= 4.5)', async () => {
+    // regression: 15 dark + 7 light themes shipped an active nav link whose
+    // text vanished into the pill. verify's token gate checks the raw hex
+    // pairs; this checks what the browser ACTUALLY paints through the real
+    // layout (correct token wiring in .nav-link.active, transitions settled).
+    const REGRESSION_SET: Array<[string, 'light' | 'dark']> = [
+      ['default', 'light'], ['catppuccin', 'light'], ['supabase', 'light'],
+      ['tangerine', 'light'], ['retro-arcade', 'light'], ['midnight-bloom', 'light'],
+      ['candyland', 'light'], ['modern-minimal', 'dark'], ['mono', 'dark'],
+      ['kodama-grove', 'dark'], ['neo-brutalism', 'dark'], ['nature', 'dark'],
+      ['mocha-mousse', 'dark'], ['supabase', 'dark'], ['catppuccin', 'dark'],
+      ['northern-lights', 'dark'], ['sunset-horizon', 'dark'], ['midnight-bloom', 'dark'],
+      ['candyland', 'dark'], ['retro-arcade', 'dark'], ['bold-tech', 'dark'],
+      ['elegant-luxury', 'dark'],
+    ];
+    const bad: string[] = [];
+    for (const [themeId, mode] of REGRESSION_SET) {
+      await page.evaluate(
+        ([t, m]) => {
+          document.documentElement.classList.toggle('dark', m === 'dark');
+          (globalThis as any)._defussShadcn.docs.applyTheme(t);
+        },
+        [themeId, mode],
+      );
+      await page.waitForTimeout(200); // past `transition: all 120ms`
+      const ratio = await page.evaluate(() => {
+        const link = document.querySelector('.nav-link.active') as HTMLElement;
+        const cs = getComputedStyle(link);
+        // canvas resolves any CSS color syntax (oklch/oklab/color()) to bytes
+        const cv = document.createElement('canvas');
+        cv.width = cv.height = 1;
+        const ctx = cv.getContext('2d')!;
+        const toRgba = (c: string): number[] => {
+          ctx.clearRect(0, 0, 1, 1);
+          ctx.fillStyle = 'rgba(0,0,0,0)';
+          ctx.fillStyle = c;
+          ctx.fillRect(0, 0, 1, 1);
+          const d = ctx.getImageData(0, 0, 1, 1).data;
+          return [d[0], d[1], d[2], d[3] / 255];
+        };
+        const lum = (rgb: number[]) => {
+          const f = (v: number) => (v / 255 <= 0.04045 ? v / 255 / 12.92 : ((v / 255 + 0.055) / 1.055) ** 2.4);
+          return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]);
+        };
+        const [ar, ag, ab, a] = toRgba(cs.backgroundColor);
+        const sb = toRgba(getComputedStyle(document.querySelector('.site-sidebar')!).backgroundColor);
+        const blend = (ch: number, bg: number) => Math.round(ch * a + bg * (1 - a));
+        const painted = [blend(ar, sb[0]), blend(ag, sb[1]), blend(ab, sb[2])];
+        const fg = toRgba(cs.color);
+        const [l1, l2] = [lum(fg), lum(painted)].sort((x, y) => y - x);
+        return (l1 + 0.05) / (l2 + 0.05);
+      });
+      if (ratio < 4.5) bad.push(`${themeId}/${mode}=${ratio.toFixed(2)}`);
+    }
+    assert.deepEqual(bad, [], `active nav link contrast below WCAG AA: ${bad.join(', ')}`);
+    await page.evaluate(() => {
+      (globalThis as any)._defussShadcn.docs.applyTheme('default');
+      document.documentElement.classList.remove('dark');
+    });
+  });
+
   await check('no first-party page errors during the whole run', async () => {
     assert.deepEqual(pageErrors, [], `uncaught page errors: ${pageErrors.join(' | ')}`);
   });

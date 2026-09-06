@@ -138,6 +138,11 @@ forget:
   from the jsDelivr CDN, exactly as README's Via CDN quick start shows — if
   it renders, the CDN install works" note, which must stay true if the CDN
   strategy in [`scripts/lib/mirror.ts`](scripts/lib/mirror.ts) ever changes.
+- **CSS-only count** — the "**N of M components need no JavaScript**" line
+  appears in both README.md and the index; `verify`'s
+  `README CSS-only stat` / `index CSS-only stat` gates compare it against
+  the actual `src/components/` tree (a component `.ts` = ships a `.js`).
+  Update both files together whenever a component gains or loses behavior.
 
 `verify` enforces the pillar set (`README ↔ index parity`, hard gate) and the
 **`README ↔ index commit window`** gate: if the two files' last-touch commits

@@ -15,7 +15,7 @@ import {
   SKILL_TEMPLATE_FILE,
 } from './lib/skill.ts';
 import { readmeCssOnlyProblems } from './lib/readme.ts';
-import { parseThemes, defaultTokenModes, sidebarContrastProblems } from './lib/contrast.ts';
+import { parseThemes, defaultTokenModes, sidebarContrastProblems, radiusConsistencyProblems } from './lib/contrast.ts';
 import { buildSkillText } from './lib/skill-files.ts';
 
 /**
@@ -901,6 +901,11 @@ check(
       'theme sidebar contrast',
       problems,
       'raise the flagged theme token(s) in src/documentation/js/themes.ts (or src/theme/default-semantic-tokens.css) until the sidebar text pair reaches WCAG AA (>=4.5) — the measured pairs are pinned by tests/contrast.test.ts',
+    );
+    check(
+      'theme radius consistency',
+      radiusConsistencyProblems(themes),
+      'declare the same `radius` in BOTH the light and dark block of the flagged theme(s) in src/documentation/js/themes.ts (AGENTS.md "Theme radius consistency")',
     );
   }
 

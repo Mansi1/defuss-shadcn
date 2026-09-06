@@ -335,7 +335,180 @@
           <p class="text-muted-foreground text-sm mb-4">Styles for figure, caption, fallback, and lightbox dialog.</p>
           <div style="position:relative;margin-top:0.5rem;">
             <button class="copy-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
-            <pre><code class="language-scss" data-src="../components/image/image.css"></code></pre>
+            <pre><code class="language-scss">@layer components {
+  .image {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    margin: 0;
+
+    &amp; &gt; img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* -- Fit variants ---------------------------------------- */
+    &amp;[data-fit=&quot;contain&quot;] &gt; img { object-fit: contain; }
+    &amp;[data-fit=&quot;fill&quot;]    &gt; img { object-fit: fill; }
+    &amp;[data-fit=&quot;none&quot;]    &gt; img { object-fit: none; }
+
+    /* -- Aspect ratio ---------------------------------------- */
+    &amp;[data-ratio=&quot;1/1&quot;]  { aspect-ratio: 1 / 1; }
+    &amp;[data-ratio=&quot;4/3&quot;]  { aspect-ratio: 4 / 3; }
+    &amp;[data-ratio=&quot;3/2&quot;]  { aspect-ratio: 3 / 2; }
+    &amp;[data-ratio=&quot;16/9&quot;] { aspect-ratio: 16 / 9; }
+    &amp;[data-ratio=&quot;21/9&quot;] { aspect-ratio: 21 / 9; }
+    &amp;[data-ratio=&quot;3/4&quot;]  { aspect-ratio: 3 / 4; }
+
+    /* -- Radius variants ------------------------------------- */
+    &amp;[data-radius=&quot;none&quot;] { border-radius: 0; }
+    &amp;[data-radius=&quot;sm&quot;]   { border-radius: var(--radius-sm); }
+    &amp;[data-radius=&quot;md&quot;]   { border-radius: var(--radius-md); }
+    &amp;[data-radius=&quot;full&quot;] { border-radius: 9999px; }
+
+    /* -- Preview cursor -------------------------------------- */
+    &amp;[data-preview] {
+      cursor: zoom-in;
+    }
+
+    /* -- Fallback -------------------------------------------- */
+    &amp; &gt; .image-fallback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--muted);
+      color: var(--muted-foreground);
+
+      &amp; &gt; svg {
+        width: 2.5rem;
+        height: 2.5rem;
+        opacity: 0.5;
+      }
+    }
+
+    /* Hide fallback when image loads successfully */
+    &amp;:has(&gt; img:not([data-error])) &gt; .image-fallback {
+      display: none;
+    }
+  }
+
+  /* -- Caption ----------------------------------------------- */
+  .image-caption {
+    padding: 0.625rem 0 0.25rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--muted-foreground);
+    text-wrap: pretty;
+  }
+
+  /* -- Lightbox dialog --------------------------------------- */
+  dialog.image-lightbox {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: auto;
+    position: fixed;
+    inset: 0;
+    max-width: 100vw;
+    max-height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 200ms ease, display 200ms allow-discrete;
+
+    &amp;[open] {
+      opacity: 1;
+    }
+
+    &amp;::backdrop {
+      background: oklch(0 0 0 / 0);
+      transition: all 200ms ease, display 200ms allow-discrete;
+    }
+
+    &amp;[open]::backdrop {
+      background: oklch(0 0 0 / 0.85);
+    }
+  }
+
+  @starting-style {
+    dialog.image-lightbox[open] {
+      opacity: 0;
+    }
+
+    dialog.image-lightbox[open]::backdrop {
+      background: oklch(0 0 0 / 0);
+    }
+  }
+
+  .image-lightbox-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    &amp; &gt; img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      transition: transform 200ms ease;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+  }
+
+  .image-lightbox-toolbar {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.25rem;
+    z-index: 1;
+  }
+
+  .image-lightbox-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: none;
+    border-radius: var(--radius-md);
+    background: oklch(0 0 0 / 0.5);
+    color: white;
+    cursor: pointer;
+    transition: background 150ms ease;
+
+    &amp;:hover {
+      background: oklch(0 0 0 / 0.7);
+    }
+
+    &amp;:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &amp; &gt; svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    dialog.image-lightbox,
+    dialog.image-lightbox::backdrop,
+    .image-lightbox-content &gt; img {
+      transition: none;
+    }
+  }
+}</code></pre>
           </div>
         </section>
 
@@ -345,7 +518,187 @@
           <p class="text-muted-foreground text-sm mb-4">Fallback error detection and lightbox preview with zoom/rotate.</p>
           <div style="position:relative;margin-top:0.5rem;">
             <button class="copy-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
-            <pre><code class="language-javascript" data-src="../components/image/image.js"></code></pre>
+            <pre><code class="language-javascript">/* -- Image component ----------------------------------------- */
+/* Fallback on error + lightbox preview for [data-preview].    */
+/* Named-state API bound per figure so agents/tests can show   */
+/* the fallback without a network failure (AGENTS.md &quot;State     */
+/* API&quot;).                                                        */
+
+// Shared preamble (AGENTS.md &quot;State API&quot;); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const imageStates = ['default', 'error'];
+
+/**
+ * UI side of setState (per figure): 'error' marks the img like a failed load
+ * would (CSS then reveals .image-fallback); 'default' clears the mark.
+ */
+function triggerStateChange(figure, stateName, _config) {
+  const img = figure.querySelector('img');
+  if (!img) return;
+  switch (stateName) {
+    case 'default':
+      delete img.dataset.error;
+      break;
+    case 'error':
+      img.dataset.error = '';
+      break;
+  }
+}
+
+/** Registry-level API; pass the figure explicitly. Unknown names throw. */
+export const imageApi = {
+  setState(figure, stateName, config = {}) {
+    if (!imageStates.includes(stateName)) {
+      throw new Error(`image: unknown state &quot;${stateName}&quot; (supported: ${imageStates.join(', ')})`);
+    }
+    triggerStateChange(figure, stateName, config);
+    // state lives on the ELEMENT, not the module (many images per page)
+    figure.dataset.stateName = stateName;
+    figure._stateConfig = config;
+  },
+  getState(figure) {
+    // reflect reality: load/error events flip it without setState()
+    const img = figure.querySelector('img');
+    return {
+      name: img &amp;&amp; img.dataset.error !== undefined ? 'error' : 'default',
+      config: figure._stateConfig ?? {},
+    };
+  },
+};
+
+_defussShadcn.imageApi = imageApi;
+_defussShadcn.imageStates = imageStates;
+
+function init() {
+/* -- Fallback: mark images that fail to load ----------------- */
+document.querySelectorAll('.image:not([data-init])').forEach((figure) =&gt; {
+  figure.dataset.init = '';
+  // bind-scope the api per figure: `$('#hero').api.setState('error')`
+  figure.api = {
+    setState: (stateName, config) =&gt; imageApi.setState(figure, stateName, config),
+    getState: () =&gt; imageApi.getState(figure),
+  };
+  const img = figure.querySelector('img');
+  if (!img) return;
+
+  if (img.complete &amp;&amp; img.naturalWidth === 0) {
+    img.dataset.error = '';
+  }
+
+  img.addEventListener('error', () =&gt; {
+    img.dataset.error = '';
+    figure.dataset.stateName = 'error';
+  });
+
+  img.addEventListener('load', () =&gt; {
+    delete img.dataset.error;
+    figure.dataset.stateName = 'default';
+  });
+});
+}
+
+init();
+new MutationObserver(init).observe(document, { childList: true, subtree: true });
+
+/* -- Lightbox ------------------------------------------------ */
+let lightbox = null;
+let lightboxImg = null;
+let zoom = 1;
+let rotation = 0;
+
+function getLightbox() {
+  if (lightbox) return lightbox;
+
+  lightbox = document.createElement('dialog');
+  lightbox.className = 'image-lightbox';
+  lightbox.setAttribute('aria-label', 'Image preview');
+
+  lightbox.innerHTML = `
+    &lt;div class=&quot;image-lightbox-content&quot;&gt;
+      &lt;img src=&quot;&quot; alt=&quot;&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;image-lightbox-toolbar&quot;&gt;
+      &lt;button class=&quot;image-lightbox-btn&quot; data-action=&quot;zoom-in&quot; aria-label=&quot;Zoom in&quot;&gt;
+        &lt;svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;8&quot;/&gt;&lt;line x1=&quot;21&quot; y1=&quot;21&quot; x2=&quot;16.65&quot; y2=&quot;16.65&quot;/&gt;&lt;line x1=&quot;11&quot; y1=&quot;8&quot; x2=&quot;11&quot; y2=&quot;14&quot;/&gt;&lt;line x1=&quot;8&quot; y1=&quot;11&quot; x2=&quot;14&quot; y2=&quot;11&quot;/&gt;&lt;/svg&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;image-lightbox-btn&quot; data-action=&quot;zoom-out&quot; aria-label=&quot;Zoom out&quot;&gt;
+        &lt;svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;8&quot;/&gt;&lt;line x1=&quot;21&quot; y1=&quot;21&quot; x2=&quot;16.65&quot; y2=&quot;16.65&quot;/&gt;&lt;line x1=&quot;8&quot; y1=&quot;11&quot; x2=&quot;14&quot; y2=&quot;11&quot;/&gt;&lt;/svg&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;image-lightbox-btn&quot; data-action=&quot;rotate-left&quot; aria-label=&quot;Rotate left&quot;&gt;
+        &lt;svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M2.5 2v6h6&quot;/&gt;&lt;path d=&quot;M2.66 15.57a10 10 0 1 0 .57-8.38&quot;/&gt;&lt;/svg&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;image-lightbox-btn&quot; data-action=&quot;rotate-right&quot; aria-label=&quot;Rotate right&quot;&gt;
+        &lt;svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M21.5 2v6h-6&quot;/&gt;&lt;path d=&quot;M21.34 15.57a10 10 0 1 1-.57-8.38&quot;/&gt;&lt;/svg&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;image-lightbox-btn&quot; data-action=&quot;reset&quot; aria-label=&quot;Reset&quot;&gt;
+        &lt;svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8&quot;/&gt;&lt;path d=&quot;M3 3v5h5&quot;/&gt;&lt;/svg&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;image-lightbox-btn&quot; data-action=&quot;close&quot; aria-label=&quot;Close&quot;&gt;
+        &lt;svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;line x1=&quot;18&quot; y1=&quot;6&quot; x2=&quot;6&quot; y2=&quot;18&quot;/&gt;&lt;line x1=&quot;6&quot; y1=&quot;6&quot; x2=&quot;18&quot; y2=&quot;18&quot;/&gt;&lt;/svg&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;`;
+
+  lightboxImg = lightbox.querySelector('.image-lightbox-content &gt; img');
+
+  /* Toolbar actions */
+  lightbox.querySelector('.image-lightbox-toolbar').addEventListener('click', (e) =&gt; {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+    if (action === 'zoom-in')      zoom = Math.min(zoom + 0.25, 5);
+    else if (action === 'zoom-out') zoom = Math.max(zoom - 0.25, 0.25);
+    else if (action === 'rotate-left')  rotation -= 90;
+    else if (action === 'rotate-right') rotation += 90;
+    else if (action === 'reset') { zoom = 1; rotation = 0; }
+    else if (action === 'close') { lightbox.close(); return; }
+
+    applyTransform();
+  });
+
+  /* Close on backdrop click */
+  lightbox.addEventListener('click', (e) =&gt; {
+    if (e.target === lightbox) lightbox.close();
+  });
+
+  document.body.appendChild(lightbox);
+  return lightbox;
+}
+
+function applyTransform() {
+  if (lightboxImg) {
+    lightboxImg.style.transform = `scale(${zoom}) rotate(${rotation}deg)`;
+  }
+}
+
+function openLightbox(src, alt) {
+  const lb = getLightbox();
+  zoom = 1;
+  rotation = 0;
+  lightboxImg.src = src;
+  lightboxImg.alt = alt || '';
+  lightboxImg.style.transform = '';
+  lb.showModal();
+}
+
+/* -- Attach preview click handlers --------------------------- */
+if (!document.__imagePreviewInit) {
+  document.__imagePreviewInit = true;
+
+  document.addEventListener('click', (e) =&gt; {
+    const figure = e.target.closest('.image[data-preview]');
+    if (!figure) return;
+
+    const img = figure.querySelector('img');
+    if (!img || img.dataset.error !== undefined) return;
+
+    openLightbox(img.src, img.alt);
+  });
+}</code></pre>
           </div>
         </section>
 

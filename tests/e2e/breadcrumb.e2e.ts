@@ -14,7 +14,27 @@ await cssSmoke('breadcrumb', [
   {
     label: '.breadcrumb-separator is smaller (12px) muted text',
     selector: '.breadcrumb-separator',
-    css: { 'font-size': '12px' },
+    css: { 'font-size': '12px', display: 'flex', 'align-items': 'center' },
+  },
+  {
+    label: 'icon separators sit on the labels\' optical center (baseline bug regression)',
+    run: async (page) => {
+      const centers = await page.evaluate(() => {
+        const row = document.querySelector('#icon-crumbs')!;
+        const svg = row.querySelector('.breadcrumb-separator svg')!;
+        const link = row.querySelector('.breadcrumb-link')!;
+        const center = (el: Element) => {
+          const r = el.getBoundingClientRect();
+          return r.top + r.height / 2;
+        };
+        return { sep: center(svg), label: center(link) };
+      });
+      const off = Math.abs(centers.sep - centers.label);
+      if (off > 1.5)
+        throw new Error(
+          `icon separator center is ${off.toFixed(1)}px off the label center (want <=1.5)`,
+        );
+    },
   },
   {
     label: '.breadcrumb-ellipsis is a 24px centered square',

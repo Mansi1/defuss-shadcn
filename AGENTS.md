@@ -421,6 +421,23 @@ contract grows; never re-declare the globals inside a component file.
 Legacy components in its `STATE_API_LEGACY` list warn only until migrated —
 remove a name from the list in the same commit that migrates the component.
 
+### Theme radius consistency (REQUIRED)
+
+A theme is **one identity, two palettes** — light and dark are the same
+theme, so its shape (`radius`) must be **identical in both modes**. If Doom64
+is hard-square in dark mode it is hard-square in light mode; if ChatGPT is
+pill-round in dark, light is pill-round too. A theme that only declares
+`radius` in one mode silently reverts the other to the default rounding, so
+toggling dark mode "changes the theme's shape" — reported (Doom64, Retro
+Arcade) and now gated.
+
+- In `src/documentation/js/themes.ts`, declare `radius` in **both** the
+  `light` and `dark` block of every theme, with the same value.
+- `verify`'s `theme radius consistency` gate fails the build otherwise.
+- Same principle for **contrast**: every theme's sidebar text pairs must
+  reach WCAG AA (≥ 4.5) in *both* modes — see the `theme sidebar contrast`
+  gate. Re-tune one mode's color and you own both.
+
 ### Tokens are the source of truth for design values
 
 `dist/theme/default-semantic-tokens.css` defines all CSS custom properties. These must match

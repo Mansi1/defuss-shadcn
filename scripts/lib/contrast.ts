@@ -162,6 +162,25 @@ export function defaultTokenModes(source: string): Record<string, Record<string,
  * fails with the exact theme/mode named; unparsable colors are skipped,
  * not silently passed.
  */
+/**
+ * Why: a theme's shape is part of its identity — ChatGPT is pill-round,
+ * Doom64 is hard-square. light and dark are two palettes of ONE theme, so
+ * `radius` must be declared identically in both modes (themes.ts shipped
+ * radius in light blocks only, so dark mode silently fell back to the
+ * default rounding — AGENTS.md "Theme radius consistency").
+ */
+export function radiusConsistencyProblems(themes: ThemeEntry[]): string[] {
+  const problems: string[] = [];
+  for (const t of themes) {
+    const light = t.modes.light?.radius;
+    const dark = t.modes.dark?.radius;
+    if (!light && !dark) continue; // theme opts into the default radius
+    if (light !== dark)
+      problems.push(`${t.id}: radius "${light ?? '(unset)'}" (light) ≠ "${dark ?? '(unset)'}" (dark) — both modes must declare the same value`);
+  }
+  return problems;
+}
+
 export function sidebarContrastProblems(
   themes: ThemeEntry[],
   min = WCAG_AA,

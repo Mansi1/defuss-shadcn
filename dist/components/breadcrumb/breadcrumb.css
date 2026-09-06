@@ -14,6 +14,9 @@
   }
   .breadcrumb-separator {
     color: var(--muted-foreground); font-size: 0.75rem;
+    /* flex (not inline): an inline <svg> sits on the text baseline, so icon
+       separators render a few px above the labels' optical center */
+    display: flex; align-items: center;
     & svg { width: 0.875rem; height: 0.875rem; flex-shrink: 0; }
 
     /* RTL: auto-flip chevron separators */

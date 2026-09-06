@@ -55,7 +55,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#1f1e1d", "sidebar-foreground": "#c3c0b6",
         "sidebar-primary": "#343434", "sidebar-primary-foreground": "#fbfbfb",
         "sidebar-accent": "#0f0f0e", "sidebar-accent-foreground": "#c3c0b6",
-        "sidebar-border": "#ebebeb", "sidebar-ring": "#b5b5b5"
+        "sidebar-border": "#ebebeb", "sidebar-ring": "#b5b5b5",
+        radius: "0.5rem"
       }
     }
   },
@@ -94,7 +95,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "oklch(0.18 0 0)", "sidebar-foreground": "oklch(1.00 0 0)",
         "sidebar-primary": "oklch(1.00 0 0)", "sidebar-primary-foreground": "oklch(0 0 0)",
         "sidebar-accent": "oklch(0.32 0 0)", "sidebar-accent-foreground": "oklch(1.00 0 0)",
-        "sidebar-border": "oklch(0.32 0 0)", "sidebar-ring": "oklch(0.72 0 0)"
+        "sidebar-border": "oklch(0.32 0 0)", "sidebar-ring": "oklch(0.72 0 0)",
+        radius: "0.5rem"
       }
     }
   },
@@ -133,7 +135,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#161618", "sidebar-foreground": "#f0f0f0",
         "sidebar-primary": "#8c5cff", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#2a2c33", "sidebar-accent-foreground": "#a78bff",
-        "sidebar-border": "#33353a", "sidebar-ring": "#8c5cff"
+        "sidebar-border": "#33353a", "sidebar-ring": "#8c5cff",
+        radius: "1.4rem"
       }
     }
   },
@@ -172,7 +175,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#11111b", "sidebar-foreground": "#cdd6f4",
         "sidebar-primary": "#cba6f7", "sidebar-primary-foreground": "#1e1e2e",
         "sidebar-accent": "#89dceb", "sidebar-accent-foreground": "#1e1e2e",
-        "sidebar-border": "#45475a", "sidebar-ring": "#cba6f7"
+        "sidebar-border": "#45475a", "sidebar-ring": "#cba6f7",
+        radius: "0.35rem"
       }
     }
   },
@@ -211,7 +215,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#17181c", "sidebar-foreground": "#d9d9d9",
         "sidebar-primary": "#1da1f2", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#061622", "sidebar-accent-foreground": "#1c9cf0",
-        "sidebar-border": "#38444d", "sidebar-ring": "#1da1f2"
+        "sidebar-border": "#38444d", "sidebar-ring": "#1da1f2",
+        radius: "1.3rem"
       }
     }
   },
@@ -250,7 +255,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#181117", "sidebar-foreground": "#e0cad6",
         "sidebar-primary": "#1d4ed8", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#261922", "sidebar-accent-foreground": "#f4f4f5",
-        "sidebar-border": "#000000", "sidebar-ring": "#db2777"
+        "sidebar-border": "#000000", "sidebar-ring": "#db2777",
+        radius: "0.5rem"
       }
     }
   },
@@ -289,7 +295,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#121212", "sidebar-foreground": "#898989",
         "sidebar-primary": "#006239", "sidebar-primary-foreground": "#dde8e3",
         "sidebar-accent": "#313131", "sidebar-accent-foreground": "#fafafa",
-        "sidebar-border": "#292929", "sidebar-ring": "#4ade80"
+        "sidebar-border": "#292929", "sidebar-ring": "#4ade80",
+        radius: "0.5rem"
       }
     }
   },
@@ -328,7 +335,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#1f1a17", "sidebar-foreground": "#F1F0E5",
         "sidebar-primary": "#C39E88", "sidebar-primary-foreground": "#1f1a17",
         "sidebar-accent": "#BAAB92", "sidebar-accent-foreground": "#1f1a17",
-        "sidebar-border": "#56453F", "sidebar-ring": "#C39E88"
+        "sidebar-border": "#56453F", "sidebar-ring": "#C39E88",
+        radius: "0.5rem"
       }
     }
   },
@@ -367,7 +375,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#1f1f1f", "sidebar-foreground": "#d9d9d9",
         "sidebar-primary": "#a0a0a0", "sidebar-primary-foreground": "#1a1a1a",
         "sidebar-accent": "#404040", "sidebar-accent-foreground": "#d9d9d9",
-        "sidebar-border": "#353535", "sidebar-ring": "#a0a0a0"
+        "sidebar-border": "#353535", "sidebar-ring": "#a0a0a0",
+        radius: "0.35rem"
       }
     }
   },
@@ -406,7 +415,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#1a1a2e", "sidebar-foreground": "#e2e2f5",
         "sidebar-primary": "#a48fff", "sidebar-primary-foreground": "#0f0f1a",
         "sidebar-accent": "#303060", "sidebar-accent-foreground": "#e2e2f5",
-        "sidebar-border": "#303052", "sidebar-ring": "#a48fff"
+        "sidebar-border": "#303052", "sidebar-ring": "#a48fff",
+        radius: "0.5rem"
       }
     }
   },
@@ -445,7 +455,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#2a303f", "sidebar-foreground": "#e5e5e5",
         "sidebar-primary": "#e05d38", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#2a3656", "sidebar-accent-foreground": "#bfdbfe",
-        "sidebar-border": "#3d4354", "sidebar-ring": "#e05d38"
+        "sidebar-border": "#3d4354", "sidebar-ring": "#e05d38",
+        radius: "0.75rem"
       }
     }
   },
@@ -484,7 +495,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#1c2a1f", "sidebar-foreground": "#f0ebe5",
         "sidebar-primary": "#4caf50", "sidebar-primary-foreground": "#0a1f0c",
         "sidebar-accent": "#1b5e20", "sidebar-accent-foreground": "#f0ebe5",
-        "sidebar-border": "#3e4a3d", "sidebar-ring": "#4caf50"
+        "sidebar-border": "#3e4a3d", "sidebar-ring": "#4caf50",
+        radius: "0.5rem"
       }
     }
   },
@@ -523,7 +535,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#0a1a20", "sidebar-foreground": "#4de8e8",
         "sidebar-primary": "#4de8e8", "sidebar-primary-foreground": "#0a1a20",
         "sidebar-accent": "#164955", "sidebar-accent-foreground": "#4de8e8",
-        "sidebar-border": "#164955", "sidebar-ring": "#4de8e8"
+        "sidebar-border": "#164955", "sidebar-ring": "#4de8e8",
+        radius: "0.125rem"
       }
     }
   },
@@ -562,7 +575,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#000000", "sidebar-foreground": "#ffffff",
         "sidebar-primary": "#ff6666", "sidebar-primary-foreground": "#000000",
         "sidebar-accent": "#3399ff", "sidebar-accent-foreground": "#000000",
-        "sidebar-border": "#ffffff", "sidebar-ring": "#ff6666"
+        "sidebar-border": "#ffffff", "sidebar-ring": "#ff6666",
+        radius: "0px"
       }
     }
   },
@@ -601,7 +615,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#0c0c1d", "sidebar-foreground": "#eceff4",
         "sidebar-primary": "#ff00c8", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#00ffcc", "sidebar-accent-foreground": "#0c0c1d",
-        "sidebar-border": "#2e2e5e", "sidebar-ring": "#ff00c8"
+        "sidebar-border": "#2e2e5e", "sidebar-ring": "#ff00c8",
+        radius: "0.5rem"
       }
     }
   },
@@ -640,7 +655,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#16141e", "sidebar-foreground": "#e0ddef",
         "sidebar-primary": "#a995c9", "sidebar-primary-foreground": "#1a1823",
         "sidebar-accent": "#372e3f", "sidebar-accent-foreground": "#f2b8c6",
-        "sidebar-border": "#2a273a", "sidebar-ring": "#a995c9"
+        "sidebar-border": "#2a273a", "sidebar-ring": "#a995c9",
+        radius: "0.5rem"
       }
     }
   },
@@ -679,7 +695,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#18181b", "sidebar-foreground": "#f4f4f5",
         "sidebar-primary": "#1d4ed8", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#27272a", "sidebar-accent-foreground": "#f4f4f5",
-        "sidebar-border": "#27272a", "sidebar-ring": "#d4d4d8"
+        "sidebar-border": "#27272a", "sidebar-ring": "#d4d4d8",
+        radius: "0.5rem"
       }
     }
   },
@@ -718,7 +735,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#3a3529", "sidebar-foreground": "#ede4d4",
         "sidebar-primary": "#8a9f7b", "sidebar-primary-foreground": "#2a2521",
         "sidebar-accent": "#a18f5c", "sidebar-accent-foreground": "#2a2521",
-        "sidebar-border": "#5a5345", "sidebar-ring": "#8a9f7b"
+        "sidebar-border": "#5a5345", "sidebar-ring": "#8a9f7b",
+        radius: "0.425rem"
       }
     }
   },
@@ -757,7 +775,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#292524", "sidebar-foreground": "#F5F5F4",
         "sidebar-primary": "#F97316", "sidebar-primary-foreground": "#FFFFFF",
         "sidebar-accent": "#0EA5E9", "sidebar-accent-foreground": "#0C2A4D",
-        "sidebar-border": "#44403C", "sidebar-ring": "#F97316"
+        "sidebar-border": "#44403C", "sidebar-ring": "#F97316",
+        radius: "0.3rem"
       }
     }
   },
@@ -796,7 +815,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#171717", "sidebar-foreground": "#fafafa",
         "sidebar-primary": "#fafafa", "sidebar-primary-foreground": "#171717",
         "sidebar-accent": "#262626", "sidebar-accent-foreground": "#fafafa",
-        "sidebar-border": "#ffffff", "sidebar-ring": "#525252"
+        "sidebar-border": "#ffffff", "sidebar-ring": "#525252",
+        radius: "0rem"
       }
     }
   },
@@ -835,7 +855,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#171717", "sidebar-foreground": "#e5e5e5",
         "sidebar-primary": "#3b82f6", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#1e3a8a", "sidebar-accent-foreground": "#bfdbfe",
-        "sidebar-border": "#404040", "sidebar-ring": "#3b82f6"
+        "sidebar-border": "#404040", "sidebar-ring": "#3b82f6",
+        radius: "0.375rem"
       }
     }
   },
@@ -874,7 +895,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#101f28", "sidebar-foreground": "#f3f4f6",
         "sidebar-primary": "#ec4899", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#f9a8d4", "sidebar-accent-foreground": "#1f2937",
-        "sidebar-border": "#374151", "sidebar-ring": "#ec4899"
+        "sidebar-border": "#374151", "sidebar-ring": "#ec4899",
+        radius: "0.4rem"
       }
     }
   },
@@ -913,7 +935,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#212121", "sidebar-foreground": "#dcdcdc",
         "sidebar-primary": "#b0b0b0", "sidebar-primary-foreground": "#212121",
         "sidebar-accent": "#e0e0e0", "sidebar-accent-foreground": "#333333",
-        "sidebar-border": "#4f4f4f", "sidebar-ring": "#c0c0c0"
+        "sidebar-border": "#4f4f4f", "sidebar-ring": "#c0c0c0",
+        radius: "0.625rem"
       }
     }
   },
@@ -952,7 +975,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#141414", "sidebar-foreground": "#e0e0e0",
         "sidebar-primary": "#e53935", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#64b5f6", "sidebar-accent-foreground": "#000000",
-        "sidebar-border": "#4a4a4a", "sidebar-ring": "#e53935"
+        "sidebar-border": "#4a4a4a", "sidebar-ring": "#e53935",
+        radius: "0px"
       }
     }
   },
@@ -991,7 +1015,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#1c0d25", "sidebar-foreground": "#ffb3ff",
         "sidebar-primary": "#ff6bef", "sidebar-primary-foreground": "#180518",
         "sidebar-accent": "#5a1f5d", "sidebar-accent-foreground": "#ffb3ff",
-        "sidebar-border": "#4a1b5f", "sidebar-ring": "#ff6bef"
+        "sidebar-border": "#4a1b5f", "sidebar-ring": "#ff6bef",
+        radius: "0.5rem"
       }
     }
   },
@@ -1030,7 +1055,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#0f172a", "sidebar-foreground": "#e0e7ff",
         "sidebar-primary": "#8b5cf6", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#4338ca", "sidebar-accent-foreground": "#e0e7ff",
-        "sidebar-border": "#2e1065", "sidebar-ring": "#8b5cf6"
+        "sidebar-border": "#2e1065", "sidebar-ring": "#8b5cf6",
+        radius: "0.625rem"
       }
     }
   },
@@ -1069,7 +1095,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#1c1917", "sidebar-foreground": "#f5f5f4",
         "sidebar-primary": "#b91c1c", "sidebar-primary-foreground": "#faf7f5",
         "sidebar-accent": "#b45309", "sidebar-accent-foreground": "#fef3c7",
-        "sidebar-border": "#44403c", "sidebar-ring": "#b91c1c"
+        "sidebar-border": "#44403c", "sidebar-ring": "#b91c1c",
+        radius: "0.375rem"
       }
     }
   },
@@ -1108,7 +1135,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#0f0f0f", "sidebar-foreground": "#e5e5e5",
         "sidebar-primary": "#f59e0b", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#92400e", "sidebar-accent-foreground": "#fde68a",
-        "sidebar-border": "#404040", "sidebar-ring": "#f59e0b"
+        "sidebar-border": "#404040", "sidebar-ring": "#f59e0b",
+        radius: "0.375rem"
       }
     }
   },
@@ -1147,7 +1175,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#3a3633", "sidebar-foreground": "#e2e8f0",
         "sidebar-primary": "#818cf8", "sidebar-primary-foreground": "#1e1b18",
         "sidebar-accent": "#484441", "sidebar-accent-foreground": "#d1d5db",
-        "sidebar-border": "#3a3633", "sidebar-ring": "#818cf8"
+        "sidebar-border": "#3a3633", "sidebar-ring": "#818cf8",
+        radius: "1.25rem"
       }
     }
   },
@@ -1186,7 +1215,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#3f324a", "sidebar-foreground": "#e0e7ff",
         "sidebar-primary": "#c0aafd", "sidebar-primary-foreground": "#1c1917",
         "sidebar-accent": "#4a3d5a", "sidebar-accent-foreground": "#d1d5db",
-        "sidebar-border": "#3f324a", "sidebar-ring": "#c0aafd"
+        "sidebar-border": "#3f324a", "sidebar-ring": "#c0aafd",
+        radius: "1.5rem"
       }
     }
   },
@@ -1225,7 +1255,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#1e293b", "sidebar-foreground": "#e2e8f0",
         "sidebar-primary": "#818cf8", "sidebar-primary-foreground": "#0f172a",
         "sidebar-accent": "#374151", "sidebar-accent-foreground": "#d1d5db",
-        "sidebar-border": "#4b5563", "sidebar-ring": "#818cf8"
+        "sidebar-border": "#4b5563", "sidebar-ring": "#818cf8",
+        radius: "0.5rem"
       }
     }
   },
@@ -1264,7 +1295,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#1e293b", "sidebar-foreground": "#d1d5db",
         "sidebar-primary": "#34d399", "sidebar-primary-foreground": "#0f172a",
         "sidebar-accent": "#374151", "sidebar-accent-foreground": "#c7c9cf",
-        "sidebar-border": "#4b5563", "sidebar-ring": "#34d399"
+        "sidebar-border": "#4b5563", "sidebar-ring": "#34d399",
+        radius: "0.5rem"
       }
     }
   },
@@ -1287,7 +1319,7 @@ globalThis._defussShadcn.docs.THEMES = [
         "sidebar-primary": "#d33682", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#177f78", "sidebar-accent-foreground": "#ffffff",
         "sidebar-border": "#839496", "sidebar-ring": "#d33682",
-        radius: "0.25rem"
+        radius: "0px"
       },
       dark: {
         background: "#002b36", foreground: "#93a1a1",
@@ -1303,7 +1335,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#002b36", "sidebar-foreground": "#93a1a1",
         "sidebar-primary": "#d33682", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#177f78", "sidebar-accent-foreground": "#ffffff",
-        "sidebar-border": "#586e75", "sidebar-ring": "#d33682"
+        "sidebar-border": "#586e75", "sidebar-ring": "#d33682",
+        radius: "0px"
       }
     }
   },
@@ -1342,7 +1375,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#1a1d23", "sidebar-foreground": "#e5e5e5",
         "sidebar-primary": "#6c5ce7", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#31527f", "sidebar-accent-foreground": "#e5e5e5",
-        "sidebar-border": "#444444", "sidebar-ring": "#6c5ce7"
+        "sidebar-border": "#444444", "sidebar-ring": "#6c5ce7",
+        radius: "0.5rem"
       }
     }
   },
@@ -1381,7 +1415,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#1a1d23", "sidebar-foreground": "#e5e5e5",
         "sidebar-primary": "#ff99cc", "sidebar-primary-foreground": "#000000",
         "sidebar-accent": "#87ceeb", "sidebar-accent-foreground": "#000000",
-        "sidebar-border": "#444444", "sidebar-ring": "#ff99cc"
+        "sidebar-border": "#444444", "sidebar-ring": "#ff99cc",
+        radius: "0.5rem"
       }
     }
   },
@@ -1420,7 +1455,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#1a1d23", "sidebar-foreground": "#e5e5e5",
         "sidebar-primary": "#34a85a", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#31527f", "sidebar-accent-foreground": "#e5e5e5",
-        "sidebar-border": "#444444", "sidebar-ring": "#34a85a"
+        "sidebar-border": "#444444", "sidebar-ring": "#34a85a",
+        radius: "0.5rem"
       }
     }
   },
@@ -1459,7 +1495,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#2d2621", "sidebar-foreground": "#ece5d8",
         "sidebar-primary": "#c0a080", "sidebar-primary-foreground": "#2d2621",
         "sidebar-accent": "#59493e", "sidebar-accent-foreground": "#ece5d8",
-        "sidebar-border": "#4a4039", "sidebar-ring": "#c0a080"
+        "sidebar-border": "#4a4039", "sidebar-ring": "#c0a080",
+        radius: "0.25rem"
       }
     }
   },
@@ -1498,7 +1535,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#2a2024", "sidebar-foreground": "#f2e9e4",
         "sidebar-primary": "#ff7e5f", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#feb47b", "sidebar-accent-foreground": "#2a2024",
-        "sidebar-border": "#463a41", "sidebar-ring": "#ff7e5f"
+        "sidebar-border": "#463a41", "sidebar-ring": "#ff7e5f",
+        radius: "0.625rem"
       }
     }
   },
@@ -1537,7 +1575,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#23243a", "sidebar-foreground": "#e6eaf3",
         "sidebar-primary": "#3a5ba0", "sidebar-primary-foreground": "#ffe066",
         "sidebar-accent": "#ffe066", "sidebar-accent-foreground": "#23243a",
-        "sidebar-border": "#2d2e3e", "sidebar-ring": "#ffe066"
+        "sidebar-border": "#2d2e3e", "sidebar-ring": "#ffe066",
+        radius: "0.5rem"
       }
     }
   },
@@ -1576,7 +1615,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#121212", "sidebar-foreground": "#c1c1c1",
         "sidebar-primary": "#e78a53", "sidebar-primary-foreground": "#121113",
         "sidebar-accent": "#333333", "sidebar-accent-foreground": "#c1c1c1",
-        "sidebar-border": "#222222", "sidebar-ring": "#e78a53"
+        "sidebar-border": "#222222", "sidebar-ring": "#e78a53",
+        radius: "0.75rem"
       }
     }
   },
@@ -1615,7 +1655,8 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#000000", "sidebar-foreground": "#ffffff",
         "sidebar-primary": "#818cf8", "sidebar-primary-foreground": "#000000",
         "sidebar-accent": "#fcd34d", "sidebar-accent-foreground": "#000000",
-        "sidebar-border": "#ffffff", "sidebar-ring": "#818cf8"
+        "sidebar-border": "#ffffff", "sidebar-ring": "#818cf8",
+        radius: "1rem"
       }
     }
   },
@@ -1654,7 +1695,53 @@ globalThis._defussShadcn.docs.THEMES = [
         sidebar: "#0f0f0f", "sidebar-foreground": "#f5f5f5",
         "sidebar-primary": "#7c9082", "sidebar-primary-foreground": "#ffffff",
         "sidebar-accent": "#1a1a1a", "sidebar-accent-foreground": "#f5f5f5",
-        "sidebar-border": "#2a2a2a", "sidebar-ring": "#7c9082"
+        "sidebar-border": "#2a2a2a", "sidebar-ring": "#7c9082",
+        radius: "0.35rem"
+      }
+    }
+  },
+  {
+    id: "openai",
+    label: "OpenAI",
+    styles: {
+      /* Colors sampled from the ChatGPT screenshots in issues/: ink #0d0d0d
+       * on paper #fcfcfc (sidebar) / #f0f0f0 (canvas), pill #efefef, brand
+       * green #10a37f; dark = black sidebar #000, gray canvas #2f2f2f,
+       * cards #2a2a2a, active pill #1a1a1a. Radius identical in both modes
+       * (AGENTS.md "Theme radius consistency"). */
+      light: {
+        background: "#f7f7f7", foreground: "#0d0d0d",
+        card: "#ffffff", "card-foreground": "#0d0d0d",
+        popover: "#ffffff", "popover-foreground": "#0d0d0d",
+        primary: "#0d0d0d", "primary-foreground": "#ffffff",
+        secondary: "#ececec", "secondary-foreground": "#0d0d0d",
+        muted: "#ececec", "muted-foreground": "#6e6e6e",
+        accent: "#efefef", "accent-foreground": "#0d0d0d",
+        destructive: "#e02e2a", "destructive-foreground": "#ffffff",
+        border: "#e5e5e5", input: "#e5e5e5", ring: "#0d0d0d",
+        "chart-1": "#10a37f", "chart-2": "#0d0d0d", "chart-3": "#efefef", "chart-4": "#19c37d", "chart-5": "#8f8f8f",
+        sidebar: "#fcfcfc", "sidebar-foreground": "#0d0d0d",
+        "sidebar-primary": "#0d0d0d", "sidebar-primary-foreground": "#ffffff",
+        "sidebar-accent": "#efefef", "sidebar-accent-foreground": "#0d0d0d",
+        "sidebar-border": "#ececec", "sidebar-ring": "#c7c7c7",
+        radius: "1.5rem"
+      },
+      dark: {
+        background: "#2f2f2f", foreground: "#ffffff",
+        card: "#2a2a2a", "card-foreground": "#ffffff",
+        popover: "#404040", "popover-foreground": "#ffffff",
+        primary: "#ffffff", "primary-foreground": "#0d0d0d",
+        secondary: "#2a2a2a", "secondary-foreground": "#ffffff",
+        muted: "#2a2a2a", "muted-foreground": "#afafaf",
+        accent: "#1a1a1a", "accent-foreground": "#ffffff",
+        destructive: "#ff6b6b", "destructive-foreground": "#000000",
+        border: "#383838", input: "#383838", ring: "#9b9b9b",
+        "chart-1": "#19c37d", "chart-2": "#ffffff", "chart-3": "#1a1a1a", "chart-4": "#10a37f", "chart-5": "#8f8f8f",
+        sidebar: "#000000", "sidebar-foreground": "#ffffff",
+        "sidebar-primary": "#ffffff", "sidebar-primary-foreground": "#000000",
+        "sidebar-accent": "#1a1a1a", "sidebar-accent-foreground": "#ffffff",
+        "sidebar-border": "#1f1f1f", "sidebar-ring": "#9b9b9b",
+        radius: "1.5rem"
       }
     }
   }

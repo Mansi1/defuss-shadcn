@@ -99,6 +99,20 @@
 
   <div style="margin-bottom:2.5rem;">
     <div class="flex items-center gap-3 mb-2">
+      <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0;">v0.7.19</h2>
+      <span class="badge" data-variant="outline" style="font-family:var(--font-mono);">September 07, 2026</span>
+    </div>
+    <ul style="margin:0;padding-left:1.25rem;" class="text-sm text-muted-foreground flex flex-col gap-1">
+      <li>image doc page: CSS/JS snippets were blank <code>data-src</code> stubs (no loader ships); they are static embedded snippets like every other page now</li>
+      <li>theme radius consistency: every preset declared <code>radius</code> in light mode only, so switching to dark changed the theme's shape (Doom64/Retro Arcade rounded despite being hard-square themes); all 42 presets now declare an identical radius in both modes, and verify's <code>theme radius consistency</code> gate fails otherwise (AGENTS.md "Theme radius consistency")</li>
+      <li>new <strong>OpenAI</strong> theme: ChatGPT palette sampled pixel-from-screenshot (issues/chatgpt_*.png) — paper #fcfcfc sidebar / ink #0d0d0d / #efefef pills in light, pure-black sidebar / #2f2f2f canvas / #2a2a2a cards in dark, brand green in the charts, pill-round 1.5rem in both modes</li>
+      <li>breadcrumb: icon separators (custom chevron variant) are vertically centered with the labels — the <code><li></code> is flex now, inline SVGs sat on the text baseline (e2e geometry check)</li>
+      <li>tests: radius-consistency assertions for all presets incl. doom-64/retro-arcade=0px and openai parity (51 unit tests total)</li>
+    </ul>
+  </div>
+
+  <div style="margin-bottom:2.5rem;">
+    <div class="flex items-center gap-3 mb-2">
       <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0;">v0.7.18</h2>
       <span class="badge" data-variant="outline" style="font-family:var(--font-mono);">September 06, 2026</span>
       <code class="changelog-hash" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted-foreground);">8274414</code>

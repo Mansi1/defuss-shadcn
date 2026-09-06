@@ -9,6 +9,7 @@ import {
   parseThemes,
   defaultTokenModes,
   sidebarContrastProblems,
+  radiusConsistencyProblems,
   WCAG_AA,
 } from '../scripts/lib/contrast.ts';
 
@@ -163,5 +164,54 @@ describe('sidebarContrastProblems', () => {
       { id: 'default', label: 'Default', modes: defaults },
     ]);
     expect(problems).toEqual([]);
+  });
+});
+
+describe('radiusConsistencyProblems', () => {
+  const mk = (lightRadius?: string, darkRadius?: string): Parameters<typeof radiusConsistencyProblems>[0] => [
+    {
+      id: 't',
+      label: 'T',
+      modes: {
+        light: { radius: lightRadius } as Record<string, string>,
+        dark: { radius: darkRadius } as Record<string, string>,
+      },
+    },
+  ];
+
+  it('passes when both modes declare the same radius', () => {
+    expect(radiusConsistencyProblems(mk('0.5rem', '0.5rem'))).toEqual([]);
+  });
+
+  it('passes when the theme declares no radius at all (uses the default)', () => {
+    expect(radiusConsistencyProblems(mk(undefined, undefined))).toEqual([]);
+  });
+
+  it('flags a mode-missing radius (dark silently reverted to default rounding)', () => {
+    const problems = radiusConsistencyProblems(mk('0px', undefined));
+    expect(problems).toHaveLength(1);
+    expect(problems[0]).toContain('(unset)');
+    expect(problems[0]).toContain('light');
+  });
+
+  it('flags mismatched values', () => {
+    expect(radiusConsistencyProblems(mk('0px', '0.5rem'))).toHaveLength(1);
+  });
+
+  it('every shipped preset declares an identical radius in light and dark', () => {
+    // regression: themes shipped radius only in light, so dark mode changed
+    // the theme's shape; doom-64 + retro-arcade must be hard-square both ways
+    const themes = parseThemes(themesSource);
+    expect(radiusConsistencyProblems(themes)).toEqual([]);
+    const doom = themes.find((t) => t.id === 'doom-64')!.modes;
+    expect(doom.light.radius).toBe('0px');
+    expect(doom.dark.radius).toBe('0px');
+    const retro = themes.find((t) => t.id === 'retro-arcade')!.modes;
+    expect(retro.light.radius).toBe('0px');
+    expect(retro.dark.radius).toBe('0px');
+    // OpenAI: one ChatGPT identity, pill-round in BOTH modes
+    const openai = themes.find((t) => t.id === 'openai')!.modes;
+    expect(openai.light.radius).toBe(openai.dark.radius);
+    expect(openai.light.radius).not.toBe('0px');
   });
 });

@@ -156,9 +156,12 @@ of every build) and the contract every coding agent must satisfy. It checks, amo
   strict typecheck, render drift (screenshot pixels changed without input changes)
 - **hygiene** — working tree committed, so a green build is a committed build
 
-Known rollout gaps (e.g. components still missing e2e tests) print as ⚠ warnings with a
-step-by-step migration procedure — always refactor the source first, write the e2e test
-after. Each failing check prints the offending file and the exact fix command.
+Every failing check prints the offending files **and the exact fix** — the verifier is
+the loop's authority (AGENTS.md defers to its output), so a coding agent can iterate
+`edit → build → do what it says` until the goal is reached. The warn-ratchets for legacy
+rollouts (State API, e2e, reduced motion) are now empty and kept as hard gates against
+regressions. How this all scales without human review — and the proof-loop diagram —
+are documented in [ARCH.md](ARCH.md).
 
 ## Testing
 

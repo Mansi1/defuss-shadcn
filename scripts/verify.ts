@@ -707,6 +707,41 @@ check(
   );
 }
 
+// 27. README ↔ index.html commit window: the two files state the same
+// promises to humans and browser users, so touching one without the other
+// within 15 minutes of commit time is treated as an un-synced edit (the
+// hero paragraph diverged once: "No build step for consumers — dist/ is
+// committed…" vs "No build step."). Identity of the touching commit passes;
+// otherwise the two last-touch commits must be ≤ SYNC_WINDOW apart.
+{
+  const SYNC_WINDOW = 15 * 60; // seconds
+  const PAIR: Array<[string, string]> = [
+    ['README.md', 'README.md'],
+    ['index.html', 'src/documentation/index.html'],
+  ];
+  const [readmeHash, readmeAt, indexHash, indexAt] = PAIR.flatMap(([, path]) =>
+    Bun.spawnSync({ cmd: ['git', 'log', '-1', '--format=%H %ct', '--', path], cwd: ROOT })
+      .stdout.toString()
+      .trim()
+      .split(' '),
+  );
+  const problems: string[] = [];
+  if (readmeHash && indexHash && readmeHash !== indexHash) {
+    const gap = Math.abs(Number(readmeAt) - Number(indexAt));
+    if (gap > SYNC_WINDOW) {
+      const older = Number(readmeAt) < Number(indexAt) ? 'README.md' : 'index.html';
+      problems.push(
+        `${older} was last committed ${Math.round(gap / 60)} min apart from the other (> ${SYNC_WINDOW / 60} min) — its statements may have drifted`,
+      );
+    }
+  }
+  check(
+    'README ↔ index commit window',
+    problems,
+    'update README.md and src/documentation/index.html in the same commit (or within 15 min of each other) so their shared claims stay true (AGENTS.md "README ↔ index parity")',
+  );
+}
+
 console.log(
   failed
     ? `\nverify: FAILED (${failed} check group(s), ${warned} warning group(s))`

@@ -100,17 +100,27 @@ full rationale lives in [ARCH.md](ARCH.md).
 
 ### README ↔ index parity
 
-`README.md` (intro pillar bullets) and `src/documentation/index.html` (pillar
-cards) describe the same system to humans and to browser users — **when you
-update either, update the other in the same commit.** The intro bullets
-(`- **Name** — …`, under "What this is" and before "Quick start") and the index pillar cards
-(`<h3 class="card-title">`) must list the same set of pillars; the index page
-also carries the "this site loads its assets from the jsDelivr CDN, exactly
-as README's Via CDN quick start shows — if it renders, the CDN install works"
-dogfooding note, which must stay true if the CDN strategy in
-[`scripts/lib/mirror.ts`](scripts/lib/mirror.ts) ever changes. `verify`'s
-`README ↔ index parity` check enforces the pillar set (hard gate); the
-prose pairing is yours to maintain.
+`README.md` and `src/documentation/index.html` describe the same system to
+humans and to browser users — **when you update either, update the other in
+the same commit.** They share two claims that drift independently if you
+forget:
+
+- **Pillar set** — the README intro bullets (`- **Name** — …`, under "What
+  this is" and before "Quick start") and the index pillar cards
+  (`<h3 class="card-title">`) must list the same set of pillars.
+- **Hero sentence** — the intro paragraph wording must match
+  (`"No build step for consumers — dist/ is committed and ready to use
+  as-is."` once diverged to a bare `"No build step."`).
+- **CDN dogfooding** — the index carries the "this site loads its assets
+  from the jsDelivr CDN, exactly as README's Via CDN quick start shows — if
+  it renders, the CDN install works" note, which must stay true if the CDN
+  strategy in [`scripts/lib/mirror.ts`](scripts/lib/mirror.ts) ever changes.
+
+`verify` enforces the pillar set (`README ↔ index parity`, hard gate) and the
+**`README ↔ index commit window`** gate: if the two files' last-touch commits
+are neither identical nor within **15 minutes** of each other, the build fails
+as "un-synced edit" — forcing you to land them together. Wording parity itself
+is yours to maintain (no automated text diff; the window is the backstop).
 
 ### Native web platform first
 

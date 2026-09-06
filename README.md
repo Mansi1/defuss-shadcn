@@ -185,9 +185,10 @@ fixture page using the component in **all** of its documented configurations (ev
 variant, size, and State API state), driven by plain Playwright against the unmodified
 files in `dist/` (`bun run e2e`). This is the verification loop a coding agent runs
 after touching any component — the shipped files themselves are asserted, so "it
-compiles" is never mistaken for "it works". The rollout is in progress (`verify` lists
-the components still missing one) and its parity rule keeps fixture, docs and code in
-lockstep as they land.
+compiles" is never mistaken for "it works". Every component ships one (the gate is
+hard), and its parity rule keeps fixture, docs and code in lockstep as they change.
+The documentation site itself is covered too ([`tests/e2e/documentation.e2e.ts`](tests/e2e/documentation.e2e.ts)):
+the intro page renders, the SPA router navigates, and the sidebar filter searches.
 
 ## Credits
 

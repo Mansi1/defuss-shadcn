@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <title>toggle-group e2e fixture</title>
     <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
+    <!-- .toggle base styles (incl. its border-radius) live in the toggle component -->
+    <link rel="stylesheet" href="/dist/components/toggle/toggle.css" />
     <link rel="stylesheet" href="/dist/components/toggle-group/toggle-group.css" />
   </head>
   <body style="padding:2rem;display:flex;flex-direction:column;gap:1.5rem;">
@@ -33,6 +35,14 @@
     <div class="toggle-group" role="group" aria-label="Vertical" data-orientation="vertical" id="group-vertical">
       <button class="toggle" aria-pressed="true">1</button>
       <button class="toggle" aria-pressed="false">2</button>
+      <button class="toggle" aria-pressed="false">3</button>
+    </div>
+
+    <!-- spacing: individual radii must win the tie against connected corners -->
+    <div class="toggle-group" role="group" aria-label="Spaced" data-variant="outline" data-spacing id="group-spaced">
+      <button class="toggle" aria-pressed="false">A</button>
+      <button class="toggle" aria-pressed="false">B</button>
+      <button class="toggle" aria-pressed="false">C</button>
     </div>
 
     <!-- authored disabled group -->

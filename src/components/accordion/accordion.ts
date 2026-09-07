@@ -75,6 +75,15 @@ function init() {
       getState: () => accordionApi.getState(accordion),
     };
     items.forEach((item) => {
+      // Cancellable pre-event: closing the LAST open item of a non-collapsible
+      // single accordion is denied here, before the DOM changes. Reopening it
+      // in the `toggle` handler instead would visibly flicker close→open now
+      // that the ::details-content height transition animates.
+      item.addEventListener('beforetoggle', (e) => {
+        if (accordion._applying) return; // programmatic state change in progress
+        if (e.newState !== 'closed' || collapsible) return;
+        if (!Array.from(items).some((i) => i !== item && i.open)) e.preventDefault();
+      });
       item.addEventListener('toggle', () => {
         if (accordion._applying) return; // programmatic state change in progress
         if (item.open) {
@@ -82,6 +91,10 @@ function init() {
             if (sibling !== item && sibling.open) sibling.open = false;
           });
         } else if (!collapsible) {
+          // fallback for browsers without beforetoggle (which the deny above
+          // needs): reopen, accepting the flicker — better than losing the
+          // single-open guarantee. Modern browsers never reach this branch
+          // because a denied beforetoggle fires no toggle event at all.
           const anyOpen = Array.from(items).some((i) => i.open);
           if (!anyOpen) item.open = true;
         }

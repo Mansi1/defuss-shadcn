@@ -83,9 +83,27 @@ try {
     await expectOpen(page, 'single', [false, false, true], 'after opening 3');
   });
 
-  await check('single-open (not collapsible): cannot close the last open item', async () => {
-    await clickItem(page, 'single', 3); // natively closes, JS immediately re-opens it
-    await expectOpen(page, 'single', [false, false, true], 're-opens itself');
+  await check('single-open (not collapsible): clicking the last open item is a no-op (no flicker)', async () => {
+    // Regression guard: the close is denied in the cancellable beforetoggle
+    // event, so `open` must stay true the WHOLE time. Reopening in `toggle`
+    // (the old way) flickers visibly now that the panel animates.
+    await page.click('#single .accordion-item[data-item="3"] > summary');
+    await page.waitForTimeout(250);
+    await expectOpen(page, 'single', [false, false, true], 'stays open, never flipped');
+    // ...and it never even *started* closing: arm a toggle recorder on the
+    // open item, click it with real input, then read what was recorded.
+    await page.evaluate(() => {
+      const d = document.querySelector('#single .accordion-item[data-item="3"]') as HTMLDetailsElement;
+      d.dataset.sawClose = 'false';
+      d.addEventListener('toggle', () => {
+        if (!d.open) d.dataset.sawClose = 'true';
+      });
+    });
+    await clickItem(page, 'single', 3);
+    await page.waitForTimeout(250);
+    const sawClose = await page.$eval('#single .accordion-item[data-item="3"]', (el) => el.dataset.sawClose);
+    assert.equal(sawClose, 'false', 'open item fired a closing toggle — the beforetoggle deny did not take effect');
+    await expectOpen(page, 'single', [false, false, true], 'still open after click');
   });
 
   await check('collapsible single: allows all items closed', async () => {

@@ -171,3 +171,4 @@ These are all browser-native — no JS needed.
 - Content height animation uses `::details-content` pseudo-element with `block-size` transition and `@starting-style` for the enter animation — fully CSS-only, no JS measurement needed
 - Set `data-type="single"` for accordion behavior (only one open); omit for disclosure list (any number open)
 - Set `data-collapsible` alongside `data-type="single"` to allow all items to be closed
+- A non-collapsible single accordion never closes its last open item: the attempt is denied in the cancellable `beforetoggle` event (`preventDefault()`), so the click is a silent no-op. Reopening in `toggle` instead would visibly flicker close-then-open

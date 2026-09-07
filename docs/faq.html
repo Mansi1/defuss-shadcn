@@ -23,8 +23,7 @@
   <link rel="stylesheet" href="css/docs-theme.css">
   <link rel="stylesheet" href="css/docs-utilities.css">
   <link rel="stylesheet" href="css/layout.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js" defer integrity="sha384-H+hy9ULve6xfxRkWIh/YOtvDdpXgV2fmAGQkIDTxIgZwNoaoBal14Di2YTMR6MzR" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/button/button.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/button/button.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/card/card.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/dialog/dialog.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/badge/badge.css">
@@ -358,72 +357,5 @@
   <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/product-showcase/product-showcase.js"></script>
   <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
   <script>globalThis.lucide?.createIcons();</script>
-<script type="text/plain" id="spec-md-content">---
-name: FAQ
-why: Icon-card answers stay visible — no disclosure widget to wire, so screen readers and crawlers see every answer.
-when: Support section on a marketing page; for many long Q&As use the Accordion (native <details>) instead.
-where: dist/components/faq/faq.css
-supportedStates: default
----
-
-# Pattern: FAQ
-
-## Native basis
-Sectioning `<article>`s in a grid — headings + paragraphs, nothing
-interactive. If you need collapsing answers, that's the
-[Accordion](../accordion/component-skill.md) (`<details name>` exclusive),
-not this block.
-
----
-
-## Native Web APIs
-- [`<article>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/article) — self-contained Q&A unit
-- [CSS Grid](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout) — 1 → 2 → 3 columns by container width
-- [`text-wrap: balance`](https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap) — question headings balance
-
----
-
-## Structure
-
-```html
-<section class="mk-faq">
-  <div class="mk-faq-head">
-    <span class="mk-faq-eyebrow">Support</span>
-    <h2 class="mk-faq-title">Frequently Asked Questions</h2>
-  </div>
-  <div class="mk-faq-grid">
-    <article class="mk-faq-item">
-      <span class="mk-faq-icon"><i data-lucide="sparkles"></i></span>
-      <div class="mk-faq-text">
-        <h3 class="mk-faq-question">What is Acme AI?</h3>
-        <p class="mk-faq-answer">A personal AI workspace that cuts context switching.</p>
-      </div>
-    </article>
-    <article class="mk-faq-item">
-      <span class="mk-faq-icon"><i data-lucide="user"></i></span>
-      <div class="mk-faq-text">
-        <h3 class="mk-faq-question">Who is it for?</h3>
-        <p class="mk-faq-answer">Creators, teams, and businesses of all sizes.</p>
-      </div>
-    </article>
-  </div>
-</section>
-```
-
----
-
-## ARIA
-
-| Attribute | Element        | Purpose                          |
-|-----------|----------------|----------------------------------|
-| `<h3>`    | question       | Headings double as TOC anchors   |
-| icon tile | `.mk-faq-icon` | Decorative — add `aria-hidden="true"` on the svg |
-
----
-
-## Notes
-- Visible-answer FAQs are indexed by search engines and read linearly — prefer this over accordions until the list is long.
-- The icon tile is decoration next to a text question: keep the SVG `aria-hidden`.
-- `mk-faq-item` caps at `max-width: 36rem` so prose lines stay readable in the 3-column layout.</script>
 </body>
 </html>

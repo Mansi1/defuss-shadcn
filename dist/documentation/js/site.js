@@ -240,74 +240,10 @@
     // Register content initializer with SPA router
     // (runs on initial load AND after each SPA navigation)
     docs.onPageReady(initPageContent);
-    // -- Spec modal viewer (runs once, uses delegation) ------
-    function initSpecModal() {
-        var specDialog = document.createElement('dialog');
-        specDialog.className = 'dialog spec-modal';
-        specDialog.setAttribute('role', 'dialog');
-        specDialog.setAttribute('aria-modal', 'true');
-        specDialog.setAttribute('aria-label', 'Component Skill');
-        specDialog.innerHTML =
-            '<div class="dialog-content spec-modal-content">' +
-                '<div class="dialog-header" style="display:flex;justify-content:space-between;align-items:center;">' +
-                '<h2 class="dialog-title" id="spec-modal-title">Component Skill</h2>' +
-                '<button class="btn" data-variant="ghost" data-size="sm" data-dialog-close aria-label="Close" style="padding:0.25rem;">' +
-                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>' +
-                '</button>' +
-                '</div>' +
-                '<div id="spec-modal-body" class="spec-modal-body" style="margin-top:1rem;overflow-y:auto;max-height:calc(80vh - 5rem);"></div>' +
-                '</div>';
-        document.body.appendChild(specDialog);
-        specDialog.addEventListener('click', function (e) {
-            if (e.target === specDialog)
-                specDialog.close();
-        });
-        specDialog.querySelector('[data-dialog-close]').addEventListener('click', function () {
-            specDialog.close();
-        });
-        // Uses document-level delegation — works automatically with SPA
-        document.addEventListener('click', function (e) {
-            var link = e.target.closest('[data-spec-href]');
-            if (!link)
-                return;
-            e.preventDefault();
-            e.stopPropagation();
-            var body = document.getElementById('spec-modal-body');
-            var title = document.getElementById('spec-modal-title');
-            var href = link.getAttribute('data-spec-href');
-            title.textContent = href.split('/').pop();
-            var embedded = document.getElementById('spec-md-content');
-            if (embedded) {
-                renderSpec(embedded.textContent, body);
-                specDialog.showModal();
-                return;
-            }
-            body.innerHTML = '<p class="text-muted-foreground text-sm">Loading…</p>';
-            specDialog.showModal();
-            fetch(href)
-                .then(function (r) { return r.text(); })
-                .then(function (md) { renderSpec(md, body); })
-                .catch(function () {
-                body.innerHTML = '<p class="text-muted-foreground text-sm">Failed to load component skill.</p>';
-            });
-        });
-        function renderSpec(md, body) {
-            if (globalThis.marked) {
-                body.innerHTML = globalThis.marked.parse(md);
-                // Shiki highlighting for spec modal code blocks
-                if (docs.__shikiHighlightAll)
-                    docs.__shikiHighlightAll();
-            }
-            else {
-                var pre = document.createElement('pre');
-                pre.style.whiteSpace = 'pre-wrap';
-                pre.style.fontSize = '0.8125rem';
-                pre.textContent = md;
-                body.innerHTML = '';
-                body.appendChild(pre);
-            }
-        }
-    }
+    // The Component Skill `<details>` (with its `[data-spec-href]` link in the
+    // summary) toggles natively — a former modal viewer intercepted these clicks
+    // with preventDefault(), which killed that native toggle while duplicating
+    // content the panel already renders. Removed: the browser does it for free.
     // -- On DOM ready (one-time setup + initial content init) -
     document.addEventListener('DOMContentLoaded', function () {
         // Sync dark mode icon state
@@ -322,8 +258,6 @@
         var themeBtn = document.getElementById('theme-toggle');
         if (themeBtn)
             themeBtn.addEventListener('click', toggleDark);
-        // Create spec modal (once — persists across SPA navs)
-        initSpecModal();
         // Handle hash-link clicks (TOC "On This Page", built-with pills, etc.)
         // Default anchor scroll doesn't always work after SPA navigation, so we
         // scrollIntoView — but its end offset is computed AT CLICK TIME. Any reflow

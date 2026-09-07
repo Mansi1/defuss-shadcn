@@ -46,12 +46,20 @@ export function mirrorTransform(text: string): string {
     .replaceAll(`${PAGES_BASE}/documentation/`, `${PAGES_BASE}/`);
 }
 
+/** GitHub Pages serves a blank page for unknown URLs unless a 404.html exists. */
+const NOT_FOUND_PAGE = '404.html';
+
 /** Files mirrored from dist/ into docs/ (documentation tree + SEO files). */
 export function mirrorFiles(dist: string): Array<{ src: string; rel: string }> {
   const DOC = join(dist, 'documentation');
   const files = walk(DOC, ['']).map((f) => ({ src: f, rel: relative(DOC, f) }));
   for (const name of ['robots.txt', 'sitemap.xml']) {
     files.push({ src: join(dist, name), rel: name });
+  }
+  // 404 fallback: same transformed index.html so GitHub Pages never shows an
+  // empty page for a dead link (Pages serves 404.html with a 404 status).
+  if (!files.some((f) => f.rel === NOT_FOUND_PAGE)) {
+    files.push({ src: join(DOC, 'index.html'), rel: NOT_FOUND_PAGE });
   }
   return files;
 }

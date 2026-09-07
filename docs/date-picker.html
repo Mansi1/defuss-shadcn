@@ -23,8 +23,7 @@
   <link rel="stylesheet" href="css/docs-theme.css">
   <link rel="stylesheet" href="css/docs-utilities.css">
   <link rel="stylesheet" href="css/layout.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js" defer integrity="sha384-H+hy9ULve6xfxRkWIh/YOtvDdpXgV2fmAGQkIDTxIgZwNoaoBal14Di2YTMR6MzR" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/button/button.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/button/button.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/card/card.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/dialog/dialog.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/badge/badge.css">
@@ -288,46 +287,5 @@
   <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/product-showcase/product-showcase.js"></script>
   <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
   <script>globalThis.lucide?.createIcons();</script>
-<script type="text/plain" id="spec-md-content"># Pattern: Date Picker
-
-## Native basis
-`<input type="date">` element with native browser date picker.
-
----
-
-## Native Web APIs
-- [`<input type="date">`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date) — native date picker with calendar UI
-- [`<input type="datetime-local">`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local) — date and time picker
-
----
-
-## Structure
-
-### Date
-```html
-<label class="label" for="birthday">Birthday</label>
-<input class="input" type="date" id="birthday">
-```
-
-### Date and time
-```html
-<label class="label" for="meeting">Meeting</label>
-<input class="input" type="datetime-local" id="meeting">
-```
-
-### With constraints
-```html
-<input class="input" type="date" id="start" min="2024-01-01" max="2025-12-31">
-```
-
----
-
-## Notes
-
-- Reuses the `.input` class — the native date picker provides the calendar UI.
-- No custom calendar implementation needed — the browser handles it.
-- The calendar popup is rendered by the OS/browser and cannot be styled.
-- For a fully custom date picker, a custom calendar component would be needed.
-</script>
 </body>
 </html>

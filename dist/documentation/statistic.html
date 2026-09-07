@@ -23,8 +23,7 @@
   <link rel="stylesheet" href="css/docs-theme.css">
   <link rel="stylesheet" href="css/docs-utilities.css">
   <link rel="stylesheet" href="css/layout.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js" defer integrity="sha384-H+hy9ULve6xfxRkWIh/YOtvDdpXgV2fmAGQkIDTxIgZwNoaoBal14Di2YTMR6MzR" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="../components/button/button.css">
+    <link rel="stylesheet" href="../components/button/button.css">
   <link rel="stylesheet" href="../components/card/card.css">
   <link rel="stylesheet" href="../components/dialog/dialog.css">
   <link rel="stylesheet" href="../components/badge/badge.css">
@@ -381,51 +380,5 @@
   <script type="module" src="../components/product-showcase/product-showcase.js"></script>
   <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
   <script>globalThis.lucide?.createIcons();</script>
-<script type="text/plain" id="spec-md-content"># Statistic
-
-## Native basis
-
-`<div>` containers displaying a numeric value with a label and optional trend indicator.
-
-## Native Web APIs
-
-- [`<div>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div) — generic container
-
-## Structure
-
-```html
-<!-- Basic statistic -->
-<div class="statistic">
-  <p class="statistic-title">Total Revenue</p>
-  <p class="statistic-value">$45,231.89</p>
-  <p class="statistic-description">+20.1% from last month</p>
-</div>
-
-<!-- Statistic with trend -->
-<div class="statistic">
-  <p class="statistic-title">Subscriptions</p>
-  <p class="statistic-value">+2,350</p>
-  <p class="statistic-description">
-    <span class="statistic-trend" data-trend="up">
-      <svg><!-- arrow up icon --></svg>
-      +12.5%
-    </span>
-    from last month
-  </p>
-</div>
-```
-
-## Trend (`data-trend`)
-
-| Value  | Description                     |
-|--------|---------------------------------|
-| `up`   | Positive trend (green)          |
-| `down` | Negative trend (red)            |
-
-## Accessibility
-
-- Use semantic text content — values are read inline
-- Trends are conveyed by text, not color alone ("+12.5%")
-</script>
 </body>
 </html>

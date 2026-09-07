@@ -190,6 +190,24 @@ test('realignWhenSettled corrects a stale landing and respects reader input (iss
   expect(heading.getBoundingClientRect().top).toBeCloseTo(wrong, 0);
 });
 
+test('component skill link toggles its <details> natively (no modal intercept)', async () => {
+  // regression: the old spec-modal click handler preventDefault()ed the
+  // summary activation, so clicking the link text never opened the panel.
+  const { doc } = await openDocPage('badge.html');
+
+  const details = doc.querySelector('details:has(span[data-spec-href])') as HTMLDetailsElement;
+  expect(details.open, 'skill starts collapsed').toBe(false);
+
+  await clickSelector(doc, 'span[data-spec-href]');
+  await waitFor(() => details.open, 'details to open via the link click');
+
+  await clickSelector(doc, 'span[data-spec-href]');
+  await waitFor(() => !details.open, 'details to close via the link click');
+
+  // the removed modal must not come back
+  expect(doc.querySelector('dialog.spec-modal'), 'no spec modal in DOM').toBeNull();
+});
+
 test('accordion single-open: opening one item closes its siblings', async () => {
   const { doc } = await openDocPage('accordion.html');
 

@@ -23,8 +23,7 @@
   <link rel="stylesheet" href="css/docs-theme.css">
   <link rel="stylesheet" href="css/docs-utilities.css">
   <link rel="stylesheet" href="css/layout.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js" defer integrity="sha384-H+hy9ULve6xfxRkWIh/YOtvDdpXgV2fmAGQkIDTxIgZwNoaoBal14Di2YTMR6MzR" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="../components/button/button.css">
+    <link rel="stylesheet" href="../components/button/button.css">
   <link rel="stylesheet" href="../components/card/card.css">
   <link rel="stylesheet" href="../components/dialog/dialog.css">
   <link rel="stylesheet" href="../components/badge/badge.css">
@@ -571,55 +570,5 @@ new MutationObserver(init).observe(document, { childList: true, subtree: true })
   <script type="module" src="../components/product-showcase/product-showcase.js"></script>
   <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
   <script>globalThis.lucide?.createIcons();</script>
-<script type="text/plain" id="spec-md-content"># Tree View
-
-## Native basis
-
-Nested `<ul>` elements with `role="tree"` / `role="treeitem"` ARIA pattern for hierarchical data.
-
-## Native Web APIs
-
-- [`<ul>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul) — nested list structure
-- [Tree View WAI-ARIA pattern](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/) — ARIA tree roles and keyboard navigation
-- [`<details>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details) — native expand/collapse for branches
-
-## Structure
-
-```html
-<ul class="tree" role="tree" aria-label="File explorer">
-  <li class="tree-item" role="treeitem" aria-expanded="true">
-    <details class="tree-branch" open>
-      <summary class="tree-branch-trigger">
-        <svg><!-- chevron --></svg>
-        <svg><!-- folder icon --></svg>
-        <span>src</span>
-      </summary>
-      <ul class="tree-group" role="group">
-        <li class="tree-item" role="treeitem">
-          <span class="tree-leaf">
-            <svg><!-- file icon --></svg>
-            <span>index.ts</span>
-          </span>
-        </li>
-      </ul>
-    </details>
-  </li>
-  <li class="tree-item" role="treeitem">
-    <span class="tree-leaf">
-      <svg><!-- file icon --></svg>
-      <span>package.json</span>
-    </span>
-  </li>
-</ul>
-```
-
-## Accessibility
-
-- Root `<ul>` has `role="tree"` and `aria-label`
-- Branch items have `role="treeitem"` and `aria-expanded`
-- Leaf items have `role="treeitem"` without `aria-expanded`
-- Nested groups use `role="group"`
-- Keyboard: Arrow keys navigate, Enter/Space toggles branches
-</script>
 </body>
 </html>

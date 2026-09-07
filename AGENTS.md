@@ -17,7 +17,8 @@ You are working on the **defuss-shadcn** design system repo.
 The consumer-facing system lives in `dist/` — **it is generated**: edit sources in
 `src/` (`bun run build` compiles `.ts` → `.js` and copies everything else 1:1).
 `docs/` is also generated: **only the documentation site** (`dist/documentation/*` +
-`robots.txt`/`sitemap.xml`) published by GitHub Pages — its pages' `../components/…` and
+`robots.txt`/`sitemap.xml` + a `404.html` copy of `index.html` so GitHub Pages never
+serves an empty page for dead links) published by GitHub Pages — its pages' `../components/…` and
 `../theme/…` references are rewritten to the jsDelivr GitHub CDN (shared transform in
 `scripts/lib/mirror.ts`), so the mirror carries no copies of the component assets.
 Refresh it with `bun run docs` (`make build` does this automatically and `verify`
@@ -50,7 +51,7 @@ defuss-shadcn/
 │       ├── css/docs-theme.css         ← doc-site font overrides (not part of the system)
 │       ├── css/layout.css             ← doc-site layout (not part of the system)
 │       ├── js/layout.js               ← SPA router, <site-header>/<site-nav> web components
-│       ├── js/site.js                 ← doc-site-only JS (tabs, copy buttons, skill modal, code collapse)
+│       ├── js/site.js                 ← doc-site-only JS (tabs, copy buttons, code collapse)
 │       ├── js/shiki-highlight.js      ← Shiki-based syntax highlighting (ES module, CDN)
 │       ├── js/themes.js               ← tweakcn color theme presets (global THEMES array)
 │       └── js/theme-switcher.js       ← applies theme overrides to CSS custom properties

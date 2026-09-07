@@ -23,8 +23,7 @@
   <link rel="stylesheet" href="css/docs-theme.css">
   <link rel="stylesheet" href="css/docs-utilities.css">
   <link rel="stylesheet" href="css/layout.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js" defer integrity="sha384-H+hy9ULve6xfxRkWIh/YOtvDdpXgV2fmAGQkIDTxIgZwNoaoBal14Di2YTMR6MzR" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="../components/button/button.css">
+    <link rel="stylesheet" href="../components/button/button.css">
   <link rel="stylesheet" href="../components/card/card.css">
   <link rel="stylesheet" href="../components/dialog/dialog.css">
   <link rel="stylesheet" href="../components/badge/badge.css">
@@ -412,33 +411,5 @@ new MutationObserver(init).observe(document, { childList: true, subtree: true })
   <script type="module" src="../components/product-showcase/product-showcase.js"></script>
   <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
   <script>globalThis.lucide?.createIcons();</script>
-<script type="text/plain" id="spec-md-content"># Pattern: Number Input
-
-## Native basis
-`<input type="number">` with custom increment/decrement buttons.
-
----
-
-## Native Web APIs
-- [`<input type="number">`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number) — native number input with built-in validation and step increment
-
----
-
-## Structure
-
-```html
-<label class="label" for="quantity">Quantity</label>
-<input class="input" type="number" id="quantity" min="0" max="100" step="1" value="1">
-```
-
----
-
-## Notes
-
-- Reuses the `.input` class for consistent styling.
-- Native spinner buttons are hidden with `::-webkit-inner-spin-button`.
-- Use `min`, `max`, and `step` for range constraints.
-- Keyboard: arrow keys increment/decrement by step value.
-</script>
 </body>
 </html>

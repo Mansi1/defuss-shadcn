@@ -450,9 +450,10 @@ check(
 );
 
 // 15c. docs/ mirror freshness: GitHub Pages publishes ./docs — the documen-
-// tation site (dist/documentation/* + SEO files), with ../component & ../theme
-// refs CDN-rewritten. Compared against exactly what sync-docs.ts writes
-// (shared lib/mirror.ts), so a green gate means the published tree is current.
+// tation site (dist/documentation/* + SEO files + the 404.html fallback copy
+// of index.html), with ../component & ../theme refs CDN-rewritten. Compared
+// against exactly what sync-docs.ts writes (shared lib/mirror.ts), so a green
+// gate means the published tree is current.
 const docsProblems: string[] = [];
 const DOCS_OUT = join(ROOT, 'docs');
 if (existsSync(DOCS_OUT) && existsSync(DIST)) {

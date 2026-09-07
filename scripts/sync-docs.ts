@@ -1,6 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { walk } from './lib/audit.ts';
 import { mirrorFiles, mirrorTransform } from './lib/mirror.ts';
 
 /**
@@ -34,5 +33,5 @@ for (const { src, rel } of mirrorFiles(DIST)) {
 }
 
 console.log(
-  `sync-docs: ${count} files → docs/ (documentation site only; ../component & ../theme refs rewritten to the jsDelivr CDN — ready for GitHub Pages)`,
+  `sync-docs: ${count} files → docs/ (documentation site only, incl. 404.html fallback; ../component & ../theme refs rewritten to the jsDelivr CDN — ready for GitHub Pages)`,
 );

@@ -117,12 +117,12 @@
     </div>
     <ul style="margin:0;padding-left:1.25rem;" class="text-sm text-muted-foreground flex flex-col gap-1">
       <li><strong>13 CSS-only marketing blocks</strong> — <code>site-header</code>, <code>hero</code>, <code>product-showcase</code>, <code>brand-logos</code>, <code>feature-details</code>, <code>testimonials</code>, <code>stats</code>, <code>pricing</code>, <code>blog</code>, <code>faq</code>, <code>get-in-touch</code>, <code>newsletter</code>, <code>site-footer</code>: native-web-platform page sections (container queries, <code>:has()</code> billing toggle, real form semantics, backdrop-blur overlays) composed from the same tokens + primitives; doc pages and e2e fixtures generated from one shared demo source, 13 new css-smoke suites</li>
-      <li>every marketing icon is an <strong>inline SVG</strong> — WebKit never paints <code><use></code> clones from hidden <code><symbol></code> sprites, so the FAQ/pricing icon tiles rendered empty in Safari; inlined paths also keep copy-pasted blocks self-contained</li>
+      <li>every marketing icon is an <strong>inline SVG</strong> — WebKit never paints <code>&lt;use&gt;</code> clones from hidden <code>&lt;symbol&gt;</code> sprites, so the FAQ/pricing icon tiles rendered empty in Safari; inlined paths also keep copy-pasted blocks self-contained</li>
       <li><code>brand-logos</code> shows <strong>real brand marks</strong> (simple-icons, devDependency, read at generate time) as real links; <code>testimonials</code> quote-brand lockup links out too</li>
-      <li><code>product-showcase</code> is a native <code><video controls></code> (webm+mp4 fallbacks, poster, browser-drawn play button); <code>hero</code> is copy-only — media belongs to the showcase block</li>
-      <li>docs header gains a <strong>wide-mode toggle</strong> (next to the dark-mode switch): releases the <code><main></code> max-width so the marketing blocks render unconstrained; persisted, <code>aria-pressed</code>, keyboard-native</li>
+      <li><code>product-showcase</code> is a native <code>&lt;video controls&gt;</code> (webm+mp4 fallbacks, poster, browser-drawn play button); <code>hero</code> is copy-only — media belongs to the showcase block</li>
+      <li>docs header gains a <strong>wide-mode toggle</strong> (next to the dark-mode switch): releases the <code>&lt;main&gt;</code> max-width so the marketing blocks render unconstrained; persisted, <code>aria-pressed</code>, keyboard-native</li>
       <li>new <strong>Architecture Overview</strong> page — a build-time render of <a href="https://github.com/kyr0/defuss-shadcn/blob/main/ARCH.md"><code>ARCH.md</code></a> via <code>scripts/lib/arch-page.ts</code>; verify's <code>architecture ↔ ARCH.md</code> gate fails on drift (AGENTS.md "ARCH.md ↔ architecture page sync")</li>
-      <li>fix: marketing <code><meta></code> descriptions and the site-footer hint were unescaped (<code><hr></code> injected raw, parse5 attribute errors); SPA router no longer stacks overlapping View Transitions ("Transition was skipped" pageerror)</li>
+      <li>fix: marketing <code>&lt;meta&gt;</code> descriptions and the site-footer hint were unescaped (<code>&lt;hr&gt;</code> injected raw, parse5 attribute errors); SPA router no longer stacks overlapping View Transitions ("Transition was skipped" pageerror)</li>
       <li>define the <code>mt-1</code> utility flagged by the utility-classes audit</li>
     </ul>
   </div>
@@ -530,6 +530,7 @@
   <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/carousel/carousel.js"></script>
   <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/slider/slider.js"></script>
   <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sortable/sortable.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/product-showcase/product-showcase.js"></script>
   <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
   <script>globalThis.lucide?.createIcons();</script>
 </body>

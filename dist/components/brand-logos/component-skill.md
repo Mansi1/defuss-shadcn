@@ -10,7 +10,9 @@ supportedStates: default
 
 ## Native basis
 A flex-wrap row of inline SVGs. `currentColor` makes every mark follow
-`--muted-foreground`, so logos stay legible across all 43 themes.
+`--foreground` — black in light mode, white in dark (the tokens flip) — so
+logos read at full theme ink; the row is softened with `opacity` instead of
+a muted color, and the name text stays `--muted-foreground`.
 
 ---
 

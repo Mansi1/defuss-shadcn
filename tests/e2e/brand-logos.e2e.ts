@@ -1,9 +1,10 @@
 import { cssSmoke } from './lib/css-smoke.ts';
 
 /**
- * Why: brand-logos is CSS-only — the promise is that marks inherit
- * currentColor (muted-foreground) and scale up at the wide size step, with
- * the caption centered beneath the wrapping row.
+ * Why: brand-logos is CSS-only — the promise is that marks follow
+ * currentColor (= --foreground: black in light mode, white in dark via the
+ * tokens), muted only via opacity, with the name text muted and the caption
+ * centered beneath the wrapping row.
  */
 await cssSmoke('brand-logos', [
   {
@@ -17,21 +18,37 @@ await cssSmoke('brand-logos', [
     css: { width: '40px', height: '40px' },
   },
   {
-    label: 'marks inherit the muted logo color (= --muted-foreground)',
+    label: 'marks follow --foreground (theme ink: black light / white dark), softened by opacity',
     run: async (page) => {
       const r = await page.evaluate(() => {
         const cs = getComputedStyle(document.querySelector('.mk-logo')!);
-        const root = getComputedStyle(document.documentElement).getPropertyValue('--muted-foreground').trim();
+        const root = getComputedStyle(document.documentElement).getPropertyValue('--foreground').trim();
         // resolve the token through a probe element to compare serialized colors
         const probe = document.createElement('span');
         probe.style.color = root;
         document.body.appendChild(probe);
         const tokenColor = getComputedStyle(probe).color;
         probe.remove();
-        return { logoColor: cs.color, tokenColor };
+        const nameColor = getComputedStyle(document.querySelector('.mk-logo-name')!).color;
+        const muted = getComputedStyle(document.documentElement).getPropertyValue('--muted-foreground').trim();
+        const nameProbe = document.createElement('span');
+        nameProbe.style.color = muted;
+        document.body.appendChild(nameProbe);
+        const mutedColor = getComputedStyle(nameProbe).color;
+        nameProbe.remove();
+        return {
+          logoColor: cs.color,
+          tokenColor,
+          opacity: parseFloat(cs.opacity),
+          nameColor,
+          mutedColor,
+        };
       });
       if (r.logoColor !== r.tokenColor)
-        throw new Error(`logo color ${r.logoColor} != token ${r.tokenColor}`);
+        throw new Error(`logo color ${r.logoColor} != --foreground ${r.tokenColor}`);
+      if (!(r.opacity < 1)) throw new Error('marks must be softened (opacity < 1)');
+      if (r.nameColor !== r.mutedColor)
+        throw new Error(`name color ${r.nameColor} != --muted-foreground ${r.mutedColor}`);
     },
   },
   {

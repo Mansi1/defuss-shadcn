@@ -81,6 +81,38 @@ export function parseChangelogEntries(html: string): ChangelogEntry[] {
 }
 
 /**
+ * Inline tags a changelog `<li>` may contain. Changelog entries are commit
+ * messages — prose with code spans and links, never rendered UI. Anything
+ * outside this list is raw markup leaking through (an entry once embedded a
+ * live `<video>` and a raw `<hr>` that rendered INTO the changelog), so the
+ * gate rejects it: escape it as `<video>` instead.
+ */
+export const CHANGELOG_ALLOWED_TAGS = ['li', 'code', 'strong', 'a', 'span', 'em', 'b', 'i', 'kbd'];
+
+/**
+ * Why: enforce "changelog entries stay text" — scan each entry's `<li>` bodies
+ * for real (non-entity) tags outside the text allowlist. `<video>` is
+ * fine (it's text); `<video>` is a live element and fails.
+ */
+export function changelogMarkupProblems(html: string): string[] {
+  const problems: string[] = [];
+  const afterMarker = html.split(CHANGELOG_MARKER)[1] ?? '';
+  const fragments = afterMarker.split('margin-bottom:2.5rem').slice(1);
+  for (const f of fragments) {
+    const version = f.match(/<h2[^>]*>\s*v([0-9][^<\s]*)\s*<\/h2>/)?.[1];
+    if (!version) continue;
+    for (const m of f.matchAll(/<li>([\s\S]*?)<\/li>/g)) {
+      for (const t of m[1].matchAll(/<(\/?[a-zA-Z][a-zA-Z0-9]*)(?![a-zA-Z0-9])/g)) {
+        const name = t[1].replace(/^\//, '').toLowerCase();
+        if (!CHANGELOG_ALLOWED_TAGS.includes(name))
+          problems.push(`changelog v${version}: <li> contains raw <${t[1]}> — escape as <${name}> (entries are text, not UI)`);
+      }
+    }
+  }
+  return [...new Set(problems)];
+}
+
+/**
  * Why: the whole "is the changelog honest about the current version?" decision
  * as one pure function — verify.ts feeds it parsed entries plus the two
  * package.json versions (HEAD vs worktree) and a commit resolver; tests feed

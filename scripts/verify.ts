@@ -7,7 +7,7 @@ import { auditUtilities, walk } from './lib/audit.ts';
 import { componentFingerprints, declaredStates } from './lib/inputs.ts';
 import { snippetDrifts } from './lib/snippets.ts';
 import { mirrorHashes } from './lib/mirror.ts';
-import { changelogProblems, FIX_TWO_COMMITS, parseChangelogEntries, type CommitInfo } from './lib/changelog.ts';
+import { changelogProblems, changelogMarkupProblems, FIX_TWO_COMMITS, parseChangelogEntries, type CommitInfo } from './lib/changelog.ts';
 import {
   parseSkillFrontmatter,
   SKILL_FRONTMATTER_KEYS,
@@ -822,6 +822,14 @@ check(
       resolveCommit,
     });
     check('changelog ↔ version', problems, FIX_TWO_COMMITS);
+    // entries are commit messages — prose with code spans and links only.
+    // Raw markup in an <li> renders live (a v0.8.0 entry once embedded a
+    // working <video> and a raw <hr> in the middle of the changelog).
+    check(
+      'changelog entries are text',
+      changelogMarkupProblems(readFileSync(join(SRC, 'documentation/changelog.html'), 'utf8')),
+      'escape element names in <li> bodies as <video> — only <code>/<strong>/<a>/<span>/<em>/<b>/<i>/<kbd>/<li> may appear raw',
+    );
     check(
       'changelog pending bump',
       warnings,

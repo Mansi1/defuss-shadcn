@@ -14,7 +14,9 @@
     padding-inline: 1.25rem;
   }
 
-  .mk-pricing-head { display: flex; flex-direction: column; gap: 1.25rem; }
+  /* centered stack: eyebrow/title/desc + toggle all share the section's
+     center line (align-items, not text-align — the toggle is a box) */
+  .mk-pricing-head { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; }
 
   .mk-pricing-eyebrow { color: var(--primary); font-size: 1rem; font-weight: 500; }
 

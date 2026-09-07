@@ -350,6 +350,9 @@
       }
     }
 
+    /* Per spec, an indeterminate checkbox ALSO matches :checked — both
+       ::after rules land on the element, so the dash must explicitly cancel
+       the checkmark's border (else the rotated border renders on top of it). */
     &amp;:indeterminate {
       background-color: var(--primary);
       border-color: var(--primary);
@@ -361,6 +364,7 @@
         top: 50%;
         width: 10px;
         height: 2px;
+        border: none;
         background: var(--primary-foreground);
         transform: translate(-50%, -50%);
       }
@@ -390,6 +394,11 @@
     &amp; &gt; label {
       font-size: 0.875rem;
       cursor: pointer;
+      /* leading-none (shadcn parity): a 1.6 line-box centers the LINE, not
+         the glyphs — baseline then floats with the font's ascent, so text
+         rides visibly off the box midline (worst with metric-heavy
+         fallbacks). line-height:1 shrinks the box to the glyphs themselves. */
+      line-height: 1;
     }
   }
 
@@ -472,6 +481,7 @@
   <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/carousel/carousel.js"></script>
   <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/slider/slider.js"></script>
   <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sortable/sortable.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/product-showcase/product-showcase.js"></script>
   <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
   <script>globalThis.lucide?.createIcons();</script>
 <script type="text/plain" id="spec-md-content"># Pattern: Checkbox

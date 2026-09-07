@@ -56,16 +56,37 @@ html { scroll-padding-top: 4rem; }
   overflow-y: auto;
   padding: 1.25rem 0.75rem;
 }
-/* -- Nav section heading ----------------------------------- */
+/* -- Nav section heading (a <summary> of a collapsible group; the docs
+   dogfood the sidebar component's .sidebar-group collapse pattern) ----- */
 .nav-heading {
+  display: flex; align-items: center; gap: 0.5rem;
   font-size: 0.75rem; font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   /* sidebar-scoped token: section headings sit on --sidebar; --primary is
      only paired against --background and fails on most theme presets */
   color: var(--sidebar-foreground);
-  padding: 0 0.75rem;
-  margin: 0 0 0.375rem;
+  padding: 0.25rem 0.75rem;
+  margin: 0 0 0.25rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  border-radius: var(--radius-md);
+  transition: color 120ms;
+}
+.nav-heading::-webkit-details-marker { display: none; }
+.nav-heading:hover { color: var(--sidebar-accent-foreground); }
+.nav-heading svg {
+  width: 0.875rem; height: 0.875rem;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: rotate 200ms ease;
+}
+details[open] > .nav-heading svg { rotate: 90deg; }
+/* collapsed: tighten the group so the sidebar shrinks to just headings */
+details.nav-section:not([open]) { margin-bottom: 0.25rem !important; }
+@media (prefers-reduced-motion: reduce) {
+  .nav-heading, .nav-heading svg { transition: none; }
 }
 
 /* -- Header action button / link --------------------------- */

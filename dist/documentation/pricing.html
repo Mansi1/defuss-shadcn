@@ -173,11 +173,9 @@
         <div class="preview" style="align-items:stretch;">
 <section class="mk-pricing" style="width:100%">
   <div class="mk-pricing-head">
-    <div class="mk-features-head" style="margin:0">
-      <span class="mk-pricing-eyebrow">Pricing</span>
-      <h2 class="mk-pricing-title">Simple Pricing, Smarter Work</h2>
-      <p class="mk-pricing-desc">Acme has a plan designed to help you move faster.</p>
-    </div>
+    <span class="mk-pricing-eyebrow">Pricing</span>
+    <h2 class="mk-pricing-title">Simple Pricing, Smarter Work</h2>
+    <p class="mk-pricing-desc">Acme has a plan designed to help you move faster.</p>
     <div class="mk-pricing-billing" role="radiogroup" aria-label="Billing period">
       <label><input class="mk-bill-yearly" type="radio" name="mk-billing" checked />Billed yearly</label>
       <label><input class="mk-bill-monthly" type="radio" name="mk-billing" />Billed monthly</label>
@@ -257,11 +255,9 @@
           <button class="copy-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
           <pre><code class="language-markup">&lt;section class=&quot;mk-pricing&quot; style=&quot;width:100%&quot;&gt;
   &lt;div class=&quot;mk-pricing-head&quot;&gt;
-    &lt;div class=&quot;mk-features-head&quot; style=&quot;margin:0&quot;&gt;
-      &lt;span class=&quot;mk-pricing-eyebrow&quot;&gt;Pricing&lt;/span&gt;
-      &lt;h2 class=&quot;mk-pricing-title&quot;&gt;Simple Pricing, Smarter Work&lt;/h2&gt;
-      &lt;p class=&quot;mk-pricing-desc&quot;&gt;Acme has a plan designed to help you move faster.&lt;/p&gt;
-    &lt;/div&gt;
+    &lt;span class=&quot;mk-pricing-eyebrow&quot;&gt;Pricing&lt;/span&gt;
+    &lt;h2 class=&quot;mk-pricing-title&quot;&gt;Simple Pricing, Smarter Work&lt;/h2&gt;
+    &lt;p class=&quot;mk-pricing-desc&quot;&gt;Acme has a plan designed to help you move faster.&lt;/p&gt;
     &lt;div class=&quot;mk-pricing-billing&quot; role=&quot;radiogroup&quot; aria-label=&quot;Billing period&quot;&gt;
       &lt;label&gt;&lt;input class=&quot;mk-bill-yearly&quot; type=&quot;radio&quot; name=&quot;mk-billing&quot; checked /&gt;Billed yearly&lt;/label&gt;
       &lt;label&gt;&lt;input class=&quot;mk-bill-monthly&quot; type=&quot;radio&quot; name=&quot;mk-billing&quot; /&gt;Billed monthly&lt;/label&gt;
@@ -359,7 +355,9 @@
     padding-inline: 1.25rem;
   }
 
-  .mk-pricing-head { display: flex; flex-direction: column; gap: 1.25rem; }
+  /* centered stack: eyebrow/title/desc + toggle all share the section's
+     center line (align-items, not text-align — the toggle is a box) */
+  .mk-pricing-head { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; }
 
   .mk-pricing-eyebrow { color: var(--primary); font-size: 1rem; font-weight: 500; }
 
@@ -546,6 +544,7 @@
   <script type="module" src="../components/carousel/carousel.js"></script>
   <script type="module" src="../components/slider/slider.js"></script>
   <script type="module" src="../components/sortable/sortable.js"></script>
+  <script type="module" src="../components/product-showcase/product-showcase.js"></script>
   <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
   <script>globalThis.lucide?.createIcons();</script>
 <script type="text/plain" id="spec-md-content">---

@@ -23,21 +23,25 @@
     row-gap: 1.75rem;
   }
 
-  /* the mark links out to the brand — no underline, quiet until hover */
+  /* the mark links out to the brand — no underline. Ink color tracks the
+     theme (black in light, white in dark) via --foreground; the name text
+     stays muted so the marks read first. */
   .mk-logo {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     flex-shrink: 0;
-    color: var(--muted-foreground);
+    color: var(--foreground);
     text-decoration: none;
     border-radius: var(--radius-md);
-    transition: color 150ms ease;
+    opacity: 0.75;
+    transition: opacity 150ms ease;
 
-    &:hover { color: var(--foreground); }
+    &:hover { opacity: 1; }
     &:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
 
-    & svg { width: 1.875rem; height: 1.875rem; aspect-ratio: 1; flex-shrink: 0; }
+    & svg { width: 1.875rem; height: 1.875rem; aspect-ratio: 1; flex-shrink: 0; fill: currentColor; }
+    & .mk-logo-name { color: var(--muted-foreground); }
   }
 
   .mk-logo-name {

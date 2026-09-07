@@ -91,6 +91,39 @@ test('SPA router migrates body-level dialogs so triggers work after nav', async 
   expect(doc.getElementById('demo-dialog'), 'dialog of the previous page removed').toBeNull();
 });
 
+test('sidebar sections are collapsible (dogfood of the sidebar-group pattern)', async () => {
+  const { doc } = await openDocPage('index.html');
+  await waitFor(() => doc.querySelector('site-header button#theme-toggle'), 'shell to render');
+  // same-origin localStorage survives iframes — start from a clean slate
+  doc.defaultView!.localStorage.removeItem('defuss-shadcn-nav-collapsed');
+
+  // every nav section is a <details class="nav-section sidebar-group">
+  const groups = [...doc.querySelectorAll('details.nav-section')] as HTMLDetailsElement[];
+  expect(groups.length, 'nav renders collapsible sections').toBeGreaterThan(3);
+  expect(groups[0].open, 'sections start expanded').toBe(true);
+
+  // clicking the summary collapses the section and persists it
+  const forms = groups.find((g) => g.dataset.navSection === 'Forms & Inputs')!;
+  expect(forms.querySelector('a[href="input.html"]'), 'section contains its links').toBeTruthy();
+  await clickSelector(doc, 'details[data-nav-section="Forms & Inputs"] > summary');
+  await waitFor(() => !forms.open, 'Forms & Inputs to collapse');
+  // `open` flips synchronously on click but the toggle event (which persists
+  // to localStorage) is a queued task — wait on the stored value itself
+  await waitFor(
+    () => (doc.defaultView!.localStorage.getItem('defuss-shadcn-nav-collapsed') ?? '').includes('Forms & Inputs'),
+    'collapse to persist to localStorage',
+  );
+
+  // SPA-navigating INTO the collapsed section re-opens it (never hide the page you opened)
+  await clickSelector(doc, 'site-nav a[href="input.html"]');
+  await waitFor(() => doc.querySelector('main h1')?.textContent?.includes('Input'), 'input page content');
+  await waitFor(() => forms.open, 'collapsed section to reopen on navigation into it');
+  await waitFor(
+    () => !(doc.defaultView!.localStorage.getItem('defuss-shadcn-nav-collapsed') ?? '').includes('Forms & Inputs'),
+    're-open to clear the stored collapse',
+  );
+});
+
 test('accordion single-open: opening one item closes its siblings', async () => {
   const { doc } = await openDocPage('accordion.html');
 

@@ -407,11 +407,11 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Product Showcase
 
-**Why:** A 5:3 video frame with browser-drawn controls — <video controls> ships play, scrub, keyboard and fullscreen for free.
-**When:** Hero pairing or standalone video/product shot; a static screenshot needs only the <img> variant.
-**Files:** dist/components/product-showcase/product-showcase.css
-**Supported states:** default
-**Screenshots:** screenshots/{light,dark}/product-showcase.png
+**Why:** A poster frame + one real <button> starts a native <video controls> — the browser draws every playback affordance once the video is visible.
+**When:** Hero pairing or standalone product video; a static screenshot needs only the poster <img> (drop the video and button).
+**Files:** dist/components/product-showcase/product-showcase.css + dist/components/product-showcase/product-showcase.js
+**Supported states:** default, playing
+**Screenshots:** screenshots/{light,dark}/product-showcase.png, screenshots/{light,dark}/product-showcase-playing.png
 **Skill:** [components/product-showcase/component-skill.md](components/product-showcase/component-skill.md)
 
 ## Progress

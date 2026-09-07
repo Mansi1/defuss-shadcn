@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="images/favicon.webp" type="image/webp">
-  <meta name="description" content="A marketing page header: brand, container-aware nav, and actions. The nav collapses below 30rem container width — pure CSS.">
+  <meta name="description" content="A marketing page header: brand, container-aware dropdown nav, and actions. The nav collapses below 30rem container width — pure CSS, popovers native.">
   <meta property="og:title" content="Site Header — defuss-shadcn">
-  <meta property="og:description" content="A marketing page header: brand, container-aware nav, and actions. The nav collapses below 30rem container width — pure CSS.">
+  <meta property="og:description" content="A marketing page header: brand, container-aware dropdown nav, and actions. The nav collapses below 30rem container width — pure CSS, popovers native.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://kyr0.github.io/defuss-shadcn/site-header.html">
   <meta property="og:site_name" content="defuss-shadcn">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Site Header — defuss-shadcn">
-  <meta name="twitter:description" content="A marketing page header: brand, container-aware nav, and actions. The nav collapses below 30rem container width — pure CSS.">
+  <meta name="twitter:description" content="A marketing page header: brand, container-aware dropdown nav, and actions. The nav collapses below 30rem container width — pure CSS, popovers native.">
   <title>Site Header — defuss-shadcn</title>
   <script src="js/themes.js"></script>
   <script src="js/theme-switcher.js"></script>
@@ -120,7 +120,7 @@
         </div>
         <h1 style="font-family:var(--font-display);font-size:2.5rem;font-weight:400;letter-spacing:-0.035em;margin:0 0 0.75rem;">Site Header</h1>
         <p class="text-muted-foreground leading-relaxed mb-6">
-          A marketing page header: brand, container-aware nav, and actions. The nav collapses below 30rem container width — pure CSS.
+          A marketing page header: brand, container-aware dropdown nav, and actions. The nav collapses below 30rem container width — pure CSS, popovers native.
         </p>
 
         <!-- Component Skill -->
@@ -131,13 +131,15 @@
           </summary>
           <div style="padding:1.5rem;font-size:0.875rem;line-height:1.85;">
             <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Native basis</p>
-            <p class="text-muted-foreground" style="margin:0 0 1.25rem;"><code><header></code> landmark with <code><nav></code>; no script. The nav collapses via a container query (<code>@container</code>), so the block adapts to the width it is placed in, not the viewport.</p>
+            <p class="text-muted-foreground" style="margin:0 0 1.25rem;"><code><header></code> landmark with <code><nav></code>; no script. The nav collapses via a container query (<code>@container</code>), so the block adapts to the width it is placed in, not the viewport. Dropdowns compose the [navigation-menu](../navigation-menu/component-skill.md) component: trigger buttons wired with <code>popovertarget</code> and <code>popover</code> panels — the Popover API handles open/close, Escape, and light dismiss natively.</p>
             <p style="margin:0 0 0.625rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Web Platform APIs</p>
             <div style="display:flex;flex-wrap:wrap;gap:0.375rem;margin-bottom:1.25rem;">
               <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/header" target="_blank" rel="noopener" title="banner landmark" class="api-pill"><code>&lt;header&gt;</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
               <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav" target="_blank" rel="noopener" title="navigation landmark with `aria-label`" class="api-pill"><code>&lt;nav&gt;</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
               <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/position#sticky_positioning" target="_blank" rel="noopener" title="opt-in sticky header, no scroll JS" class="api-pill"><code>position: sticky</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
               <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries" target="_blank" rel="noopener" title="width-aware nav collapse" class="api-pill"><code>Container queries</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/Popover_API" target="_blank" rel="noopener" title="declarative dropdown triggers, zero JS" class="api-pill"><code>popovertarget` / `popover</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning" target="_blank" rel="noopener" title="panels place below their trigger (from navigation-menu)" class="api-pill"><code>CSS anchor positioning</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
               <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible" target="_blank" rel="noopener" title="keyboard-only focus rings" class="api-pill"><code>:focus-visible</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
             </div>
             <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Classes</p>
@@ -147,7 +149,6 @@
               <code>.mk-header-brand</code>
               <code>.mk-header-name</code>
               <code>.mk-header-nav</code>
-              <code>.mk-header-link</code>
               <code>.mk-header-actions</code>
             </div>
 
@@ -162,13 +163,22 @@
 
         <!-- Default -->
         <p class="text-sm font-medium mb-2 mt-6">Default</p>
-        <p class="text-xs text-muted-foreground mb-3">Brand left, nav center, actions right.</p>
+        <p class="text-xs text-muted-foreground mb-3">Composes <code>navigation-menu</code>: triggers + <code>popovertarget</code>, no JS.</p>
         <div class="preview" style="align-items:stretch;">
 <header class="mk-header" style="width:100%">
   <div class="mk-header-inner">
     <a href="#" class="mk-header-brand"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="mk-header-name">Acme Inc.</span></a>
     <nav class="mk-header-nav" aria-label="Main">
-      <a href="#" class="mk-header-link">Products</a><a href="#" class="mk-header-link">Solutions</a><a href="#" class="mk-header-link">Pricing</a><a href="#" class="mk-header-link">Company</a>
+      <ul class="nav-menu-list">
+    <li class="nav-menu-item">
+      <button class="nav-menu-trigger" popovertarget="mk-sh-products">Products <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="nav-menu-content" id="mk-sh-products" popover>
+        <a class="nav-menu-content-link" href="#"><strong>Analytics</strong><p>View your dashboard and metrics</p></a>
+        <a class="nav-menu-content-link" href="#"><strong>Automation</strong><p>Build workflows and integrations</p></a>
+      </div>
+    </li>
+    <li class="nav-menu-item"><a class="nav-menu-link" href="#">Pricing</a></li>
+      </ul>
     </nav>
     <div class="mk-header-actions">
       <button type="button" class="btn" data-variant="ghost" data-size="sm">Login</button>
@@ -183,7 +193,16 @@
   &lt;div class=&quot;mk-header-inner&quot;&gt;
     &lt;a href=&quot;#&quot; class=&quot;mk-header-brand&quot;&gt;&lt;svg viewBox=&quot;0 0 24 24&quot; width=&quot;24&quot; height=&quot;24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;polygon points=&quot;13 2 3 14 12 14 11 22 21 10 12 10 13 2&quot;/&gt;&lt;/svg&gt;&lt;span class=&quot;mk-header-name&quot;&gt;Acme Inc.&lt;/span&gt;&lt;/a&gt;
     &lt;nav class=&quot;mk-header-nav&quot; aria-label=&quot;Main&quot;&gt;
-      &lt;a href=&quot;#&quot; class=&quot;mk-header-link&quot;&gt;Products&lt;/a&gt;&lt;a href=&quot;#&quot; class=&quot;mk-header-link&quot;&gt;Solutions&lt;/a&gt;&lt;a href=&quot;#&quot; class=&quot;mk-header-link&quot;&gt;Pricing&lt;/a&gt;&lt;a href=&quot;#&quot; class=&quot;mk-header-link&quot;&gt;Company&lt;/a&gt;
+      &lt;ul class=&quot;nav-menu-list&quot;&gt;
+    &lt;li class=&quot;nav-menu-item&quot;&gt;
+      &lt;button class=&quot;nav-menu-trigger&quot; popovertarget=&quot;mk-sh-products&quot;&gt;Products &lt;svg aria-hidden=&quot;true&quot; width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;&gt;&lt;path d=&quot;m6 9 6 6 6-6&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+      &lt;div class=&quot;nav-menu-content&quot; id=&quot;mk-sh-products&quot; popover&gt;
+        &lt;a class=&quot;nav-menu-content-link&quot; href=&quot;#&quot;&gt;&lt;strong&gt;Analytics&lt;/strong&gt;&lt;p&gt;View your dashboard and metrics&lt;/p&gt;&lt;/a&gt;
+        &lt;a class=&quot;nav-menu-content-link&quot; href=&quot;#&quot;&gt;&lt;strong&gt;Automation&lt;/strong&gt;&lt;p&gt;Build workflows and integrations&lt;/p&gt;&lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;nav-menu-item&quot;&gt;&lt;a class=&quot;nav-menu-link&quot; href=&quot;#&quot;&gt;Pricing&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
     &lt;/nav&gt;
     &lt;div class=&quot;mk-header-actions&quot;&gt;
       &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-variant=&quot;ghost&quot; data-size=&quot;sm&quot;&gt;Login&lt;/button&gt;
@@ -202,7 +221,18 @@
   <header class="mk-header" data-variant="sticky">
     <div class="mk-header-inner">
       <a href="#" class="mk-header-brand"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="mk-header-name">Acme Inc.</span></a>
-      <nav class="mk-header-nav" aria-label="Main"><a href="#" class="mk-header-link">Products</a><a href="#" class="mk-header-link">Pricing</a></nav>
+      <nav class="mk-header-nav" aria-label="Main">
+        <ul class="nav-menu-list">
+    <li class="nav-menu-item">
+      <button class="nav-menu-trigger" popovertarget="mk-sh-sticky-products">Products <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="nav-menu-content" id="mk-sh-sticky-products" popover>
+        <a class="nav-menu-content-link" href="#"><strong>Analytics</strong><p>View your dashboard and metrics</p></a>
+        <a class="nav-menu-content-link" href="#"><strong>Automation</strong><p>Build workflows and integrations</p></a>
+      </div>
+    </li>
+    <li class="nav-menu-item"><a class="nav-menu-link" href="#">Pricing</a></li>
+        </ul>
+      </nav>
       <div class="mk-header-actions"><button type="button" class="btn" data-size="sm">Get started</button></div>
     </div>
   </header>
@@ -215,7 +245,18 @@
   &lt;header class=&quot;mk-header&quot; data-variant=&quot;sticky&quot;&gt;
     &lt;div class=&quot;mk-header-inner&quot;&gt;
       &lt;a href=&quot;#&quot; class=&quot;mk-header-brand&quot;&gt;&lt;svg viewBox=&quot;0 0 24 24&quot; width=&quot;24&quot; height=&quot;24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;polygon points=&quot;13 2 3 14 12 14 11 22 21 10 12 10 13 2&quot;/&gt;&lt;/svg&gt;&lt;span class=&quot;mk-header-name&quot;&gt;Acme Inc.&lt;/span&gt;&lt;/a&gt;
-      &lt;nav class=&quot;mk-header-nav&quot; aria-label=&quot;Main&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;mk-header-link&quot;&gt;Products&lt;/a&gt;&lt;a href=&quot;#&quot; class=&quot;mk-header-link&quot;&gt;Pricing&lt;/a&gt;&lt;/nav&gt;
+      &lt;nav class=&quot;mk-header-nav&quot; aria-label=&quot;Main&quot;&gt;
+        &lt;ul class=&quot;nav-menu-list&quot;&gt;
+    &lt;li class=&quot;nav-menu-item&quot;&gt;
+      &lt;button class=&quot;nav-menu-trigger&quot; popovertarget=&quot;mk-sh-sticky-products&quot;&gt;Products &lt;svg aria-hidden=&quot;true&quot; width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;&gt;&lt;path d=&quot;m6 9 6 6 6-6&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+      &lt;div class=&quot;nav-menu-content&quot; id=&quot;mk-sh-sticky-products&quot; popover&gt;
+        &lt;a class=&quot;nav-menu-content-link&quot; href=&quot;#&quot;&gt;&lt;strong&gt;Analytics&lt;/strong&gt;&lt;p&gt;View your dashboard and metrics&lt;/p&gt;&lt;/a&gt;
+        &lt;a class=&quot;nav-menu-content-link&quot; href=&quot;#&quot;&gt;&lt;strong&gt;Automation&lt;/strong&gt;&lt;p&gt;Build workflows and integrations&lt;/p&gt;&lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;nav-menu-item&quot;&gt;&lt;a class=&quot;nav-menu-link&quot; href=&quot;#&quot;&gt;Pricing&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/nav&gt;
       &lt;div class=&quot;mk-header-actions&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;btn&quot; data-size=&quot;sm&quot;&gt;Get started&lt;/button&gt;&lt;/div&gt;
     &lt;/div&gt;
   &lt;/header&gt;
@@ -278,27 +319,11 @@
     white-space: nowrap;
   }
 
-  /* nav collapses below the container breakpoint (source: `hidden md:flex`) */
+  /* nav collapses below the container breakpoint (source: `hidden md:flex`).
+     The nav composes the navigation-menu component (.nav-menu-list /
+     .nav-menu-trigger / .nav-menu-content) — its dropdown popovers are the
+     native Popover API, so the header stays CSS-only. */
   .mk-header-nav { display: none; align-items: center; }
-
-  .mk-header-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.375rem;
-    height: 2rem;
-    padding-inline: 0.75rem;
-    border-radius: var(--radius-md);
-    font-size: 0.875rem;
-    font-weight: 500;
-    white-space: nowrap;
-    color: inherit;
-    text-decoration: none;
-    transition: background-color 150ms ease, color 150ms ease;
-
-    &amp;:hover { background: var(--accent); color: var(--accent-foreground); }
-    &amp;:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-  }
 
   .mk-header-actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
 
@@ -309,7 +334,8 @@
 
   /* -- Accessibility ------------------------------------------- */
   @media (prefers-reduced-motion: reduce) {
-    .mk-header-link { transition: none; }
+    /* navigation-menu suppresses its own transitions; nothing header-side
+       animates, so no overrides needed here */
   }
 
   @media (forced-colors: active) {
@@ -350,6 +376,7 @@
   <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/carousel/carousel.js"></script>
   <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/slider/slider.js"></script>
   <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/sortable/sortable.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/product-showcase/product-showcase.js"></script>
   <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
   <script>globalThis.lucide?.createIcons();</script>
 <script type="text/plain" id="spec-md-content">---
@@ -365,7 +392,10 @@ supportedStates: default
 ## Native basis
 `<header>` landmark with `<nav>`; no script. The nav collapses via a
 container query (`@container`), so the block adapts to the width it is
-placed in, not the viewport.
+placed in, not the viewport. Dropdowns compose the
+[navigation-menu](../navigation-menu/component-skill.md) component: trigger
+buttons wired with `popovertarget` and `popover` panels — the Popover API
+handles open/close, Escape, and light dismiss natively.
 
 ---
 
@@ -374,6 +404,8 @@ placed in, not the viewport.
 - [`<nav>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav) — navigation landmark with `aria-label`
 - [`position: sticky`](https://developer.mozilla.org/en-US/docs/Web/CSS/position#sticky_positioning) — opt-in sticky header, no scroll JS
 - [Container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries) — width-aware nav collapse
+- [`popovertarget` / `popover`](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) — declarative dropdown triggers, zero JS
+- [CSS anchor positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning) — panels place below their trigger (from navigation-menu)
 - [`:focus-visible`](https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible) — keyboard-only focus rings
 
 ---
@@ -388,8 +420,21 @@ placed in, not the viewport.
       <span class="mk-header-name">Acme Inc.</span>
     </a>
     <nav class="mk-header-nav" aria-label="Main">
-      <a href="#" class="mk-header-link">Products</a>
-      <a href="#" class="mk-header-link">Solutions</a>
+      <ul class="nav-menu-list">
+        <li class="nav-menu-item">
+          <button class="nav-menu-trigger" popovertarget="nav-products">
+            Products
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+          <div class="nav-menu-content" id="nav-products" popover>
+            <a class="nav-menu-content-link" href="#"><strong>Analytics</strong><p>View your dashboard</p></a>
+          </div>
+        </li>
+        <li class="nav-menu-item"><a class="nav-menu-link" href="#">Pricing</a></li>
+      </ul>
     </nav>
     <div class="mk-header-actions">
       <button class="btn" data-variant="ghost" data-size="sm">Login</button>
@@ -399,7 +444,10 @@ placed in, not the viewport.
 </header>
 ```
 
-Actions compose the [Button](../button/component-skill.md) component.
+Actions compose the [Button](../button/component-skill.md) component; the nav
+composes [Navigation Menu](../navigation-menu/component-skill.md) (its CSS and
+`popovertarget` wiring do all the work — the header adds no styles of its own
+beyond layout).
 
 ---
 
@@ -422,7 +470,8 @@ Actions compose the [Button](../button/component-skill.md) component.
 
 ## Notes
 - Icons render via lucide (`<i data-lucide="…">` + `lucide.createIcons()`); an inline `<svg>` works identically with zero dependencies.
-- `.mk-header-nav` is hidden below a 48rem **container** width — put the header in a wide container to see the links.
-- The nav is links, not `<button>`s — a link that navigates is a link.</script>
+- `.mk-header-nav` is hidden below a 30rem **container** width — put the header in a wide container to see the links.
+- Plain destinations are `.nav-menu-link` anchors; only sections that open a dropdown get a trigger `<button>`.
+- Give each `nav-menu-content` id a page-unique prefix (ids are document-global; two headers on one page collide otherwise).</script>
 </body>
 </html>

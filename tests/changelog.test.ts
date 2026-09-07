@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  changelogMarkupProblems,
   changelogProblems,
   parseChangelogEntries,
   type ChangelogEntry,
@@ -146,5 +147,38 @@ describe('changelogProblems', () => {
     const { problems, warnings } = changelogProblems({ ...base, entries: [], committedVersion: null });
     expect(problems).toEqual([]);
     expect(warnings.join('\n')).toMatch(/changelog gate skipped/);
+  });
+});
+
+describe('changelogMarkupProblems', () => {
+  // entity text written with \u0026 escapes (see DEFAULT_MESSAGE) so the
+  // gate sees literal "<video>" the way the real changelog.html stores it
+  it('accepts prose with code/strong/link/span and entity-escaped element names', () => {
+    const html = page(
+      entryHtml({
+        version: '2.0.0',
+        date: 'd',
+        message:
+          'a <strong>fix</strong> to <code>video</code> — see <a href="#">the docs</a> & <code>\u0026lt;video\u0026gt;</code> handling',
+      }),
+    );
+    expect(changelogMarkupProblems(html)).toEqual([]);
+  });
+
+  it('flags raw element markup inside an entry (it would render live)', () => {
+    const html = page(entryHtml({ version: '2.0.0', date: 'd', message: 'now a native <video controls> element' }));
+    const problems = changelogMarkupProblems(html);
+    expect(problems).toHaveLength(1);
+    expect(problems[0]).toMatch(/v2\.0\.0/);
+    expect(problems[0]).toMatch(/<video>/);
+  });
+
+  it('flags the historic offenders (hr, main) individually', () => {
+    const html = page(
+      entryHtml({ version: '2.0.0', date: 'd', message: 'a raw <hr> and the <main> width' }),
+    );
+    const problems = changelogMarkupProblems(html);
+    expect(problems.some((p) => p.includes('<hr>'))).toBe(true);
+    expect(problems.some((p) => p.includes('<main>'))).toBe(true);
   });
 });

@@ -11,7 +11,10 @@ supportedStates: default
 ## Native basis
 `<header>` landmark with `<nav>`; no script. The nav collapses via a
 container query (`@container`), so the block adapts to the width it is
-placed in, not the viewport.
+placed in, not the viewport. Dropdowns compose the
+[navigation-menu](../navigation-menu/component-skill.md) component: trigger
+buttons wired with `popovertarget` and `popover` panels — the Popover API
+handles open/close, Escape, and light dismiss natively.
 
 ---
 
@@ -20,6 +23,8 @@ placed in, not the viewport.
 - [`<nav>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav) — navigation landmark with `aria-label`
 - [`position: sticky`](https://developer.mozilla.org/en-US/docs/Web/CSS/position#sticky_positioning) — opt-in sticky header, no scroll JS
 - [Container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries) — width-aware nav collapse
+- [`popovertarget` / `popover`](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) — declarative dropdown triggers, zero JS
+- [CSS anchor positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning) — panels place below their trigger (from navigation-menu)
 - [`:focus-visible`](https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible) — keyboard-only focus rings
 
 ---
@@ -34,8 +39,21 @@ placed in, not the viewport.
       <span class="mk-header-name">Acme Inc.</span>
     </a>
     <nav class="mk-header-nav" aria-label="Main">
-      <a href="#" class="mk-header-link">Products</a>
-      <a href="#" class="mk-header-link">Solutions</a>
+      <ul class="nav-menu-list">
+        <li class="nav-menu-item">
+          <button class="nav-menu-trigger" popovertarget="nav-products">
+            Products
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+          <div class="nav-menu-content" id="nav-products" popover>
+            <a class="nav-menu-content-link" href="#"><strong>Analytics</strong><p>View your dashboard</p></a>
+          </div>
+        </li>
+        <li class="nav-menu-item"><a class="nav-menu-link" href="#">Pricing</a></li>
+      </ul>
     </nav>
     <div class="mk-header-actions">
       <button class="btn" data-variant="ghost" data-size="sm">Login</button>
@@ -45,7 +63,10 @@ placed in, not the viewport.
 </header>
 ```
 
-Actions compose the [Button](../button/component-skill.md) component.
+Actions compose the [Button](../button/component-skill.md) component; the nav
+composes [Navigation Menu](../navigation-menu/component-skill.md) (its CSS and
+`popovertarget` wiring do all the work — the header adds no styles of its own
+beyond layout).
 
 ---
 
@@ -68,5 +89,6 @@ Actions compose the [Button](../button/component-skill.md) component.
 
 ## Notes
 - Icons render via lucide (`<i data-lucide="…">` + `lucide.createIcons()`); an inline `<svg>` works identically with zero dependencies.
-- `.mk-header-nav` is hidden below a 48rem **container** width — put the header in a wide container to see the links.
-- The nav is links, not `<button>`s — a link that navigates is a link.
+- `.mk-header-nav` is hidden below a 30rem **container** width — put the header in a wide container to see the links.
+- Plain destinations are `.nav-menu-link` anchors; only sections that open a dropdown get a trigger `<button>`.
+- Give each `nav-menu-content` id a page-unique prefix (ids are document-global; two headers on one page collide otherwise).

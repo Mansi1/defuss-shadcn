@@ -417,15 +417,34 @@
   }
 
   /* -- <site-nav> --------------------------------------------- */
+  /* Sections are collapsible groups: the docs dogfood the sidebar
+     component's `<details>` pattern (.sidebar-group) — summary heading +
+     chevron, open by default, collapse state persisted per section. */
+  var NAV_COLLAPSE_KEY = 'defuss-shadcn-nav-collapsed';
+
+  function navCollapsed() {
+    try { return JSON.parse(localStorage.getItem(NAV_COLLAPSE_KEY) || '[]'); }
+    catch { return []; }
+  }
+
+  /* Remembered collapses are a courtesy, not a trap: the section holding the
+     current page always renders open (and SPA navigation opens the target). */
+  function sectionOpen(heading) {
+    return heading === 'Overview' || navCollapsed().indexOf(heading) === -1;
+  }
+
   class SiteNav extends HTMLElement {
     connectedCallback() {
       this.style.display = 'contents';
       var html = '<aside class="site-sidebar">';
       html += '<div class="sidebar-scroll">';
       NAV.forEach(function (section, i) {
-        html += '<div class="nav-section" style="margin-bottom:1.25rem;">';
-        html += '<p class="nav-heading">' + section.heading + '</p>';
         var isComponentSection = (i > 0);
+        var open = sectionOpen(section.heading);
+        html += '<details class="nav-section sidebar-group"' + (open ? ' open' : '') + ' data-nav-section="' + section.heading + '" style="margin-bottom:0.75rem;">';
+        html += '<summary class="nav-heading">' + section.heading +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></summary>';
+        html += '<nav class="sidebar-nav">';
         section.items.forEach(function (item) {
           var cls = 'nav-link';
           if (item.href === currentPage) cls += ' active';
@@ -435,12 +454,22 @@
             : '';
           html += '<a class="' + cls + '" href="' + item.href + '" style="display:flex;align-items:center;gap:0.375rem;">' + item.label + badge + '</a>';
         });
-        html += '</div>';
+        html += '</nav></details>';
       });
       html += '</div>';
       html += '</aside>';
       this.innerHTML = html;
 
+      /* Persist collapses (except Overview — the entry point stays visible) */
+      this.querySelectorAll('details[data-nav-section]').forEach(function (d) {
+        d.addEventListener('toggle', function () {
+          if (d.dataset.navSection === 'Overview') { d.open = true; return; }
+          var set = navCollapsed();
+          if (d.open) set = set.filter(function (h) { return h !== d.dataset.navSection; });
+          else if (set.indexOf(d.dataset.navSection) === -1) set.push(d.dataset.navSection);
+          try { localStorage.setItem(NAV_COLLAPSE_KEY, JSON.stringify(set)); } catch { /* private mode */ }
+        });
+      });
     }
   }
 
@@ -597,6 +626,13 @@
           document.querySelectorAll('.nav-link').forEach(function (link) {
             link.classList.toggle('active', link.getAttribute('href') === currentPage);
           });
+
+          /* Reveal the section the navigation landed in — a collapsed group
+             must not hide the page you just opened (toggle listener then
+             persists the un-collapse). */
+          var active = document.querySelector('.nav-link.active');
+          var grp = active && active.closest('details[data-nav-section]');
+          if (grp && !grp.open) grp.open = true;
 
           /* Push browser history */
           if (pushState !== false) {

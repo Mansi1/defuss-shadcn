@@ -3,7 +3,9 @@ import { cssSmoke } from './lib/css-smoke.ts';
 /**
  * Why: site-header is CSS-only — the contract is that the flex header lays
  * out brand/nav/actions, the container query reveals the nav at wide
- * containers, and the sticky variant actually sticks.
+ * containers, and the sticky variant actually sticks. The nav composes the
+ * navigation-menu component: trigger buttons with popovertarget + popover
+ * panels, no header-side JS.
  */
 await cssSmoke('site-header', [
   {
@@ -24,9 +26,32 @@ await cssSmoke('site-header', [
     css: { display: 'flex' },
   },
   {
-    label: 'nav link is a 32px pill',
-    selector: '.mk-header-link',
-    css: { height: '32px', 'font-size': '14px', 'font-weight': '500' },
+    label: 'nav composes navigation-menu: trigger buttons + popover panels',
+    run: async (page) => {
+      const r = await page.evaluate(() => {
+        const nav = document.querySelector('.mk-header-nav')!;
+        const triggers = [...nav.querySelectorAll('button.nav-menu-trigger[popovertarget]')];
+        const panels = [...nav.querySelectorAll('div.nav-menu-content[popover]')];
+        const linked = triggers.every((b) => panels.some((p) => p.id === b.getAttribute('popovertarget')));
+        const pricing = !!nav.querySelector('a.nav-menu-link');
+        return { triggers: triggers.length, panels: panels.length, linked, pricing };
+      });
+      if (r.triggers < 1 || r.panels < 1) throw new Error('nav lacks dropdown trigger/popover pairs');
+      if (!r.linked) throw new Error('a popovertarget does not reference a panel in the header');
+      if (!r.pricing) throw new Error('plain nav links missing');
+    },
+  },
+  {
+    label: 'dropdown opens natively on trigger click (Popover API, zero JS)',
+    run: async (page) => {
+      await page.click('.mk-header-nav button.nav-menu-trigger');
+      const open = await page.evaluate(() => {
+        const id = document.querySelector('.mk-header-nav button.nav-menu-trigger')!.getAttribute('popovertarget')!;
+        return (document.getElementById(id) as HTMLDivElement).popover === 'auto';
+      });
+      if (!open) throw new Error('panel is not a native popover');
+      await page.keyboard.press('Escape');
+    },
   },
   {
     label: 'data-variant="sticky" pins the header',

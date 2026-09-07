@@ -131,7 +131,7 @@
           </summary>
           <div style="padding:1.5rem;font-size:0.875rem;line-height:1.85;">
             <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Native basis</p>
-            <p class="text-muted-foreground" style="margin:0 0 1.25rem;">A flex-wrap row of inline SVGs. <code>currentColor</code> makes every mark follow <code>--muted-foreground</code>, so logos stay legible across all 43 themes.</p>
+            <p class="text-muted-foreground" style="margin:0 0 1.25rem;">A flex-wrap row of inline SVGs. <code>currentColor</code> makes every mark follow <code>--foreground</code> — black in light mode, white in dark (the tokens flip) — so logos read at full theme ink; the row is softened with <code>opacity</code> instead of a muted color, and the name text stays <code>--muted-foreground</code>.</p>
             <p style="margin:0 0 0.625rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Web Platform APIs</p>
             <div style="display:flex;flex-wrap:wrap;gap:0.375rem;margin-bottom:1.25rem;">
               <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/svg" target="_blank" rel="noopener" title="vector marks that inherit text color" class="api-pill"><code>Inline `&lt;svg&gt;</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
@@ -207,21 +207,25 @@
     row-gap: 1.75rem;
   }
 
-  /* the mark links out to the brand — no underline, quiet until hover */
+  /* the mark links out to the brand — no underline. Ink color tracks the
+     theme (black in light, white in dark) via --foreground; the name text
+     stays muted so the marks read first. */
   .mk-logo {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     flex-shrink: 0;
-    color: var(--muted-foreground);
+    color: var(--foreground);
     text-decoration: none;
     border-radius: var(--radius-md);
-    transition: color 150ms ease;
+    opacity: 0.75;
+    transition: opacity 150ms ease;
 
-    &amp;:hover { color: var(--foreground); }
+    &amp;:hover { opacity: 1; }
     &amp;:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
 
-    &amp; svg { width: 1.875rem; height: 1.875rem; aspect-ratio: 1; flex-shrink: 0; }
+    &amp; svg { width: 1.875rem; height: 1.875rem; aspect-ratio: 1; flex-shrink: 0; fill: currentColor; }
+    &amp; .mk-logo-name { color: var(--muted-foreground); }
   }
 
   .mk-logo-name {
@@ -286,6 +290,7 @@
   <script type="module" src="../components/carousel/carousel.js"></script>
   <script type="module" src="../components/slider/slider.js"></script>
   <script type="module" src="../components/sortable/sortable.js"></script>
+  <script type="module" src="../components/product-showcase/product-showcase.js"></script>
   <script src="https://unpkg.com/lucide@1.8.0" integrity="sha384-+8nbzwDAyu5kAjqtR/XKxIgPHQD2TflvbZgeDZn5t3JP+OOogNH1jXnfel8ZAgzS" crossorigin="anonymous"></script>
   <script>globalThis.lucide?.createIcons();</script>
 <script type="text/plain" id="spec-md-content">---
@@ -300,7 +305,9 @@ supportedStates: default
 
 ## Native basis
 A flex-wrap row of inline SVGs. `currentColor` makes every mark follow
-`--muted-foreground`, so logos stay legible across all 43 themes.
+`--foreground` — black in light mode, white in dark (the tokens flip) — so
+logos read at full theme ink; the row is softened with `opacity` instead of
+a muted color, and the name text stays `--muted-foreground`.
 
 ---
 

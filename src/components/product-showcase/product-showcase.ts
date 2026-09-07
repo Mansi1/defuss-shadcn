@@ -1,0 +1,89 @@
+// -- Product Showcase ----------------------------------------
+// A poster frame with a circular play button; clicking it swaps to the
+// native <video> (which then carries its own controls). No custom player
+// chrome — the browser draws everything once the video is visible.
+// State API per AGENTS.md: 'default' (poster) | 'playing' (video).
+
+// Shared preamble (AGENTS.md "State API"); build.ts inlines it into the
+// shipped .js, so this import never appears in dist/.
+import { defussGlobals } from '../../shared/state-api.js';
+
+const _defussShadcn = defussGlobals();
+
+const productShowcaseStates = ['default', 'playing'];
+
+/**
+ * UI side of setState: the only function touching the DOM for a state
+ * change. 'playing' hides the poster/play button (CSS, via data-state) and
+ * starts playback; 'default' pauses and rewinds so the poster returns.
+ */
+function triggerStateChange(showcase, stateName, _config) {
+  const video = showcase.querySelector('video');
+  switch (stateName) {
+    case 'default':
+      if (video) {
+        video.pause();
+        video.currentTime = 0;
+      }
+      showcase.dataset.state = 'default';
+      break;
+    case 'playing':
+      showcase.dataset.state = 'playing';
+      // muted: playback must never be blocked (or blast audio) when a
+      // screenshot/agent drives setState without a user gesture
+      if (video) {
+        video.muted = true;
+        video.play().catch(() => { /* autoplay blocked — poster stays, controls still work */ });
+      }
+      break;
+  }
+}
+
+/** Registry-level API; pass the showcase element explicitly. Unknown names throw. */
+export const productShowcaseApi = {
+  setState(showcase, stateName, config = {}) {
+    if (!productShowcaseStates.includes(stateName)) {
+      throw new Error(
+        `product-showcase: unknown state "${stateName}" (supported: ${productShowcaseStates.join(', ')})`,
+      );
+    }
+    triggerStateChange(showcase, stateName, config);
+    // state lives on the ELEMENT, not the module (multiple showcases per page)
+    showcase.dataset.stateName = stateName;
+    showcase._stateConfig = config;
+  },
+  getState(showcase) {
+    // reflect reality: a user pausing the native controls returns to the poster
+    const playing = showcase.dataset.state === 'playing';
+    return {
+      name: showcase.dataset.stateName || (playing ? 'playing' : 'default'),
+      config: showcase._stateConfig ?? {},
+    };
+  },
+};
+
+_defussShadcn.productShowcaseApi = productShowcaseApi;
+_defussShadcn.productShowcaseStates = productShowcaseStates;
+
+function init() {
+  document.querySelectorAll('.mk-showcase:not([data-init])').forEach((showcase) => {
+    showcase.dataset.init = '';
+    showcase.dataset.state = 'default';
+    // bind-scope the api per instance: `$('#showcase').api.setState('playing')`
+    showcase.api = {
+      setState: (stateName, config) => productShowcaseApi.setState(showcase, stateName, config),
+      getState: () => productShowcaseApi.getState(showcase),
+    };
+    showcase.querySelector('.mk-showcase-play')?.addEventListener('click', () => {
+      productShowcaseApi.setState(showcase, 'playing');
+    });
+    // native pause/ended returns to the poster: route it through the API so
+    // the visible state and getState() never diverge (pause covers `ended` too)
+    showcase.querySelector('video')?.addEventListener('pause', () => {
+      if (showcase.dataset.state === 'playing') productShowcaseApi.setState(showcase, 'default');
+    });
+  });
+}
+
+init();
+new MutationObserver(init).observe(document, { childList: true, subtree: true });

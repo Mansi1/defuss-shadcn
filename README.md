@@ -141,7 +141,8 @@ bun run test:run   # run the UI test suite (headless Chromium)
 
 `src/` is the authoring tree (`.ts` + html/css/md/fonts); `dist/` is its compiled, 1:1
 mirror, committed and the only thing that ships. `docs/` is the generated **documentation
-site** (only `dist/documentation/` + the SEO files) that GitHub Pages publishes — the
+site** (only `dist/documentation/` + the SEO files + a `404.html` copy of `index.html` so
+GitHub Pages never serves an empty page for dead links) that GitHub Pages publishes — the
 pages' `../components/…` / `../theme/…` references are rewritten to the jsDelivr GitHub
 CDN by the mirror ([scripts/lib/mirror.ts](scripts/lib/mirror.ts)), so docs/ carries no
 copies of the component assets. Refresh with `bun run docs`, never edit it directly.

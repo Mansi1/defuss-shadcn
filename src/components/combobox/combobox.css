@@ -29,6 +29,39 @@
     opacity: 0.5;
   }
 
+  /* Clear button (injected by combobox.js after the trigger). Anchor-positioned
+     over the trigger's chevron slot; anchored via the same per-instance anchor
+     name the popover uses. `data-placeholder` presence is the single
+     selection marker — the :has() rules below flip chevron and clear in sync,
+     so no JS toggles visibility. */
+  .combobox-clear {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    top: anchor(top);
+    bottom: anchor(bottom);
+    right: anchor(right);
+    /* center the 20px box exactly over the 16px chevron (1rem trigger padding) */
+    margin-inline-end: 0.875rem;
+    width: 1.25rem;
+    display: none;
+    place-items: center;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+
+    &:hover { color: var(--foreground); }
+    &:focus-visible { outline: 2px solid var(--ring); outline-offset: 1px; }
+  }
+
+  .combobox:has(.combobox-value:not([data-placeholder])) {
+    & .combobox-clear { display: grid; }
+    & .combobox-chevron { display: none; }
+  }
+
   .combobox-content {
     position: fixed;
     inset: auto;
@@ -141,6 +174,13 @@
     &[aria-disabled="true"] {
       pointer-events: none;
       opacity: 0.5;
+    }
+
+    /* Author `display: flex` overrides the UA's [hidden] { display: none }
+       (author origin always wins), so filter()'s item.hidden = true left
+       non-matching options rendered — and clickable — in the list. */
+    &[hidden] {
+      display: none;
     }
   }
 

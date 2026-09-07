@@ -125,6 +125,7 @@
               <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning" target="_blank" rel="noopener" title="positions the popover relative to the trigger without JS" class="api-pill"><code>CSS Anchor Positioning</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
               <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style" target="_blank" rel="noopener" title="entry animation starting values for popover appearance" class="api-pill"><code>@starting-style</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
               <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior" target="_blank" rel="noopener" title="prevents scroll chaining from the listbox to the page" class="api-pill"><code>overscroll-behavior</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:has" target="_blank" rel="noopener" title="reveals the injected clear button exactly while a selection exists" class="api-pill"><code>:has()</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
               <a href="https://www.w3.org/WAI/ARIA/apg/patterns/combobox/" target="_blank" rel="noopener" title="keyboard navigation and screen reader contract" class="api-pill"><code>WAI-ARIA Combobox pattern</code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
             </div>
 
@@ -134,6 +135,7 @@
               <code>.combobox-trigger</code>
               <code>.combobox-value</code>
               <code>.combobox-chevron</code>
+              <code>.combobox-clear</code>
               <code>.combobox-content</code>
               <code>.combobox-search</code>
               <code>.combobox-search-icon</code>
@@ -175,6 +177,7 @@
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• The popover animates in via <code>@starting-style</code> + <code>transition-behavior: allow-discrete</code></p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• The check icon for selected items uses a CSS <code>::before</code> pseudo-element</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Filter matching is case-insensitive and supports substring matching</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• A clear (✕) button is injected on the trigger once a value is selected, replacing the chevron; clicking it restores the placeholder</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Group labels and separators auto-hide when their group has no visible items</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>overscroll-behavior: contain</code> prevents scroll chaining from the listbox</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>prefers-reduced-motion: reduce</code> disables all transitions</p>
@@ -406,6 +409,39 @@
     opacity: 0.5;
   }
 
+  /* Clear button (injected by combobox.js after the trigger). Anchor-positioned
+     over the trigger's chevron slot; anchored via the same per-instance anchor
+     name the popover uses. `data-placeholder` presence is the single
+     selection marker — the :has() rules below flip chevron and clear in sync,
+     so no JS toggles visibility. */
+  .combobox-clear {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    top: anchor(top);
+    bottom: anchor(bottom);
+    right: anchor(right);
+    /* center the 20px box exactly over the 16px chevron (1rem trigger padding) */
+    margin-inline-end: 0.875rem;
+    width: 1.25rem;
+    display: none;
+    place-items: center;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+
+    &amp;:hover { color: var(--foreground); }
+    &amp;:focus-visible { outline: 2px solid var(--ring); outline-offset: 1px; }
+  }
+
+  .combobox:has(.combobox-value:not([data-placeholder])) {
+    &amp; .combobox-clear { display: grid; }
+    &amp; .combobox-chevron { display: none; }
+  }
+
   .combobox-content {
     position: fixed;
     inset: auto;
@@ -518,6 +554,13 @@
     &amp;[aria-disabled=&quot;true&quot;] {
       pointer-events: none;
       opacity: 0.5;
+    }
+
+    /* Author `display: flex` overrides the UA's [hidden] { display: none }
+       (author origin always wins), so filter()'s item.hidden = true left
+       non-matching options rendered — and clickable — in the list. */
+    &amp;[hidden] {
+      display: none;
     }
   }
 
@@ -648,6 +691,31 @@ function init() {
     const anchorId = `--combobox-${popover.id}`;
     trigger.style.anchorName = anchorId;
     popover.style.positionAnchor = anchorId;
+
+    // Clear button - injected so consumer markup stays minimal (and the
+    // button can't be nested in the trigger's &lt;button&gt;). Visibility is pure
+    // CSS: .combobox-clear shows exactly while data-placeholder is absent
+    // (combobox.css :has() rule); JS only wires the click and focus.
+    const placeholder = valueEl?.dataset.placeholder ?? '';
+    const clearBtn = document.createElement('button');
+    clearBtn.type = 'button';
+    clearBtn.className = 'combobox-clear';
+    clearBtn.setAttribute('aria-label', 'Clear selection');
+    clearBtn.innerHTML =
+      '&lt;svg aria-hidden=&quot;true&quot; width=&quot;12&quot; height=&quot;12&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot;&gt;&lt;path d=&quot;M18 6 6 18&quot;/&gt;&lt;path d=&quot;m6 6 12 12&quot;/&gt;&lt;/svg&gt;';
+    clearBtn.style.positionAnchor = anchorId;
+    trigger.after(clearBtn);
+    clearBtn.addEventListener('click', () =&gt; {
+      allItems.forEach((i) =&gt; { i.setAttribute('aria-selected', 'false'); });
+      if (valueEl) {
+        valueEl.textContent = placeholder;
+        // re-declare data-placeholder: selectItem removed it, and it is the
+        // very marker the CSS :has() rule keys off to hide this button again
+        valueEl.setAttribute('data-placeholder', placeholder);
+      }
+      // the button goes display:none with the selection - keep focus usable
+      trigger.focus();
+    });
 
     const getVisibleItems = () =&gt; allItems.filter((item) =&gt; !item.hidden &amp;&amp; item.getAttribute('aria-disabled') !== 'true');
     const open = () =&gt; {

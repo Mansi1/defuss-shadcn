@@ -275,6 +275,9 @@
     &amp;:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
     &amp;[aria-disabled=&quot;true&quot;] { pointer-events: none; opacity: 0.5; }
     &amp; svg { width: 1rem; height: 1rem; color: var(--muted-foreground); flex-shrink: 0; }
+    /* Same as combobox-item: `display: flex` beats the UA [hidden] rule, and
+       command.ts filter() hides non-matches via the hidden attribute. */
+    &amp;[hidden] { display: none; }
   }
 
   .command-separator { height: 1px; background-color: var(--border); margin: 0.25rem -0.25rem; }

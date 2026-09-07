@@ -70,6 +70,31 @@ function init() {
     trigger.style.anchorName = anchorId;
     popover.style.positionAnchor = anchorId;
 
+    // Clear button - injected so consumer markup stays minimal (and the
+    // button can't be nested in the trigger's <button>). Visibility is pure
+    // CSS: .combobox-clear shows exactly while data-placeholder is absent
+    // (combobox.css :has() rule); JS only wires the click and focus.
+    const placeholder = valueEl?.dataset.placeholder ?? '';
+    const clearBtn = document.createElement('button');
+    clearBtn.type = 'button';
+    clearBtn.className = 'combobox-clear';
+    clearBtn.setAttribute('aria-label', 'Clear selection');
+    clearBtn.innerHTML =
+      '<svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+    clearBtn.style.positionAnchor = anchorId;
+    trigger.after(clearBtn);
+    clearBtn.addEventListener('click', () => {
+      allItems.forEach((i) => { i.setAttribute('aria-selected', 'false'); });
+      if (valueEl) {
+        valueEl.textContent = placeholder;
+        // re-declare data-placeholder: selectItem removed it, and it is the
+        // very marker the CSS :has() rule keys off to hide this button again
+        valueEl.setAttribute('data-placeholder', placeholder);
+      }
+      // the button goes display:none with the selection - keep focus usable
+      trigger.focus();
+    });
+
     const getVisibleItems = () => allItems.filter((item) => !item.hidden && item.getAttribute('aria-disabled') !== 'true');
     const open = () => {
       // deferred show (safeShowPopover): showPopover() mid-exit crashes the

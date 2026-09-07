@@ -22,6 +22,7 @@ the search input when the popover opens.
 
 ## Native Web APIs
 - [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) — top-layer rendering and light-dismiss for the dropdown list
+- [`:has()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) — reveals the injected clear button exactly while a selection exists (`data-placeholder` absent)
 - [CSS Anchor Positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning) — positions the popover relative to the trigger without JS
 - [`@starting-style`](https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style) — entry animation starting values for popover appearance
 - [`overscroll-behavior`](https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior) — prevents scroll chaining from the listbox to the page
@@ -169,6 +170,7 @@ The registry global is `_defussShadcn.comboboxApi` / `_defussShadcn.comboboxStat
 - The popover animates in via `@starting-style` + `transition-behavior: allow-discrete`
 - The check icon for selected items uses a CSS `::before` pseudo-element
 - Filter matching is case-insensitive and supports substring matching
+- The clear button (`.combobox-clear`, ✕) is **injected by the JS after the trigger** — consumer markup never contains it. It replaces the chevron whenever a value is selected (pure CSS via `:has()`), and clicking it restores the placeholder and deselects every option
 - The empty state element is shown when no items match the filter query
 - Group labels and separators auto-hide when their group has no visible items
 - `overscroll-behavior: contain` prevents scroll chaining from the listbox

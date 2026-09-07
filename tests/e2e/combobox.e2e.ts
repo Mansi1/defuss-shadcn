@@ -151,6 +151,35 @@ try {
     await page.keyboard.press('Escape');
   });
 
+  await check('clear button: injected, visible with a selection, restores placeholder', async () => {
+    // the ✕ is NOT in consumer markup — combobox.js injects exactly one per wrapper
+    const count = await page.$$eval('#cb-demo .combobox-clear', (els) => els.length);
+    assert.equal(count, 1, 'exactly one injected clear button');
+    // Astro is selected from the previous check → clear shows, chevron yields
+    const shown = await page.evaluate(() => ({
+      clear: getComputedStyle(document.querySelector('#cb-demo .combobox-clear')!).display,
+      chevron: getComputedStyle(document.querySelector('#cb-demo .combobox-chevron')!).display,
+    }));
+    assert.notEqual(shown.clear, 'none', 'clear button visible while a value is selected');
+    assert.equal(shown.chevron, 'none', 'chevron hidden while clear is shown');
+    await page.click('#cb-demo .combobox-clear');
+    assert.equal(await triggerText(page), 'Select framework...', 'placeholder restored');
+    const cleared = await page.evaluate(() => ({
+      placeholder: document.querySelector('#cb-demo .combobox-value')!.hasAttribute('data-placeholder'),
+      selected: document.querySelectorAll('#cb-demo [role="option"][aria-selected="true"]').length,
+      clear: getComputedStyle(document.querySelector('#cb-demo .combobox-clear')!).display,
+      chevron: getComputedStyle(document.querySelector('#cb-demo .combobox-chevron')!).display,
+    }));
+    assert.equal(cleared.placeholder, true, 'data-placeholder marker restored');
+    assert.equal(cleared.selected, 0, 'no option remains selected');
+    assert.equal(cleared.clear, 'none', 'clear hides again without a selection');
+    assert.notEqual(cleared.chevron, 'none', 'chevron returns');
+    // reselect Astro — later state-API checks assert getState().config.value === 'Astro'
+    await page.click('#cb-demo .combobox-trigger');
+    await page.waitForFunction(() => document.querySelector('#cb-framework-popover')!.matches(':popover-open'));
+    await page.click('#cb-opt-astro');
+  });
+
   await check('grouped listbox: labels, separators, disabled options', async () => {
     await page.click('#cb-grouped .combobox-trigger');
     await page.waitForFunction(() => document.querySelector('#cb-tz-popover')!.matches(':popover-open'));
@@ -209,6 +238,31 @@ try {
     await page.waitForFunction(() => document.querySelector('#cb-framework-popover')!.matches(':popover-open'));
     const state = await page.$eval('#cb-framework-popover', (el) => (el as HTMLElement).api!.getState());
     assert.equal(state.name, 'open');
+  });
+
+  await check('regression: filtered-out options are display:none and non-clickable', async () => {
+    // bug: `.combobox-item { display: flex }` (author origin) beat the UA's
+    // [hidden] { display: none }, so all options stayed rendered while JS
+    // treated them as hidden — clicking a still-visible non-match was dropped.
+    // (previous check leaves the popover open — close deterministically first)
+    await setState(page, 'cb-framework-popover', 'default');
+    await page.click('#cb-demo .combobox-trigger');
+    await page.waitForFunction(() => document.querySelector('#cb-framework-popover')!.matches(':popover-open'));
+    await page.fill('#cb-demo .combobox-search-input', 'sve');
+    const displays = await page.evaluate(() => ({
+      astro: getComputedStyle(document.querySelector('#cb-opt-astro')!).display,
+      svelte: getComputedStyle(document.querySelector('#cb-opt-svelte')!).display,
+    }));
+    assert.equal(displays.astro, 'none', 'non-matching option must not render');
+    assert.notEqual(displays.svelte, 'none', 'matching option stays rendered');
+    // the match is clickable and selects (Playwright would time out on a hidden element)
+    await page.click('#cb-opt-svelte');
+    assert.equal(await triggerText(page), 'SvelteKit', 'matching option selects');
+    assert.equal(await isOpen(page, 'cb-framework-popover'), false, 'selection closes the listbox');
+    // restore the Astro selection the state-API checks below rely on
+    await page.click('#cb-demo .combobox-trigger');
+    await page.waitForFunction(() => document.querySelector('#cb-framework-popover')!.matches(':popover-open'));
+    await page.click('#cb-opt-astro');
   });
 
   await check('state API: unknown state names throw', async () => {

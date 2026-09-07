@@ -61,6 +61,10 @@ try {
   await check('typing filters items, groups and empty state', async () => {
     await page.keyboard.type('cal');
     assert.deepEqual(await visibleItems(page), ['Calendar', 'Calculator'], 'filter is substring-based');
+    // regression: `.command-item { display: flex }` beat the UA [hidden] rule,
+    // so filtered-out items stayed rendered; they must be display:none now
+    const hiddenDisplay = await page.$eval('#demo-cmd .command-item[hidden]', (el) => getComputedStyle(el).display);
+    assert.equal(hiddenDisplay, 'none', 'non-matching items must not render');
     await page.keyboard.type('xyz');
     assert.deepEqual(await visibleItems(page), [], 'no matches');
     const emptyHidden = await page.$eval('#demo-cmd .command-empty', (el) => (el as HTMLElement).hidden);

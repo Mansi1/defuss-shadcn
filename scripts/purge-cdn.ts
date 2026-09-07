@@ -8,16 +8,21 @@ import { CDN_BASE } from './lib/mirror.ts';
  * the resolution and the files (s-maxage=43200 at the edge, max-age=604800 in
  * browsers), so right after a release the deployed site can keep serving the
  * PREVIOUS release's assets — a fixed bug stays live for up to 12h.
- * This script purges every dist asset path so @latest re-resolves to the
- * newest tag immediately. Run it after `bun run deploy` once the tag is
- * pushed and GitHub Pages has republished.
+ * This script purges every dist asset path — the complete release payload
+ * (components/, theme/, documentation/ assets incl. fonts & videos, SKILL.md,
+ * robots.txt/sitemap.xml) — so @latest re-resolves to the newest tag
+ * immediately. Run it after `bun run deploy` once the tag is pushed and
+ * GitHub Pages has republished.
  */
 
 const ROOT = join(import.meta.dirname, '..');
 const DIST = join(ROOT, 'dist');
 const PURGE_BASE = CDN_BASE.replace('cdn.jsdelivr.net', 'purge.jsdelivr.net');
 
-const files = [...walk(join(DIST, 'components'), ['']), ...walk(join(DIST, 'theme'), [''])]
+// whole-tree walk: any dist/ file a release ships may already sit in
+// jsDelivr's cache (agents fetch SKILL.md/skills from @latest too, not just
+// the CSS/JS the docs pages link), so purge all of them, not just components
+const files = walk(DIST, [''])
   .map((f) => relative(DIST, f))
   .filter((rel) => !rel.endsWith('.DS_Store'));
 

@@ -112,6 +112,23 @@
 
   <div style="margin-bottom:2.5rem;">
     <div class="flex items-center gap-3 mb-2">
+      <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0;">v0.8.0</h2>
+      <span class="badge" data-variant="outline" style="font-family:var(--font-mono);">September 07, 2026</span>
+    </div>
+    <ul style="margin:0;padding-left:1.25rem;" class="text-sm text-muted-foreground flex flex-col gap-1">
+      <li><strong>13 CSS-only marketing blocks</strong> — <code>site-header</code>, <code>hero</code>, <code>product-showcase</code>, <code>brand-logos</code>, <code>feature-details</code>, <code>testimonials</code>, <code>stats</code>, <code>pricing</code>, <code>blog</code>, <code>faq</code>, <code>get-in-touch</code>, <code>newsletter</code>, <code>site-footer</code>: native-web-platform page sections (container queries, <code>:has()</code> billing toggle, real form semantics, backdrop-blur overlays) composed from the same tokens + primitives; doc pages and e2e fixtures generated from one shared demo source, 13 new css-smoke suites</li>
+      <li>every marketing icon is an <strong>inline SVG</strong> — WebKit never paints <code><use></code> clones from hidden <code><symbol></code> sprites, so the FAQ/pricing icon tiles rendered empty in Safari; inlined paths also keep copy-pasted blocks self-contained</li>
+      <li><code>brand-logos</code> shows <strong>real brand marks</strong> (simple-icons, devDependency, read at generate time) as real links; <code>testimonials</code> quote-brand lockup links out too</li>
+      <li><code>product-showcase</code> is a native <code><video controls></code> (webm+mp4 fallbacks, poster, browser-drawn play button); <code>hero</code> is copy-only — media belongs to the showcase block</li>
+      <li>docs header gains a <strong>wide-mode toggle</strong> (next to the dark-mode switch): releases the <code><main></code> max-width so the marketing blocks render unconstrained; persisted, <code>aria-pressed</code>, keyboard-native</li>
+      <li>new <strong>Architecture Overview</strong> page — a build-time render of <a href="https://github.com/kyr0/defuss-shadcn/blob/main/ARCH.md"><code>ARCH.md</code></a> via <code>scripts/lib/arch-page.ts</code>; verify's <code>architecture ↔ ARCH.md</code> gate fails on drift (AGENTS.md "ARCH.md ↔ architecture page sync")</li>
+      <li>fix: marketing <code><meta></code> descriptions and the site-footer hint were unescaped (<code><hr></code> injected raw, parse5 attribute errors); SPA router no longer stacks overlapping View Transitions ("Transition was skipped" pageerror)</li>
+      <li>define the <code>mt-1</code> utility flagged by the utility-classes audit</li>
+    </ul>
+  </div>
+
+  <div style="margin-bottom:2.5rem;">
+    <div class="flex items-center gap-3 mb-2">
       <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0;">v0.7.19</h2>
       <span class="badge" data-variant="outline" style="font-family:var(--font-mono);">September 07, 2026</span>
       <code class="changelog-hash" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted-foreground);">06e3d0a</code>

@@ -38,7 +38,7 @@ handles open/close, Escape, and light dismiss natively.
       <i data-lucide="zap"></i>
       <span class="mk-header-name">Acme Inc.</span>
     </a>
-    <nav class="mk-header-nav" aria-label="Main">
+    <nav class="mk-header-nav nav-menu" aria-label="Main">
       <ul class="nav-menu-list">
         <li class="nav-menu-item">
           <button class="nav-menu-trigger" popovertarget="nav-products">
@@ -64,9 +64,10 @@ handles open/close, Escape, and light dismiss natively.
 ```
 
 Actions compose the [Button](../button/component-skill.md) component; the nav
-composes [Navigation Menu](../navigation-menu/component-skill.md) (its CSS and
-`popovertarget` wiring do all the work — the header adds no styles of its own
-beyond layout).
+composes [Navigation Menu](../navigation-menu/component-skill.md) — carry its
+root class on the `<nav>` (`class="mk-header-nav nav-menu"`) so the component's
+JS wires the CSS anchor names that position each panel under its trigger;
+without `.nav-menu` the panel still opens but renders at the viewport origin.
 
 ---
 

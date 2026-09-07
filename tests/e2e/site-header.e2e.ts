@@ -54,6 +54,28 @@ await cssSmoke('site-header', [
     },
   },
   {
+    label: 'panel anchors below its trigger (nav carries .nav-menu so the anchor names are wired)',
+    run: async (page) => {
+      // the reported bug: without .nav-menu on the nav, navigation-menu.ts never
+      // sets anchor names and the panel renders at the viewport top-left.
+      await page.click('.mk-header-nav button.nav-menu-trigger');
+      const r = await page.evaluate(() => {
+        const t = document.querySelector('.mk-header-nav button.nav-menu-trigger')!;
+        const id = t.getAttribute('popovertarget')!;
+        const p = document.getElementById(id)!;
+        return {
+          posAnchor: getComputedStyle(p).positionAnchor,
+          gap: p.getBoundingClientRect().top - t.getBoundingClientRect().bottom,
+          aligned: Math.abs(p.getBoundingClientRect().left - t.getBoundingClientRect().left) < 2,
+        };
+      });
+      await page.keyboard.press('Escape');
+      if (r.posAnchor === 'normal') throw new Error('position-anchor not applied — nav is missing .nav-menu');
+      if (!(r.gap >= 0 && r.gap < 24)) throw new Error(`panel ${r.gap}px from trigger bottom — not anchored below`);
+      if (!r.aligned) throw new Error('panel left edge not aligned with trigger');
+    },
+  },
+  {
     label: 'data-variant="sticky" pins the header',
     selector: '.mk-header[data-variant="sticky"]',
     css: { position: 'sticky', top: '0px' },

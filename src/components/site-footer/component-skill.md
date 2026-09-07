@@ -54,7 +54,7 @@ queries.
           <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
           <a href="#" aria-label="Twitter"><i data-lucide="twitter"></i></a>
         </div>
-        <p class="mk-footer-copy">© Copyright Acme Inc. 2025. All rights reserved.</p>
+        <p class="mk-footer-copy">© Copyright Acme Inc. 2026. All rights reserved.</p>
       </div>
     </div>
   </div>

@@ -107,7 +107,7 @@
         <h1 style="font-family:var(--font-display);font-size:2.5rem;font-weight:400;letter-spacing:-0.035em;margin:0 0 0.75rem;">Label</h1>
         <p class="text-muted-foreground leading-relaxed mb-6">
           Renders an accessible label associated with form controls. Built on the native <code>&lt;label&gt;</code> element
-          with <code>:has()</code> for focus-reactive styling. No JavaScript required.
+          with <code>:has()</code> for focus-reactive styling. No JavaScript required. The label’s <code>for</code> and the control’s <code>id</code> must carry the <strong>exact same value</strong> — that pairing <em>is</em> the association: it is what makes clicking the label focus the field and lets a screen reader announce the control’s name. Change one side and leave the other, and the label keeps looking right while quietly stopping working.
         </p>
         <!-- Component Skill -->
         <details style="margin-bottom:2rem;border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;">
@@ -135,6 +135,7 @@
             </div>
 
             <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Accessibility</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <strong>One value, written twice:</strong> the label’s <code>for</code> and the control’s <code>id</code> must be the exact same string. A mismatch fails silently — the label renders and styles normally but no longer focuses the field or names it for assistive technology.</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Clicking the label focuses the associated input — this is native <code>&lt;label&gt;</code> behavior.</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• The required indicator <code>*</code> uses <code>aria-hidden=&quot;true&quot;</code> since the <code>required</code> attribute on the input already conveys the requirement to assistive technology.</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Do not use <code>&lt;label&gt;</code> without a <code>for</code> attribute or a nested input.</p>
@@ -152,7 +153,7 @@
 
         <!-- Basic -->
         <p class="text-sm font-medium mb-2 mt-6">Default</p>
-        <p class="text-xs text-muted-foreground mb-3">Basic label paired with an input. Click the label to focus the input.</p>
+        <p class="text-xs text-muted-foreground mb-3">Basic label paired with an input. Click the label to focus the input — <code>for="demo-email"</code> and <code>id="demo-email"</code> must always match; changing one without the other breaks the link.</p>
         <div class="preview">
           <div style="width:100%;max-width:20rem;">
             <label class="label" for="demo-email">Email</label>
@@ -164,7 +165,8 @@
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
             Copy
           </button>
-          <pre><code class="language-markup">&lt;label class="label" for="email"&gt;Email&lt;/label&gt;
+          <pre><code class="language-markup">&lt;! for and id are one value in two places — keep them identical --&gt;
+&lt;label class="label" for="email"&gt;Email&lt;/label&gt;
 &lt;input class="input" type="email" id="email" placeholder="you@example.com"&gt;</code></pre>
         </div>
 

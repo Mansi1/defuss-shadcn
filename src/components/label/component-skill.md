@@ -10,6 +10,9 @@ supportedStates: default
 
 ## Native basis
 `<label>` element. Browser provides built-in click-to-focus association with form controls.
+The association is the `for`↔`id` pairing: the label's `for` and the control's `id`
+must be the exact same string — click-to-focus and the accessible name both exist
+only because of it.
 
 ---
 
@@ -25,6 +28,7 @@ supportedStates: default
 
 ### Basic
 ```html
+<!-- for and id are one value in two places — keep them identical -->
 <label class="label" for="email">Email</label>
 <input class="input" id="email" type="email">
 ```
@@ -91,7 +95,8 @@ The label auto-dims when the adjacent control is disabled — no `data-disabled`
 |-----------|------|-------|
 | `for` | Always | Matches the `id` of the associated form control |
 
-- Clicking the label focuses the associated input — this is native `<label>` behavior.
+- **One value, written twice:** the label's `for` and the control's `id` must be the exact same string. A mismatch fails silently — the label renders and styles normally but no longer focuses the field or names it for assistive technology. When renaming a control's `id`, update every `for` that pointed at it.
+- Clicking the label focuses the associated input — native `<label>` behavior, and the practical proof the pairing is intact.
 - The required indicator `*` uses `aria-hidden="true"` since the `required` attribute on the input already conveys the requirement to assistive technology.
 - Do not use `<label>` without a `for` attribute or a nested input.
 - In `forced-colors` mode, label text maps to system `LinkText` color.

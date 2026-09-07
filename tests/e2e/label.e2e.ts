@@ -29,4 +29,14 @@ await cssSmoke('label', [
       assert.equal(opacity, '0.7');
     },
   },
+  {
+    // the documented for↔id contract (issue #17): clicking the label focuses
+    // the control its `for` points at — proof the pairing is intact
+    label: 'clicking the label focuses the control named by its for/id pairing',
+    run: async (page) => {
+      await page.click('#lb-plain');
+      const focused = await page.evaluate(() => document.activeElement?.id);
+      assert.equal(focused, 'in-1', 'for="in-1" must transfer focus to #in-1');
+    },
+  },
 ]);

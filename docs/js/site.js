@@ -10,6 +10,67 @@
     // globals live under globalThis._defussShadcn — never on window.
     globalThis._defussShadcn = globalThis._defussShadcn || {};
     const docs = (globalThis._defussShadcn.docs = globalThis._defussShadcn.docs || {});
+    // -- Hash-link scroll correction (issue #2) ----------------
+    // Why: scrollIntoView freezes its target offset at call time. When the
+    // layout reflows DURING the smooth scroll (shiki swapping every code block
+    // in, web-font swaps, late-loading CDN CSS on the published site), the
+    // browser stops at the stale offset and the clicked heading ends up hidden
+    // under the fixed header — or with a gap above it. Once scrolling settles,
+    // re-align once if the heading missed its resting spot (scroll-padding-top).
+    // Reader input (wheel/touch/key) aborts the correction — we never fight
+    // someone who started scrolling themselves.
+    var realignCancel = null;
+    function realignWhenSettled(id) {
+        // A newer jump supersedes any pending correction — an uncancelled one
+        // would yank the page back to the previous heading mid-next-scroll.
+        if (realignCancel)
+            realignCancel();
+        var timer = null;
+        var done = false;
+        function cleanup() {
+            done = true;
+            if (realignCancel === cleanup)
+                realignCancel = null;
+            clearTimeout(timer);
+            removeEventListener('scroll', arm, true);
+            removeEventListener('wheel', abort, true);
+            removeEventListener('touchstart', abort, true);
+            removeEventListener('keydown', abort, true);
+        }
+        function abort() { cleanup(); }
+        function check() {
+            cleanup();
+            var t = document.getElementById(id);
+            if (!t)
+                return;
+            // scrollIntoView's resting offset is the scroller's scroll-padding-top
+            var pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+            var delta = t.getBoundingClientRect().top - pad;
+            // >1px: the page settled at a stale offset — correct it instantly.
+            // A target below `pad` that can't scroll further clamps harmlessly.
+            if (Math.abs(delta) > 1)
+                window.scrollTo({ top: window.scrollY + delta });
+        }
+        // any scroll event re-arms the settle timer; check runs 150ms after the last.
+        // ponytail: one correction after scrolling goes quiet — a reflow landing
+        // AFTER that window (very slow CDN) could still drift; upgrade path is a
+        // ResizeObserver on <main> that re-arms arm() while the page is unstable.
+        function arm() {
+            if (done)
+                return;
+            clearTimeout(timer);
+            timer = setTimeout(check, 150);
+        }
+        addEventListener('scroll', arm, { passive: true, capture: true });
+        addEventListener('wheel', abort, { once: true, passive: true, capture: true });
+        addEventListener('touchstart', abort, { once: true, passive: true, capture: true });
+        addEventListener('keydown', abort, { once: true, capture: true });
+        realignCancel = cleanup;
+        arm(); // an instant jump fires no scroll event — the initial arm covers it
+    }
+    // Cross-file contract (same discipline as THEMES/onPageReady): layout.ts's
+    // palette jumps scroll to headings the same way and need the same correction.
+    docs.realignWhenSettled = realignWhenSettled;
     function toggleDark() {
         var isDark = document.documentElement.classList.contains('dark');
         document.documentElement.classList.toggle('dark', !isDark);
@@ -263,8 +324,14 @@
             themeBtn.addEventListener('click', toggleDark);
         // Create spec modal (once — persists across SPA navs)
         initSpecModal();
-        // Handle hash-link clicks (built-with pills, etc.)
-        // Default anchor scroll doesn't always work after SPA navigation
+        // Handle hash-link clicks (TOC "On This Page", built-with pills, etc.)
+        // Default anchor scroll doesn't always work after SPA navigation, so we
+        // scrollIntoView — but its end offset is computed AT CLICK TIME. Any reflow
+        // during the smooth scroll (shiki swapping every code block in, web fonts
+        // swapping, late jsDelivr CSS on the published CDN site — issue #2) leaves
+        // the scroll stopped at a stale offset: the clicked heading ends up hidden
+        // under the fixed header (or a gap above it). So once scrolling settles we
+        // re-align once; any reader input aborts so we never fight the user.
         document.addEventListener('click', function (e) {
             var link = e.target.closest('a[href^="#"]');
             if (!link)
@@ -275,6 +342,7 @@
                 e.preventDefault();
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 history.replaceState(null, '', '#' + id);
+                realignWhenSettled(id);
             }
         });
     });

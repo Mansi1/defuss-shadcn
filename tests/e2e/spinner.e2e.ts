@@ -10,9 +10,13 @@ await cssSmoke('spinner', [
   {
     label: 'spinner sizes: default 16 / sm 14 / md 20 / lg 24',
     run: async (page) => {
+      // computed `width` (layout box), not getBoundingClientRect().width:
+      // the rect INCLUDES the rotation transform, so measuring mid-spin
+      // yields the diagonal (16 → up to 22.6 at 45°) and the assert raced
+      // the 1s animation. (offsetWidth is undefined on <svg> elements.)
       const sizes = await page.evaluate(() =>
         ['#sp-default', '#sp-sm', '#sp-md', '#sp-lg'].map(
-          (s) => document.querySelector(s)!.getBoundingClientRect().width,
+          (s) => parseFloat(getComputedStyle(document.querySelector(s)!).width),
         ),
       );
       assert.deepEqual(sizes, [16, 14, 20, 24]);

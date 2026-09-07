@@ -395,7 +395,7 @@
           var page = hashAt === -1 ? href : href.slice(0, hashAt);
           var id = hashAt === -1 ? '' : href.slice(hashAt + 1);
           if (page === currentPage) {
-            if (id) { var el = document.getElementById(id); if (el) el.scrollIntoView({ block: 'start' }); }
+            if (id) { var el = document.getElementById(id); if (el) { el.scrollIntoView({ block: 'start' }); if (docs.realignWhenSettled) docs.realignWhenSettled(id); } }
             else window.scrollTo(0, 0);
           } else {
             navigateTo(page, true);
@@ -411,7 +411,13 @@
      hook on navigateTo's completion, not needed while the docs stay static. */
   function scrollToWhenReady(id, attempt) {
     var el = document.getElementById(id);
-    if (el) { el.scrollIntoView({ block: 'start' }); return; }
+    if (el) {
+      el.scrollIntoView({ block: 'start' });
+      // SPA swap + shiki re-highlight reflow async → the landed offset goes
+      // stale (issue #2); re-align once the scroll settles.
+      if (docs.realignWhenSettled) docs.realignWhenSettled(id);
+      return;
+    }
     if (attempt > 20) return;
     setTimeout(function () { scrollToWhenReady(id, attempt + 1); }, 100);
   }
@@ -702,6 +708,27 @@
 
   var tocObserver = null;
 
+  /* -- Anchor clearance (--anchor-pad) ----------------------
+     .page-header is `position: sticky` pinned right under the fixed site
+     header, so anything scrolled to the plain 4rem scroll-padding-top lands
+     under the page-header bar (issue #2 follow-up). The true clearance is
+     site-header + page-header height + a little breathing room — both
+     content-dependent, so the browser measures it and publishes the value
+     as --anchor-pad, which layout.css wires into scroll-padding-top
+     (native fragment jumps, scrollIntoView, and realignWhenSettled all
+     read scroll-padding-top, so every scroll path gets the same offset). */
+  function updateAnchorPad() {
+    var hdr = document.querySelector('.site-header');
+    var ph = document.querySelector('.page-header');
+    var h = (hdr ? hdr.getBoundingClientRect().height : 0) +
+      (ph ? ph.getBoundingClientRect().height : 0) + 8;
+    document.documentElement.style.setProperty('--anchor-pad', Math.round(h) + 'px');
+  }
+  addEventListener('resize', updateAnchorPad);
+  /* Component-skill <details> in .page-header change its height when toggled;
+     `toggle` bubbles, so one capture listener covers present and future ones. */
+  addEventListener('toggle', updateAnchorPad, true);
+
   function getHeadingText(el) {
     var clone = el.cloneNode(true);
     clone.querySelectorAll('a, span.badge, svg').forEach(function (c) { c.remove(); });
@@ -736,6 +763,13 @@
     headings.forEach(function (item) {
       var id = item.el.id || 'toc-' + item.text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       if (!item.el.id) item.el.id = id;
+      /* § permalink before every TOC heading — a visible, copyable deep link
+         (getHeadingText strips <a> clones, so it never leaks into TOC labels;
+         the search index is built statically, so it never leaks there either). */
+      if (!item.el.querySelector('.heading-anchor')) {
+        item.el.insertAdjacentHTML('afterbegin',
+          '<a class="heading-anchor" href="#' + id + '" aria-label="Link to section: ' + item.text.replace(/"/g, '"') + '">§</a>');
+      }
       html += '<a class="toc-link" href="#' + id + '">' + item.text + '</a>';
     });
     tocContent.innerHTML = html;
@@ -750,7 +784,11 @@
           if (active) active.classList.add('active');
         }
       });
-    }, { rootMargin: '-80px 0px -60% 0px' });
+    }, {
+      /* Active heading = first one crossing the bottom edge of the header
+         stack; reuse the measured --anchor-pad so the band starts below it. */
+      rootMargin: '-' + (parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 80) + 'px 0px -60% 0px',
+    });
     headings.forEach(function (item) { tocObserver.observe(item.el); });
   }
 
@@ -838,5 +876,11 @@
   docs.onPageReady(function () {
     buildToc();
     buildPrevNext();
+    updateAnchorPad(); // page header height differs per page — remeasure
+    /* A fresh load landed with the 4rem fallback padding (this script measured
+       the real clearance only now) — re-align the initial fragment once. */
+    if (location.hash.length > 1 && docs.realignWhenSettled) {
+      docs.realignWhenSettled(decodeURIComponent(location.hash.slice(1)));
+    }
   });
 })();

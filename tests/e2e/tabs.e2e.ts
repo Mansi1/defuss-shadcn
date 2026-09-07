@@ -73,6 +73,11 @@ try {
   });
 
   await check('line variant styles selection with an underline (tabs.css)', async () => {
+    // the underline is a 2px border whose color flips transparent -> primary.
+    // .tab-trigger has `transition: all 150ms` — the previous check just
+    // toggled the selection via Home, so settle before reading the color
+    // (measured mid-fade it's a blend, matching neither endpoint).
+    await page.waitForTimeout(250);
     // the underline is a 2px border whose color flips transparent -> primary
     const [on, off] = await page.evaluate(() => {
       const pick = (id: string) => {

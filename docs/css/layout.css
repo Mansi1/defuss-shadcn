@@ -4,8 +4,17 @@
 /* Prevent horizontal overflow on mobile */
 html { overflow-x: clip; }
 
-/* -- Scroll offset for fixed header ------------------------ */
-html { scroll-padding-top: 4rem; }
+/* -- Scroll offset for fixed header + sticky page header ----
+   --anchor-pad is published at runtime by layout.js (updateAnchorPad):
+   .page-header is `position: sticky` pinned right under the fixed site
+   header, so the true clearance = site header + page header + breathing
+   room, which only the browser can measure (content-dependent height).
+   The 4rem fallback covers pre-JS and pages without a .page-header. */
+html { scroll-padding-top: var(--anchor-pad, 4rem); }
+/* The shipped typography .h1–.h4 carry scroll-margin-top for consumer apps;
+   on the docs page the measured --anchor-pad already provides the clearance,
+   so the extra scroll-margin would stack and leave a gap above the heading. */
+main .h1, main .h2, main .h3, main .h4 { scroll-margin-top: 0; }
 
 /* -- Site header ------------------------------------------- */
 .site-header {
@@ -657,6 +666,14 @@ html.dark pre.shiki span {
   transition: color 150ms, border-color 150ms;
   line-height: 1.6;
 }
+/* § permalink before every TOC-listed heading (injected by layout.js buildToc) */
+.heading-anchor {
+  color: var(--muted-foreground);
+  text-decoration: none;
+  margin-right: 0.375rem;
+  font-weight: 400;
+}
+.heading-anchor:hover { color: var(--primary); text-decoration: underline; }
 .toc-link:hover { color: var(--foreground); }
 .toc-link.active {
   color: var(--foreground);

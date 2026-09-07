@@ -1,6 +1,9 @@
 import { expect, test } from 'vitest';
 import { clickSelector, openDocPage, waitFor } from './helpers.ts';
 
+/** site.js/layout.js expose their globals under `_defussShadcn` (no window globals). */
+type DocsGlobal = Window & { _defussShadcn: { docs: { realignWhenSettled?: (id: string) => void } } };
+
 /**
  * Why: end-to-end checks that the real doc-site UI — web components, SPA
  * router, and component interaction JS — actually work in a real browser
@@ -122,6 +125,69 @@ test('sidebar sections are collapsible (dogfood of the sidebar-group pattern)', 
     () => !(doc.defaultView!.localStorage.getItem('defuss-shadcn-nav-collapsed') ?? '').includes('Forms & Inputs'),
     're-open to clear the stored collapse',
   );
+});
+
+/** Runtime anchor clearance published by layout.js (fixed site header + sticky .page-header). */
+function padPx(win: Window): number {
+  return parseFloat(getComputedStyle(win.document.documentElement).scrollPaddingTop);
+}
+
+test('TOC links land their heading below the fixed AND sticky headers (issue #2)', async () => {
+  const { doc } = await openDocPage('theming.html');
+  await waitFor(() => doc.querySelector('.toc-link'), 'TOC to build');
+  const win = doc.defaultView!;
+  // --anchor-pad must clear BOTH bars: 3.5rem fixed site header + the sticky page header
+  const pad = padPx(win);
+  expect(pad).toBeGreaterThan(64);
+
+  // clicking a mid-page TOC entry rests the heading exactly at scroll-padding-top
+  await clickSelector(doc, '.toc-link[href="#toc-radius-scale"]');
+  const heading = doc.getElementById('toc-radius-scale')!;
+  await waitFor(() => Math.abs(heading.getBoundingClientRect().top - pad) <= 2, 'heading to rest at scroll-padding-top');
+});
+
+test('every TOC heading carries a § permalink that deep-links (issue #2)', async () => {
+  const { doc } = await openDocPage('button.html');
+  await waitFor(() => doc.querySelector('.toc-link'), 'TOC to build');
+
+  const links = [...doc.querySelectorAll('.toc-link')];
+  expect(links.length).toBeGreaterThan(5);
+  for (const link of links) {
+    const heading = doc.getElementById(link.getAttribute('href')!.slice(1))!;
+    const anchor = heading.querySelector(':scope > a.heading-anchor');
+    expect(anchor, `§ permalink on #${heading.id}`).toBeTruthy();
+    expect(anchor!.getAttribute('href')).toBe(`#${heading.id}`);
+    expect(anchor!.textContent).toBe('§');
+    // the § must not leak into the TOC label (getHeadingText strips <a>)
+    expect(link.textContent).not.toContain('§');
+  }
+});
+
+test('realignWhenSettled corrects a stale landing and respects reader input (issue #2)', async () => {
+  const { doc } = await openDocPage('theming.html');
+  await waitFor(() => doc.querySelector('.toc-link'), 'TOC to build');
+  const win = doc.defaultView as DocsGlobal;
+  expect(typeof win._defussShadcn.docs.realignWhenSettled).toBe('function');
+  const heading = doc.getElementById('toc-chart-tokens')!;
+  const realign = win._defussShadcn.docs.realignWhenSettled!;
+
+  const pad = padPx(win);
+  // simulate the issue-#2 outcome: scrolling ended 150px short of the heading
+  win.scrollTo({ top: win.scrollY + heading.getBoundingClientRect().top - pad - 150 });
+  await new Promise((r) => setTimeout(r, 120));
+  expect(heading.getBoundingClientRect().top).toBeGreaterThan(pad + 100);
+
+  realign('toc-chart-tokens');
+  await waitFor(() => Math.abs(heading.getBoundingClientRect().top - pad) <= 2, 'correction to snap the heading to scroll-padding-top');
+
+  // a reader who scrolls during the correction must never be fought
+  win.scrollTo({ top: win.scrollY + heading.getBoundingClientRect().top - pad - 150 });
+  await new Promise((r) => setTimeout(r, 120));
+  const wrong = heading.getBoundingClientRect().top;
+  realign('toc-chart-tokens');
+  win.dispatchEvent(new WheelEvent('wheel', { deltaY: -1 })); // global ctor, dispatch into frame
+  await new Promise((r) => setTimeout(r, 400));
+  expect(heading.getBoundingClientRect().top).toBeCloseTo(wrong, 0);
 });
 
 test('accordion single-open: opening one item closes its siblings', async () => {

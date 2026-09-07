@@ -1,7 +1,7 @@
 ---
 name: Hero
-why: Headline, description, CTAs and a 5:3 showcase — all native flow layout, aspect-ratio and a real <button> for play.
-when: First section of a marketing page; not for app screens or dashboards.
+why: Headline, description and CTAs in one centered copy block — native flow layout and container queries, nothing to script.
+when: First section of a marketing page; pair with the Product Showcase block when you need a video.
 where: dist/components/hero/hero.css
 supportedStates: default
 ---
@@ -9,18 +9,16 @@ supportedStates: default
 # Pattern: Hero
 
 ## Native basis
-Plain sectioning content; the showcase uses `aspect-ratio` (no
-padding-bottom hack) and the play control is a real `<button>` with
-`aria-label` — focusable and announced by default.
+Plain sectioning content: badge, `<h1>`, lead paragraph, CTA row.
+`text-wrap: balance` optically balances the headline and container
+queries swap the size step — no viewport coupling, no script.
 
 ---
 
 ## Native Web APIs
-- [`aspect-ratio`](https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio) — intrinsic 5:3 media frame
 - [`text-wrap: balance`](https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap) — optical headline balancing
-- [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) — cover-crop showcase image
-- [Container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries) — size steps follow the container
-- Individual transform [`scale`](https://developer.mozilla.org/en-US/docs/Web/CSS/scale) — play-button hover, no transform strings
+- [Container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries) — size steps follow the block, not the viewport
+- [Button](../button/component-skill.md) — CTAs compose the shipped component
 
 ---
 
@@ -36,12 +34,6 @@ padding-bottom hack) and the play control is a real `<button>` with
       <button class="btn">Get Started</button>
     </div>
   </div>
-  <figure class="mk-hero-media">
-    <img src="images/mk-wide.png" alt="Product showcase" />
-    <button class="mk-hero-play" aria-label="Play video">
-      <i data-lucide="play"></i>
-    </button>
-  </figure>
 </section>
 ```
 
@@ -51,15 +43,13 @@ CTAs compose the [Button](../button/component-skill.md) component.
 
 ## ARIA
 
-| Attribute    | Element          | Purpose                        |
-|--------------|------------------|--------------------------------|
-| `aria-label` | play button      | Names the icon-only control    |
-| `alt`        | showcase `img`   | Describes the screenshot       |
-| `<figure>`   | media wrapper    | Associates image with caption  |
+| Attribute | Element | Purpose                              |
+|-----------|---------|--------------------------------------|
+| `<h1>`    | title   | One per page — keep other sections h2 |
 
 ---
 
 ## Notes
-- The play button centers via `position: absolute; inset: 0; margin: auto` — no transforms or JS.
-- Wire the play button to open a [Dialog](../dialog/component-skill.md) with a `<video controls>`; the block itself stays behavior-free.
-- One `<h1>` per page: keep the hero title as `<h1>`, all other section titles as `<h2>`.
+- The hero is copy-only by design: media belongs to the [Product Showcase](../product-showcase/component-skill.md), which owns the video contract — compositing them keeps both blocks single-purpose.
+- A container cannot query itself: the responsive rules target `.mk-hero-title` / `.mk-hero-actions` (descendants), which is why those selectors live in the `@container` block.
+- Keep the CTA row to one primary + one secondary action; more competes with the page's own nav.

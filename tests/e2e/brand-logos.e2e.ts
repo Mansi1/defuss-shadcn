@@ -40,6 +40,24 @@ await cssSmoke('brand-logos', [
     css: { 'font-size': '20px', 'font-weight': '500' },
   },
   {
+    label: 'each mark is a real link to the brand site, unstyled until hover',
+    run: async (page) => {
+      const r = await page.evaluate(() => {
+        const links = [...document.querySelectorAll('a.mk-logo')] as HTMLAnchorElement[];
+        return {
+          count: links.length,
+          allHttp: links.every((a) => /^https:\/\//.test(a.href)),
+          noUnderline: links.every((a) => getComputedStyle(a).textDecorationLine === 'none'),
+          svgFilled: links.every((a) => getComputedStyle(a.querySelector('svg')!).fill !== 'none'),
+        };
+      });
+      if (r.count < 4) throw new Error(`only ${r.count} linked logos`);
+      if (!r.allHttp) throw new Error('a logo link is not an https URL');
+      if (!r.noUnderline) throw new Error('logo links show underlines');
+      if (!r.svgFilled) throw new Error('a brand mark is not filled (currentColor inheritance broken)');
+    },
+  },
+  {
     label: 'caption is centered 14px muted text',
     selector: '.mk-logos-caption',
     css: { 'text-align': 'center', 'font-size': '14px' },

@@ -1,7 +1,7 @@
 ---
 name: Product Showcase
-why: A 5:3 media frame with a play affordance — aspect-ratio + one absolutely-centered real button, nothing else.
-when: Standalone product shot/video poster inside any marketing section; reuse of the Hero's media block.
+why: A 5:3 video frame with browser-drawn controls — <video controls> ships play, scrub, keyboard and fullscreen for free.
+when: Hero pairing or standalone video/product shot; a static screenshot needs only the <img> variant.
 where: dist/components/product-showcase/product-showcase.css
 supportedStates: default
 ---
@@ -9,14 +9,20 @@ supportedStates: default
 # Pattern: Product Showcase
 
 ## Native basis
-`<figure>` + `aspect-ratio` + a real `<button>`. No script, no wrapper divs.
+`<video controls>` in an `aspect-ratio: 5/3` frame. The UA renders the
+play button, scrubber, volume, captions and fullscreen — every affordance
+is browser-provided (keyboard included), so the block has no script.
+An `<img>` child is styled identically for poster-only use.
 
 ---
 
 ## Native Web APIs
-- [(`<figure>`)](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/figure) — self-contained media unit
+- [(`<video>`)](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) — native playback UI + `controls`
+- [`poster`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video#poster) — first-paint image before load
+- [`<source type>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source) — codec fallback (webm → mp4)
+- [`preload="metadata"`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video#preload) — cheap first paint
 - [`aspect-ratio`](https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio) — stable 5:3 box, zero layout shift
-- [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) — cover-crop without cropping the button layer
+- [(`<track>`)](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track) — captions for real videos
 
 ---
 
@@ -24,10 +30,11 @@ supportedStates: default
 
 ```html
 <figure class="mk-showcase">
-  <img src="images/mk-wide.png" alt="Product dashboard preview" />
-  <button class="mk-showcase-play" aria-label="Play video">
-    <i data-lucide="play"></i>
-  </button>
+  <video controls preload="metadata" playsinline poster="images/poster.png">
+    <source src="videos/demo.webm" type="video/webm" />
+    <source src="videos/demo.mp4" type="video/mp4" />
+    Your browser does not support embedded video.
+  </video>
 </figure>
 ```
 
@@ -35,14 +42,15 @@ supportedStates: default
 
 ## ARIA
 
-| Attribute    | Element        | Purpose                     |
-|--------------|----------------|-----------------------------|
-| `aria-label` | play button    | Names the icon-only control |
-| `alt`        | `img`          | Describes the shot          |
+| Attribute    | Element  | Purpose                                     |
+|--------------|----------|---------------------------------------------|
+| `controls`   | `video`  | Full native keyboard + pointer operation    |
+| fallback text| `video`  | Shown when no source plays                  |
+| `<track>`    | captions | Required accessibility for real videos      |
 
 ---
 
 ## Notes
-- Same play-button pattern as [Hero](../hero/component-skill.md); use this one when the block stands alone (no headline/copy).
-- On click, open the video in a [Dialog](../dialog/component-skill.md) — the block intentionally ships no behavior.
-- Set `alt=""` and drop `aria-label` only when the shot is purely decorative (rare for product shots).
+- Ship both webm (VP9/AV1) and mp4 (H.264) `<source>`s — Safari wants mp4, Firefox prefers webm.
+- Captions are a hard accessibility requirement for real product videos: add `<track kind="captions" src="captions.vtt" default>`.
+- No custom play overlay: an overlaid `<button>` would steal the first click from the native control and re-add all the JS the UA already gives you.

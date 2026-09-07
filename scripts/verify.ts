@@ -17,6 +17,7 @@ import {
 import { readmeCssOnlyProblems } from './lib/readme.ts';
 import { parseThemes, defaultTokenModes, sidebarContrastProblems, radiusConsistencyProblems } from './lib/contrast.ts';
 import { buildSkillText } from './lib/skill-files.ts';
+import { ARCH_OUTPUT_FILE, ARCH_TEMPLATE_FILE, buildArchPageText } from './lib/arch-page.ts';
 
 /**
  * Why: one static, fast gate that proves the repo is self-consistent after any
@@ -858,6 +859,28 @@ check(
       'SKILL.md ↔ skills',
       skillProblems,
       'run `bun run build` (build.ts regenerates src/SKILL.md from SKILL_tpl.md + frontmatter; never edit SKILL.md by hand)',
+    );
+  }
+
+  // 30b. architecture page ↔ ARCH.md: the published Overview page is a
+  // generated render of the repo's design manifesto (build.ts regenerates it
+  // from ARCH.md + architecture_tpl.html). Same drift class as SKILL.md:
+  // edit ARCH.md, rebuild — never hand-edit the page (AGENTS.md "ARCH.md ↔
+  // architecture page sync").
+  {
+    let archProblems: string[] = [];
+    try {
+      const fresh = buildArchPageText(SRC);
+      if (!existsSync(join(SRC, 'documentation', ARCH_OUTPUT_FILE))) archProblems.push(`src/documentation/${ARCH_OUTPUT_FILE} missing`);
+      else if (readFileSync(join(SRC, 'documentation', ARCH_OUTPUT_FILE), 'utf8') !== fresh)
+        archProblems.push(`src/documentation/${ARCH_OUTPUT_FILE} is stale vs ARCH.md + ${ARCH_TEMPLATE_FILE}`);
+    } catch (e) {
+      archProblems.push(`${(e as Error).message.split(' — ')[0]} — architecture page cannot be generated`);
+    }
+    check(
+      'architecture ↔ ARCH.md',
+      archProblems,
+      'run `bun run build` (build.ts regenerates the architecture page from ARCH.md; never edit architecture.html by hand)',
     );
   }
 

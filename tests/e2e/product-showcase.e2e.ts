@@ -1,8 +1,9 @@
 import { cssSmoke } from './lib/css-smoke.ts';
 
 /**
- * Why: product-showcase is a standalone 5:3 frame + play button — verify the
- * same geometry contract as the Hero's media block, applied from its own CSS.
+ * Why: product-showcase is a native <video controls> frame — verify the
+ * 5:3 box, the cover-fill on the video, and that the browser's own
+ * controls are on (no custom play button shipped).
  */
 await cssSmoke('product-showcase', [
   {
@@ -11,27 +12,27 @@ await cssSmoke('product-showcase', [
     css: { 'aspect-ratio': '5 / 3', overflow: 'hidden' },
   },
   {
-    label: 'image cover-fills the frame',
-    selector: '.mk-showcase img',
-    css: { 'object-fit': 'cover' },
+    label: 'video cover-fills the frame',
+    selector: '.mk-showcase video',
+    css: { 'object-fit': 'cover', display: 'block' },
   },
   {
-    label: 'play button is a 64px circle above the image',
-    selector: '.mk-showcase-play',
-    css: { width: '64px', height: '64px', 'border-radius': '9999px', position: 'absolute', 'z-index': '10' },
-  },
-  {
-    label: 'play button is centered in the frame',
+    label: 'video carries native controls + webm/mp4 fallbacks (no custom overlay)',
     run: async (page) => {
-      const off = await page.evaluate(() => {
-        const f = document.querySelector('.mk-showcase')!.getBoundingClientRect();
-        const p = document.querySelector('.mk-showcase-play')!.getBoundingClientRect();
-        return Math.max(
-          Math.abs(f.left + f.width / 2 - (p.left + p.width / 2)),
-          Math.abs(f.top + f.height / 2 - (p.top + p.height / 2)),
-        );
+      const r = await page.evaluate(() => {
+        const v = document.querySelector('.mk-showcase video') as HTMLVideoElement;
+        return {
+          controls: v.controls,
+          poster: v.getAttribute('poster') ?? '',
+          types: [...v.querySelectorAll('source')].map((s) => s.getAttribute('type')),
+          overlay: !!document.querySelector('.mk-showcase-play'),
+        };
       });
-      if (off > 1) throw new Error(`play off-center by ${off}px`);
+      if (!r.controls) throw new Error('video lacks controls');
+      if (!r.poster) throw new Error('video lacks poster');
+      if (!r.types.includes('video/webm') || !r.types.includes('video/mp4'))
+        throw new Error(`codecs: ${r.types.join(',')}`);
+      if (r.overlay) throw new Error('custom play overlay must not exist — controls are native');
     },
   },
 ]);

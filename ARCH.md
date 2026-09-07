@@ -1,11 +1,11 @@
 # ARCH — How this framework scales with AI
 
-defuss-shadcn is built for an era where **coding agents do the work**. The
+`defuss-shadcn` is built for an era where **coding agents do the work**. The
 scaling bottleneck is no longer writing components — it is *trusting* them.
 This repo solves trust with a closed loop: every artifact an agent produces
 passes through mechanical quality gates designed by a human senior software engineer, and the gates talk back to the AI agent in the form of executable instructions. An agent can reach "done" only by satisfying every gate; the goal is unreachable any other way.
 
-The method has four parts.
+The method has five parts.
 
 ## 1. AGENTS.md — the philosophy/instruction layer
 
@@ -132,7 +132,7 @@ human review does not scale to an army of agents, but a verifier that
 audits every byte, speaks repair instructions, and is the only door out
 does.
 
----
+## 5. Human expert final review before release
 
 The human expert only reviews the code, documentation and visual representation after all quality gates have passed and the visual evidence has been captured - right before a new version is released.
 

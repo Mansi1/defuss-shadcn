@@ -274,6 +274,50 @@ try {
     });
   });
 
+  await check('wide-mode toggle releases the main max-width (and persists)', async () => {
+    const before = await page.evaluate(() => getComputedStyle(document.querySelector('main')!).maxWidth);
+    assert.notEqual(before, 'none', 'main is unconstrained before toggling — the check proves nothing');
+
+    await page.click('#wide-toggle');
+    const wide = await page.evaluate(() => ({
+      maxWidth: getComputedStyle(document.querySelector('main')!).maxWidth,
+      pressed: document.getElementById('wide-toggle')!.getAttribute('aria-pressed'),
+      stored: localStorage.getItem('defuss-shadcn-wide'),
+      icon: getComputedStyle(document.getElementById('icon-wide-collapse')!).display,
+    }));
+    assert.equal(wide.maxWidth, 'none', 'wide mode did not release the max-width');
+    assert.equal(wide.pressed, 'true', 'aria-pressed not synced');
+    assert.equal(wide.stored, '1', 'state not persisted');
+    assert.notEqual(wide.icon, 'none', 'collapse icon not shown');
+
+    // toggle back so later checks (and reloads) see the default layout
+    await page.click('#wide-toggle');
+    const after = await page.evaluate(() => ({
+      maxWidth: getComputedStyle(document.querySelector('main')!).maxWidth,
+      stored: localStorage.getItem('defuss-shadcn-wide'),
+    }));
+    assert.equal(after.maxWidth, before, 'toggling off did not restore the width');
+    assert.equal(after.stored, '0', 'off-state not persisted');
+  });
+
+  await check('architecture page renders from ARCH.md (h2s + proof-loop section)', async () => {
+    await page.goto(`${server.url}/dist/documentation/architecture.html`);
+    const state = await page.evaluate(() => ({
+      h1: document.querySelector('main h1')?.textContent?.trim() ?? '',
+      h2s: [...document.querySelectorAll('main h2')].map((h) => h.textContent?.trim() ?? ''),
+      prose: !!document.querySelector('.arch-prose'),
+    }));
+    assert.match(state.h1, /Architecture/, 'h1 missing');
+    assert.ok(state.prose, 'ARCH.md body not injected (.arch-prose missing)');
+    // ARCH.md's five parts + the proof loop must all be present
+    for (const want of ['AGENTS.MD', 'VERIFIER', 'PROOF LOOP', 'HUMAN EXPERT']) {
+      assert.ok(
+        state.h2s.some((t) => t.toUpperCase().includes(want)),
+        `h2 for "${want}" missing — page drifted from ARCH.md? (found: ${state.h2s.join(' | ')})`,
+      );
+    }
+  });
+
   await check('no first-party page errors during the whole run', async () => {
     assert.deepEqual(pageErrors, [], `uncaught page errors: ${pageErrors.join(' | ')}`);
   });

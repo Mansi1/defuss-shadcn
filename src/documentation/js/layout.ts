@@ -18,6 +18,14 @@
   // forever because it was a second, un-synchronised literal.
   var SITE_VERSION = 'v0.7.19';
 
+  /* -- Wide mode (must run before first paint, like dark mode) ---
+     Strips the content max-width so wide layouts (the marketing blocks)
+     render at full width. Persisted per-origin, same key discipline as
+     the theme. The toggle button lives in <site-header> below. */
+  if (localStorage.getItem('defuss-shadcn-wide') === '1') {
+    document.documentElement.classList.add('wide');
+  }
+
   /* -- Dark mode (must run before first paint) ----------------- */
   var saved = localStorage.getItem('defuss-shadcn-theme');
   var darkMQ = window.matchMedia('(prefers-color-scheme: dark)');
@@ -67,6 +75,7 @@
       { label: 'Theming', href: 'theming.html' },
       { label: 'Dark Mode', href: 'dark-mode.html' },
       { label: 'Data Attribute API', href: 'data-attribute-api.html' },
+      { label: 'Architecture', href: 'architecture.html' },
       { label: 'Cascade Layers', href: 'cascade-layers.html' },
       { label: 'ES Modules', href: 'es-modules.html' },
       { label: 'Native Web APIs', href: 'native-web-apis.html' },
@@ -165,7 +174,7 @@
 
   /* Pages that have been built (have a real doc page) */
   var BUILT = new Set([
-    'index.html', 'installation.html', 'theming.html', 'dark-mode.html', 'data-attribute-api.html', 'cascade-layers.html', 'es-modules.html', 'native-web-apis.html', 'animations.html', 'accessibility.html', 'component-skills.html', 'changelog.html',
+    'index.html', 'installation.html', 'theming.html', 'dark-mode.html', 'data-attribute-api.html', 'architecture.html', 'cascade-layers.html', 'es-modules.html', 'native-web-apis.html', 'animations.html', 'accessibility.html', 'component-skills.html', 'changelog.html',
     'typography.html', 'separator.html', 'icon.html', 'label.html',
     'button.html', 'toggle.html', 'toggle-group.html', 'button-group.html', 'toolbar.html',
     'input.html', 'textarea.html', 'checkbox.html', 'radio.html', 'switch.html',
@@ -219,6 +228,10 @@
               '<span class="github-label">GitHub</span>' +
               '<span class="github-stars"></span>' +
             '</a>' +
+            '<button id="wide-toggle" class="header-action theme-toggle-btn" aria-label="Toggle wide layout" aria-pressed="false">' +
+              '<svg id="icon-wide-expand" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>' +
+              '<svg id="icon-wide-collapse" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/></svg>' +
+            '</button>' +
             '<button id="theme-toggle" class="header-action theme-toggle-btn" aria-label="Toggle dark mode">' +
               '<svg id="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>' +
               '<svg id="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>' +
@@ -306,6 +319,26 @@
       if (resetBtn) {
         resetBtn.addEventListener('click', function () {
           if (docs.applyTheme) docs.applyTheme('default');
+        });
+      }
+
+      /* -- Wide mode toggle ------------------------------------- */
+      var wideBtn = this.querySelector('#wide-toggle');
+      var syncWideBtn = function () {
+        if (!wideBtn) return;
+        var on = document.documentElement.classList.contains('wide');
+        wideBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        var expand = wideBtn.querySelector('#icon-wide-expand');
+        var collapse = wideBtn.querySelector('#icon-wide-collapse');
+        if (expand) expand.style.display = on ? 'none' : 'block';
+        if (collapse) collapse.style.display = on ? 'block' : 'none';
+      };
+      syncWideBtn(); // the class was applied pre-paint above — reflect it
+      if (wideBtn) {
+        wideBtn.addEventListener('click', function () {
+          var on = document.documentElement.classList.toggle('wide');
+          localStorage.setItem('defuss-shadcn-wide', on ? '1' : '0');
+          syncWideBtn();
         });
       }
 
@@ -583,9 +616,16 @@
           navigating = false;
         };
 
-        /* Use View Transitions API if available */
-        if (document.startViewTransition) {
-          document.startViewTransition(swap);
+        /* Use View Transitions API if available. Chromium throws a
+           "Transition was skipped. New ViewTransition started" error when two
+           transitions overlap — the `navigating` flag only guards the fetch,
+           not the async VT, so rapid navs (Enter key + section click) can
+           stack them. Track the active transition and swap immediately
+           (exactly what a skipped VT does anyway) while one is in flight. */
+        if (document.startViewTransition && !docs.__vtActive) {
+          var vt = document.startViewTransition(swap);
+          docs.__vtActive = true;
+          vt.finished.finally(function () { docs.__vtActive = false; });
         } else {
           swap();
         }

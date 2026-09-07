@@ -308,8 +308,8 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Hero
 
-**Why:** Headline, description, CTAs and a 5:3 showcase — all native flow layout, aspect-ratio and a real <button> for play.
-**When:** First section of a marketing page; not for app screens or dashboards.
+**Why:** Headline, description and CTAs in one centered copy block — native flow layout and container queries, nothing to script.
+**When:** First section of a marketing page; pair with the Product Showcase block when you need a video.
 **Files:** dist/components/hero/hero.css
 **Supported states:** default
 **Screenshots:** screenshots/{light,dark}/hero.png
@@ -407,8 +407,8 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Product Showcase
 
-**Why:** A 5:3 media frame with a play affordance — aspect-ratio + one absolutely-centered real button, nothing else.
-**When:** Standalone product shot/video poster inside any marketing section; reuse of the Hero's media block.
+**Why:** A 5:3 video frame with browser-drawn controls — <video controls> ships play, scrub, keyboard and fullscreen for free.
+**When:** Hero pairing or standalone video/product shot; a static screenshot needs only the <img> variant.
 **Files:** dist/components/product-showcase/product-showcase.css
 **Supported states:** default
 **Screenshots:** screenshots/{light,dark}/product-showcase.png

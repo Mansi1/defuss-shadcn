@@ -23,12 +23,19 @@
     row-gap: 1.75rem;
   }
 
+  /* the mark links out to the brand — no underline, quiet until hover */
   .mk-logo {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     flex-shrink: 0;
     color: var(--muted-foreground);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: color 150ms ease;
+
+    &:hover { color: var(--foreground); }
+    &:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
 
     & svg { width: 1.875rem; height: 1.875rem; aspect-ratio: 1; flex-shrink: 0; }
   }
@@ -53,6 +60,10 @@
   }
 
   /* -- Accessibility ------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .mk-logo { transition: none; }
+  }
+
   @media (forced-colors: active) {
     .mk-logo { color: CanvasText; }
   }

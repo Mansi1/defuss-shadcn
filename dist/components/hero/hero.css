@@ -1,7 +1,7 @@
 /* -- Hero (marketing) ---------------------------------------------
-   Centered headline + description + CTAs over a 5:3 product showcase
-   with a play affordance. Layout switches on container width, not
-   viewport — the block renders correctly inside a doc preview box. */
+   Centered headline + description + CTAs. Copy-only by design — pair it
+   with the Product Showcase block for video. Layout switches on container
+   width, not viewport — the block renders correctly inside a preview box. */
 
 @layer components {
   .mk-hero {
@@ -54,53 +54,10 @@
 
   .mk-hero-actions { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; }
 
-  .mk-hero-media {
-    position: relative;
-    aspect-ratio: 5 / 3;
-    width: 100%;
-    margin: 0;
-    overflow: hidden;
-    border-radius: var(--radius-lg);
-    background: var(--muted);
-
-    & img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-  }
-
-  /* centered circular play button — real <button>, keyboard-focusable */
-  .mk-hero-play {
-    position: absolute;
-    inset: 0;
-    z-index: 10;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 4rem;
-    height: 4rem;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 9999px;
-    background: var(--background);
-    box-shadow: var(--shadow-2xs);
-    cursor: pointer;
-
-    & svg { width: 1.5rem; height: 1.5rem; transition: scale 300ms ease; }
-    &:hover svg { scale: 1.1; }
-    &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-  }
-
+  /* the section itself is the query container — a container cannot query
+     itself, so responsive rules target the copy child (descendant) */
   @container mk-hero (min-width: 30rem) {
     .mk-hero-title { font-size: 3.75rem; }
     .mk-hero-actions { flex-direction: row; width: fit-content; }
-  }
-
-  /* -- Accessibility ------------------------------------------- */
-  @media (prefers-reduced-motion: reduce) {
-    .mk-hero-play svg { transition: none; }
   }
 }

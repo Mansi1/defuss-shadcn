@@ -54,10 +54,10 @@ await cssSmoke('site-header', [
     },
   },
   {
-    label: 'panel anchors below its trigger (nav carries .nav-menu so the anchor names are wired)',
+    label: 'panel anchors below its trigger (navigation-menu wires anchor names per pair)',
     run: async (page) => {
-      // the reported bug: without .nav-menu on the nav, navigation-menu.ts never
-      // sets anchor names and the panel renders at the viewport top-left.
+      // the reported bug (Default AND Sticky demos): unwired panels keep
+      // position-anchor: normal and render at the viewport top-left.
       await page.click('.mk-header-nav button.nav-menu-trigger');
       const r = await page.evaluate(() => {
         const t = document.querySelector('.mk-header-nav button.nav-menu-trigger')!;
@@ -70,7 +70,7 @@ await cssSmoke('site-header', [
         };
       });
       await page.keyboard.press('Escape');
-      if (r.posAnchor === 'normal') throw new Error('position-anchor not applied — nav is missing .nav-menu');
+      if (r.posAnchor === 'normal') throw new Error('position-anchor not applied — anchor wiring did not run');
       if (!(r.gap >= 0 && r.gap < 24)) throw new Error(`panel ${r.gap}px from trigger bottom — not anchored below`);
       if (!r.aligned) throw new Error('panel left edge not aligned with trigger');
     },
@@ -79,5 +79,19 @@ await cssSmoke('site-header', [
     label: 'data-variant="sticky" pins the header',
     selector: '.mk-header[data-variant="sticky"]',
     css: { position: 'sticky', top: '0px' },
+  },
+  {
+    label: 'sticky header dropdown also anchors below its trigger',
+    run: async (page) => {
+      // the reported issue: the Sticky demo panel opened at the viewport origin
+      await page.click('[data-variant="sticky"] .nav-menu-trigger');
+      const r = await page.evaluate(() => {
+        const t = document.querySelector('[data-variant="sticky"] .nav-menu-trigger')!;
+        const p = document.getElementById(t.getAttribute('popovertarget')!)!;
+        return { gap: p.getBoundingClientRect().top - t.getBoundingClientRect().bottom };
+      });
+      await page.keyboard.press('Escape');
+      if (!(r.gap >= 0 && r.gap < 24)) throw new Error(`sticky panel ${r.gap}px from trigger bottom — not anchored`);
+    },
   },
 ]);

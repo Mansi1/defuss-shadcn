@@ -168,7 +168,7 @@
 <header class="mk-header" style="width:100%">
   <div class="mk-header-inner">
     <a href="#" class="mk-header-brand"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="mk-header-name">Acme Inc.</span></a>
-    <nav class="mk-header-nav nav-menu" aria-label="Main">
+    <nav class="mk-header-nav" aria-label="Main">
       <ul class="nav-menu-list">
     <li class="nav-menu-item">
       <button class="nav-menu-trigger" popovertarget="mk-sh-products">Products <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button>
@@ -192,7 +192,7 @@
           <pre><code class="language-markup">&lt;header class=&quot;mk-header&quot; style=&quot;width:100%&quot;&gt;
   &lt;div class=&quot;mk-header-inner&quot;&gt;
     &lt;a href=&quot;#&quot; class=&quot;mk-header-brand&quot;&gt;&lt;svg viewBox=&quot;0 0 24 24&quot; width=&quot;24&quot; height=&quot;24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;polygon points=&quot;13 2 3 14 12 14 11 22 21 10 12 10 13 2&quot;/&gt;&lt;/svg&gt;&lt;span class=&quot;mk-header-name&quot;&gt;Acme Inc.&lt;/span&gt;&lt;/a&gt;
-    &lt;nav class=&quot;mk-header-nav nav-menu&quot; aria-label=&quot;Main&quot;&gt;
+    &lt;nav class=&quot;mk-header-nav&quot; aria-label=&quot;Main&quot;&gt;
       &lt;ul class=&quot;nav-menu-list&quot;&gt;
     &lt;li class=&quot;nav-menu-item&quot;&gt;
       &lt;button class=&quot;nav-menu-trigger&quot; popovertarget=&quot;mk-sh-products&quot;&gt;Products &lt;svg aria-hidden=&quot;true&quot; width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;&gt;&lt;path d=&quot;m6 9 6 6 6-6&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
@@ -419,7 +419,7 @@ handles open/close, Escape, and light dismiss natively.
       <i data-lucide="zap"></i>
       <span class="mk-header-name">Acme Inc.</span>
     </a>
-    <nav class="mk-header-nav nav-menu" aria-label="Main">
+    <nav class="mk-header-nav" aria-label="Main">
       <ul class="nav-menu-list">
         <li class="nav-menu-item">
           <button class="nav-menu-trigger" popovertarget="nav-products">
@@ -445,10 +445,11 @@ handles open/close, Escape, and light dismiss natively.
 ```
 
 Actions compose the [Button](../button/component-skill.md) component; the nav
-composes [Navigation Menu](../navigation-menu/component-skill.md) — carry its
-root class on the `<nav>` (`class="mk-header-nav nav-menu"`) so the component's
-JS wires the CSS anchor names that position each panel under its trigger;
-without `.nav-menu` the panel still opens but renders at the viewport origin.
+composes [Navigation Menu](../navigation-menu/component-skill.md) — its JS
+wires the CSS anchor names per trigger→panel pair (no `.nav-menu` wrapper
+needed, only `.nav-menu-trigger[popovertarget]` + `.nav-menu-content[popover]`),
+so each panel positions under its trigger; unwired panels open at the viewport
+origin instead.
 
 ---
 

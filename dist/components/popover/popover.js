@@ -91,11 +91,16 @@ _defussShadcn.popoverApi = popoverApi;
 _defussShadcn.popoverStates = popoverStates;
 function init() {
     document.querySelectorAll('[popovertarget]:not([data-init])').forEach((trigger) => {
-        trigger.dataset.init = '';
         const id = trigger.getAttribute('popovertarget');
         const popover = document.getElementById(id);
+        // Ownership boundary (AGENTS.md "Each component owns its dialog", popover
+        // edition): only claim triggers whose target is a .popover panel. Stamping
+        // every [popovertarget] starved sibling components — navigation-menu's
+        // triggers got claimed here, then skipped (panel isn't .popover), and
+        // nav-menu's own :not([data-init]) scan never anchored them.
         if (!popover || !popover.classList.contains('popover'))
             return;
+        trigger.dataset.init = '';
         // CSS anchor positioning - unique name per trigger-popover pair
         const anchorId = `--popover-${id}`;
         trigger.style.anchorName = anchorId;

@@ -31,10 +31,12 @@ try {
   const page = await browser.newPage();
   await page.goto(`${server.url}${FIXTURE}`);
 
-  await check('navigation-menu.js initialized nav + content (data-init)', async () => {
+  await check('navigation-menu.js wired every trigger + content (data-init)', async () => {
+    // wiring is per trigger→panel pair (no .nav-menu wrapper required —
+    // composable inside other components like site-header)
     await page.waitForFunction(
       () =>
-        document.querySelectorAll('.nav-menu:not([data-init])').length === 0 &&
+        document.querySelectorAll('.nav-menu-trigger[popovertarget]:not([data-init])').length === 0 &&
         document.querySelectorAll('.nav-menu-content[popover]:not([data-init])').length === 0,
     );
   });

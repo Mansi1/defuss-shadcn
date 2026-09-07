@@ -93,26 +93,28 @@ export const navigationMenuApi = {
 _defussShadcn.navigationMenuApi = navigationMenuApi;
 _defussShadcn.navigationMenuStates = navigationMenuStates;
 function init() {
-    document.querySelectorAll('.nav-menu:not([data-init])').forEach((nav) => {
-        nav.dataset.init = '';
-        nav.querySelectorAll('.nav-menu-trigger[popovertarget]').forEach((trigger) => {
-            const id = trigger.getAttribute('popovertarget');
-            const content = document.getElementById(id);
-            if (!content)
-                return;
-            // CSS anchor positioning - unique name per trigger-content pair
-            const anchorId = `--nav-menu-${id}`;
-            trigger.style.anchorName = anchorId;
-            content.style.positionAnchor = anchorId;
-        });
-        // bind-scope the api per content element: `$('#nav-products').api.setState('open')`
-        document.querySelectorAll('.nav-menu-content[popover]:not([data-init])').forEach((content) => {
-            content.dataset.init = '';
-            content.api = {
-                setState: (stateName, config) => navigationMenuApi.setState(content, stateName, config),
-                getState: () => navigationMenuApi.getState(content),
-            };
-        });
+    // Wiring is per trigger→panel PAIR, not per wrapper: a consumer may compose
+    // the menu inside another component (e.g. site-header's <nav>) without a
+    // .nav-menu ancestor. Scanning wrappers left those panels unanchored —
+    // position-anchor stayed 'normal' and the popover fell back to the viewport
+    // top-left (reported twice: site-header Default + Sticky).
+    document.querySelectorAll('.nav-menu-trigger[popovertarget]:not([data-init])').forEach((trigger) => {
+        trigger.dataset.init = '';
+        const content = document.getElementById(trigger.getAttribute('popovertarget'));
+        if (!content)
+            return;
+        // CSS anchor positioning - unique name per trigger-content pair
+        const anchorId = `--nav-menu-${content.id}`;
+        trigger.style.anchorName = anchorId;
+        content.style.positionAnchor = anchorId;
+    });
+    // bind-scope the api per content element: `$('#nav-products').api.setState('open')`
+    document.querySelectorAll('.nav-menu-content[popover]:not([data-init])').forEach((content) => {
+        content.dataset.init = '';
+        content.api = {
+            setState: (stateName, config) => navigationMenuApi.setState(content, stateName, config),
+            getState: () => navigationMenuApi.getState(content),
+        };
     });
 }
 init();

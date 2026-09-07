@@ -380,15 +380,18 @@ _defussShadcn.navigationMenuApi = navigationMenuApi;
 _defussShadcn.navigationMenuStates = navigationMenuStates;
 
 function init() {
-  document.querySelectorAll('.nav-menu:not([data-init])').forEach((nav) =&gt; {
-  nav.dataset.init = '';
-  nav.querySelectorAll('.nav-menu-trigger[popovertarget]').forEach((trigger) =&gt; {
-    const id = trigger.getAttribute('popovertarget');
-    const content = document.getElementById(id);
+  // Wiring is per trigger→panel PAIR, not per wrapper: a consumer may compose
+  // the menu inside another component (e.g. site-header's &lt;nav&gt;) without a
+  // .nav-menu ancestor. Scanning wrappers left those panels unanchored —
+  // position-anchor stayed 'normal' and the popover fell back to the viewport
+  // top-left (reported twice: site-header Default + Sticky).
+  document.querySelectorAll('.nav-menu-trigger[popovertarget]:not([data-init])').forEach((trigger) =&gt; {
+    trigger.dataset.init = '';
+    const content = document.getElementById(trigger.getAttribute('popovertarget'));
     if (!content) return;
 
     // CSS anchor positioning - unique name per trigger-content pair
-    const anchorId = `--nav-menu-${id}`;
+    const anchorId = `--nav-menu-${content.id}`;
     trigger.style.anchorName = anchorId;
     content.style.positionAnchor = anchorId;
   });
@@ -401,7 +404,6 @@ function init() {
       getState: () =&gt; navigationMenuApi.getState(content),
     };
   });
-});
 }
 
 init();

@@ -9,11 +9,18 @@ import { CDN_BASE } from './lib/mirror.ts';
  * the resolution and the files (s-maxage=43200 at the edge, max-age=604800 in
  * browsers), so right after a release the deployed site can keep serving the
  * PREVIOUS release's assets — a fixed bug stays live for up to 12h.
- * This script purges every dist asset path — the complete release payload
- * (components/, theme/, documentation/ assets incl. fonts & videos, SKILL.md,
- * robots.txt/sitemap.xml) — so @latest re-resolves to the newest tag
- * immediately. Run it after `bun run deploy` once the tag is pushed and
- * GitHub Pages has republished.
+ *
+ * This script purges EVERY mutable URL jsDelivr actually exposes:
+ * 1. the `@latest` PACKAGE ROOT — the @latest → tag resolution is an entry of
+ *    its own. Purging only files re-resolves through the stale entry and
+ *    re-caches old bytes at edges that still hold the resolution (observed
+ *    post-v0.8.3: one CSS stayed stale ~10 min although its file purge
+ *    reported "finished");
+ * 2. every individual dist asset path — the complete release payload
+ *    (components/, theme/, documentation/ assets incl. fonts & videos,
+ *    SKILL.md, robots.txt/sitemap.xml).
+ * Run it after `bun run deploy` once the tag is pushed and GitHub Pages has
+ * republished.
  */
 
 const ROOT = join(import.meta.dirname, '..');
@@ -52,9 +59,9 @@ if (!probe.ok) {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-async function purge(rel: string): Promise<'ok' | 'retry'> {
+async function purgeUrl(url: string): Promise<'ok' | 'retry'> {
   try {
-    const res = await fetch(`${PURGE_BASE}/${rel}`);
+    const res = await fetch(url);
     if (!res.ok) return 'retry';
     const body = (await res.json()) as {
       status?: string;
@@ -68,18 +75,32 @@ async function purge(rel: string): Promise<'ok' | 'retry'> {
   }
 }
 
-// small worker pool: the purge API throttles aggressive clients
+async function purgeWithRetry(url: string, attempts = 3): Promise<boolean> {
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    if ((await purgeUrl(url)) === 'ok') return true;
+    await sleep(1000 * attempt); // the purge API throttles aggressive clients
+  }
+  return false;
+}
+
+// 1. package root FIRST: purging `…@latest` clears the cached entry
+// resolution, so the per-file purges below re-fetch from the NEW tag.
+const PKG_ROOT = PURGE_BASE.slice(0, PURGE_BASE.lastIndexOf('/'));
+if (!(await purgeWithRetry(PKG_ROOT))) {
+  console.error(
+    `purge-cdn: purging the @latest package root failed (${PKG_ROOT}) —\n` +
+      `  file purges would re-resolve through the stale entry; aborting.`,
+  );
+  process.exit(1);
+}
+
+// 2. every individual asset path, on a small worker pool (throttle-friendly)
 const pending = [...files];
 const failed: string[] = [];
 
 async function worker() {
   for (let rel = pending.pop(); rel; rel = pending.pop()) {
-    let done = false;
-    for (let attempt = 1; attempt <= 3 && !done; attempt++) {
-      if ((await purge(rel)) === 'ok') done = true;
-      else await sleep(1000 * attempt);
-    }
-    if (!done) failed.push(rel);
+    if (!(await purgeWithRetry(`${PURGE_BASE}/${rel}`))) failed.push(rel);
     await sleep(150);
   }
 }
@@ -92,4 +113,4 @@ if (failed.length > 0) {
   process.exit(1);
 }
 
-console.log(`purge-cdn: ${files.length} dist asset paths purged from jsDelivr @latest`);
+console.log(`purge-cdn: @latest package root + ${files.length} dist asset paths purged from jsDelivr`);

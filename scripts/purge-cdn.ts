@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { walk } from './lib/audit.ts';
 import { CDN_BASE } from './lib/mirror.ts';
@@ -28,6 +29,24 @@ const files = walk(DIST, [''])
 
 if (files.length === 0) {
   console.error('purge-cdn: no dist assets found — run `bun run build` first');
+  process.exit(1);
+}
+
+// Preflight (learned the hard way): a purge only re-fetches from whatever tag
+// @latest currently resolves to. If the release tag isn't pushed yet, every
+// path purges "successfully" while upstream still serves the previous
+// release — a silent no-op that looks like "the CSS was not purged". Ask
+// jsDelivr directly whether it can serve the version we're releasing; its
+// @latest entry-resolution cache lags a tag push by minutes, but a direct
+// @<version> fetch succeeds as soon as the tag is on GitHub.
+const version = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')).version as string;
+const probe = await fetch(`${CDN_BASE.replace('@latest', '@' + version)}/SKILL.md`, { method: 'HEAD' });
+if (!probe.ok) {
+  console.error(
+    `purge-cdn: jsDelivr cannot serve v${version} yet (@${version}/dist/SKILL.md -> ${probe.status}).\n` +
+      `  Purging now would be a silent no-op — @latest still resolves to the previous tag.\n` +
+      `  Publish first: git push origin main && git push origin v${version}, then re-run.`,
+  );
   process.exit(1);
 }
 

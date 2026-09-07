@@ -106,7 +106,7 @@
         </div>
         <h1 style="font-family:var(--font-display);font-size:2.5rem;font-weight:400;letter-spacing:-0.035em;margin:0 0 0.75rem;">Select</h1>
         <p class="text-muted-foreground leading-relaxed mb-6">
-          A native dropdown for choosing from a list of options. Built on <code>&lt;select&gt;</code> with <code>appearance: none</code> and a custom chevron.
+          A native dropdown for choosing from a list of options. Built on <code>&lt;select&gt;</code> with <code>appearance: none</code> and a custom chevron. The empty-value placeholder option stays selectable, so it doubles as the clear/reset entry: re-choosing it empties the box again (add <code>required</code> for mandatory fields).
         </p>
         <!-- Component Skill -->
         <details style="margin-bottom:2rem;border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;">
@@ -138,23 +138,24 @@
             <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Accessibility</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Native <code>&lt;select&gt;</code> provides full keyboard navigation (arrow keys, type-ahead).</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Use <code>&lt;label&gt;</code> with <code>for</code> for description.</p>
-            <p class="text-muted-foreground" style="margin:0 0 0;">• Use <code>disabled</code> on <code>&lt;option&gt;</code> elements for placeholder text.</p>
+            <p class="text-muted-foreground" style="margin:0 0 0;">• The placeholder is a <code>&lt;option value="" selected&gt;</code> <strong>without</strong> <code>disabled</code> — a disabled placeholder cannot be re-selected, so a made selection could never be cleared (issue #32). Keep it selectable and mark the field <code>required</code> if empty must not submit; the control reads as a placeholder while the empty option is selected (muted text via <code>:has(option:checked)</code>).</p>
 
 
             <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Notes</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Uses <code>appearance: none</code> with a custom chevron via <code>background-image</code> SVG.</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• The dropdown list is rendered by the browser — it cannot be styled.</p>
-            <p class="text-muted-foreground" style="margin:0 0 0;">• For a fully custom dropdown, use the Combobox component instead.</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• For a fully custom dropdown, use the Combobox component instead.</p>
+            <p class="text-muted-foreground" style="margin:0 0 0;">• While the empty option is selected the closed control renders muted (<code>:has(> option[value=""]:checked)</code>); choosing a value restores the foreground color.</p>
           </div>
         </details>
       </div>
         <p class="text-sm font-medium mb-2 mt-6">Default</p>
-        <p class="text-xs text-muted-foreground mb-3">Native select with placeholder.</p>
+        <p class="text-xs text-muted-foreground mb-3">Native select with a clearable placeholder — re-choose "Select a fruit" to empty it again.</p>
         <div class="preview">
           <div style="width:100%;max-width:16rem;">
             <label class="label" for="d-fruit">Fruit</label>
             <select class="select" id="d-fruit">
-              <option value="" disabled selected>Select a fruit</option>
+              <option value="" selected>Select a fruit</option>
               <option value="apple">Apple</option>
               <option value="banana">Banana</option>
               <option value="cherry">Cherry</option>
@@ -168,7 +169,7 @@
             Copy
           </button>
           <pre><code class="language-markup">&lt;select class="select"&gt;
-  &lt;option value="" disabled selected&gt;Select a fruit&lt;/option&gt;
+  &lt;option value="" selected&gt;Select a fruit&lt;/option&gt;
   &lt;option value="apple"&gt;Apple&lt;/option&gt;
   ...
 &lt;/select&gt;</code></pre>
@@ -178,7 +179,7 @@
         <div class="preview">
           <div style="width:100%;max-width:16rem;">
             <select class="select">
-              <option value="" disabled selected>Select timezone</option>
+              <option value="" selected>Select timezone</option>
               <optgroup label="Americas">
                 <option>New York</option>
                 <option>Los Angeles</option>
@@ -250,6 +251,16 @@
     background-repeat: no-repeat;
     background-position: right 0.5rem center;
     background-size: 1rem;
+
+    /* Placeholder = the empty-value option. It stays selectable (no
+       `disabled`) so it doubles as the clear/reset entry — choosing it
+       again empties the box (issue #32). While it is the selection the
+       closed control reads as a placeholder; a real value restores
+       --foreground because the base rule's color wins over this one.
+       option:checked matches the *selected* option in every engine. */
+    &amp;:has(&gt; option[value=&quot;&quot;]:checked) {
+      color: var(--muted-foreground);
+    }
 
     &amp;:focus {
       border-color: var(--ring);

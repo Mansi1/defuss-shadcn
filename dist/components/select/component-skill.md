@@ -22,10 +22,12 @@ supportedStates: default
 ## Structure
 
 ### Basic
+The empty-value placeholder stays selectable (no `disabled`) so it doubles as
+the clear/reset entry — re-choosing it empties the box again.
 ```html
 <label class="label" for="fruit">Fruit</label>
 <select class="select" id="fruit">
-  <option value="" disabled selected>Select a fruit</option>
+  <option value="" selected>Select a fruit</option>
   <option value="apple">Apple</option>
   <option value="banana">Banana</option>
   <option value="cherry">Cherry</option>
@@ -52,7 +54,11 @@ supportedStates: default
 
 - Native `<select>` provides full keyboard navigation (arrow keys, type-ahead).
 - Use `<label>` with `for` for description.
-- Use `disabled` on `<option>` elements for placeholder text.
+- The placeholder is `<option value="" selected>` **without** `disabled`: a
+  disabled placeholder can't be re-selected, so a made selection could never be
+  cleared. Keep it selectable and add `required` to the `<select>` when an empty
+  value must not submit — native validation then blocks submission while the
+  placeholder is still the selection.
 
 ---
 
@@ -73,5 +79,8 @@ Set `data-size` on the `.select` trigger button.
 ## Notes
 
 - Uses `appearance: none` with a custom chevron via `background-image` SVG.
+- While the empty option is selected, the closed control renders in
+  `--muted-foreground` (`:has(> option[value=""]:checked)`) so it reads as a
+  placeholder; a real value restores `--foreground`.
 - The dropdown list is rendered by the browser — it cannot be styled.
 - For a fully custom dropdown, use the Combobox component instead.

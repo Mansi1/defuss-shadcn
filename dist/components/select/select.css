@@ -23,6 +23,16 @@
     background-position: right 0.5rem center;
     background-size: 1rem;
 
+    /* Placeholder = the empty-value option. It stays selectable (no
+       `disabled`) so it doubles as the clear/reset entry — choosing it
+       again empties the box (issue #32). While it is the selection the
+       closed control reads as a placeholder; a real value restores
+       --foreground because the base rule's color wins over this one.
+       option:checked matches the *selected* option in every engine. */
+    &:has(> option[value=""]:checked) {
+      color: var(--muted-foreground);
+    }
+
     &:focus {
       border-color: var(--ring);
       box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);

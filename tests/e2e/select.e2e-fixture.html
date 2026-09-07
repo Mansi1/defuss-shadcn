@@ -7,10 +7,12 @@
     <link rel="stylesheet" href="/dist/components/select/select.css" />
   </head>
   <body style="padding:2rem;">
-    <!-- mirrors the doc page: default, disabled, invalid, both sizes (parity) -->
+    <!-- mirrors the doc page: default (clearable placeholder — the empty
+         option stays selectable so a selection can be reset, issue #32),
+         disabled, invalid, both sizes (parity) -->
     <select class="select" id="se-default">
-      <option>Choose…</option>
-      <option>One</option>
+      <option value="" selected>Choose…</option>
+      <option value="one">One</option>
     </select>
     <select class="select" id="se-disabled" disabled style="margin-top:1rem;">
       <option>Disabled</option>

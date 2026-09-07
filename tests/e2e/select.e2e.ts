@@ -48,4 +48,28 @@ await cssSmoke('select', [
       { selector: '#se-invalid', prop: 'border-top-color' },
     ],
   },
+  {
+    // issue #32: the empty option must stay selectable so it doubles as the
+    // clear/reset entry — select a value, then select the placeholder again
+    label: 'placeholder is selectable and clears a made selection (issue #32)',
+    run: async (page) => {
+      const disabled = await page.$eval('#se-default option[value=""]', (el) => (el as HTMLOptionElement).disabled);
+      assert.equal(disabled, false, 'placeholder option must not be disabled');
+      // value color != placeholder color (the :has(> option[value=""]:checked) rule)
+      const colorOf = (value: string) =>
+        page.evaluate((v) => {
+          const s = document.querySelector('#se-default') as HTMLSelectElement;
+          s.value = v;
+          return getComputedStyle(s).color;
+        }, value);
+      const placeholderColor = await colorOf('');
+      const valueColor = await colorOf('one');
+      assert.notEqual(placeholderColor, valueColor, 'placeholder renders muted, value in foreground');
+      // and the box really clears: value back to '' after re-choosing it
+      await page.selectOption('#se-default', 'one');
+      await page.selectOption('#se-default', '');
+      const cleared = await page.$eval('#se-default', (el) => (el as HTMLSelectElement).value);
+      assert.equal(cleared, '', 're-choosing the empty option empties the select');
+    },
+  },
 ]);

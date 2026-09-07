@@ -106,6 +106,32 @@ try {
     await expectOpen(page, 'card', [false, true], 'card 2 open');
   });
 
+  await check('panel animates open (block-size interpolates 0 → auto, no snap)', async () => {
+    // Regression guard: the ::details-content transition needs BOTH the
+    // compound selector (`&::details-content`) and `interpolate-size:
+    // allow-keywords`; with either missing, block-size jumps 0 → final in one
+    // frame and mid-transition samples are all-or-nothing.
+    const samples = await page.evaluate(async () => {
+      const d = document.querySelector('#multi .accordion-item[data-item="1"]') as HTMLDetailsElement;
+      const size = () => parseFloat(getComputedStyle(d, '::details-content').blockSize);
+      d.open = true;
+      await new Promise((r) => setTimeout(r, 250));
+      const full = size();
+      d.open = false;
+      await new Promise((r) => setTimeout(r, 250));
+      d.open = true;
+      const out: number[] = [];
+      for (let i = 0; i < 5; i++) {
+        out.push(size());
+        await new Promise((r) => setTimeout(r, 25));
+      }
+      return { full, out };
+    });
+    assert.ok(samples.full > 0, 'open panel should have height');
+    const mid = samples.out.some((s) => s > 0 && s < samples.full - 1);
+    assert.ok(mid, `expected an intermediate height during opening, got [${samples.out}] of ${samples.full}`);
+  });
+
   await check('keyboard: Enter toggles the focused summary (native)', async () => {
     await page.focus('#multi .accordion-item[data-item="1"] > summary');
     await page.keyboard.press('Enter');

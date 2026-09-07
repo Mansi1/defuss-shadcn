@@ -337,20 +337,27 @@
 
     &amp;:last-child { border-bottom: none; }
 
-    /* -- Content animation (CSS-only) ------------------------- */
-    &amp; ::details-content {
+    /* -- Content animation (CSS-only) -------------------------
+       Two gotchas, both required for the panel to glide:
+       1. `::details-content` must attach to the compound (`&amp;::details-content`,
+          NOT `&amp; ::details-content` — the descendant form never matches, the
+          pseudo's originating element is the subject itself).
+       2. `block-size: auto` is a keyword — without interpolate-size the
+          0→auto pair is non-interpolable and the transition silently snaps. */
+    &amp;::details-content {
       block-size: 0;
       overflow-y: clip;
+      interpolate-size: allow-keywords;
       transition: block-size 200ms ease, content-visibility 200ms allow-discrete;
     }
 
-    &amp;[open] ::details-content {
+    &amp;[open]::details-content {
       block-size: auto;
     }
   }
 
   @starting-style {
-    .accordion-item[open] ::details-content {
+    .accordion-item[open]::details-content {
       block-size: 0;
     }
   }
@@ -402,7 +409,7 @@
    (REQUIRED for all components — AGENTS.md &quot;Accessibility CSS&quot;). */
 @media (prefers-reduced-motion: reduce) {
   @layer components {
-    .accordion-item ::details-content { transition: none; }
+    .accordion-item::details-content { transition: none; }
     .accordion-trigger { transition: none; }
   }
 }</code></pre>

@@ -4,19 +4,26 @@
     border-radius: var(--radius-lg);
     overflow: hidden;
 
-    & ::details-content {
+    /* Two gotchas, both required for the panel to glide:
+       1. `::details-content` must attach to the compound (`&::details-content`,
+          NOT `& ::details-content` — the descendant form never matches, the
+          pseudo's originating element is the subject itself).
+       2. `block-size: auto` is a keyword — without interpolate-size the
+          0→auto pair is non-interpolable and the transition silently snaps. */
+    &::details-content {
       block-size: 0;
       overflow-y: clip;
+      interpolate-size: allow-keywords;
       transition: block-size 200ms ease, content-visibility 200ms allow-discrete;
     }
 
-    &[open] ::details-content {
+    &[open]::details-content {
       block-size: auto;
     }
   }
 
   @starting-style {
-    .collapsible[open] ::details-content {
+    .collapsible[open]::details-content {
       block-size: 0;
     }
   }
@@ -80,6 +87,7 @@
     .collapsible *::before,
     .collapsible *::after,
     .collapsible::backdrop,
+    .collapsible::details-content,
     .collapsible-chevron,
     .collapsible-chevron *,
     .collapsible-chevron::before,

@@ -19,19 +19,26 @@
   .tree-branch {
     border: none;
 
-    & ::details-content {
+    /* Two gotchas, both required for the branch to glide:
+       1. `::details-content` must attach to the compound (`&::details-content`,
+          NOT `& ::details-content` — the descendant form never matches, the
+          pseudo's originating element is the subject itself).
+       2. `block-size: auto` is a keyword — without interpolate-size the
+          0→auto pair is non-interpolable and the transition silently snaps. */
+    &::details-content {
       block-size: 0;
       overflow-y: clip;
+      interpolate-size: allow-keywords;
       transition: block-size 200ms ease, content-visibility 200ms allow-discrete;
     }
 
-    &[open] ::details-content {
+    &[open]::details-content {
       block-size: auto;
     }
   }
 
   @starting-style {
-    .tree-branch[open] ::details-content {
+    .tree-branch[open]::details-content {
       block-size: 0;
     }
   }
@@ -120,6 +127,7 @@
     .tree-branch *::before,
     .tree-branch *::after,
     .tree-branch::backdrop,
+    .tree-branch::details-content,
     .tree-branch-trigger,
     .tree-branch-trigger *,
     .tree-branch-trigger::before,

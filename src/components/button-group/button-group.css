@@ -10,13 +10,17 @@
       margin-inline-start: -1px;
     }
 
-    /* Remove internal radii for connected appearance */
-    & > .btn:not(:first-child):not(:has(+ [role="separator"])) {
+    /* Remove internal radii for connected appearance. The orientation gate is
+       :where()-wrapped so these INLINE-corner rules only ever apply to
+       horizontal groups; ungated they also squared vertical buttons' corners
+       at a higher specificity than the vertical block below, leaving "Top"
+       with a rounded top-left but a square top-right (issue #13). */
+    &:where(:not([data-orientation="vertical"])) > .btn:not(:first-child):not(:has(+ [role="separator"])) {
       border-start-start-radius: 0;
       border-end-start-radius: 0;
     }
 
-    & > .btn:not(:last-child):not([role="separator"] + .btn) {
+    &:where(:not([data-orientation="vertical"])) > .btn:not(:last-child):not([role="separator"] + .btn) {
       border-start-end-radius: 0;
       border-end-end-radius: 0;
     }
@@ -61,26 +65,21 @@
         margin-top: -1px;
       }
 
+      /* Square exactly the BLOCK corners that touch a neighbour — a
+         non-first button squares its top edge, a non-last its bottom
+         edge; the base .btn radius keeps every outer corner rounded on
+         both sides. No per-corner "restore" overrides: the last block's
+         restores re-rounded a corner the previous block had just
+         squared, which (together with the ungated horizontal rules)
+         produced the asymmetric Top/Middle corners of issue #13. */
       & > .btn:not(:first-child) {
         border-start-start-radius: 0;
         border-start-end-radius: 0;
-        border-end-start-radius: var(--radius-md);
       }
 
       & > .btn:not(:last-child) {
         border-end-start-radius: 0;
         border-end-end-radius: 0;
-        border-start-end-radius: var(--radius-md);
-      }
-
-      & > .btn:first-child {
-        border-start-start-radius: var(--radius-md);
-        border-start-end-radius: var(--radius-md);
-      }
-
-      & > .btn:last-child {
-        border-end-start-radius: var(--radius-md);
-        border-end-end-radius: var(--radius-md);
       }
 
       & > [role="separator"] {

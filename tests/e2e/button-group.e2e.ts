@@ -48,4 +48,26 @@ await cssSmoke('button-group', [
     selector: '#bg-vertical',
     css: { 'flex-direction': 'column', 'align-items': 'stretch' },
   },
+  {
+    // issue #13: vertical corners must be symmetric — Top rounded on BOTH
+    // top corners, Bottom on both bottom, middle fully square
+    label: 'vertical group corners are symmetric top/bottom (issue #13)',
+    run: async (page) => {
+      const corners = await page.evaluate(() => {
+        const c = (id: string) => {
+          const s = getComputedStyle(document.getElementById(id)!);
+          return [
+            s.borderTopLeftRadius,
+            s.borderTopRightRadius,
+            s.borderBottomRightRadius,
+            s.borderBottomLeftRadius,
+          ];
+        };
+        return { top: c('bg-v-top'), mid: c('bg-v-mid'), bottom: c('bg-v-bottom') };
+      });
+      assert.deepEqual(corners.top, ['8px', '8px', '0px', '0px'], 'Top rounded on both top corners');
+      assert.deepEqual(corners.mid, ['0px', '0px', '0px', '0px'], 'Middle fully square');
+      assert.deepEqual(corners.bottom, ['0px', '0px', '8px', '8px'], 'Bottom rounded on both bottom corners');
+    },
+  },
 ]);

@@ -9,7 +9,7 @@
 [![TypeScript definitions](https://img.shields.io/npm/types/defuss-shadcn.svg)](https://www.npmjs.com/package/defuss-shadcn)
 [![Socket Badge](https://badge.socket.dev/npm/package/defuss-shadcn/latest)](https://socket.dev/npm/package/defuss-shadcn)
 
-**A UI component system that scales with AI.** Themeable components built on semantic HTML, modern CSS, and vanilla JavaScript. No framework. No build step for consumers — `dist/` is committed and ready to use as-is. The simplest possible foundation for AI-driven prototyping.
+**A UI component system that scales with _local_ AI.** Themeable components built on semantic HTML, modern CSS, and vanilla JavaScript. No framework. No build step for consumers — `dist/` is committed and ready to use as-is. The simplest possible foundation for AI-driven prototyping.
 
 41 of 68 components need no JavaScript — native HTML and modern CSS cover them entirely.
 

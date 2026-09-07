@@ -159,6 +159,7 @@
 
             <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Notes</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Animation uses CSS-only enter via <code>@starting-style</code> and exit via <code>transition</code> + <code>allow-discrete</code>.</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• While the dialog is modal, <code>html:has(dialog.dialog:modal)</code> sets <code>overflow: hidden</code> + <code>scrollbar-gutter: stable</code> — the page behind cannot scroll and its position is preserved for when the dialog closes (no JS scroll-lock).</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• The selector is <code>dialog.dialog</code> (element + class) to avoid styling native <code>&lt;dialog&gt;</code> elements used elsewhere.</p>
             <p class="text-muted-foreground" style="margin:0 0 0;">• For forms inside dialogs, use the <code>dialog-body</code> wrapper for the form content.</p>
           </div>
@@ -315,6 +316,18 @@
       background: oklch(0 0 0 / 0);
       backdrop-filter: blur(0px);
     }
+  }
+
+  /* -- Scroll lock ------------------------------------------- */
+  /* While the dialog is modal the page behind must stay put — closing
+     returns you to exactly the scroll offset you had. `:modal` matches only
+     while opened via showModal(); overflow:hidden freezes the viewport
+     without losing the scroll position (no JS position:fixed hack), and
+     scrollbar-gutter:stable keeps the scrollbar's space reserved so its
+     removal can't shift the layout underneath. */
+  html:has(dialog.dialog:modal) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
   }
 
   /* -- Content sections ------------------------------------- */

@@ -108,6 +108,14 @@
     }
   }
 
+  /* -- Scroll lock ------------------------------------------- */
+  /* Page behind stays put while the lightbox is modal (see dialog.css):
+     `:modal` + overflow:hidden freezes the viewport at its current offset. */
+  html:has(dialog.image-lightbox:modal) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+
   .image-lightbox-content {
     display: flex;
     align-items: center;

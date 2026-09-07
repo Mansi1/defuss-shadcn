@@ -219,6 +219,40 @@ try {
     assert.deepEqual(reg.states, ['default', 'open']);
     assert.ok(reg.dollarWorks, 'globalThis.$ query alias missing');
   });
+
+  // -- Scroll lock (documented in skill Notes: page behind stays put) --------
+  await check('page behind the modal sheet stays put; position restored on close', async () => {
+    await page.evaluate(() => {
+      // blur the trigger still focused from the previous check — its
+      // async focus-restore scroll-into-view would race our measurement
+      (document.activeElement as HTMLElement | null)?.blur();
+      window.scrollTo(0, 400);
+    });
+    const before = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.ok(before > 0, 'fixture page is scrollable');
+    // setState + fixed settle (not the open() transition-dance: resolving it
+    // mid-transition raced with the wheel and reset the scroll read)
+    await setState(page, 'sheet-right', 'open');
+    await page.waitForTimeout(450);
+    // wheel over the backdrop and over the docked sheet itself
+    await page.mouse.move(2, 2);
+    await page.mouse.wheel(0, 500);
+    await page.mouse.move(1000, 360);
+    await page.mouse.wheel(0, 500);
+    await page.waitForTimeout(100);
+    const during = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.equal(during, before, 'page must not scroll while the sheet is modal');
+    await setState(page, 'sheet-right', 'default');
+    const after = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.equal(after, before, 'scroll position preserved after close');
+    await page.waitForTimeout(350); // exit transition (allow-discrete keeps it visible 300ms)
+    await page.mouse.move(400, 360); // left of the docked sheet's column
+    await page.mouse.wheel(0, 200);
+    await page.waitForTimeout(100);
+    const scrolled = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.ok(scrolled > before, 'page is scrollable again after close');
+    await page.evaluate(() => window.scrollTo(0, 0)); // leave a clean viewport
+  });
 } finally {
   await browser.close();
   server.stop();

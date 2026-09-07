@@ -142,6 +142,33 @@ try {
     await page.waitForFunction(() => !document.querySelector('.image-lightbox')!.matches(':open'));
   });
 
+  // -- Scroll lock (documented in skill Notes: page behind stays put) --------
+  await check('page behind the lightbox stays put; position restored on close', async () => {
+    await page.evaluate(() => window.scrollTo(0, 400));
+    const before = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.ok(before > 0, 'fixture page is scrollable');
+    await page.click('#im-preview img');
+    await page.waitForFunction(() => document.querySelector('.image-lightbox')?.matches(':modal'));
+    // wheel over the fullscreen lightbox — must not scroll the page behind
+    await page.mouse.move(640, 360);
+    await page.mouse.wheel(0, 500);
+    await page.waitForTimeout(100);
+    const during = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    // close FIRST (guarded) — a failed assert must not leave the modal open
+    // and cascade into the click-based checks below
+    await page.click('.image-lightbox [data-action="close"]');
+    await page.waitForFunction(() => !document.querySelector('.image-lightbox')!.matches(':open'));
+    assert.equal(during, before, 'page must not scroll while the lightbox is modal');
+    const after = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.equal(after, before, 'scroll position preserved after close');
+    await page.mouse.move(640, 360);
+    await page.mouse.wheel(0, 200);
+    await page.waitForTimeout(100);
+    const scrolled = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.ok(scrolled > before, 'page is scrollable again after close');
+    await page.evaluate(() => window.scrollTo(0, 0)); // leave a clean viewport
+  });
+
   await check('broken image cannot be previewed (error guard)', async () => {
     // #im-broken also has data-preview, but its errored <img> must block the
     // lightbox; click the figure itself (a broken img may be 0×0/unactionable)

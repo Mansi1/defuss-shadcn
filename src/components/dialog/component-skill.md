@@ -114,5 +114,6 @@ Requires minimal JavaScript — only for trigger wiring and backdrop-click-to-cl
 ## Notes
 
 - Animation uses CSS-only enter via `@starting-style` and exit via `transition` + `allow-discrete`.
+- While the dialog is modal, `html:has(dialog.dialog:modal)` sets `overflow: hidden` + `scrollbar-gutter: stable` — the page behind cannot scroll and its position is preserved for when the dialog closes (no JS scroll-lock).
 - The selector is `dialog.dialog` (element + class) to avoid styling native `<dialog>` elements used elsewhere.
 - For forms inside dialogs, use the `dialog-body` wrapper for the form content.

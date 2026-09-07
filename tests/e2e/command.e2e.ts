@@ -130,6 +130,26 @@ try {
     assert.deepEqual(reg.states, ['default', 'open']);
     assert.ok(reg.dollarWorks, 'globalThis.$ query alias missing');
   });
+
+  // -- Scroll lock (documented in skill Notes: page behind stays put) --------
+  await check('page behind the modal palette stays put; position restored on close', async () => {
+    await page.evaluate(() => window.scrollTo(0, 400));
+    const before = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.ok(before > 0, 'fixture page is scrollable');
+    await setState(page, 'open');
+    // wheel over the backdrop corner and over the palette (top: 15%)
+    await page.mouse.move(2, 2);
+    await page.mouse.wheel(0, 500);
+    await page.mouse.move(640, 150);
+    await page.mouse.wheel(0, 300);
+    await page.waitForTimeout(100);
+    const during = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.equal(during, before, 'page must not scroll while the palette is modal');
+    await setState(page, 'default');
+    const after = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.equal(after, before, 'scroll position preserved after close');
+    await page.evaluate(() => window.scrollTo(0, 0)); // leave a clean viewport
+  });
 } finally {
   await browser.close();
   server.stop();

@@ -115,6 +115,31 @@ try {
     assert.equal(await isOpen(page), false, 'native Escape-to-close must still work');
   });
 
+  // -- Scroll lock (documented in skill Notes: page behind stays put) --------
+  await check('page behind the modal stays put; position restored on close', async () => {
+    await page.evaluate(() => window.scrollTo(0, 400));
+    const before = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.ok(before > 0, 'fixture page is scrollable');
+    await setState(page, 'open');
+    // wheel over the backdrop corner and over the dialog box — neither may
+    // move the page behind (the bug this guards: page scrolled ~600px here)
+    await page.mouse.move(2, 2);
+    await page.mouse.wheel(0, 500);
+    await page.mouse.move(640, 360);
+    await page.mouse.wheel(0, 500);
+    await page.waitForTimeout(100);
+    const during = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.equal(during, before, 'page must not scroll while the dialog is modal');
+    await setState(page, 'default');
+    const after = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.equal(after, before, 'scroll position preserved after close');
+    await page.mouse.move(640, 360);
+    await page.mouse.wheel(0, 200);
+    await page.waitForTimeout(100);
+    const scrolled = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.ok(scrolled > before, 'page is scrollable again after close');
+  });
+
   // -- Sizes (documented in dialog.html + skill: sm/lg/xl/full) --------------
   // max-width from dialog.css; width is calc(100vw - 2rem) so the cap binds.
   const sizeExpect: Record<string, number> = { 'size-sm': 24, 'size-lg': 32, 'size-xl': 40, 'size-full': 0 }; // rem; 0 = no cap below viewport

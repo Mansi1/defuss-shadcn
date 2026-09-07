@@ -122,6 +122,14 @@
     }
   }
 
+  /* -- Scroll lock ------------------------------------------- */
+  /* Page behind stays put while a sheet is modal (see dialog.css):
+     `:modal` + overflow:hidden freezes the viewport at its current offset. */
+  html:has(dialog.sheet:modal) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+
   /* -- Content sections -------------------------------------- */
   .sheet-content     { padding: 1.5rem; position: relative; }
 

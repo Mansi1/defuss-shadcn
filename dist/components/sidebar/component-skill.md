@@ -126,7 +126,7 @@ The registry global is `_defussShadcn.sidebarApi` / `_defussShadcn.sidebarStates
 
 ## Notes
 
-- **Mobile**: Desktop sidebar hidden below 768px. Use `<dialog class="sidebar-mobile">` for slide-in sheet.
+- **Mobile**: Desktop sidebar hidden below 768px. Use `<dialog class="sidebar-mobile">` for slide-in sheet. While it is modal, `html:has(.sidebar-mobile:modal)` sets `overflow: hidden` + `scrollbar-gutter: stable` — the page behind cannot scroll and keeps its position (no JS scroll-lock).
 - **Collapsible groups**: `<details class="sidebar-group">` — native toggle, no JS.
 - **Submenus**: `<details class="sidebar-submenu">` for nested nav with left border.
 - **Badges**: `<span class="sidebar-badge">` for notification counts.

@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="/dist/theme/default-semantic-tokens.css" />
     <link rel="stylesheet" href="/dist/components/image/image.css" />
   </head>
-  <body style="padding:2rem;display:flex;flex-direction:column;gap:1.5rem;align-items:flex-start;">
+  <!-- min-height makes the document scrollable so the scroll-lock behavior
+       (page behind a modal lightbox must stay put) is observable. -->
+  <body style="padding:2rem;min-height:250vh;display:flex;flex-direction:column;gap:1.5rem;align-items:flex-start;">
     <!-- mirrors the doc page: plain figure, caption, ratio, fallback, preview.
          Images use data: URIs so loads are deterministic and offline. -->
     <figure class="image" id="im-loaded" style="max-width:320px;">

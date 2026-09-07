@@ -50,6 +50,14 @@
     }
   }
 
+  /* -- Scroll lock ------------------------------------------- */
+  /* Page behind stays put while the alert is modal (see dialog.css):
+     `:modal` + overflow:hidden freezes the viewport at its current offset. */
+  html:has(dialog.alert-dialog:modal) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+
   .alert-dialog-content {
     padding: 1.5rem;
   }

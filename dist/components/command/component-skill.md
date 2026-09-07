@@ -109,3 +109,4 @@ The api is bound per palette dialog; the registry global is
 - The dialog uses `showModal()` — focus is trapped inside and Escape closes it natively.
 - On close, the search input is cleared and all items are restored.
 - No JavaScript positioning is needed — the dialog uses CSS `position: fixed` with `top: 15%`.
+- While the palette is modal, `html:has(dialog.command:modal)` sets `overflow: hidden` + `scrollbar-gutter: stable` — the page behind cannot scroll and its position is preserved for when the palette closes (no JS scroll-lock).

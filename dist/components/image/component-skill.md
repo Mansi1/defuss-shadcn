@@ -144,6 +144,7 @@ The registry global is `_defussShadcn.imageApi` / `_defussShadcn.imageStates`.
 - Use `loading="lazy"` on images below the fold for performance.
 - Lightbox supports keyboard: Escape closes, Tab navigates controls.
 - Multiple images with `data-preview` share a single dialog instance.
+- While the lightbox is modal, `html:has(dialog.image-lightbox:modal)` sets `overflow: hidden` + `scrollbar-gutter: stable` — the page behind cannot scroll and its position is preserved for when the lightbox closes (no JS scroll-lock).
 # Image
 
 ## Native basis

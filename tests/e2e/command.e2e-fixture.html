@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="/dist/components/button/button.css" />
     <link rel="stylesheet" href="/dist/components/command/command.css" />
   </head>
-  <body style="padding:2rem;">
+  <!-- min-height makes the document scrollable so the scroll-lock behavior
+       (page behind a modal palette must stay put) is observable. -->
+  <body style="padding:2rem;min-height:250vh;">
     <!-- mirrors the doc page demo -->
     <button class="btn" data-variant="outline" data-command-trigger="demo-cmd">Open Command Menu</button>
     <dialog id="demo-cmd" class="command" role="dialog" aria-modal="true" aria-label="Command menu">

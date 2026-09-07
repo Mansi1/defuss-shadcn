@@ -123,6 +123,7 @@ The api is bound per sheet element; the registry global is
 
 ## Notes
 
+- While a sheet is modal, `html:has(dialog.sheet:modal)` sets `overflow: hidden` + `scrollbar-gutter: stable` — the page behind cannot scroll and its position is preserved for when the sheet closes (no JS scroll-lock).
 - Right/left sheets have a fixed width of `24rem` with `max-width: 100vw` for small screens.
 - Top/bottom sheets are full width with `height: auto` — they size to their content. Their `.sheet-content` column caps at `48rem` and centers, so content doesn't stretch to the viewport edges.
 - The selector is `dialog.sheet` (element + class) to avoid conflicts with `dialog.dialog`.

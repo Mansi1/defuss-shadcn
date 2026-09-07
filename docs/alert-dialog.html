@@ -147,7 +147,8 @@
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>aria-labelledby</code> and <code>aria-describedby</code> link to title and description</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• No backdrop click dismiss — user must make an explicit choice</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Escape key is disabled — user must use the action buttons</p>
-            <p class="text-muted-foreground" style="margin:0 0 0;">• Focus is trapped inside the dialog via native <code>showModal()</code></p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Focus is trapped inside the dialog via native <code>showModal()</code></p>
+            <p class="text-muted-foreground" style="margin:0 0 0;">• While the alert is modal, <code>html:has(dialog.alert-dialog:modal)</code> sets <code>overflow: hidden</code> + <code>scrollbar-gutter: stable</code> — the page behind cannot scroll and its position is preserved for when the alert closes (no JS scroll-lock)</p>
           </div>
         </details>
       </div>
@@ -303,6 +304,14 @@
       background: oklch(0 0 0 / 0);
       backdrop-filter: blur(0px);
     }
+  }
+
+  /* -- Scroll lock ------------------------------------------- */
+  /* Page behind stays put while the alert is modal (see dialog.css):
+     `:modal` + overflow:hidden freezes the viewport at its current offset. */
+  html:has(dialog.alert-dialog:modal) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
   }
 
   .alert-dialog-content {

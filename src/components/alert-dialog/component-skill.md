@@ -62,3 +62,4 @@ The api is bound per dialog; the registry global is
 - No backdrop click dismiss — user must make an explicit choice
 - Escape key is disabled — user must use the action buttons
 - Focus is trapped inside the dialog via native `showModal()`
+- While the alert is modal, `html:has(dialog.alert-dialog:modal)` sets `overflow: hidden` + `scrollbar-gutter: stable` — the page behind cannot scroll and its position is preserved for when the alert closes (no JS scroll-lock).

@@ -147,7 +147,10 @@
             <p class="text-muted-foreground" style="margin:0 0 1.25rem;">• <code>data-highlighted</code></p>
 
             <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Wiring conventions</p>
-            <p class="text-muted-foreground" style="margin:0 0 1.25rem;">• <code>data-command-trigger</code> on any element — opens the component</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>data-command-trigger</code> on any element — opens the component</p>
+
+            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Notes</p>
+            <p class="text-muted-foreground" style="margin:0 0 0;">• While the palette is modal, <code>html:has(dialog.command:modal)</code> sets <code>overflow: hidden</code> + <code>scrollbar-gutter: stable</code> — the page behind cannot scroll and its position is preserved for when the palette closes (no JS scroll-lock).</p>
           </div>
         </details>
       </div>
@@ -237,6 +240,14 @@
   @starting-style {
     dialog.command[open] { opacity: 0; transform: scale(0.98); }
     dialog.command[open]::backdrop { background: oklch(0 0 0 / 0); }
+  }
+
+  /* -- Scroll lock ------------------------------------------- */
+  /* Page behind stays put while the palette is modal (see dialog.css):
+     `:modal` + overflow:hidden freezes the viewport at its current offset. */
+  html:has(dialog.command:modal) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
   }
 
   .command-input-wrapper {

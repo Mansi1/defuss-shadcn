@@ -138,7 +138,10 @@
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>data-preview</code> — enables click-to-preview lightbox</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>data-ratio</code> — values: <code>1/1</code>, <code>4/3</code>, <code>3/2</code>, <code>16/9</code>, <code>21/9</code>, <code>3/4</code></p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>data-fit</code> — values: <code>contain</code>, <code>fill</code>, <code>none</code></p>
-            <p class="text-muted-foreground" style="margin:0 0 0;">• <code>data-radius</code> — values: <code>none</code>, <code>sm</code>, <code>md</code>, <code>full</code></p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• <code>data-radius</code> — values: <code>none</code>, <code>sm</code>, <code>md</code>, <code>full</code></p>
+
+            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Notes</p>
+            <p class="text-muted-foreground" style="margin:0 0 0;">• While the lightbox is modal, <code>html:has(dialog.image-lightbox:modal)</code> sets <code>overflow: hidden</code> + <code>scrollbar-gutter: stable</code> — the page behind cannot scroll and its position is preserved for when the lightbox closes (no JS scroll-lock).</p>
           </div>
         </details>
       </div>
@@ -455,6 +458,14 @@
     dialog.image-lightbox[open]::backdrop {
       background: oklch(0 0 0 / 0);
     }
+  }
+
+  /* -- Scroll lock ------------------------------------------- */
+  /* Page behind stays put while the lightbox is modal (see dialog.css):
+     `:modal` + overflow:hidden freezes the viewport at its current offset. */
+  html:has(dialog.image-lightbox:modal) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
   }
 
   .image-lightbox-content {

@@ -82,6 +82,34 @@ try {
     assert.equal(focused, 'demo-alert-dialog-1', 'trigger must be refocused after close');
   });
 
+  // -- Scroll lock (documented in skill Notes: page behind stays put) --------
+  await check('page behind the modal stays put; position restored on close', async () => {
+    // real user flow: trigger is clicked while visible, so the position it
+    // leaves is the position close() must hand back (focus-restore then
+    // needs no scroll — the lock means the page never moved in between)
+    await page.click('[data-alert-dialog-trigger="demo-alert-dialog-1"]');
+    await page.waitForFunction(() => (document.querySelector('#demo-alert-dialog-1') as HTMLDialogElement).open);
+    const before = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    // wheel over the backdrop corner and over the (centered) dialog box
+    await page.mouse.move(2, 2);
+    await page.mouse.wheel(0, 500);
+    await page.mouse.move(640, 300);
+    await page.mouse.wheel(0, 500);
+    await page.waitForTimeout(100);
+    const during = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.equal(during, before, 'page must not scroll while the alert is modal');
+    await page.click('[data-alert-dialog-close]'); // Cancel
+    await page.waitForFunction(() => !(document.querySelector('#demo-alert-dialog-1') as HTMLDialogElement).open);
+    await page.waitForTimeout(350); // exit transition (allow-discrete keeps it visible 200ms)
+    const after = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.equal(after, before, 'scroll position preserved after close');
+    await page.mouse.move(640, 300);
+    await page.mouse.wheel(0, 200);
+    await page.waitForTimeout(100);
+    const scrolled = await page.evaluate(() => document.scrollingElement!.scrollTop);
+    assert.ok(scrolled > before, 'page is scrollable again after close');
+  });
+
   // -- State API (AGENTS.md "State API") -------------------------------------
   await check("state API: setState('open') opens modally; getState reports it", async () => {
     const before = await page.$eval('#demo-alert-dialog-1', (el) => (el as HTMLElement).api!.getState());

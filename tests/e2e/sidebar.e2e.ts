@@ -121,6 +121,37 @@ try {
     }
   });
 
+  // -- Scroll lock (documented in skill Notes: page behind stays put) --------
+  await check('page behind the mobile sheet stays put; position restored on close', async () => {
+    await page.setViewportSize({ width: 390, height: 800 }); // .sidebar-mobile is mobile-only
+    try {
+      await page.evaluate(() => window.scrollTo(0, 300));
+      const before = await page.evaluate(() => document.scrollingElement!.scrollTop);
+      assert.ok(before > 0, 'fixture page is scrollable at mobile width');
+      // JS click (not page.click): Playwright would scrollIntoView the trigger
+      // first, clobbering the 300px offset we just measured
+      await page.$eval('[data-sidebar-mobile="demo-mobile"]', (el) => (el as HTMLElement).click());
+      await page.waitForFunction(() => document.querySelector('#demo-mobile')!.matches(':modal'));
+      // wheel over the backdrop corner and over the sheet itself
+      await page.mouse.move(380, 2);
+      await page.mouse.wheel(0, 400);
+      await page.mouse.move(120, 400);
+      await page.mouse.wheel(0, 400);
+      await page.waitForTimeout(100);
+      const during = await page.evaluate(() => document.scrollingElement!.scrollTop);
+      // close FIRST (guarded) — a failed assert must not leave the modal open
+      // and cascade into the click-based checks below
+      await page.click('.sidebar-mobile-close');
+      await page.waitForFunction(() => !document.querySelector('#demo-mobile')!.matches(':open'));
+      assert.equal(during, before, 'page must not scroll while the mobile sheet is modal');
+      const after = await page.evaluate(() => document.scrollingElement!.scrollTop);
+      assert.equal(after, before, 'scroll position preserved after close');
+      await page.evaluate(() => window.scrollTo(0, 0)); // leave a clean viewport
+    } finally {
+      await page.setViewportSize({ width: 1280, height: 720 }); // restore, even on failure
+    }
+  });
+
   // -- State API (AGENTS.md "State API"), bound per sidebar ------------------
   const setState = (page: Page, state: string) =>
     page.$eval('#demo-sidebar', (el, s) => (el as HTMLElement).api!.setState(s), state);

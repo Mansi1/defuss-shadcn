@@ -31,6 +31,9 @@
 
     <div style="flex:1;position:relative;">
       <button data-sidebar-trigger="demo-sidebar" aria-label="Toggle sidebar">Toggle</button>
+      <!-- tall spacer keeps the document scrollable so the scroll-lock behavior
+           (page behind the mobile sheet must stay put) is observable -->
+      <div style="height:200vh"></div>
       <!-- documented data-side="right" variant: docks right of the content -->
       <button data-sidebar-trigger="demo-sidebar-right" aria-label="Toggle right sidebar">Toggle Right</button>
     </div>

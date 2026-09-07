@@ -18,6 +18,7 @@
     "e2e": "bun tests/e2e/run.ts",
     "typecheck": "tsc -p tsconfig.test.json --noEmit && tsc -p tsconfig.scripts.json --noEmit",
     "setup": "bun install && bunx playwright install",
+    "purge-cdn": "bun scripts/purge-cdn.ts",
     "push": "./scripts/push.sh",
     "deploy": "./scripts/deploy.sh",
     "deploy:minor": "./scripts/deploy.sh minor",

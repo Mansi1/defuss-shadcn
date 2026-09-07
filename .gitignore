@@ -18,3 +18,5 @@ coverage/
 tmp/
 
 issues/
+
+.playwright-mcp/

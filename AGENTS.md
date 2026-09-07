@@ -23,6 +23,11 @@ The consumer-facing system lives in `dist/` — **it is generated**: edit source
 Refresh it with `bun run docs` (`make build` does this automatically and `verify`
 fails if the mirror drifts). Never edit `docs/` directly — like `dist/`, it is
 deleted and rebuilt on every `bun run docs`.
+Because the docs pages load their assets from jsDelivr `@latest` (newest git tag),
+a fresh release keeps serving the **previous** release's CSS/JS until jsDelivr's
+cache expires (12h edge, 7d browser). After `bun run deploy`, run
+`bun run purge-cdn` (`make purge-cdn`) to force `@latest` to re-resolve to the
+new tag immediately.
 Never edit `dist/` directly; it is deleted and rebuilt on every build.
 
 ---
@@ -73,7 +78,8 @@ defuss-shadcn/
 │   ├── sync-css-snippets.ts           ← re-embed component CSS into doc pages after edits
 │   ├── sync-js-snippets.ts            ← re-embed component JS into doc pages after edits
 │   ├── push.sh                        ← commit + push dev → main (non-release)
-│   └── deploy.sh                      ← release: version bump, changelog, tag, GitHub release
+│   ├── deploy.sh                      ← release: version bump, changelog, tag, GitHub release
+│   └── purge-cdn.ts                   ← purge jsDelivr @latest cache for all dist assets (run after deploy)
 ├── tests/                             ← UI tests (Vitest browser mode + Playwright)
 │   ├── helpers.ts                     ← loads real doc pages in a same-origin iframe
 │   ├── ui.test.ts                     ← end-to-end tests of the actual site UI

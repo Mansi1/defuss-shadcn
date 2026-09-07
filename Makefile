@@ -2,7 +2,7 @@
 # KISS: every target delegates to package.json so there is one source of truth.
 
 .DEFAULT_GOAL := help
-.PHONY: help setup dev test test-run coverage e2e lint verify screenshots build docs
+.PHONY: help setup dev test test-run coverage e2e lint verify screenshots build docs purge-cdn
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z0-9_-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -34,6 +34,9 @@ typecheck: ## Strict tsc type-check of tests/ and scripts/ (no emit)
 
 docs: ## Build, then mirror dist/ → docs/ for GitHub Pages
 	bun run docs
+
+purge-cdn: ## Purge jsDelivr @latest cache for all dist assets (run after deploy)
+	bun run purge-cdn
 
 # Full pipeline: fast checks first, compile, refresh screenshots (the verify
 # gate requires them fresh vs. the new dist/), then gate + tests. Calls

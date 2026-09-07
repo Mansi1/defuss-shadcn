@@ -1,0 +1,71 @@
+import { join, relative } from 'node:path';
+import { walk } from './lib/audit.ts';
+import { CDN_BASE } from './lib/mirror.ts';
+
+/**
+ * Why: docs/ pages load their component assets from jsDelivr @latest (see
+ * lib/mirror.ts). jsDelivr resolves @latest to a git tag once and caches both
+ * the resolution and the files (s-maxage=43200 at the edge, max-age=604800 in
+ * browsers), so right after a release the deployed site can keep serving the
+ * PREVIOUS release's assets — a fixed bug stays live for up to 12h.
+ * This script purges every dist asset path so @latest re-resolves to the
+ * newest tag immediately. Run it after `bun run deploy` once the tag is
+ * pushed and GitHub Pages has republished.
+ */
+
+const ROOT = join(import.meta.dirname, '..');
+const DIST = join(ROOT, 'dist');
+const PURGE_BASE = CDN_BASE.replace('cdn.jsdelivr.net', 'purge.jsdelivr.net');
+
+const files = [...walk(join(DIST, 'components'), ['']), ...walk(join(DIST, 'theme'), [''])]
+  .map((f) => relative(DIST, f))
+  .filter((rel) => !rel.endsWith('.DS_Store'));
+
+if (files.length === 0) {
+  console.error('purge-cdn: no dist assets found — run `bun run build` first');
+  process.exit(1);
+}
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+async function purge(rel: string): Promise<'ok' | 'retry'> {
+  try {
+    const res = await fetch(`${PURGE_BASE}/${rel}`);
+    if (!res.ok) return 'retry';
+    const body = (await res.json()) as {
+      status?: string;
+      paths?: Record<string, { throttled?: boolean }>;
+    };
+    const entry = Object.values(body.paths ?? {})[0];
+    if (body.status !== 'finished' || entry?.throttled) return 'retry';
+    return 'ok';
+  } catch {
+    return 'retry';
+  }
+}
+
+// small worker pool: the purge API throttles aggressive clients
+const pending = [...files];
+const failed: string[] = [];
+
+async function worker() {
+  for (let rel = pending.pop(); rel; rel = pending.pop()) {
+    let done = false;
+    for (let attempt = 1; attempt <= 3 && !done; attempt++) {
+      if ((await purge(rel)) === 'ok') done = true;
+      else await sleep(1000 * attempt);
+    }
+    if (!done) failed.push(rel);
+    await sleep(150);
+  }
+}
+
+await Promise.all(Array.from({ length: 4 }, worker));
+
+if (failed.length > 0) {
+  console.error(`purge-cdn: ${failed.length}/${files.length} paths failed:`);
+  for (const rel of failed) console.error(`  ${rel}`);
+  process.exit(1);
+}
+
+console.log(`purge-cdn: ${files.length} dist asset paths purged from jsDelivr @latest`);

@@ -8,7 +8,8 @@ import { join } from 'node:path';
  * is generated from ARCH.md on every build (same class of artifact as
  * SKILL.md and the search index) and verify's drift gate fails when the two
  * diverge. Handles the small markdown subset ARCH.md uses: headings,
- * paragraphs, bullets, tables, fenced code, links, **bold**, `code`.
+ * paragraphs, bullets (incl. wrapped continuation lines), ordered lists,
+ * tables, fenced code, links, **bold**, *italic*, `code`.
  */
 
 const REPO_FILE_BASE = 'https://github.com/kyr0/defuss-shadcn/blob/main/';
@@ -24,14 +25,17 @@ const esc = (s: string) => s.replace(/&/g, '\u0026amp;').replace(/</g, '\u0026lt
 
 /** inline markdown → HTML. Input is raw text; output is escaped HTML. */
 function inline(s: string): string {
-  let out = esc(s);
-  out = out.replace(/`([^`]+)`/g, (_m, c) => `<code>${c}</code>`);
-  out = out.replace(/\*\*([^*]+)\*\*/g, (_m, c) => `<strong>${c}</strong>`);
+  const codes: string[] = [];
+  // code spans are held as placeholders first so *, ** and [] inside them stay literal
+  let out = esc(s).replace(/`([^`]+)`/g, (_m, c) => `\u0000${codes.push(`<code>${c}</code>`) - 1}\u0000`);
+  out = out.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'); // may wrap *italic*
+  out = out.replace(/\*([^*]+)\*/g, '<em>$1</em>');
   // [text](url): repo-relative link targets point at the GitHub source
   out = out.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, text, url) => {
     const href = /^(https?:|mailto:|#)/.test(url) ? url : REPO_FILE_BASE + url.replace(/^\.?\//, '');
     return `<a href="${href}">${text}</a>`;
   });
+  for (let i = 0; i < codes.length; i++) out = out.replaceAll(`\u0000${i}\u0000`, codes[i]);
   return out;
 }
 
@@ -41,13 +45,18 @@ export function archBodyHtml(md: string): string {
   const out: string[] = [];
   let para: string[] = [];
   let list: string[] = [];
+  let listOrdered = false;
   const flushPara = () => {
     if (para.length) out.push(`<p class="text-muted-foreground leading-relaxed">${inline(para.join(' '))}</p>`);
     para = [];
   };
   const flushList = () => {
-    if (list.length) out.push(`<ul class="docs-ul">\n${list.map((i) => `  <li>${inline(i)}</li>`).join('\n')}\n</ul>`);
-    list = [];
+    if (list.length) {
+      const tag = listOrdered ? 'ol' : 'ul';
+      const cls = listOrdered ? '' : ' class="docs-ul"';
+      out.push(`<${tag}${cls}>\n${list.map((i) => `  <li>${inline(i)}</li>`).join('\n')}\n</${tag}>`);
+      list = [];
+    }
   };
 
   for (let i = 0; i < lines.length; i++) {
@@ -101,18 +110,32 @@ export function archBodyHtml(md: string): string {
       );
       continue;
     }
-    const bullet = line.match(/^- (.+)$/);
+    const bullet = line.match(/^- (.+)$/) ?? line.match(/^\d+\. (.+)$/);
     if (bullet) {
       flushPara();
+      const ordered = /^\d/.test(line);
+      if (list.length && listOrdered !== ordered) flushList(); // ul ↔ ol switch
+      listOrdered = ordered;
       list.push(bullet[1]);
       continue;
     }
     if (line.trim() === '') {
       flushPara();
-      flushList();
+      if (list.length) {
+        // loose list: blank lines between items keep the list open
+        let j = i + 1;
+        while (j < lines.length && lines[j].trim() === '') j++;
+        const next = lines[j] ?? '';
+        const nextItem = /^- .+$/.test(next) || /^\d+\. .+$/.test(next);
+        if (!(nextItem && /^\d/.test(next) === listOrdered)) flushList();
+      }
       continue;
     }
-    list.length && flushList();
+    if (list.length) {
+      // markdown lazy continuation: a list item wrapped over multiple lines
+      list[list.length - 1] += ' ' + line.trim();
+      continue;
+    }
     para.push(line.trim());
   }
   flushPara();

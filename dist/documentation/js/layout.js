@@ -14,7 +14,7 @@
     // "version consistency" gate fails if it (or any other version literal in
     // this file) drifts from package.json — the footer once froze an old number
     // forever because it was a second, un-synchronised literal.
-    var SITE_VERSION = 'v0.8.1';
+    var SITE_VERSION = 'v0.8.2';
     /* -- Wide mode (must run before first paint, like dark mode) ---
        Strips the content max-width so wide layouts (the marketing blocks)
        render at full width. Persisted per-origin, same key discipline as

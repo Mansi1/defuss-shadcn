@@ -63,7 +63,7 @@ await cssSmoke('typography', [
     },
   },
   {
-    label: '.code is a mono chip on the muted surface (--radius-sm = 6px)',
+    label: '.inline-code is a mono chip on the muted surface (--radius-sm = 6px)',
     selector: '#ty-code',
     css: { 'font-family': /mono/, 'border-radius': '6px', padding: '3.2px 4.8px' },
   },

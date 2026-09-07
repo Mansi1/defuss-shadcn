@@ -72,7 +72,7 @@ Pure CSS — no JavaScript or ARIA required.
 
 ### Inline code
 ```html
-<code class="code">default-semantic-tokens.css</code>
+<code class="inline-code">default-semantic-tokens.css</code>
 ```
 
 ---
@@ -91,7 +91,7 @@ Pure CSS — no JavaScript or ARIA required.
 | `.small` | `<small>` or any | 0.875rem medium text, line-height 1 |
 | `.muted` | `<p>` or any | 0.875rem muted-foreground text |
 | `.blockquote` | `<blockquote>` | Italic block with inline-start border, hanging punctuation |
-| `.code` | `<code>` | Monospace inline code with muted background |
+| `.inline-code` | `<code>` | Monospace inline code with muted background |
 
 ---
 

@@ -19,9 +19,9 @@
   <!-- a small list, where the sizer is the real content height -->
   <div class="virtual-list" id="vl-small" aria-label="Fifty rows"></div>
 
-  <!-- sizes -->
-  <div class="virtual-list" id="vl-sm" data-size="sm" aria-label="Small rows"></div>
-  <div class="virtual-list" id="vl-lg" data-size="lg" aria-label="Large rows"></div>
+  <!-- row height comes from the custom property, not a size scale -->
+  <div class="virtual-list" id="vl-sm" style="--virtual-list-row-height:28px;" aria-label="Compact rows"></div>
+  <div class="virtual-list" id="vl-lg" style="--virtual-list-row-height:64px;" aria-label="Roomy rows"></div>
 
   <!-- grid: three items per row, tail row deliberately short (1_000_000 % 3 = 1) -->
   <div class="virtual-list" id="vl-grid" data-columns="3" style="--virtual-list-row-height:72px;" aria-label="Icon grid"></div>

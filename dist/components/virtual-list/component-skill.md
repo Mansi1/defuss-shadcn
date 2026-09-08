@@ -101,19 +101,11 @@ drawing empty tiles.
 | `data-count` | `.virtual-list` | Initial row count without calling `setData` (rows render as `Row N`) |
 | `data-columns` | `.virtual-list` | Items per row. Above 1 the list becomes a grid: `role="grid"`, rows of `.virtual-list-cell`, renderer called per cell |
 
-## Sizes
-
-| `data-size` | Row height |
-|-------------|-----------|
-| `sm` | 32px |
-| *(default)* | 40px |
-| `lg` | 56px |
-
 ## Custom properties
 
 | Property | Default | Purpose |
 |----------|---------|---------|
-| `--virtual-list-row-height` | `40px` | Row height. Every row is this tall — the maths depends on it |
+| `--virtual-list-row-height` | `40px` | Row height, and the only way to set it. Every row is this tall — the scroll maths reads this value. A grid tile wants a different height from a text row, so there is no fixed size scale |
 
 ---
 
@@ -153,7 +145,9 @@ The registry globals are `_defussShadcn.virtualListApi` and
 
 ## Notes
 - **Row height is uniform and must be known.** The scroll maths depends on it;
-  a row that renders taller than `--virtual-list-row-height` is clipped.
+  a row that renders taller than `--virtual-list-row-height` is clipped. Set it
+  per instance — there is deliberately no `data-size` scale, since the right
+  height depends on what a row holds.
 - **Very long lists are scaled, not clamped.** Browsers cap element height
   (Chrome around 33.5M px), so ten million 40px rows cannot have a true sizer.
   Past 15M px the sizer is capped and scroll positions are mapped onto the real

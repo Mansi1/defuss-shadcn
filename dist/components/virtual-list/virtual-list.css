@@ -23,15 +23,12 @@
       outline: 2px solid var(--ring);
       outline-offset: 2px;
     }
-
-    &[data-size="sm"] {
-      --virtual-list-row-height: 32px;
-    }
-
-    &[data-size="lg"] {
-      --virtual-list-row-height: 56px;
-    }
   }
+
+  /* Row height is set with --virtual-list-row-height rather than a data-size
+     scale: it is a continuous measurement the scroll maths reads, and every
+     real use picks its own (a grid tile needs a different height from a text
+     row). A three-value scale would only get in the way. */
 
   /* Height stands in for every row that could exist, so the scrollbar has the
      right length and feel. */
@@ -110,6 +107,16 @@
       width: 1.25rem;
       height: 1.25rem;
       color: var(--foreground);
+    }
+
+    /* Composed .image keeps its own aspect ratio and object-fit; the cell only
+       says how wide it may be. Fixed dimensions matter here because a recycled
+       cell swaps the src rather than the element — without them every scroll
+       frame would reflow the row as each new picture arrives. */
+    & > .image {
+      width: 2.75rem;
+      flex-shrink: 0;
+      background: var(--muted);
     }
 
     &:hover {

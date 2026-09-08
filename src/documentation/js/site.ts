@@ -112,14 +112,24 @@
 
     var grid = document.getElementById('demo-vl-grid');
     if (grid) {
-      var glyphs = ['📁', '📄', '🖼️', '🎵', '🎬', '📦', '🔧', '🌍'];
       ns.virtualList.setData(grid, 1000000, function (cell, index) {
         cell.textContent = '';
-        var glyph = document.createElement('span');
-        glyph.textContent = glyphs[index % glyphs.length];
+        // compose the image component rather than a bare <img>: the figure
+        // carries the square ratio, the cover fit and the theme radius
+        var figure = document.createElement('figure');
+        figure.className = 'image';
+        figure.dataset.ratio = '1/1';
+        var img = document.createElement('img');
+        // seeded, so the same index always shows the same picture — scroll away
+        // and back and the recycled cell recovers its own image
+        img.src = 'https://picsum.photos/seed/' + index + '/88/88';
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.alt = '';
+        figure.appendChild(img);
         var label = document.createElement('span');
-        label.textContent = 'Icon ' + (index + 1).toLocaleString();
-        cell.append(glyph, label);
+        label.textContent = 'Photo ' + (index + 1).toLocaleString();
+        cell.append(figure, label);
       });
     }
 

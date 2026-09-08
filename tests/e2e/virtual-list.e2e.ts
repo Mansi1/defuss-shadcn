@@ -253,13 +253,23 @@ try {
     assert.equal(tail.hidden, 2, 'the two unused cells must be hidden, not blank tiles');
   });
 
-  await check('sizes map to distinct row heights', async () => {
-    const heights = await page.evaluate(() =>
-      ['#vl-sm', '#vl-lg'].map(
-        (s) => getComputedStyle(document.querySelector(`${s} .virtual-list-row`)!).height,
-      ),
+  await check('--virtual-list-row-height drives the row height and the maths', async () => {
+    const m = await page.evaluate(() =>
+      ['#vl-sm', '#vl-lg'].map((s) => {
+        const list = document.querySelector(s)!;
+        return {
+          rowPx: getComputedStyle(list.querySelector('.virtual-list-row')!).height,
+          sizerPx: parseFloat((list.querySelector('.virtual-list-sizer') as HTMLElement).style.height),
+        };
+      }),
     );
-    assert.notEqual(heights[0], heights[1], `sm and lg rows should differ, both ${heights[0]}`);
+    assert.equal(m[0].rowPx, '28px', `compact rows should be 28px, got ${m[0].rowPx}`);
+    assert.equal(m[1].rowPx, '64px', `roomy rows should be 64px, got ${m[1].rowPx}`);
+    // the property is not cosmetic: the scrollable extent is derived from it
+    assert.ok(
+      m[1].sizerPx > m[0].sizerPx,
+      `taller rows must produce a taller sizer, got ${m[0].sizerPx} and ${m[1].sizerPx}`,
+    );
   });
 } finally {
   await browser.close();

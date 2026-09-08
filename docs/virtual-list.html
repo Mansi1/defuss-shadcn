@@ -138,10 +138,9 @@
               <code>.virtual-list-row-meta</code>
             </div>
 
-            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Sizes (data-size)</p>
+            <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Custom properties</p>
             <div style="display:grid;grid-template-columns:auto 1fr;gap:0.25rem 1rem;margin-bottom:1.25rem;">
-              <code>sm</code><span class="text-muted-foreground">32px rows</span>
-              <code>lg</code><span class="text-muted-foreground">56px rows</span>
+              <code>--virtual-list-row-height</code><span class="text-muted-foreground">Row height (default 40px) — the value the scroll maths reads</span>
             </div>
 
             <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.8125rem;font-family:var(--font-mono);">Accessibility</p>
@@ -185,12 +184,12 @@ virtualList.setData(document.getElementById('results'), 10_000_000, (row, index)
         </div>
 
         <!-- Sizes -->
-        <p class="text-sm font-medium mb-2 mt-8">Sizes</p>
-        <p class="text-xs text-muted-foreground mb-3">Row height comes from <code>data-size</code>. Every row in a list is the same height — the scroll maths depends on it.</p>
+        <p class="text-sm font-medium mb-2 mt-8">Row Height</p>
+        <p class="text-xs text-muted-foreground mb-3">Set <code>--virtual-list-row-height</code> per instance. Every row in a list is that tall — the scroll maths reads the value, so there is no fixed size scale to pick from.</p>
         <div class="preview">
           <div style="display:flex;gap:1rem;flex-wrap:wrap;width:100%;justify-content:center;">
-            <div class="virtual-list" id="demo-vl-sm" data-size="sm" aria-label="Small rows" style="height:12rem;width:13rem;"></div>
-            <div class="virtual-list" id="demo-vl-lg" data-size="lg" aria-label="Large rows" style="height:12rem;width:13rem;"></div>
+            <div class="virtual-list" id="demo-vl-sm" aria-label="Compact rows" style="--virtual-list-row-height:28px;height:12rem;width:13rem;"></div>
+            <div class="virtual-list" id="demo-vl-lg" aria-label="Roomy rows" style="--virtual-list-row-height:64px;height:12rem;width:13rem;"></div>
           </div>
         </div>
         <div style="position:relative;margin-top:0.5rem;">
@@ -198,8 +197,10 @@ virtualList.setData(document.getElementById('results'), 10_000_000, (row, index)
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
             Copy
           </button>
-          <pre><code class="language-markup">&lt;div class=&quot;virtual-list&quot; data-size=&quot;sm&quot; aria-label=&quot;Small rows&quot; style=&quot;height:12rem;&quot;&gt;&lt;/div&gt;
-&lt;div class=&quot;virtual-list&quot; data-size=&quot;lg&quot; aria-label=&quot;Large rows&quot; style=&quot;height:12rem;&quot;&gt;&lt;/div&gt;</code></pre>
+          <pre><code class="language-markup">&lt;div class=&quot;virtual-list&quot; aria-label=&quot;Compact rows&quot;
+     style=&quot;--virtual-list-row-height: 28px; height: 12rem;&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;virtual-list&quot; aria-label=&quot;Roomy rows&quot;
+     style=&quot;--virtual-list-row-height: 64px; height: 12rem;&quot;&gt;&lt;/div&gt;</code></pre>
         </div>
 
         <!-- Jump to a row -->
@@ -225,17 +226,17 @@ virtualList.setData(document.getElementById('results'), 10_000_000, (row, index)
 
         <!-- Grid -->
         <p class="text-sm font-medium mb-2 mt-8">Grid</p>
-        <p class="text-xs text-muted-foreground mb-3">Add <code>data-columns</code> and the renderer is called once per <em>cell</em> instead of once per row — a virtualized grid of a million icons. Give the row enough height for a whole tile.</p>
+        <p class="text-xs text-muted-foreground mb-3">Add <code>data-columns</code> and the renderer is called once per <em>cell</em> instead of once per row — a virtualized grid of a million photos, each loaded only while its cell is on screen. Give the row enough height for a whole tile.</p>
         <div class="preview">
-          <div class="virtual-list" id="demo-vl-grid" data-columns="3" style="--virtual-list-row-height:76px;height:16rem;width:100%;max-width:28rem;" aria-label="Icon grid"></div>
+          <div class="virtual-list" id="demo-vl-grid" data-columns="3" style="--virtual-list-row-height:96px;height:18rem;width:100%;max-width:28rem;" aria-label="Photo grid"></div>
         </div>
         <div style="position:relative;margin-top:0.5rem;">
           <button class="copy-btn">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
             Copy
           </button>
-          <pre><code class="language-markup">&lt;div class=&quot;virtual-list&quot; data-columns=&quot;3&quot; aria-label=&quot;Icon grid&quot;
-     style=&quot;--virtual-list-row-height: 76px; height: 16rem;&quot;&gt;&lt;/div&gt;</code></pre>
+          <pre><code class="language-markup">&lt;div class=&quot;virtual-list&quot; data-columns=&quot;3&quot; aria-label=&quot;Photo grid&quot;
+     style=&quot;--virtual-list-row-height: 96px; height: 18rem;&quot;&gt;&lt;/div&gt;</code></pre>
         </div>
         <div style="position:relative;margin-top:0.5rem;">
           <button class="copy-btn">
@@ -245,11 +246,24 @@ virtualList.setData(document.getElementById('results'), 10_000_000, (row, index)
           <pre><code class="language-js">// with data-columns the callback receives a CELL and an ITEM index
 virtualList.setData(document.getElementById('grid'), 1_000_000, (cell, index) =&gt; {
   cell.textContent = '';
-  const glyph = document.createElement('span');
-  glyph.textContent = icons[index % icons.length];
+
+  // compose the image component: the figure carries the square ratio,
+  // the cover fit and the theme radius
+  const figure = document.createElement('figure');
+  figure.className = 'image';
+  figure.dataset.ratio = '1/1';
+
+  const img = document.createElement('img');
+  // seeded: the same index always yields the same picture, so a recycled
+  // cell recovers its own image when you scroll back
+  img.src = `https://picsum.photos/seed/${index}/88/88`;
+  img.loading = 'lazy';
+  img.alt = '';
+  figure.appendChild(img);
+
   const label = document.createElement('span');
-  label.textContent = `Icon ${index + 1}`;
-  cell.append(glyph, label);
+  label.textContent = `Photo ${index + 1}`;
+  cell.append(figure, label);
 });</code></pre>
         </div>
 
@@ -320,15 +334,12 @@ list.api.getState();                                   // → { name, config }</
       outline: 2px solid var(--ring);
       outline-offset: 2px;
     }
-
-    &amp;[data-size=&quot;sm&quot;] {
-      --virtual-list-row-height: 32px;
-    }
-
-    &amp;[data-size=&quot;lg&quot;] {
-      --virtual-list-row-height: 56px;
-    }
   }
+
+  /* Row height is set with --virtual-list-row-height rather than a data-size
+     scale: it is a continuous measurement the scroll maths reads, and every
+     real use picks its own (a grid tile needs a different height from a text
+     row). A three-value scale would only get in the way. */
 
   /* Height stands in for every row that could exist, so the scrollbar has the
      right length and feel. */
@@ -407,6 +418,16 @@ list.api.getState();                                   // → { name, config }</
       width: 1.25rem;
       height: 1.25rem;
       color: var(--foreground);
+    }
+
+    /* Composed .image keeps its own aspect ratio and object-fit; the cell only
+       says how wide it may be. Fixed dimensions matter here because a recycled
+       cell swaps the src rather than the element — without them every scroll
+       frame would reflow the row as each new picture arrives. */
+    &amp; &gt; .image {
+      width: 2.75rem;
+      flex-shrink: 0;
+      background: var(--muted);
     }
 
     &amp;:hover {

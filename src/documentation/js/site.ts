@@ -84,6 +84,55 @@
     if (docs.updateFavicon) docs.updateFavicon();
   }
 
+  // -- Virtual list demos (virtual-list page only) ---------
+  // Lives here rather than in the page: the SPA router swaps main.innerHTML,
+  // and a <script> inserted that way never runs, so page-local demo code is
+  // dead on every navigation into the page. Same reason initTokenSwatches()
+  // lives here.
+  function initVirtualListDemos() {
+    var ns = globalThis._defussShadcn;
+    if (!ns || !ns.virtualList) return;
+    if (!document.getElementById('demo-virtual-list')) return; // not this page
+
+    var renderRow = function (row, index) {
+      row.textContent = '';
+      var label = document.createElement('span');
+      label.textContent = 'Item ' + (index + 1).toLocaleString();
+      var meta = document.createElement('span');
+      meta.className = 'virtual-list-row-meta';
+      meta.textContent = '#' + (index + 1).toLocaleString();
+      row.append(label, meta);
+    };
+
+    [['demo-virtual-list', 10000000], ['demo-vl-sm', 1000], ['demo-vl-lg', 1000], ['demo-vl-jump', 10000000]]
+      .forEach(function (pair) {
+        var el = document.getElementById(pair[0]);
+        if (el) ns.virtualList.setData(el, pair[1], renderRow);
+      });
+
+    var grid = document.getElementById('demo-vl-grid');
+    if (grid) {
+      var glyphs = ['📁', '📄', '🖼️', '🎵', '🎬', '📦', '🔧', '🌍'];
+      ns.virtualList.setData(grid, 1000000, function (cell, index) {
+        cell.textContent = '';
+        var glyph = document.createElement('span');
+        glyph.textContent = glyphs[index % glyphs.length];
+        var label = document.createElement('span');
+        label.textContent = 'Icon ' + (index + 1).toLocaleString();
+        cell.append(glyph, label);
+      });
+    }
+
+    document.querySelectorAll('[data-vl-jump]').forEach(function (btn) {
+      if (btn.dataset.vlInit) return;
+      btn.dataset.vlInit = '';
+      btn.addEventListener('click', function () {
+        var list = document.getElementById('demo-vl-jump');
+        if (list && list.api) list.api.setState('default', { index: Number(btn.dataset.vlJump) });
+      });
+    });
+  }
+
   // -- Token swatches (theming page only) ------------------
   function initTokenSwatches() {
     var swatchContainer = document.getElementById('swatch-container');
@@ -243,6 +292,9 @@
 
     // Token swatches
     initTokenSwatches();
+
+    // Virtual list demo data
+    initVirtualListDemos();
 
     // Code collapse/expand toggles
     initCodeCollapse();

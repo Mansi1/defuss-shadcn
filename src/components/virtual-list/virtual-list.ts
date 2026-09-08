@@ -214,7 +214,13 @@ function init() {
     list._renderRow = list._renderRow || defaultRenderRow;
     list._rowHeight =
       parseFloat(getComputedStyle(list).getPropertyValue('--virtual-list-row-height')) || 40;
-    list._count = parseInt(list.dataset.count || '0', 10) || 0;
+    // Data may arrive BEFORE this element is initialized: on SPA navigation the
+    // page's setup runs synchronously after the content swap, while this init
+    // is a MutationObserver callback that lands afterwards. Keep what setData
+    // stored — clobbering it here is what left a freshly navigated page empty.
+    if (typeof list._count !== 'number') {
+      list._count = parseInt(list.dataset.count || '0', 10) || 0;
+    }
 
     const cols = columnsOf(list);
     list.setAttribute('role', cols > 1 ? 'grid' : 'list');

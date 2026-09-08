@@ -387,7 +387,13 @@ function init() {
     list._renderRow = list._renderRow || defaultRenderRow;
     list._rowHeight =
       parseFloat(getComputedStyle(list).getPropertyValue('--virtual-list-row-height')) || 40;
-    list._count = parseInt(list.dataset.count || '0', 10) || 0;
+    // Data may arrive BEFORE this element is initialized: on SPA navigation the
+    // page's setup runs synchronously after the content swap, while this init
+    // is a MutationObserver callback that lands afterwards. Keep what setData
+    // stored — clobbering it here is what left a freshly navigated page empty.
+    if (typeof list._count !== 'number') {
+      list._count = parseInt(list.dataset.count || '0', 10) || 0;
+    }
 
     const cols = columnsOf(list);
     list.setAttribute('role', cols &gt; 1 ? 'grid' : 'list');
@@ -780,51 +786,6 @@ list.api.getState();                                   // → { name, config }</
           </div>
         </section>
 
-        <script type="module">
-          /* Doc-page demo data. Re-runs after SPA navigation via onPageReady. */
-          globalThis._defussShadcn.docs.onPageReady(function () {
-            var ns = globalThis._defussShadcn;
-            if (!ns.virtualList) return;
-            var renderRow = function (row, index) {
-              row.textContent = '';
-              var label = document.createElement('span');
-              label.textContent = 'Item ' + (index + 1).toLocaleString();
-              var meta = document.createElement('span');
-              meta.className = 'virtual-list-row-meta';
-              meta.textContent = '#' + (index + 1).toLocaleString();
-              row.append(label, meta);
-            };
-            [
-              ['demo-virtual-list', 10000000],
-              ['demo-vl-sm', 1000],
-              ['demo-vl-lg', 1000],
-              ['demo-vl-jump', 10000000],
-            ].forEach(function (pair) {
-              var el = document.getElementById(pair[0]);
-              if (el) ns.virtualList.setData(el, pair[1], renderRow);
-            });
-            var grid = document.getElementById('demo-vl-grid');
-            if (grid) {
-              var glyphs = ['📁', '📄', '🖼️', '🎵', '🎬', '📦', '🔧', '🌍'];
-              ns.virtualList.setData(grid, 1000000, function (cell, index) {
-                cell.textContent = '';
-                var glyph = document.createElement('span');
-                glyph.textContent = glyphs[index % glyphs.length];
-                var label = document.createElement('span');
-                label.textContent = 'Icon ' + (index + 1).toLocaleString();
-                cell.append(glyph, label);
-              });
-            }
-            document.querySelectorAll('[data-vl-jump]').forEach(function (btn) {
-              if (btn.dataset.vlInit) return;
-              btn.dataset.vlInit = '';
-              btn.addEventListener('click', function () {
-                var list = document.getElementById('demo-vl-jump');
-                if (list && list.api) list.api.setState('default', { index: Number(btn.dataset.vlJump) });
-              });
-            });
-          });
-        </script>
 
 
     </main>

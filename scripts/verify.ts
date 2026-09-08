@@ -15,6 +15,7 @@ import {
   SKILL_TEMPLATE_FILE,
 } from './lib/skill.ts';
 import { readmeCssOnlyProblems } from './lib/readme.ts';
+import { ariaDescribedByProblems, fieldDescriptionOwnerProblems, fieldFeatureProblems } from './lib/fields.ts';
 import { parseThemes, defaultTokenModes, sidebarContrastProblems, radiusConsistencyProblems } from './lib/contrast.ts';
 import { buildSkillText } from './lib/skill-files.ts';
 import { ARCH_OUTPUT_FILE, ARCH_TEMPLATE_FILE, buildArchPageText } from './lib/arch-page.ts';
@@ -433,6 +434,25 @@ check(
   'update component-skill.md (Variants/Sizes tables) and the doc page to cover what the CSS implements (AGENTS.md)',
 );
 
+// 15a. field-feature parity: a component CSS that styles `.field-*` helpers
+// ships that feature, so the skill and the doc page must describe it —
+// check 15 only tracks data-variant/data-size selectors, which field-heavy
+// components (e.g. form) often lack entirely. Pure string analysis in
+// scripts/lib/fields.ts (unit-tested in tests/fields.test.ts).
+const fieldProblems = fieldFeatureProblems(
+  componentDirs.map((c) => ({
+    name: c,
+    css: existsSync(join(COMPS, c, `${c}.css`)) ? readFileSync(join(COMPS, c, `${c}.css`), 'utf8') : '',
+    skill: existsSync(join(COMPS, c, 'component-skill.md')) ? readFileSync(join(COMPS, c, 'component-skill.md'), 'utf8') : '',
+    doc: docHtml.find(([p]) => p === `${c}.html`)?.[1] ?? '',
+  })),
+);
+check(
+  'field feature parity',
+  fieldProblems,
+  'a .field-* class styled in the component CSS must be documented in component-skill.md and the doc page (classes the feature ships with)',
+);
+
 // 15b. strict type-check of the tooling/test trees (bun run typecheck). The
 // e2e rollout is all test code — a type error must not survive to CI. ~0.3 s.
 // NOTE: tsc writes diagnostics to STDOUT — reading only stderr silently passed
@@ -600,12 +620,38 @@ check(
 // pattern; this gate keeps the other pages from drifting off it. linkedom
 // only sees live elements: escaped snippet markup is text, not DOM.
 const descProblems: string[] = [];
+// issue #18 second half: the wiring must also RESOLVE and sit on the right
+// element. One linkedom pass per page feeds both pure checkers from
+// scripts/lib/fields.ts (unit-tested in tests/fields.test.ts):
+//  - every aria-describedby token must match exactly one id on the page
+//    (dangling = silent hint loss, duplicate = unpredictable AT behavior)
+//  - every referenced .field-description/.field-error must be referenced by
+//    the field itself (input/select/textarea/fieldset), not a wrapper —
+//    aria-describedby on a <div> names nothing for the focused control.
+const resolveProblems: string[] = [];
 for (const [page, html] of docHtml) {
   const { document } = parseHTML(html);
-  const refs = new Set(
-    [...document.querySelectorAll('[aria-describedby]')]
-      .flatMap((el) => (el.getAttribute('aria-describedby') ?? '').split(/\s+/).filter(Boolean)),
+  const allRefs = [...document.querySelectorAll('[aria-describedby]')].map((el) => ({
+    owner: `${el.tagName.toLowerCase()}${el.id ? `#${el.id}` : ''}`,
+    tag: el.tagName.toLowerCase(),
+    tokens: (el.getAttribute('aria-describedby') ?? '').split(/\s+/).filter(Boolean),
+  }));
+  resolveProblems.push(
+    ...ariaDescribedByProblems(
+      page,
+      allRefs,
+      [...document.querySelectorAll('[id]')].map((el) => el.getAttribute('id')!).filter(Boolean),
+    ),
+    ...fieldDescriptionOwnerProblems(
+      page,
+      allRefs,
+      [...document.querySelectorAll('.field-description[id], .field-error[id]')].map((el) => ({
+        id: el.getAttribute('id')!,
+        cls: el.classList[0],
+      })),
+    ),
   );
+  const refs = new Set(allRefs.flatMap((r) => r.tokens));
   for (const el of document.querySelectorAll('.field-description, .field-error')) {
     const id = el.getAttribute('id');
     if (!id) descProblems.push(`${page}: a .${el.classList[0]} has no id for a control to reference`);
@@ -616,6 +662,11 @@ check(
   'field description wiring',
   descProblems,
   'give the description an id and point aria-describedby at it from the field/fieldset (see Input "With description")',
+);
+check(
+  'aria-describedby resolution',
+  resolveProblems,
+  'each aria-describedby token must match exactly one id on the page, on the input/select/textarea/fieldset itself (issue #18)',
 );
 
 // 21. link integrity in the shipped doc pages: every local href/src and

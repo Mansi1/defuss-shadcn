@@ -1,5 +1,6 @@
 ---
 name: Skeleton
+type: ATM
 why: Shimmering placeholder blocks shaped like the content that will arrive.
 when: Loading known layout without layout shift; unknown layout takes the spinner.
 where: dist/components/skeleton/skeleton.css

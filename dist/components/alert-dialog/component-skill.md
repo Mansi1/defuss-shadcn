@@ -1,5 +1,6 @@
 ---
 name: Alert Dialog
+type: MOL
 why: A <dialog> that demands an answer — Escape and backdrop clicks deliberately do not dismiss it, forcing an explicit confirm or cancel.
 when: Destructive or irreversible actions (delete, discard) that must be confirmed.
 where: dist/components/alert-dialog/alert-dialog.css + dist/components/alert-dialog/alert-dialog.js

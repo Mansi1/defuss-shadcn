@@ -1,5 +1,6 @@
 ---
 name: Textarea
+type: ATM
 why: Native textarea with field-sizing: content — auto-grows with zero JavaScript.
 when: Multi-line text input.
 where: dist/components/textarea/textarea.css

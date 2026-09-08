@@ -1,5 +1,6 @@
 ---
 name: Number Input
+type: ATM
 why: Input plus stepper buttons bound to native min/max/step and arrow-key behavior.
 when: Numeric values where nudging or a bounded range matters — quantity, price.
 where: dist/components/number-input/number-input.css + dist/components/number-input/number-input.js

@@ -1,5 +1,6 @@
 ---
 name: Progress
+type: ATM
 why: Native <progress value max> — semantics and rendering come free.
 when: Completion of a task with a known total; unknown total takes the spinner.
 where: dist/components/progress/progress.css

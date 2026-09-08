@@ -127,7 +127,7 @@
 
   <!-- -- SKILL.md index -- -->
   <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0 0 0.875rem;">The SKILL.md index</h2>
-  <p class="text-sm text-muted-foreground mb-5"><code>dist/SKILL.md</code> is the generated entry point of the whole system — integration instructions, the library's philosophy, a map of the <code>dist/</code> layout, and one index entry per component (why to use it, when to reach for it, which files ship it, and which states it supports). It is built on every build from <code>SKILL_tpl.md</code> plus each skill's frontmatter, so it can never drift from the skills it indexes.</p>
+  <p class="text-sm text-muted-foreground mb-5"><code>dist/SKILL.md</code> is the generated entry point of the whole system — integration instructions, the library's philosophy, a map of the <code>dist/</code> layout, and one index entry per component (its taxonomy type, why to use it, when to reach for it, which files ship it, and which states it supports). It is built on every build from <code>SKILL_tpl.md</code> plus each skill's frontmatter, so it can never drift from the skills it indexes.</p>
   <p class="text-sm text-muted-foreground mb-5"><strong>If you are an agent wiring this library into a project, point yourself at <a href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/SKILL.md"><code>dist/SKILL.md</code></a> first</strong> — it tells you what to include, which skill to read next, and where the state screenshots live (<code>screenshots/{light,dark}/{name}-{state}.png</code> in the source repo), so you can look up exactly what an "open modal" or "collapsed sidebar" should look like before you build it.</p>
   <div class="sep"></div>
 
@@ -137,7 +137,7 @@
 
   <div style="display:grid;grid-template-columns:auto 1fr;gap:0.5rem 1rem;margin-bottom:2.5rem;align-items:baseline;">
     <span style="font-weight:600;font-size:0.8125rem;">0. Frontmatter</span>
-    <span class="text-sm text-muted-foreground">Machine-readable header (<code>name</code>, <code>why</code>, <code>when</code>, <code>where</code>, <code>supportedStates</code>) that <code>SKILL.md</code> is generated from — required on every skill and enforced by <code>verify</code>.</span>
+    <span class="text-sm text-muted-foreground">Machine-readable header (<code>name</code>, <code>type</code>, <code>why</code>, <code>when</code>, <code>where</code>, <code>supportedStates</code>) that <code>SKILL.md</code> is generated from — required on every skill and enforced by <code>verify</code>.</span>
 
     <span style="font-weight:600;font-size:0.8125rem;">1. Native basis</span>
     <span class="text-sm text-muted-foreground">Which HTML element or browser API the component builds on. Every component starts from native semantics.</span>
@@ -163,6 +163,18 @@
 
   <div class="sep"></div>
 
+  <!-- -- Component taxonomy -- -->
+  <h2 id="component-taxonomy" style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0 0 0.875rem;">Component taxonomy</h2>
+  <p class="text-sm text-muted-foreground mb-5">Every component is classified with exactly one type, expressed in three places that <code>verify</code> keeps in sync: the skill's <code>type:</code> frontmatter (source of truth), the sidebar badge, and the badge on the component's doc page. Classification never leaks into component names — <code>Button</code>, never <code>ButtonAtom</code>.</p>
+  <div style="display:grid;gap:0.5rem;margin-bottom:2.5rem;">
+    <div class="flex items-center gap-2"><span class="type-badge" data-type="ATM" title="Atom">ATM</span><span class="text-sm text-muted-foreground"><strong>Atom</strong> — contains no descendant components (any DOM inside, but no other component).</span></div>
+    <div class="flex items-center gap-2"><span class="type-badge" data-type="MOL" title="Molecule">MOL</span><span class="text-sm text-muted-foreground"><strong>Molecule</strong> — ≥1 direct child component, all atoms.</span></div>
+    <div class="flex items-center gap-2"><span class="type-badge" data-type="ORG" title="Organism">ORG</span><span class="text-sm text-muted-foreground"><strong>Organism</strong> — direct children are atoms and/or molecules, with ≥1 molecule.</span></div>
+    <div class="flex items-center gap-2"><span class="type-badge" data-type="BLK" title="Block">BLK</span><span class="text-sm text-muted-foreground"><strong>Block</strong> — a self-contained sectional slice of a template (header, hero, pricing, footer…); arbitrary nesting inside.</span></div>
+    <div class="flex items-center gap-2"><span class="type-badge" data-type="TPL" title="Template">TPL</span><span class="text-sm text-muted-foreground"><strong>Template</strong> — the whole page/UI composition of blocks and anything else.</span></div>
+  </div>
+  <div class="sep"></div>
+
   <!-- -- Example -- -->
   <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:400;letter-spacing:-0.02em;margin:0 0 0.875rem;">Example: Badge skill file</h2>
   <p class="text-sm text-muted-foreground mb-5">Here's the complete skill file for the Badge component — one of the simplest components in the system.</p>
@@ -173,6 +185,7 @@
     </div>
     <pre style="border-radius:0;border:none;margin:0;background:transparent;flex:1;overflow:hidden;"><code class="language-markdown">---
 name: Badge
+type: ATM
 why: Pure-CSS <span> chip with emphasis variants —
      nothing to wire up.
 when: Short status, version, or count labels next to

@@ -55,7 +55,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## How to work with this library
 
-1. Pick components from the list below (why/when tells you fit; supportedStates + screenshots give visual expectations).
+1. Pick components from the list below (why/when tells you fit; type says how it composes — ATM atom / MOL molecule / ORG organism / BLK template section / TPL whole page; supportedStates + screenshots give visual expectations).
 2. Read the component's `component-skill.md` and copy its structure section — don't invent markup.
 3. Include the component's CSS (always) and JS (`type="module"`, interactive ones only) plus the token file.
 4. Need a visual state? `el.api.setState('<state>')`; verify against the matching screenshot.
@@ -65,6 +65,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Accordion
 
+**Type:** ATM
 **Why:** Native <details>/<summary> disclosure — the browser owns open/close, and <details name="group"> gives exclusive (single-open) behavior with zero JS.
 **When:** Grouped content sections on one page (FAQs, settings, progressive disclosure) that expand independently or mutually exclusively.
 **Files:** dist/components/accordion/accordion.css + dist/components/accordion/accordion.js
@@ -74,6 +75,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Alert
 
+**Type:** MOL
 **Why:** Styled container using role=status/aria-live so the message is announced inline — no modal logic involved.
 **When:** Inline, non-blocking notices (error, warning, info) tied to surrounding content.
 **Files:** dist/components/alert/alert.css
@@ -83,6 +85,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Alert Dialog
 
+**Type:** MOL
 **Why:** A <dialog> that demands an answer — Escape and backdrop clicks deliberately do not dismiss it, forcing an explicit confirm or cancel.
 **When:** Destructive or irreversible actions (delete, discard) that must be confirmed.
 **Files:** dist/components/alert-dialog/alert-dialog.css + dist/components/alert-dialog/alert-dialog.js
@@ -92,6 +95,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Avatar
 
+**Type:** ATM
 **Why:** Circular image with an initials fallback and an error state exposed through the State API.
 **When:** Representing a person or entity — alone, stacked in a group, or beside a name.
 **Files:** dist/components/avatar/avatar.css + dist/components/avatar/avatar.js
@@ -101,6 +105,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Badge
 
+**Type:** ATM
 **Why:** Pure-CSS <span> chip with emphasis variants — nothing to wire up.
 **When:** Short status, version, or count labels next to content — not for actions.
 **Files:** dist/components/badge/badge.css
@@ -110,6 +115,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Blog
 
+**Type:** BLK
 **Why:** Post cards are `<a>` + `<img>` + clamped text — line-clamp and aspect-ratio give the editorial layout for free.
 **When:** Insights/news teasers on a marketing page; the full article list is a table or card grid instead.
 **Files:** dist/components/blog/blog.css
@@ -119,6 +125,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Brand Logos
 
+**Type:** BLK
 **Why:** Logos as currentColor SVGs recolor with the theme automatically — a row of marks needs zero behavior.
 **When:** "Trusted by" social proof band under a Hero — not for user-uploaded arbitrary images.
 **Files:** dist/components/brand-logos/brand-logos.css
@@ -128,6 +135,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Breadcrumb
 
+**Type:** ATM
 **Why:** nav > ol markup with aria-current="page" — the accessibility comes free with the markup, not from JS.
 **When:** Showing hierarchy in multi-level sites/apps so users know where they are and can jump up.
 **Files:** dist/components/breadcrumb/breadcrumb.css
@@ -137,6 +145,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Button
 
+**Type:** ATM
 **Why:** Native <button> styled through data-variant/data-size — disabled, form submission, and focus are browser-provided.
 **When:** Every single action trigger — forms, dialogs, toolbars.
 **Files:** dist/components/button/button.css
@@ -146,6 +155,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Button Group
 
+**Type:** MOL
 **Why:** Adjacent buttons fused into one visual unit via border collapse on first/last children.
 **When:** Tightly related actions (Save + Cancel, split buttons, icon actions) that belong together.
 **Files:** dist/components/button-group/button-group.css
@@ -155,6 +165,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Calendar
 
+**Type:** ATM
 **Why:** Month grid with keyboard navigation and selection state via the State API.
 **When:** Displaying or selecting days inside a larger date UI — pair with a popover for a full picker.
 **Files:** dist/components/calendar/calendar.css + dist/components/calendar/calendar.js
@@ -164,6 +175,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Card
 
+**Type:** MOL
 **Why:** Token-backed surface with header/content/footer slots — one container for anything boxed.
 **When:** Grouping related content and actions on a page — dashboards, lists, modal bodies.
 **Files:** dist/components/card/card.css
@@ -173,6 +185,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Carousel
 
+**Type:** ATM
 **Why:** Native scroll-snap track with prev/next controls — scrolling, swiping, and snapping stay browser features.
 **When:** Presenting a finite set of large items (hero slides, galleries) one or a few at a time.
 **Files:** dist/components/carousel/carousel.css + dist/components/carousel/carousel.js
@@ -182,6 +195,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Checkbox
 
+**Type:** ATM
 **Why:** Native input[type=checkbox] including the indeterminate state — themed with accent-color, no custom widget.
 **When:** Independent on/off selections in a form, one or many at once.
 **Files:** dist/components/checkbox/checkbox.css
@@ -191,6 +205,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Collapsible
 
+**Type:** ATM
 **Why:** A single <details> disclosure with smooth height animation via interpolate-size.
 **When:** Revealing or hiding one content region — an accordion of exactly one item, e.g. advanced options.
 **Files:** dist/components/collapsible/collapsible.css
@@ -200,6 +215,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Color Picker
 
+**Type:** ATM
 **Why:** Native <input type=color> plus a swatch popover — the browser owns the picking itself.
 **When:** A form field where the user chooses a color; use the bare native input when a popover is overkill.
 **Files:** dist/components/color-picker/color-picker.css + dist/components/color-picker/color-picker.js
@@ -209,6 +225,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Combobox
 
+**Type:** MOL
 **Why:** Text input filtering an anchored list with the aria-activedescendant keyboard model.
 **When:** Choosing from a long list the user narrows by typing — states, tags, users.
 **Files:** dist/components/combobox/combobox.css + dist/components/combobox/combobox.js
@@ -218,6 +235,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Command Palette
 
+**Type:** ATM
 **Why:** A <dialog class="command"> palette — filtering and keyboard navigation are the only JS; the modal is native.
 **When:** ⌘K-style search or command surface across app features or documentation pages.
 **Files:** dist/components/command/command.css + dist/components/command/command.js
@@ -227,6 +245,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Context Menu
 
+**Type:** ATM
 **Why:** Popover anchored to the pointer position on contextmenu — no positioning library involved.
 **When:** Secondary per-item actions invoked with right-click or long-press.
 **Files:** dist/components/context-menu/context-menu.css + dist/components/context-menu/context-menu.js
@@ -236,6 +255,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Date Picker
 
+**Type:** ATM
 **Why:** Text field plus calendar in a popover, wired declaratively with command/commandfor attributes.
 **When:** A form field where users type or pick a date.
 **Files:** dist/components/date-picker/date-picker.css
@@ -245,6 +265,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Dialog
 
+**Type:** MOL
 **Why:** Native <dialog> + showModal(): focus trap, Escape-to-close, ::backdrop, and inert background all come from the browser.
 **When:** Modals for forms, detail views, or previews — unless the answer is mandatory (then alert-dialog).
 **Files:** dist/components/dialog/dialog.css + dist/components/dialog/dialog.js
@@ -254,6 +275,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Dropdown Menu
 
+**Type:** ATM
 **Why:** Button-triggered menu as a Popover positioned by CSS anchor positioning — dismiss and placement are browser-owned.
 **When:** The go-to menu of actions or options anchored to a trigger button.
 **Files:** dist/components/dropdown/dropdown.css + dist/components/dropdown/dropdown.js
@@ -263,6 +285,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## FAQ
 
+**Type:** BLK
 **Why:** Icon-card answers stay visible — no disclosure widget to wire, so screen readers and crawlers see every answer.
 **When:** Support section on a marketing page; for many long Q&As use the Accordion (native <details>) instead.
 **Files:** dist/components/faq/faq.css
@@ -272,6 +295,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Feature Details
 
+**Type:** BLK
 **Why:** Two-image feature split with a rule between — a grid with an auto-stretched divider column, no JS.
 **When:** "Benefits" section of a marketing page; for a feature list without imagery use cards instead.
 **Files:** dist/components/feature-details/feature-details.css
@@ -281,6 +305,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## File Input
 
+**Type:** ATM
 **Why:** A <label> wrapping the native file input with styled drag-over and filled states.
 **When:** Uploads that need a clear drop-target affordance beyond a bare file field.
 **Files:** dist/components/file-input/file-input.css
@@ -290,6 +315,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Form
 
+**Type:** MOL
 **Why:** Layout conventions — label/control/error slots and :user-invalid validation styling — around native form semantics.
 **When:** Composing multiple inputs into one labeled, validated submit.
 **Files:** dist/components/form/form.css
@@ -299,6 +325,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Get In Touch
 
+**Type:** BLK
 **Why:** A bordered contact CTA card — avatar overlap is negative margins + outline, not positioning math.
 **When:** End-of-page "want to know more?" band; for an actual contact form use Form + Input components.
 **Files:** dist/components/get-in-touch/get-in-touch.css
@@ -308,6 +335,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Hero
 
+**Type:** BLK
 **Why:** Headline, description and CTAs in one centered copy block — native flow layout and container queries, nothing to script.
 **When:** First section of a marketing page; pair with the Product Showcase block when you need a video.
 **Files:** dist/components/hero/hero.css
@@ -317,6 +345,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Icon
 
+**Type:** ATM
 **Why:** Consistent 24px stroke wrappers around lucide icons, sized via data-size.
 **When:** Any icon anywhere in the system — keeps size and stroke uniform across components.
 **Files:** dist/components/icon/icon.css
@@ -326,6 +355,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Image
 
+**Type:** ATM
 **Why:** Content image with lazy loading, aspect-ratio control, and an error-state fallback via the State API.
 **When:** Remote images whose loading or failure must be visually controlled.
 **Files:** dist/components/image/image.css + dist/components/image/image.js
@@ -335,6 +365,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Input
 
+**Type:** ATM
 **Why:** Native text inputs — validation via :user-invalid, autofill and keyboards via inputmode/autocomplete.
 **When:** Short single-line text; multi-line text takes textarea instead.
 **Files:** dist/components/input/input.css
@@ -344,6 +375,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Label
 
+**Type:** ATM
 **Why:** Native <label for> association — click-to-focus and announcement are free.
 **When:** Every form control, always — never a placeholder standing in for a label.
 **Files:** dist/components/label/label.css
@@ -353,6 +385,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Navigation Menu
 
+**Type:** ATM
 **Why:** Primary site/app menu with hover/focus-triggered popover panels.
 **When:** Top-level navigation, optionally with mega-menu panels per item.
 **Files:** dist/components/navigation-menu/navigation-menu.css + dist/components/navigation-menu/navigation-menu.js
@@ -362,6 +395,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Newsletter
 
+**Type:** BLK
 **Why:** A real <form> with <input type="email"> — native validation, keyboard, and autofill come free.
 **When:** Sign-up band on a marketing page; for multi-field sign-up use the Form component.
 **Files:** dist/components/newsletter/newsletter.css
@@ -371,6 +405,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Number Input
 
+**Type:** ATM
 **Why:** Input plus stepper buttons bound to native min/max/step and arrow-key behavior.
 **When:** Numeric values where nudging or a bounded range matters — quantity, price.
 **Files:** dist/components/number-input/number-input.css + dist/components/number-input/number-input.js
@@ -380,6 +415,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Pagination
 
+**Type:** ATM
 **Why:** Numbered page links in a nav > ol with aria-current="page" on the active page.
 **When:** Splitting long lists or tables across pages.
 **Files:** dist/components/pagination/pagination.css
@@ -389,6 +425,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Popover
 
+**Type:** ATM
 **Why:** Native Popover API with CSS anchor positioning — show, dismiss, and placement owned by the browser.
 **When:** Lightweight panel anchored to a trigger — info, mini-forms, menus.
 **Files:** dist/components/popover/popover.css + dist/components/popover/popover.js
@@ -398,6 +435,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Pricing
 
+**Type:** BLK
 **Why:** Plan cards are a stretch-aligned grid; the billing toggle is native radios plus :has(), so one checked input flips every plan with zero JS.
 **When:** Plans/tiers section of a marketing page; a single plan needs no grid — one card suffices.
 **Files:** dist/components/pricing/pricing.css
@@ -407,6 +445,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Product Showcase
 
+**Type:** BLK
 **Why:** A poster frame + one real <button> starts a native <video controls> — the browser draws every playback affordance once the video is visible.
 **When:** Hero pairing or standalone product video; a static screenshot needs only the poster <img> (drop the video and button).
 **Files:** dist/components/product-showcase/product-showcase.css + dist/components/product-showcase/product-showcase.js
@@ -416,6 +455,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Progress
 
+**Type:** ATM
 **Why:** Native <progress value max> — semantics and rendering come free.
 **When:** Completion of a task with a known total; unknown total takes the spinner.
 **Files:** dist/components/progress/progress.css
@@ -425,6 +465,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Radio Group
 
+**Type:** MOL
 **Why:** Native radio group with arrow-key grouping and accent-color theming.
 **When:** A mutually exclusive choice among a short, visible set of options.
 **Files:** dist/components/radio/radio.css
@@ -434,6 +475,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Scroll Area
 
+**Type:** ATM
 **Why:** Overflow container with styled scrollbars and edge fade — pure CSS.
 **When:** Fixed-height regions that scroll: menu bodies, sidebars, code panes.
 **Files:** dist/components/scroll-area/scroll-area.css
@@ -443,6 +485,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Select
 
+**Type:** ATM
 **Why:** Native <select> — the OS renders the options list, fully accessible on every platform.
 **When:** Pick one value from a list; prefer it over custom listboxes and comboboxes.
 **Files:** dist/components/select/select.css
@@ -452,6 +495,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Separator
 
+**Type:** ATM
 **Why:** An <hr> (or role=separator with aria-orientation) — semantic and free.
 **When:** Dividing content groups visually and semantically.
 **Files:** dist/components/separator/separator.css
@@ -461,6 +505,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Sheet
 
+**Type:** MOL
 **Why:** A <dialog> variant that slides in from an edge — native modal semantics with transform-only animation.
 **When:** Off-canvas panels: mobile menus, filter drawers, detail side panels.
 **Files:** dist/components/sheet/sheet.css + dist/components/sheet/sheet.js
@@ -470,6 +515,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Sidebar
 
+**Type:** ATM
 **Why:** App-shell navigation rail with a collapsible state (State API) and a mobile overlay mode.
 **When:** Persistent primary navigation beside the app content.
 **Files:** dist/components/sidebar/sidebar.css + dist/components/sidebar/sidebar.js
@@ -479,6 +525,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Site Footer
 
+**Type:** BLK
 **Why:** Link columns + social row is pure grid/flex markup in a <footer> landmark — no behavior to script.
 **When:** Bottom of marketing pages; the doc site's own footer is separate chrome (<footer> in layout.js).
 **Files:** dist/components/site-footer/site-footer.css
@@ -488,6 +535,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Site Header
 
+**Type:** BLK
 **Why:** A marketing page header is pure layout — flexbox + a container query replace any JS show/hide of the nav.
 **When:** Top of a marketing/landing page — for the doc site's own chrome use <site-header> instead.
 **Files:** dist/components/site-header/site-header.css
@@ -497,6 +545,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Skeleton
 
+**Type:** ATM
 **Why:** Shimmering placeholder blocks shaped like the content that will arrive.
 **When:** Loading known layout without layout shift; unknown layout takes the spinner.
 **Files:** dist/components/skeleton/skeleton.css
@@ -506,6 +555,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Slider
 
+**Type:** ATM
 **Why:** Native range input with styled track and thumb — keyboard and announcement are built in.
 **When:** Continuous numeric values or ranges — volume, price bounds.
 **Files:** dist/components/slider/slider.css + dist/components/slider/slider.js
@@ -515,6 +565,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Sortable
 
+**Type:** ATM
 **Why:** Native HTML drag-and-drop reordering with a handle and a drop indicator.
 **When:** Lists whose order the user controls — todo lists, table row ordering.
 **Files:** dist/components/sortable/sortable.css + dist/components/sortable/sortable.js
@@ -524,6 +575,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Spinner
 
+**Type:** ATM
 **Why:** Animated indicator with role=status announcing "loading".
 **When:** Unbounded waits where the total is unknown; known total takes progress.
 **Files:** dist/components/spinner/spinner.css
@@ -533,6 +585,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Statistic
 
+**Type:** ATM
 **Why:** Labelled metric with a delta indicator — tokens and plain text only.
 **When:** Dashboards showing one value and its trend.
 **Files:** dist/components/statistic/statistic.css
@@ -542,6 +595,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Stats
 
+**Type:** BLK
 **Why:** Metric band = a grid of rule-led numbers; text alignment and tabular-nums do what a chart library would.
 **When:** "Trusted by teams everywhere" social proof with hard numbers; not a data dashboard.
 **Files:** dist/components/stats/stats.css
@@ -551,6 +605,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Steps
 
+**Type:** ATM
 **Why:** Ordered list of process steps with aria-current="step" on the active one.
 **When:** Multi-step flows: wizards, checkout, onboarding progress.
 **Files:** dist/components/steps/steps.css
@@ -560,6 +615,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Switch
 
+**Type:** ATM
 **Why:** Native checkbox styled as a sliding toggle — Space/Enter toggling is native.
 **When:** Settings that apply immediately; a checkbox + submit fits explicit forms better.
 **Files:** dist/components/switch/switch.css
@@ -569,6 +625,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Table
 
+**Type:** ATM
 **Why:** Semantic <table> — headers, captions, and sort state stay accessible.
 **When:** Tabular data in rows and columns; never div grids.
 **Files:** dist/components/table/table.css
@@ -578,6 +635,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Tabs
 
+**Type:** ATM
 **Why:** role=tablist with arrow-key roving focus; panels toggle via data-state.
 **When:** Switching views within one context without navigating away.
 **Files:** dist/components/tabs/tabs.css + dist/components/tabs/tabs.js
@@ -587,6 +645,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Testimonials
 
+**Type:** BLK
 **Why:** A pull-quote plus photo cards with floating review overlays — backdrop-filter and stacking replace any JS layering.
 **When:** Social-proof band on a marketing page; for short quotes without photos a plain blockquote is enough.
 **Files:** dist/components/testimonials/testimonials.css
@@ -596,6 +655,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Textarea
 
+**Type:** ATM
 **Why:** Native textarea with field-sizing: content — auto-grows with zero JavaScript.
 **When:** Multi-line text input.
 **Files:** dist/components/textarea/textarea.css
@@ -605,6 +665,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Timeline
 
+**Type:** ATM
 **Why:** Ordered list laid out on a vertical rail — the <ol> keeps the chronological semantics.
 **When:** Event history: activity logs, order tracking, changelog-style lists.
 **Files:** dist/components/timeline/timeline.css
@@ -614,6 +675,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Toast
 
+**Type:** MOL
 **Why:** Transient notification via the Popover API plus the _defussShadcn.toast factory — auto-dismisses.
 **When:** Post-action feedback that must not interrupt the user.
 **Files:** dist/components/toast/toast.css + dist/components/toast/toast.js
@@ -623,6 +685,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Toggle
 
+**Type:** ATM
 **Why:** Two-state button carrying aria-pressed — activation is native.
 **When:** A single on/off action: mute, bold, favorite.
 **Files:** dist/components/toggle/toggle.css + dist/components/toggle/toggle.js
@@ -632,6 +695,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Toggle Group
 
+**Type:** MOL
 **Why:** Grouped toggle buttons with roving focus and single or multiple selection.
 **When:** Sets of on/off options like text formatting (bold/italic/underline).
 **Files:** dist/components/toggle-group/toggle-group.css + dist/components/toggle-group/toggle-group.js
@@ -641,6 +705,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Toolbar
 
+**Type:** ORG
 **Why:** role=toolbar with arrow-key focus management across a button cluster.
 **When:** Editor-style action bars above a content region.
 **Files:** dist/components/toolbar/toolbar.css + dist/components/toolbar/toolbar.js
@@ -650,6 +715,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Tooltip
 
+**Type:** ATM
 **Why:** popover="hint" anchored label — shows on hover/focus without stealing dismissals from other popovers.
 **When:** Brief clarifying text for icon-only controls; never for essential information.
 **Files:** dist/components/tooltip/tooltip.css + dist/components/tooltip/tooltip.js
@@ -659,6 +725,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Tree View
 
+**Type:** ATM
 **Why:** role=tree with expandable nodes and the full arrow-key interaction model.
 **When:** Hierarchical data: file explorers, org charts, folder trees.
 **Files:** dist/components/tree-view/tree-view.css + dist/components/tree-view/tree-view.js
@@ -668,6 +735,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## Typography
 
+**Type:** ATM
 **Why:** Type styling for raw content elements — headings, lists, blockquotes, code.
 **When:** Rendering markdown or CMS output where you cannot add classes.
 **Files:** dist/components/typography/typography.css

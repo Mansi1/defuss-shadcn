@@ -1,5 +1,6 @@
 ---
 name: Image
+type: ATM
 why: Content image with lazy loading, aspect-ratio control, and an error-state fallback via the State API.
 when: Remote images whose loading or failure must be visually controlled.
 where: dist/components/image/image.css + dist/components/image/image.js

@@ -1,5 +1,6 @@
 ---
 name: Tree View
+type: ATM
 why: role=tree with expandable nodes and the full arrow-key interaction model.
 when: Hierarchical data: file explorers, org charts, folder trees.
 where: dist/components/tree-view/tree-view.css + dist/components/tree-view/tree-view.js

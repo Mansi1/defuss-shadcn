@@ -1,5 +1,6 @@
 ---
 name: Testimonials
+type: BLK
 why: A pull-quote plus photo cards with floating review overlays — backdrop-filter and stacking replace any JS layering.
 when: Social-proof band on a marketing page; for short quotes without photos a plain blockquote is enough.
 where: dist/components/testimonials/testimonials.css

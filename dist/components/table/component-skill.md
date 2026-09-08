@@ -1,5 +1,6 @@
 ---
 name: Table
+type: ATM
 why: Semantic <table> — headers, captions, and sort state stay accessible.
 when: Tabular data in rows and columns; never div grids.
 where: dist/components/table/table.css

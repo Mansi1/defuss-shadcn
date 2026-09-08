@@ -55,7 +55,7 @@ In the **source repository** additionally: `screenshots/{light,dark}/{name}.png`
 
 ## How to work with this library
 
-1. Pick components from the list below (why/when tells you fit; supportedStates + screenshots give visual expectations).
+1. Pick components from the list below (why/when tells you fit; type says how it composes — ATM atom / MOL molecule / ORG organism / BLK template section / TPL whole page; supportedStates + screenshots give visual expectations).
 2. Read the component's `component-skill.md` and copy its structure section — don't invent markup.
 3. Include the component's CSS (always) and JS (`type="module"`, interactive ones only) plus the token file.
 4. Need a visual state? `el.api.setState('<state>')`; verify against the matching screenshot.

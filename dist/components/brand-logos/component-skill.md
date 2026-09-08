@@ -1,5 +1,6 @@
 ---
 name: Brand Logos
+type: BLK
 why: Logos as currentColor SVGs recolor with the theme automatically — a row of marks needs zero behavior.
 when: "Trusted by" social proof band under a Hero — not for user-uploaded arbitrary images.
 where: dist/components/brand-logos/brand-logos.css

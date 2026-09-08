@@ -1,5 +1,6 @@
 ---
 name: Context Menu
+type: ATM
 why: Popover anchored to the pointer position on contextmenu — no positioning library involved.
 when: Secondary per-item actions invoked with right-click or long-press.
 where: dist/components/context-menu/context-menu.css + dist/components/context-menu/context-menu.js

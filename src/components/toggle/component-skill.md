@@ -1,5 +1,6 @@
 ---
 name: Toggle
+type: ATM
 why: Two-state button carrying aria-pressed — activation is native.
 when: A single on/off action: mute, bold, favorite.
 where: dist/components/toggle/toggle.css + dist/components/toggle/toggle.js

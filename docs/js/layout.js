@@ -359,7 +359,10 @@
                         group = e.s;
                         html += '<div class="command-group"><p class="command-group-heading">' + esc(group) + '</p>';
                     }
-                    html += '<button class="command-item" type="button" data-href="' + esc(e.h) + '">' + esc(e.t) + '</button>';
+                    // e.d = the component's taxonomy type (page entries only) — render the
+                    // same badge the sidebar and doc pages show, so all three agree.
+                    html += '<button class="command-item" type="button" data-href="' + esc(e.h) + '">' + esc(e.t) +
+                        (e.d ? typeBadge(e.d) : '') + '</button>';
                 });
                 if (group !== null)
                     html += '</div>';
@@ -427,6 +430,17 @@
             return;
         setTimeout(function () { scrollToWhenReady(id, attempt + 1); }, 100);
     }
+    /* -- Component type badges -----------------------------------
+       Every component carries exactly one atomic-design type (ATM | MOL | ORG |
+       BLK | TPL — see AGENTS.md "Component taxonomy"). The source of truth is
+       each skill's `type:` frontmatter, carried at runtime by the generated
+       search index (search-index.ts page entries `d`). Built lazily in
+       <site-nav>: search-index.js loads after this file, so module scope would
+       still be empty here. Markup is byte-identical to the doc-page badge;
+       verify's parity gate compares both against the frontmatter. */
+    function typeBadge(type) {
+        return ' <span class="type-badge" data-type="' + type + '" title="' + type + '">' + type + '</span>';
+    }
     /* -- <site-nav> --------------------------------------------- */
     /* Sections are collapsible groups: the docs dogfood the sidebar
        component's `<details>` pattern (.sidebar-group) — summary heading +
@@ -448,6 +462,11 @@
     class SiteNav extends HTMLElement {
         connectedCallback() {
             this.style.display = 'contents';
+            var TYPE_BY_PAGE = {};
+            ((globalThis._defussShadcn.docs && globalThis._defussShadcn.docs.searchIndex) || []).forEach(function (e) {
+                if (e.d && e.h.indexOf('#') === -1)
+                    TYPE_BY_PAGE[e.h] = e.d;
+            });
             var html = '<aside class="site-sidebar">';
             html += '<div class="sidebar-scroll">';
             NAV.forEach(function (section, i) {
@@ -463,9 +482,7 @@
                         cls += ' active';
                     else if (!BUILT.has(item.href))
                         cls += ' disabled';
-                    var badge = isComponentSection
-                        ? ' <span style="font-size:0.5625rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted-foreground);opacity:0.7;margin-left:auto;flex-shrink:0;">PREVIEW</span>'
-                        : '';
+                    var badge = isComponentSection && TYPE_BY_PAGE[item.href] ? typeBadge(TYPE_BY_PAGE[item.href]) : '';
                     html += '<a class="' + cls + '" href="' + item.href + '" style="display:flex;align-items:center;gap:0.375rem;">' + item.label + badge + '</a>';
                 });
                 html += '</nav></details>';

@@ -25,6 +25,23 @@ test('site shell renders header and sidebar from layout.js web components', asyn
   expect(navLink!.checkVisibility({ opacityProperty: true, visibilityProperty: true })).toBe(true);
 });
 
+test('sidebar shows component type badges (taxonomy), never the generic PREVIEW marker', async () => {
+  const { doc } = await openDocPage('index.html');
+  await waitFor(() => doc.querySelector('site-nav a[href="accordion.html"]'), 'sidebar links');
+
+  // badge type must match the skill frontmatter (accordion is an ATM — verified
+  // against src/ by `bun run verify`'s `component type badges` gate)
+  const atm: HTMLElementOrNull = doc.querySelector('site-nav a[href="accordion.html"] .type-badge');
+  expect(atm, 'Accordion type badge').toBeTruthy();
+  expect(atm!.dataset.type).toBe('ATM');
+  expect(atm!.textContent).toBe('ATM');
+  const blk: HTMLElementOrNull = doc.querySelector('site-nav a[href="hero.html"] .type-badge');
+  expect(blk, 'Hero type badge').toBeTruthy();
+  expect(blk!.dataset.type).toBe('BLK');
+  // the old generic PREVIEW marker is gone everywhere in the sidebar
+  expect(doc.querySelector('site-nav')!.textContent).not.toContain('PREVIEW');
+});
+
 test('SPA router swaps <main> content on nav click without reloading', async () => {
   const { doc } = await openDocPage('index.html');
   await waitFor(() => doc.querySelector('site-header button#theme-toggle'), 'shell to render');

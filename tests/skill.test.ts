@@ -18,6 +18,7 @@ import {
 
 const VALID = `---
 name: Dialog
+type: MOL
 why: Native <dialog> gives focus trap and Escape.
 when: Modals — unless the answer is mandatory.
 where: dist/components/dialog/dialog.css + dist/components/dialog/dialog.js
@@ -30,6 +31,7 @@ supportedStates: default, open
 const entry = (over: Partial<SkillEntry> = {}): SkillEntry => ({
   folder: 'dialog',
   name: 'Dialog',
+  type: 'MOL',
   why: 'Native <dialog> gives focus trap and Escape.',
   when: 'Modals — unless the answer is mandatory.',
   where: 'dist/components/dialog/dialog.css + dist/components/dialog/dialog.js',
@@ -43,6 +45,7 @@ describe('parseSkillFrontmatter', () => {
     expect(meta).not.toBeNull();
     for (const key of SKILL_FRONTMATTER_KEYS) expect(meta![key]).toBeTruthy();
     expect(meta!.name).toBe('Dialog');
+    expect(meta!.type).toBe('MOL');
     expect(meta!.supportedStates).toBe('default, open');
   });
 
@@ -64,6 +67,11 @@ describe('parseSkillFrontmatter', () => {
     expect(parseSkillFrontmatter('---\njust prose\nname: X\n---\n')).toBeNull();
   });
 
+  it('returns null when type is not one of the five taxonomy codes', () => {
+    expect(parseSkillFrontmatter(VALID.replace('type: MOL', 'type: ATOM'))).toBeNull();
+    expect(parseSkillFrontmatter(VALID.replace('type: MOL', 'type: '))).toBeNull();
+  });
+
   it('accepts extra unknown keys (forward-compatible frontmatter)', () => {
     const md = VALID.replace('---\nname:', '---\nversion: 2\nname:');
     expect(parseSkillFrontmatter(md)?.name).toBe('Dialog');
@@ -73,8 +81,9 @@ describe('parseSkillFrontmatter', () => {
 describe('renderSkillEntry', () => {
   const block = renderSkillEntry(entry());
 
-  it('renders the index block with name, why, when, files, states, skill link', () => {
+  it('renders the index block with name, type, why, when, files, states, skill link', () => {
     expect(block).toMatch(/^## Dialog\n/);
+    expect(block).toContain('**Type:** MOL');
     expect(block).toContain('**Why:** Native <dialog> gives focus trap and Escape.');
     expect(block).toContain('**When:** Modals');
     expect(block).toContain('**Files:** dist/components/dialog/dialog.css + dist/components/dialog/dialog.js');

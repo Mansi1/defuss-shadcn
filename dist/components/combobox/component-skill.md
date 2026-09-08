@@ -1,5 +1,6 @@
 ---
 name: Combobox
+type: MOL
 why: Text input filtering an anchored list with the aria-activedescendant keyboard model.
 when: Choosing from a long list the user narrows by typing — states, tags, users.
 where: dist/components/combobox/combobox.css + dist/components/combobox/combobox.js

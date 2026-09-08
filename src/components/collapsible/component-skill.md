@@ -1,5 +1,6 @@
 ---
 name: Collapsible
+type: ATM
 why: A single <details> disclosure with smooth height animation via interpolate-size.
 when: Revealing or hiding one content region — an accordion of exactly one item, e.g. advanced options.
 where: dist/components/collapsible/collapsible.css

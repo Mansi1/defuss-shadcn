@@ -1,5 +1,6 @@
 ---
 name: Color Picker
+type: ATM
 why: Native <input type=color> plus a swatch popover — the browser owns the picking itself.
 when: A form field where the user chooses a color; use the bare native input when a popover is overkill.
 where: dist/components/color-picker/color-picker.css + dist/components/color-picker/color-picker.js

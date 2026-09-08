@@ -1,5 +1,6 @@
 ---
 name: Toggle Group
+type: MOL
 why: Grouped toggle buttons with roving focus and single or multiple selection.
 when: Sets of on/off options like text formatting (bold/italic/underline).
 where: dist/components/toggle-group/toggle-group.css + dist/components/toggle-group/toggle-group.js

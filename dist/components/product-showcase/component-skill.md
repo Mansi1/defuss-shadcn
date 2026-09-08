@@ -1,5 +1,6 @@
 ---
 name: Product Showcase
+type: BLK
 why: A poster frame + one real <button> starts a native <video controls> — the browser draws every playback affordance once the video is visible.
 when: Hero pairing or standalone product video; a static screenshot needs only the poster <img> (drop the video and button).
 where: dist/components/product-showcase/product-showcase.css + dist/components/product-showcase/product-showcase.js

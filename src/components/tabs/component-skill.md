@@ -1,5 +1,6 @@
 ---
 name: Tabs
+type: ATM
 why: role=tablist with arrow-key roving focus; panels toggle via data-state.
 when: Switching views within one context without navigating away.
 where: dist/components/tabs/tabs.css + dist/components/tabs/tabs.js

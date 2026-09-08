@@ -222,6 +222,41 @@ main {
   opacity: 0.65;
 }
 
+/* -- Component type badges ---------------------------------
+   Atomic-design taxonomy (ATM/MOL/ORG/BLK/TPL) shown in the sidebar
+   (replacing the old generic PREVIEW marker) and on each component doc
+   page. Colors follow the taxonomy spec: one identity per type, dark
+   variant for the dark scheme (forced-colors falls back to system ink). */
+.type-badge {
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  font-family: var(--font-mono);
+  padding: 0.125rem 0.375rem;
+  border: 1px solid;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+.type-badge[data-type="ATM"] { color: #06B6D4; border-color: color-mix(in oklch, #06B6D4 40%, transparent); }
+.type-badge[data-type="MOL"] { color: #3B82F6; border-color: color-mix(in oklch, #3B82F6 40%, transparent); }
+.type-badge[data-type="ORG"] { color: #8B5CF6; border-color: color-mix(in oklch, #8B5CF6 40%, transparent); }
+.type-badge[data-type="BLK"] { color: #F59E0B; border-color: color-mix(in oklch, #F59E0B 40%, transparent); }
+.type-badge[data-type="TPL"] { color: #64748B; border-color: color-mix(in oklch, #64748B 40%, transparent); }
+html.dark .type-badge[data-type="ATM"] { color: #22D3EE; border-color: color-mix(in oklch, #22D3EE 40%, transparent); }
+html.dark .type-badge[data-type="MOL"] { color: #60A5FA; border-color: color-mix(in oklch, #60A5FA 40%, transparent); }
+html.dark .type-badge[data-type="ORG"] { color: #A78BFA; border-color: color-mix(in oklch, #A78BFA 40%, transparent); }
+html.dark .type-badge[data-type="BLK"] { color: #FBBF24; border-color: color-mix(in oklch, #FBBF24 40%, transparent); }
+html.dark .type-badge[data-type="TPL"] { color: #94A3B8; border-color: color-mix(in oklch, #94A3B8 40%, transparent); }
+@media (forced-colors: active) {
+  .type-badge { color: CanvasText; border-color: CanvasText; }
+}
+/* Sidebar keeps the right-aligned slot the old PREVIEW marker had. */
+.nav-link .type-badge { margin-left: auto; }
+/* Palette rows use flex space-between already; nudge badge off the label. */
+.command-item .type-badge { margin-inline-start: auto; }
+
 /* -- Built-with pills -------------------------------------- */
 a.built-with-pill {
   text-decoration: none;

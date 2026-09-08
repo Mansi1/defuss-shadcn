@@ -1,5 +1,6 @@
 ---
 name: Alert
+type: MOL
 why: Styled container using role=status/aria-live so the message is announced inline — no modal logic involved.
 when: Inline, non-blocking notices (error, warning, info) tied to surrounding content.
 where: dist/components/alert/alert.css

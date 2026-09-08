@@ -1,5 +1,6 @@
 ---
 name: Sidebar
+type: ATM
 why: App-shell navigation rail with a collapsible state (State API) and a mobile overlay mode.
 when: Persistent primary navigation beside the app content.
 where: dist/components/sidebar/sidebar.css + dist/components/sidebar/sidebar.js

@@ -11,8 +11,10 @@
  * entry collection lives in ./skill-files.ts.
  */
 
+import { COMPONENT_TYPES } from './taxonomy.ts';
+
 /** Required frontmatter keys every component-skill.md must declare (AGENTS.md). */
-export const SKILL_FRONTMATTER_KEYS = ['name', 'why', 'when', 'where', 'supportedStates'] as const;
+export const SKILL_FRONTMATTER_KEYS = ['name', 'type', 'why', 'when', 'where', 'supportedStates'] as const;
 
 export type SkillMeta = Record<(typeof SKILL_FRONTMATTER_KEYS)[number], string>;
 
@@ -43,6 +45,9 @@ export function parseSkillFrontmatter(md: string): SkillMeta | null {
   for (const key of SKILL_FRONTMATTER_KEYS) {
     if (!meta[key]) return null;
   }
+  // the taxonomy code must be one of the five allowed types (fail-closed: an
+  // unknown code would propagate into SKILL.md, the sidebar, and the badge)
+  if (!(COMPONENT_TYPES as readonly string[]).includes(meta.type)) return null;
   return meta as SkillMeta;
 }
 
@@ -62,6 +67,7 @@ export function renderSkillEntry(e: SkillEntry): string {
   return [
     `## ${e.name}`,
     '',
+    `**Type:** ${e.type}`,
     `**Why:** ${e.why}`,
     `**When:** ${e.when}`,
     `**Files:** ${e.where}`,

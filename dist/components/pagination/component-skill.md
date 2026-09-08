@@ -1,5 +1,6 @@
 ---
 name: Pagination
+type: ATM
 why: Numbered page links in a nav > ol with aria-current="page" on the active page.
 when: Splitting long lists or tables across pages.
 where: dist/components/pagination/pagination.css

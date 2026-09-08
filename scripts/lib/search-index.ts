@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 /**
@@ -68,10 +68,17 @@ function pageSections(file: string): { text: string; id: string }[] {
 /** Build the search-index.js source text (exported so verify.ts can compare
  * the committed copy against a fresh regeneration). */
 export function buildSearchIndexText(): string {
-  type Entry = { t: string; h: string; s: string };
+  type Entry = { t: string; h: string; s: string; d?: string };
   const entries: Entry[] = [];
   for (const page of navPages()) {
-    entries.push({ t: page.label, h: page.href, s: page.section });
+    // `d` carries the component's taxonomy type (ATM/MOL/ORG/BLK/TPL) so the
+    // palette's nav hit renders the same badge the sidebar uses — the palette
+    // and sidebar render the same NAV entries, they must look the same.
+    const typeFile = join(DOCS, '..', 'components', page.href.replace(/\.html$/, ''), 'component-skill.md');
+    const typeMatch = existsSync(typeFile)
+      ? readFileSync(typeFile, 'utf8').match(/^type: (ATM|MOL|ORG|BLK|TPL)$/m)
+      : null;
+    entries.push({ t: page.label, h: page.href, s: page.section, ...(typeMatch ? { d: typeMatch[1] } : {}) });
     const file = join(DOCS, page.href);
     for (const sec of pageSections(file)) {
       entries.push({ t: sec.text, h: `${page.href}#${sec.id}`, s: page.label });

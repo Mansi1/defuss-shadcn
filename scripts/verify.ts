@@ -20,6 +20,7 @@ import { ariaDescribedByProblems, fieldDescriptionOwnerProblems, fieldFeaturePro
 import { parseThemes, defaultTokenModes, sidebarContrastProblems, radiusConsistencyProblems } from './lib/contrast.ts';
 import { buildSkillText } from './lib/skill-files.ts';
 import { ARCH_OUTPUT_FILE, ARCH_TEMPLATE_FILE, buildArchPageText } from './lib/arch-page.ts';
+import { typeBadgeHtml, type ComponentType } from './lib/taxonomy.ts';
 
 /**
  * Why: one static, fast gate that proves the repo is self-consistent after any
@@ -987,6 +988,44 @@ check(
       'architecture ↔ ARCH.md',
       archProblems,
       'run `bun run build` (build.ts regenerates the architecture page from ARCH.md; never edit architecture.html by hand)',
+    );
+  }
+
+  // 30c. component taxonomy type: every component declares exactly one type
+  // (ATM | MOL | ORG | BLK | TPL — AGENTS.md "Component taxonomy") in its skill
+  // frontmatter, and the other two carriers of that claim must agree with it:
+  // the sidebar badge (layout.ts reads the generated search-index `d` field)
+  // and the doc page badge (exact markup from scripts/lib/taxonomy.ts). A
+  // generic PREVIEW marker anywhere in the sidebar is a failure — the type
+  // replaced it.
+  {
+    const typeProblems: string[] = [];
+    const indexFile = join(DOCS, 'js/search-index.js');
+    const indexText = existsSync(indexFile) ? readFileSync(indexFile, 'utf8') : '';
+    if (!indexText) typeProblems.push('src/documentation/js/search-index.js missing — sidebar badges cannot be checked');
+    for (const c of componentDirs) {
+      const skill = join(COMPS, c, 'component-skill.md');
+      if (!existsSync(skill)) continue; // reported by "component skills"
+      const meta = parseSkillFrontmatter(readFileSync(skill, 'utf8'));
+      if (!meta) continue; // reported by "skill frontmatter"
+      // sidebar: layout.ts derives its badge map from search-index page entries
+      const entry = indexText.match(new RegExp(`\\{[^{}]*"h":"${c}\\.html"[^{}]*\\}`));
+      const sidebar = entry && entry[0].match(/"d":"([A-Z]{3})"/);
+      if (!sidebar) typeProblems.push(`${c}: sidebar has no type badge (skill type absent from search index)`);
+      else if (sidebar[1] !== meta.type)
+        typeProblems.push(`${c}: sidebar badge says ${sidebar[1]}, skill frontmatter says ${meta.type}`);
+      // doc page: exact generated badge markup (never hand-written)
+      const page = join(DOCS, `${c}.html`);
+      if (!existsSync(page)) continue; // reported by "documentation pages"
+      if (!readFileSync(page, 'utf8').includes(typeBadgeHtml(meta.type as ComponentType)))
+        typeProblems.push(`${c}: doc page lacks the exact \`${meta.type}\` type badge`);
+    }
+    const layoutSrc = readFileSync(join(DOCS, 'js/layout.ts'), 'utf8');
+    if (layoutSrc.includes('PREVIEW')) typeProblems.push('src/documentation/js/layout.ts still renders the generic PREVIEW badge');
+    check(
+      'component type badges',
+      typeProblems,
+      'one type per component, identical in all three places — skill `type:` frontmatter (source of truth), sidebar badge + search-index (`bun run build` regenerates both from frontmatter), doc page badge (see AGENTS.md "Component taxonomy")',
     );
   }
 

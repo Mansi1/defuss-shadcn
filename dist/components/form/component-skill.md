@@ -1,5 +1,6 @@
 ---
 name: Form
+type: MOL
 why: Layout conventions — label/control/error slots and :user-invalid validation styling — around native form semantics.
 when: Composing multiple inputs into one labeled, validated submit.
 where: dist/components/form/form.css

@@ -1,5 +1,6 @@
 ---
 name: Date Picker
+type: ATM
 why: Text field plus calendar in a popover, wired declaratively with command/commandfor attributes.
 when: A form field where users type or pick a date.
 where: dist/components/date-picker/date-picker.css

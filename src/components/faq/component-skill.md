@@ -1,5 +1,6 @@
 ---
 name: FAQ
+type: BLK
 why: Icon-card answers stay visible — no disclosure widget to wire, so screen readers and crawlers see every answer.
 when: Support section on a marketing page; for many long Q&As use the Accordion (native <details>) instead.
 where: dist/components/faq/faq.css

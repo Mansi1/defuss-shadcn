@@ -1,5 +1,6 @@
 ---
 name: Site Footer
+type: BLK
 why: Link columns + social row is pure grid/flex markup in a <footer> landmark — no behavior to script.
 when: Bottom of marketing pages; the doc site's own footer is separate chrome (<footer> in layout.js).
 where: dist/components/site-footer/site-footer.css

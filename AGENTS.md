@@ -662,6 +662,36 @@ vanilla JS model.
 Always prefer native browser APIs over JS workarounds. Check MDN for support
 status of newer APIs (`popover`, anchor positioning, `@starting-style`, etc.).
 
+## Component taxonomy (REQUIRED for every component)
+
+Every component carries exactly **one** atomic-design type:
+
+| Type | Meaning | Color (light / dark) |
+| --- | --- | --- |
+| `ATM` | Atom — contains **no descendant components** (arbitrary DOM inside is fine) | cyan `#06B6D4` / `#22D3EE` |
+| `MOL` | Molecule — ≥1 direct child component, **all atoms** | blue `#3B82F6` / `#60A5FA` |
+| `ORG` | Organism — direct children are atoms/molecules with **≥1 molecule** | violet `#8B5CF6` / `#A78BFA` |
+| `BLK` | Block — a self-contained **sectional template slice** (header, hero, pricing, footer…); arbitrary nesting | amber `#F59E0B` / `#FBBF24` |
+| `TPL` | Template — the **whole page/UI composition** of blocks and anything else | slate `#64748B` / `#94A3B8` |
+
+Deterministic classifier (apply in order): role = whole composition → `TPL`; role =
+sectional template slice → `BLK`; no descendant components → `ATM`; every direct child
+is an atom → `MOL`; some direct child is a molecule → `ORG`; otherwise → `BLK`.
+
+- **Descendant component** = markup of *another* component (e.g. `.btn`, `.label`) inside
+  this component's root, at any DOM depth. Classes of the component's own parts
+  (`.card-header`, `.toast-close`) are DOM, not components. DOM nesting never affects
+  component ancestry.
+- **Names never encode the type** — `Button`, never `ButtonAtom`. The type is presentation
+  metadata only.
+- The type is declared in the skill `type:` frontmatter (source of truth; parser in
+  `scripts/lib/skill.ts`, shared contract in `scripts/lib/taxonomy.ts`) and surfaces as the
+  badge in the docs **sidebar** and on the **doc page** header (the old generic `PREVIEW`
+  marker is gone). `verify`'s `component type badges` gate fails if any of the three disagree
+  or a PREVIEW marker resurfaces. Badge markup is generated — copy it from an existing doc
+  page or use `injectTypeBadge()`; recolor via `.type-badge[data-type]` rules in
+  `documentation/css/layout.css`.
+
 ## Component skill template
 
 Component skills document **how to build the HTML** for a component. CSS and JS live in
@@ -675,6 +705,7 @@ index lags (rebuild with `bun run build`):
 ```markdown
 ---
 name: Dialog
+type: MOL
 why: Native <dialog> + showModal(): focus trap, Escape, ::backdrop, and inert background are browser-provided.
 when: Modals for forms, detail views, or previews — unless the answer is mandatory (then alert-dialog).
 where: dist/components/dialog/dialog.css + dist/components/dialog/dialog.js
@@ -682,14 +713,15 @@ supportedStates: default, open
 ---
 ```
 
-- **name** — display name (Title Case) · **why** — what its native basis buys · **when** — which
+- **name** — display name (Title Case) · **type** — its taxonomy class (see "Component taxonomy")
+  · **why** — what its native basis buys · **when** — which
   use it for, and when to pick a sibling instead · **where** — the shipped files
   (`dist/components/{name}/{name}.css` + `.js` if interactive) · **supportedStates** — the exact
   State API names (matches `{name}States`, `default` first; CSS-only components: `default`).
 
 Every component skill must include these sections in order:
 
-0. **Frontmatter** — `name` / `why` / `when` / `where` / `supportedStates` (see above — REQUIRED)
+0. **Frontmatter** — `name` / `type` / `why` / `when` / `where` / `supportedStates` (see above — REQUIRED)
 1. **Native basis** — which HTML element/API it builds on
 2. **Native Web APIs** — bulleted list of significant platform APIs with MDN links (see format below)
 3. **Structure** — complete HTML markup with all attributes

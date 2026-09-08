@@ -1,5 +1,6 @@
 ---
 name: Calendar
+type: ATM
 why: Month grid with keyboard navigation and selection state via the State API.
 when: Displaying or selecting days inside a larger date UI — pair with a popover for a full picker.
 where: dist/components/calendar/calendar.css + dist/components/calendar/calendar.js

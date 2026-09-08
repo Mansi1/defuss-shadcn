@@ -1,5 +1,6 @@
 ---
 name: Button Group
+type: MOL
 why: Adjacent buttons fused into one visual unit via border collapse on first/last children.
 when: Tightly related actions (Save + Cancel, split buttons, icon actions) that belong together.
 where: dist/components/button-group/button-group.css

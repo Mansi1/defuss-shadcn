@@ -1,5 +1,6 @@
 ---
 name: Accordion
+type: ATM
 why: Native <details>/<summary> disclosure — the browser owns open/close, and <details name="group"> gives exclusive (single-open) behavior with zero JS.
 when: Grouped content sections on one page (FAQs, settings, progressive disclosure) that expand independently or mutually exclusively.
 where: dist/components/accordion/accordion.css + dist/components/accordion/accordion.js

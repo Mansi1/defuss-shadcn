@@ -1,5 +1,6 @@
 ---
 name: Spinner
+type: ATM
 why: Animated indicator with role=status announcing "loading".
 when: Unbounded waits where the total is unknown; known total takes progress.
 where: dist/components/spinner/spinner.css

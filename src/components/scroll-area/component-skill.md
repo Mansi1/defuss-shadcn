@@ -1,5 +1,6 @@
 ---
 name: Scroll Area
+type: ATM
 why: Overflow container with styled scrollbars and edge fade — pure CSS.
 when: Fixed-height regions that scroll: menu bodies, sidebars, code panes.
 where: dist/components/scroll-area/scroll-area.css

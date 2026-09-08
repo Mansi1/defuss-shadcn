@@ -1,5 +1,6 @@
 ---
 name: Blog
+type: BLK
 why: Post cards are `<a>` + `<img>` + clamped text — line-clamp and aspect-ratio give the editorial layout for free.
 when: Insights/news teasers on a marketing page; the full article list is a table or card grid instead.
 where: dist/components/blog/blog.css

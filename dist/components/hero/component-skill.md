@@ -1,5 +1,6 @@
 ---
 name: Hero
+type: BLK
 why: Headline, description and CTAs in one centered copy block — native flow layout and container queries, nothing to script.
 when: First section of a marketing page; pair with the Product Showcase block when you need a video.
 where: dist/components/hero/hero.css

@@ -1,5 +1,6 @@
 ---
 name: Get In Touch
+type: BLK
 why: A bordered contact CTA card — avatar overlap is negative margins + outline, not positioning math.
 when: End-of-page "want to know more?" band; for an actual contact form use Form + Input components.
 where: dist/components/get-in-touch/get-in-touch.css

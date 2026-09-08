@@ -1,5 +1,6 @@
 ---
 name: Breadcrumb
+type: ATM
 why: nav > ol markup with aria-current="page" — the accessibility comes free with the markup, not from JS.
 when: Showing hierarchy in multi-level sites/apps so users know where they are and can jump up.
 where: dist/components/breadcrumb/breadcrumb.css

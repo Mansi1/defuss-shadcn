@@ -1,5 +1,6 @@
 ---
 name: Checkbox
+type: ATM
 why: Native input[type=checkbox] including the indeterminate state — themed with accent-color, no custom widget.
 when: Independent on/off selections in a form, one or many at once.
 where: dist/components/checkbox/checkbox.css

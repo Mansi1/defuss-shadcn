@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { chromium, type Page } from 'playwright';
 import { startServer } from './server.ts';
+import { icbRect } from './lib/viewport.ts';
 
 /**
  * Why: E2E smoke test for the shipped alert-dialog component. Loads the
@@ -45,7 +46,10 @@ try {
   await check('alert-dialog.css applied (centered modal, 28rem cap)', async () => {
     await page.click('[data-alert-dialog-trigger="demo-alert-dialog-1"]');
     await page.waitForFunction(() => (document.querySelector('#demo-alert-dialog-1') as HTMLDialogElement).open);
-    const geom = await page.evaluate(() => {
+    // margin:auto centers within the fixed-element containing block, which the
+    // scrollbar-gutter scroll lock shrinks by the classic scrollbar — measure
+    // against the ICB sentinel, not innerWidth (see lib/viewport.ts).
+    const geom = await page.evaluate((icb) => {
       const el = document.querySelector('#demo-alert-dialog-1') as HTMLDialogElement;
       const cs = getComputedStyle(el);
       const r = el.getBoundingClientRect();
@@ -53,9 +57,9 @@ try {
         position: cs.position,
         maxWidth: cs.maxWidth,
         role: el.getAttribute('role'),
-        centered: Math.abs(r.x + r.width / 2 - window.innerWidth / 2) < 2,
+        centered: Math.abs(r.x + r.width / 2 - icb.cx) < 2,
       };
-    });
+    }, await page.evaluate(icbRect));
     assert.equal(geom.position, 'fixed');
     assert.equal(geom.maxWidth, '448px', 'max-width: 28rem');
     assert.equal(geom.role, 'alertdialog', 'alertdialog role present for AT');

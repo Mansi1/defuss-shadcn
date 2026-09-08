@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { chromium, type Page } from 'playwright';
 import { startServer } from './server.ts';
+import { icbRect } from './lib/viewport.ts';
 
 /**
  * Why: E2E smoke test for the shipped sheet component. Loads the fixture
@@ -63,25 +64,26 @@ try {
     );
   });
 
-  // rect() widths include the 1px dock border and innerWidth includes the
-  // classic scrollbar — assert layout viewport (clientWidth/clientHeight) and
-  // computed width instead of raw rects.
+  // The modal scroll lock (scrollbar-gutter:stable) shrinks the fixed-element
+  // containing block by the classic scrollbar while clientWidth keeps
+  // reporting the full viewport — dock against the ICB sentinel
+  // (tests/e2e/lib/viewport.ts), the block fixed elements actually get.
   await check('right sheet: docked right, 24rem wide, full height', async () => {
     await open(page, 'sheet-right');
-    const geom = await page.evaluate(() => {
+    const geom = await page.evaluate((icb) => {
       const el = document.querySelector('#sheet-right')!;
       const r = el.getBoundingClientRect();
       return {
         right: r.right,
         cssWidth: getComputedStyle(el).width,
         height: r.height,
-        viewportW: document.documentElement.clientWidth,
         viewportH: document.documentElement.clientHeight,
         opacity: getComputedStyle(el).opacity,
+        icbRight: icb.right,
       };
-    });
+    }, await page.evaluate(icbRect));
     assert.equal(geom.cssWidth, '384px', 'width: 24rem');
-    assert.equal(Math.round(geom.right), geom.viewportW, 'docked to the right edge');
+    assert.ok(Math.abs(geom.right - geom.icbRight) < 2, 'docked to the right edge');
     assert.equal(Math.round(geom.height), geom.viewportH, 'full height');
     assert.equal(geom.opacity, '1', 'slid in (opacity 1)');
   });
@@ -100,12 +102,12 @@ try {
   await check('top sheet: docked top, full width', async () => {
     await setState(page, 'sheet-left', 'default');
     await open(page, 'sheet-top');
-    const geom = await page.evaluate(() => {
+    const geom = await page.evaluate((icb) => {
       const r = document.querySelector('#sheet-top')!.getBoundingClientRect();
-      return { y: r.y, width: r.width, viewport: document.documentElement.clientWidth };
-    });
+      return { y: r.y, width: r.width, icbWidth: icb.width };
+    }, await page.evaluate(icbRect));
     assert.equal(Math.round(geom.y), 0, 'flush with top edge');
-    assert.equal(Math.round(geom.width), geom.viewport, 'full width');
+    assert.ok(Math.abs(geom.width - geom.icbWidth) < 2, 'full width of the fixed-element containing block');
   });
 
   await check('top/bottom sheets center their content column', async () => {
@@ -128,17 +130,17 @@ try {
   await check('bottom sheet: docked bottom, full width', async () => {
     await setState(page, 'sheet-top', 'default');
     await open(page, 'sheet-bottom');
-    const geom = await page.evaluate(() => {
+    const geom = await page.evaluate((icb) => {
       const r = document.querySelector('#sheet-bottom')!.getBoundingClientRect();
       return {
         bottom: r.bottom,
         width: r.width,
-        viewport: document.documentElement.clientWidth,
-        vh: document.documentElement.clientHeight,
+        icbWidth: icb.width,
+        icbBottom: icb.bottom,
       };
-    });
-    assert.equal(Math.round(geom.bottom), geom.vh, 'flush with bottom edge');
-    assert.equal(Math.round(geom.width), geom.viewport, 'full width');
+    }, await page.evaluate(icbRect));
+    assert.ok(Math.abs(geom.bottom - geom.icbBottom) < 2, 'flush with bottom edge');
+    assert.ok(Math.abs(geom.width - geom.icbWidth) < 2, 'full width of the fixed-element containing block');
     await setState(page, 'sheet-bottom', 'default');
   });
 

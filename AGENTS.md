@@ -66,7 +66,8 @@ defuss-shadcn/
 │
 ├── screenshots/                       ← generated PNGs per component AND per declared state, light/ + dark/ (`bun run screenshots`, gitignored) — SKILL.md maps state names to these files
 ├── scripts/                           ← build & maintenance scripts (no one-shot migrations)
-│   ├── build.ts                       ← src/ → dist/ (tsc type-strip + copy everything else 1:1)
+│   ├── build.ts                       ← src/ → dist/ (tsc type-strip + sourceMap + copy everything else 1:1)
+│   ├── minify.ts                      ← post-pass: per-component *.min.css (lightningcss) + *.min.js + *.min.js.map (oxc-minify; `make minify`)
 │   ├── verify.ts                      ← static consistency gate (runs at end of build; `bun run verify`)
 │   ├── sync-docs.ts                   ← mirror dist/documentation → docs/ (CDN-rewritten; `bun run docs`)
 │   ├── lib/mirror.ts                  ← shared docs/ mirror transform (sync-docs + verify compare against it)
@@ -75,6 +76,7 @@ defuss-shadcn/
 │   ├── lib/skill-files.ts             ← dist/SKILL.md index generator from src/SKILL_tpl.md + skill frontmatter (build.ts regenerates every build)
 │   ├── create-screenshots.ts          ← parallel default-state screenshots for agent inspection
 │   ├── lib/audit.ts                   ← undefined-utility audit (used by verify)
+│   ├── lib/minify.ts                  ← derived-artifact recognition (verify 1:1 allow-list + min-twin gate; pure)
 │   ├── lib/snippets.ts                ← shared snippet drift/replace logic (syncers + verify)
 │   ├── sync-css-snippets.ts           ← re-embed component CSS into doc pages after edits
 │   ├── sync-js-snippets.ts            ← re-embed component JS into doc pages after edits
@@ -848,10 +850,13 @@ of removing it).
 ## Testing
 
 `make help` lists the shortcuts (`setup`, `dev`, `test`, `test-run`, `coverage`, `e2e`, `lint`,
-`verify`, `screenshots`, `build`) — they wrap the equivalent `bun run <script>` commands;
+`verify`, `screenshots`, `minify`, `build`) — they wrap the equivalent `bun run <script>` commands;
 package.json stays the single source of truth. `make build` is the full pipeline:
-lint → compile → screenshots → docs-mirror → verify → tests → e2e (it calls `scripts/build.ts` directly,
-since `bun run build` runs `verify` before screenshots could be refreshed).
+lint → compile → minify → screenshots → docs-mirror → verify → tests → e2e (it calls `scripts/build.ts` +
+`scripts/minify.ts` directly, since `bun run build` runs `verify` before screenshots could be refreshed).
+`make minify` alone re-runs just the minify post-pass over `dist/components/` (every shipped `.css` gains a
+`.min.css`, every `.js` a `.min.js` + `.min.js.map`; tsc already emits the readable `.js.map`). verify's
+`minified artifacts` gate fails when a component ships without its twins.
 
 `bun run test:run` runs the UI suite in headless Chromium (Vitest browser mode + Playwright).
 First run needs `make setup` (or `bunx playwright install`).

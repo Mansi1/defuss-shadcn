@@ -5,6 +5,7 @@ import { join, relative, sep } from 'node:path';
 import { parseHTML } from 'linkedom';
 import { auditUtilities, walk } from './lib/audit.ts';
 import { componentFingerprints, declaredStates } from './lib/inputs.ts';
+import { isDerivedArtifact, minifyArtifactProblems } from './lib/minify.ts';
 import { snippetDrifts } from './lib/snippets.ts';
 import { mirrorHashes } from './lib/mirror.ts';
 import { changelogProblems, changelogMarkupProblems, FIX_TWO_COMMITS, parseChangelogEntries, type CommitInfo } from './lib/changelog.ts';
@@ -205,6 +206,8 @@ if (!existsSync(DIST)) {
   const srcSet = new Set(walk(SRC, ['']).map((f) => relative(SRC, f).replace(/\.ts$/, '.js')));
   for (const f of walk(DIST, [''])) {
     const rel = relative(DIST, f);
+    // scripts/minify.ts + tsc sourceMap write derived twins — not orphans
+    if (isDerivedArtifact(rel)) continue;
     if (!srcSet.has(rel)) distProblems.push(`dist/${rel} is orphaned (no src/ counterpart) — rebuild`);
   }
 }
@@ -212,6 +215,24 @@ check(
   'dist 1:1',
   distProblems,
   'run `bun run build` (never edit dist/ directly)',
+);
+
+// 10a. every shipped component file must carry its minified twins (the
+// Installation page advertises *.min.css / *.min.js / *.min.js.map / *.js.map
+// to consumers — a component shipping without them is a broken CDN URL).
+const artifactProblems = existsSync(DIST)
+  ? minifyArtifactProblems(
+      new Set(
+        walk(DIST, [''])
+          .filter((f) => statSync(f).size > 0)
+          .map((f) => relative(DIST, f)),
+      ),
+    )
+  : [];
+check(
+  'minified artifacts',
+  artifactProblems.slice(0, 8),
+  'run `bun run build` (compiles + minifies via scripts/minify.ts; `make minify` for the post-pass alone)',
 );
 
 // 10b. State API contract (AGENTS.md "State API"): every JS component must

@@ -299,3 +299,4 @@ function init() {
 }
 init();
 new MutationObserver(init).observe(document, { childList: true, subtree: true });
+//# sourceMappingURL=sortable.js.map

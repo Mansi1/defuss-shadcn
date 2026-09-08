@@ -144,3 +144,4 @@ function init() {
 }
 init();
 new MutationObserver(init).observe(document, { childList: true, subtree: true });
+//# sourceMappingURL=toolbar.js.map

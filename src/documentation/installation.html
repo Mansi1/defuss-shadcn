@@ -203,8 +203,22 @@
 └-- dialog/
     ├-- component-skill.md    ← HTML structure, attributes, ARIA (read this first)
     ├-- dialog.css   ← stylesheet (include via &lt;link&gt;)
-    └-- dialog.js    ← interaction behavior (include via &lt;script type="module"&gt;)</code></pre>
+    ├-- dialog.min.css       ← minified stylesheet
+    ├-- dialog.js    ← interaction behavior (include via &lt;script type="module"&gt;)
+    ├-- dialog.js.map        ← source map for dialog.js
+    ├-- dialog.min.js        ← minified behavior
+    └-- dialog.min.js.map    ← source map for dialog.min.js</code></pre>
     <p class="text-sm text-muted-foreground mt-2">Some components — like Button and Badge — are CSS-only. No JavaScript needed.</p>
+  </div>
+
+  <!-- -- Minified builds ------------------------------------- -->
+  <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);">
+    <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:400;letter-spacing:-0.02em;margin:0 0 0.75rem;">Minified builds &amp; source maps</h2>
+    <p class="text-sm text-muted-foreground mb-3">Every component also ships minified twins, generated at build time with <a href="https://oxc.rs" target="_blank" style="color:var(--primary);text-decoration:underline;text-underline-offset:4px;">oxc-minify</a> (JS) and <a href="https://lightningcss.dev" target="_blank" style="color:var(--primary);text-decoration:underline;text-underline-offset:4px;">Lightning CSS</a> (CSS). Swap the extension to <code>.min.css</code> / <code>.min.js</code> in any URL:</p>
+    <pre><code class="language-markup">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/dialog/dialog.min.css"&gt;
+&lt;script type="module" src="https://cdn.jsdelivr.net/gh/kyr0/defuss-shadcn@latest/dist/components/dialog/dialog.min.js"&gt;&lt;/script&gt;</code></pre>
+    <p class="text-sm text-muted-foreground mt-2">Minification changes no behavior — the State API (<code>el.api.setState()</code>), globals and <code>data-*</code> attributes work identically. Debugging stays intact: <code>dialog.js.map</code> maps the readable file back to its source and <code>dialog.min.js.map</code> maps the minified file through it; devtools pick both up automatically via <code>sourceMappingURL</code>, so you can set breakpoints in the original source even when loading the <code>.min.js</code>.</p>
+    <p class="text-sm text-muted-foreground" style="margin-top:0.75rem;">Readable and minified files ship from the same source per release, so you can mix them freely — minified in production, readable while developing — and switch back by URL alone.</p>
   </div>
     </main>
   </div>

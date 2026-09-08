@@ -2,7 +2,7 @@
 # KISS: every target delegates to package.json so there is one source of truth.
 
 .DEFAULT_GOAL := help
-.PHONY: help setup dev test test-run coverage e2e lint verify screenshots build docs purge-cdn
+.PHONY: help setup dev test test-run coverage e2e lint verify screenshots minify build docs purge-cdn
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z0-9_-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -38,18 +38,23 @@ docs: ## Build, then mirror dist/ → docs/ for GitHub Pages
 purge-cdn: ## Purge jsDelivr @latest cache for all dist assets (run after deploy)
 	bun run purge-cdn
 
-# Full pipeline: fast checks first, compile, refresh screenshots (the verify
-# gate requires them fresh vs. the new dist/), then gate + tests. Calls
-# scripts/build.ts directly because `bun run build` would run verify BEFORE
-# the screenshots could be refreshed.
-build: ## Full pipeline: lint → compile → screenshots → docs → verify → tests → e2e
+# Full pipeline: fast checks first, compile + minify, refresh screenshots (the
+# verify gate requires them fresh vs. the new dist/, and min files are part of
+# each component's fingerprint — hence minify BEFORE screenshots), then gate +
+# tests. Calls scripts/build.ts directly because `bun run build` would run
+# verify BEFORE the screenshots could be refreshed.
+build: ## Full pipeline: lint → compile → minify → screenshots → docs → verify → tests → e2e
 	bun run lint
 	bun scripts/build.ts
+	bun run minify
 	bun run screenshots
 	bun run docs
 	bun run verify
 	bun run test:run
 	bun run e2e
+
+minify: ## Post-build: *.min.css + *.min.js (+ source maps) into dist/components/
+	bun run minify
 
 verify: ## Static consistency gate (runs automatically after build)
 	bun run verify

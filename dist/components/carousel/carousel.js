@@ -274,3 +274,4 @@ function init() {
 }
 init();
 new MutationObserver(init).observe(document, { childList: true, subtree: true });
+//# sourceMappingURL=carousel.js.map

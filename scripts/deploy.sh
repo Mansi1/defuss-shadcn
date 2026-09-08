@@ -156,7 +156,7 @@ node -e "
   html = html.replace(anchor, '\$1 <code class=\"changelog-hash\">${ENTRY_HASH}</code>');
   fs.writeFileSync(file, html);
 "
-bun scripts/build.ts && bun scripts/sync-docs.ts
+bun scripts/build.ts && bun scripts/minify.ts && bun scripts/sync-docs.ts
 
 git add package.json src/documentation/js/layout.ts src/documentation/changelog.html dist/ docs/
 git commit -m "chore: bump version to v${NEW_VERSION} (changelog ${ENTRY_HASH})"

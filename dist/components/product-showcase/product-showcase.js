@@ -125,3 +125,4 @@ function init() {
 }
 init();
 new MutationObserver(init).observe(document, { childList: true, subtree: true });
+//# sourceMappingURL=product-showcase.js.map

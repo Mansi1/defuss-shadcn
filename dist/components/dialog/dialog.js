@@ -126,3 +126,4 @@ function init() {
 }
 init();
 new MutationObserver(init).observe(document, { childList: true, subtree: true });
+//# sourceMappingURL=dialog.js.map

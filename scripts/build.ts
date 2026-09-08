@@ -64,8 +64,17 @@ cpSync(SRC, DIST, { recursive: true, filter: (s) => !s.endsWith('.ts') });
 // shipped files keep zero local module dependencies
 const helperPath = join(DIST, 'shared', 'state-api.js');
 if (existsSync(helperPath)) {
-  // drop `export` — each module gets its own hoisted copy of the functions
-  const helper = readFileSync(helperPath, 'utf8').replace(/^export /gm, '');
+  // drop `export` — each module gets its own hoisted copy of the functions.
+  // Also drop the helper's own sourceMappingURL comment: dist/shared/ (and its
+  // .map) is deleted below, and tsc appends the comment WITHOUT a trailing
+  // newline — inlining it would comment out the component's first code line.
+  // ponytail: the component's own .js.map was emitted before this insertion,
+  // so mapped lines after the inlined block shift by the helper's height
+  // (debug-quality only). Upgrade path: merge maps with a real remapping lib.
+  const helper = readFileSync(helperPath, 'utf8')
+    .replace(/^export /gm, '')
+    .replace(/\/\/# sourceMappingURL=.*\n?/g, '')
+    .replace(/\n*$/, '\n');
   for (const dir of readdirSync(join(DIST, 'components'))) {
     const js = join(DIST, 'components', dir, `${dir}.js`);
     if (!existsSync(js)) continue;

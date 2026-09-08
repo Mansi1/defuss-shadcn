@@ -216,3 +216,4 @@ if (!document.__imagePreviewInit) {
         openLightbox(img.src, img.alt);
     });
 }
+//# sourceMappingURL=image.js.map

@@ -141,3 +141,4 @@
         updateFavicon();
     });
 })();
+//# sourceMappingURL=theme-switcher.js.map

@@ -180,6 +180,19 @@ test('every TOC heading carries a § permalink that deep-links (issue #2)', asyn
   }
 });
 
+test('no § permalink is injected inside .preview demo markup', async () => {
+  // preview subtrees hold component demo markup (alert-dialog titles,
+  // typography samples) — the § must never be stamped there
+  for (const page of ['alert-dialog.html', 'typography.html']) {
+    const { doc } = await openDocPage(page);
+    await waitFor(() => doc.querySelector('.toc-link'), 'TOC to build');
+    expect(
+      doc.querySelector('.preview .heading-anchor'),
+      `no § inside .preview on ${page}`,
+    ).toBeNull();
+  }
+});
+
 test('realignWhenSettled corrects a stale landing and respects reader input (issue #2)', async () => {
   const { doc } = await openDocPage('theming.html');
   await waitFor(() => doc.querySelector('.toc-link'), 'TOC to build');

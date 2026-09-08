@@ -782,8 +782,10 @@
       if (!item.el.id) item.el.id = id;
       /* § permalink before every TOC heading — a visible, copyable deep link
          (getHeadingText strips <a> clones, so it never leaks into TOC labels;
-         the search index is built statically, so it never leaks there either). */
-      if (!item.el.querySelector('.heading-anchor')) {
+         the search index is built statically, so it never leaks there either).
+         .preview subtrees are excluded: their h2s are demo/sample markup
+         (dialog titles etc.), not doc sections — a § there pollutes the demo. */
+      if (!item.el.querySelector('.heading-anchor') && !item.el.closest('.preview')) {
         item.el.insertAdjacentHTML('afterbegin',
           '<a class="heading-anchor" href="#' + id + '" aria-label="Link to section: ' + item.text.replace(/"/g, '"') + '">§</a>');
       }

@@ -32,23 +32,30 @@ export function typeBadgeHtml(type: ComponentType): string {
   return `<span class="type-badge" data-type="${type}" title="${TYPE_NAMES[type]}">${type}</span>`;
 }
 
-/** Why: the exact div the badge is injected after on every doc page (the
- * page-header metadata row) — shared between the bootstrap script and verify so
- * they anchor identically. */
-export const BADGE_ANCHOR = '<div style="display:flex;align-items:baseline;gap:0.375rem;">';
+/** Why: the exact <h1> every component doc page opens its page-header with (the
+ * component-name title) — the badge rides that heading's baseline. Shared
+ * between the generator and any caller so they anchor identically. */
+export const BADGE_ANCHOR =
+  '<h1 style="font-family:var(--font-display);font-size:2.5rem;font-weight:400;letter-spacing:-0.035em;margin:0 0 0.75rem;">';
 
 /**
- * Why: place the type badge as the first chip of a doc page's page-header
- * metadata row (every component page has it). Idempotent: re-running with a new
- * type replaces the previous badge. Throws on an unknown type or a page without
- * the row (which would silently produce an unanchored injection).
+ * Why: append the type badge inside a doc page's title <h1> so it renders
+ * right after the component name, on the heading's baseline (spacing lives in
+ * documentation/css/layout.css `.page-header h1 .type-badge`). Idempotent:
+ * re-running with a new type replaces the previous badge. Throws on an unknown
+ * type or a page without the title <h1> (which would silently produce an
+ * unanchored injection).
  */
 export function injectTypeBadge(html: string, type: ComponentType): string {
   if (!(COMPONENT_TYPES as readonly string[]).includes(type))
     throw new Error(`unknown component type "${type}" (allowed: ${COMPONENT_TYPES.join(', ')})`);
   const at = html.indexOf(BADGE_ANCHOR);
-  if (at === -1) throw new Error('doc page has no page-header pill row to anchor the type badge');
-  const tail = html.slice(at + BADGE_ANCHOR.length);
-  const old = tail.match(/<span class="type-badge" data-type="[A-Z]{3}">[A-Z]{3}<\/span> /);
-  return html.slice(0, at + BADGE_ANCHOR.length) + typeBadgeHtml(type) + ' ' + tail.replace(old ? old[0] : '', '');
+  if (at === -1) throw new Error('doc page has no page-title <h1> to anchor the type badge');
+  const close = html.indexOf('</h1>', at);
+  if (close === -1) throw new Error('doc page title <h1> is never closed — cannot anchor the type badge');
+  // drop a previously injected badge (with its leading gap) so a re-run just swaps the type
+  const title = html
+    .slice(at + BADGE_ANCHOR.length, close)
+    .replace(/ ?<span class="type-badge" data-type="[A-Z]{3}" title="[^"]*">[A-Z]{3}<\/span>/, '');
+  return html.slice(0, at + BADGE_ANCHOR.length) + title + typeBadgeHtml(type) + html.slice(close);
 }

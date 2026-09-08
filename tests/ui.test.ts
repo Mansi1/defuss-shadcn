@@ -42,6 +42,23 @@ test('sidebar shows component type badges (taxonomy), never the generic PREVIEW 
   expect(doc.querySelector('site-nav')!.textContent).not.toContain('PREVIEW');
 });
 
+test('doc page type badge rides the title <h1> baseline, after the component name', async () => {
+  const { doc } = await openDocPage('badge.html');
+  await waitFor(() => doc.querySelector('.page-header h1'), 'page title');
+
+  const badge: HTMLElementOrNull = doc.querySelector('.page-header h1 .type-badge');
+  expect(badge, 'type badge inside title <h1>').toBeTruthy();
+  expect(badge!.dataset.type).toBe('ATM');
+  // badge directly follows the component-name text node inside the heading
+  expect(badge!.previousSibling!.textContent).toBe('Badge');
+  // small inline padding on the baseline (see .page-header h1 .type-badge in layout.css)
+  const styles = (doc.defaultView as Window).getComputedStyle(badge!);
+  expect(styles.marginLeft).not.toBe('0px');
+  expect(styles.verticalAlign).toBe('baseline');
+  // the metadata row no longer carries a badge
+  expect(doc.querySelector('.page-header .flex .type-badge')).toBeFalsy();
+});
+
 test('SPA router swaps <main> content on nav click without reloading', async () => {
   const { doc } = await openDocPage('index.html');
   await waitFor(() => doc.querySelector('site-header button#theme-toggle'), 'shell to render');

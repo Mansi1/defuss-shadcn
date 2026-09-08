@@ -252,6 +252,13 @@ html.dark .type-badge[data-type="TPL"] { color: #94A3B8; border-color: color-mix
 @media (forced-colors: active) {
   .type-badge { color: CanvasText; border-color: CanvasText; }
 }
+/* Doc page title badge: sits right after the component name, on the heading's
+   baseline (baseline-aligned inline-block keeps its border box on the text line). */
+.page-header h1 .type-badge {
+  display: inline-block;
+  margin-inline-start: 0.5rem;
+  vertical-align: baseline;
+}
 /* Sidebar keeps the right-aligned slot the old PREVIEW marker had. */
 .nav-link .type-badge { margin-left: auto; }
 /* Palette rows use flex space-between already; nudge badge off the label. */

@@ -593,6 +593,31 @@ check(
   'fix the doc reference or restore the script/target — docs are agent instructions',
 );
 
+// 20b. field-description wiring: every live .field-description / .field-error
+// paragraph on a doc page must carry an id that at least one aria-describedby
+// in the same page points at. Visual proximity is invisible to screen
+// readers — the Input "With description" example is the site's established
+// pattern; this gate keeps the other pages from drifting off it. linkedom
+// only sees live elements: escaped snippet markup is text, not DOM.
+const descProblems: string[] = [];
+for (const [page, html] of docHtml) {
+  const { document } = parseHTML(html);
+  const refs = new Set(
+    [...document.querySelectorAll('[aria-describedby]')]
+      .flatMap((el) => (el.getAttribute('aria-describedby') ?? '').split(/\s+/).filter(Boolean)),
+  );
+  for (const el of document.querySelectorAll('.field-description, .field-error')) {
+    const id = el.getAttribute('id');
+    if (!id) descProblems.push(`${page}: a .${el.classList[0]} has no id for a control to reference`);
+    else if (!refs.has(id)) descProblems.push(`${page}: #${id} is referenced by no aria-describedby — screen readers never announce it`);
+  }
+}
+check(
+  'field description wiring',
+  descProblems,
+  'give the description an id and point aria-describedby at it from the field/fieldset (see Input "With description")',
+);
+
 // 21. link integrity in the shipped doc pages: every local href/src and
 // same-page #anchor must resolve inside dist/. Snippet blocks are excluded —
 // they contain escaped examples (src="photo.jpg") meant to be illustrative.

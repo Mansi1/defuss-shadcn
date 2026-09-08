@@ -31,8 +31,8 @@ supportedStates: default
 <form class="form">
   <div class="form-field">
     <label class="label" for="f-name">Name</label>
-    <input class="input" type="text" id="f-name" required>
-    <p class="field-description">Your full name.</p>
+    <input class="input" type="text" id="f-name" required aria-describedby="f-name-desc">
+    <p class="field-description" id="f-name-desc">Your full name.</p>
   </div>
   <div class="form-field">
     <label class="label" for="f-email">Email</label>
@@ -58,8 +58,8 @@ supportedStates: default
 <div class="form-field" data-orientation="horizontal">
   <label class="label" for="f-user">Username</label>
   <div>
-    <input class="input" type="text" id="f-user">
-    <p class="field-description">Your public display name.</p>
+    <input class="input" type="text" id="f-user" aria-describedby="f-user-desc">
+    <p class="field-description" id="f-user-desc">Your public display name.</p>
   </div>
 </div>
 ```
@@ -69,17 +69,17 @@ supportedStates: default
 <div class="form-field-row">
   <div>
     <label class="label" for="f-marketing">Marketing emails</label>
-    <p class="field-description">Receive emails about new products and features.</p>
+    <p class="field-description" id="f-marketing-desc">Receive emails about new products and features.</p>
   </div>
-  <input class="switch" type="checkbox" role="switch" id="f-marketing">
+  <input class="switch" type="checkbox" role="switch" id="f-marketing" aria-describedby="f-marketing-desc">
 </div>
 ```
 
 ### Fieldset grouping
 ```html
-<fieldset class="form-fieldset">
+<fieldset class="form-fieldset" aria-describedby="f-notify-desc">
   <legend>Notifications</legend>
-  <p class="field-description">Choose what you want to be notified about.</p>
+  <p class="field-description" id="f-notify-desc">Choose what you want to be notified about.</p>
   <div class="form-group">
     <div class="form-field-inline">
       <input class="checkbox" type="checkbox" id="opt-1">

@@ -173,8 +173,8 @@
         <div class="preview">
           <div style="width:100%;max-width:24rem;">
             <label class="label" for="d-bio">Bio</label>
-            <textarea class="textarea" id="d-bio" placeholder="Tell us about yourself..."></textarea>
-            <p class="field-description">You can use markdown in your bio.</p>
+            <textarea class="textarea" id="d-bio" placeholder="Tell us about yourself..." aria-describedby="d-bio-desc"></textarea>
+            <p class="field-description" id="d-bio-desc">You can use markdown in your bio.</p>
           </div>
         </div>
         <div style="position:relative;margin-top:0.5rem;">
@@ -183,8 +183,8 @@
             Copy
           </button>
           <pre><code class="language-markup">&lt;label class="label" for="bio"&gt;Bio&lt;/label&gt;
-&lt;textarea class="textarea" id="bio" placeholder="Tell us..."&gt;&lt;/textarea&gt;
-&lt;p class="field-description"&gt;You can use markdown.&lt;/p&gt;</code></pre>
+&lt;textarea class="textarea" id="bio" placeholder="Tell us..." aria-describedby="bio-desc"&gt;&lt;/textarea&gt;
+&lt;p class="field-description" id="bio-desc"&gt;You can use markdown.&lt;/p&gt;</code></pre>
         </div>
 
         <!-- -- CSS --------------------------------------- -->

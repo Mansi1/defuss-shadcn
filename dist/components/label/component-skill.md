@@ -82,8 +82,8 @@ The label auto-dims when the adjacent control is disabled — no `data-disabled`
 ```html
 <div>
   <label class="label" for="username">Username</label>
-  <input class="input" id="username" type="text" placeholder="shadcn">
-  <p class="field-description">This is your public display name.</p>
+  <input class="input" id="username" type="text" placeholder="shadcn" aria-describedby="username-desc">
+  <p class="field-description" id="username-desc">This is your public display name.</p>
 </div>
 ```
 
@@ -99,6 +99,7 @@ The label auto-dims when the adjacent control is disabled — no `data-disabled`
 - Clicking the label focuses the associated input — native `<label>` behavior, and the practical proof the pairing is intact.
 - The required indicator `*` uses `aria-hidden="true"` since the `required` attribute on the input already conveys the requirement to assistive technology.
 - Do not use `<label>` without a `for` attribute or a nested input.
+- A `.field-description` next to the field is only visible proximity — add `aria-describedby` on the control pointing to the description's `id` so assistive tech announces it with the field.
 - In `forced-colors` mode, label text maps to system `LinkText` color.
 
 ---

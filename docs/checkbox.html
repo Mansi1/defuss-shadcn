@@ -169,10 +169,10 @@
         <p class="text-xs text-muted-foreground mb-3">Checkbox with helper text.</p>
         <div class="preview">
           <div class="checkbox-item-block">
-            <input class="checkbox" type="checkbox" id="d-notify" style="margin-top:0.125rem;">
+            <input class="checkbox" type="checkbox" id="d-notify" style="margin-top:0.125rem;" aria-describedby="d-notify-desc">
             <div>
               <label for="d-notify" style="font-size:0.875rem;font-weight:500;">Enable notifications</label>
-              <p class="field-description">You can enable or disable notifications at any time.</p>
+              <p class="field-description" id="d-notify-desc">You can enable or disable notifications at any time.</p>
             </div>
           </div>
         </div>
@@ -181,10 +181,10 @@
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
             Copy
           </button>
-          <pre><code class="language-markup">&lt;input class="checkbox" type="checkbox" id="notify"&gt;
+          <pre><code class="language-markup">&lt;input class="checkbox" type="checkbox" id="notify" aria-describedby="notify-desc"&gt;
 &lt;div&gt;
   &lt;label for="notify"&gt;Enable notifications&lt;/label&gt;
-  &lt;p class="field-description"&gt;...&lt;/p&gt;
+  &lt;p class="field-description" id="notify-desc"&gt;...&lt;/p&gt;
 &lt;/div&gt;</code></pre>
         </div>
 
@@ -268,9 +268,9 @@
         <p class="text-sm font-medium mb-2 mt-8">Group</p>
         <p class="text-xs text-muted-foreground mb-3">Multiple checkboxes in a group using <code>&lt;fieldset&gt;</code> and <code>&lt;legend&gt;</code>.</p>
         <div class="preview">
-          <fieldset style="border:none;padding:0;margin:0;">
+          <fieldset style="border:none;padding:0;margin:0;" aria-describedby="d-grp-desc">
             <legend style="font-size:0.875rem;font-weight:500;margin-bottom:0.25rem;">Select items to display on the desktop:</legend>
-            <p class="field-description" style="margin-bottom:0.75rem;">Choose which items are visible.</p>
+            <p class="field-description" id="d-grp-desc" style="margin-bottom:0.75rem;">Choose which items are visible.</p>
             <div style="display:flex;flex-direction:column;gap:0.5rem;">
               <div class="checkbox-item">
                 <input class="checkbox" type="checkbox" id="d-grp-1" checked>
@@ -296,9 +296,9 @@
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
             Copy
           </button>
-          <pre><code class="language-markup">&lt;fieldset&gt;
+          <pre><code class="language-markup">&lt;fieldset aria-describedby="grp-desc"&gt;
   &lt;legend&gt;Select items to display on the desktop:&lt;/legend&gt;
-  &lt;p class="field-description"&gt;Choose which items are visible.&lt;/p&gt;
+  &lt;p class="field-description" id="grp-desc"&gt;Choose which items are visible.&lt;/p&gt;
   &lt;div class="checkbox-item"&gt;
     &lt;input class="checkbox" type="checkbox" id="item-1" checked&gt;
     &lt;label for="item-1"&gt;Hard disks&lt;/label&gt;

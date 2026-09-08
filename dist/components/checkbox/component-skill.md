@@ -38,10 +38,10 @@ supportedStates: default
 ### With description
 ```html
 <div style="display:flex;align-items:flex-start;gap:0.5rem;">
-  <input class="checkbox" type="checkbox" id="notify" style="margin-top:0.125rem;">
+  <input class="checkbox" type="checkbox" id="notify" style="margin-top:0.125rem;" aria-describedby="notify-desc">
   <div>
     <label class="label" for="notify" style="margin:0;">Enable notifications</label>
-    <p class="field-description">You can enable or disable notifications at any time.</p>
+    <p class="field-description" id="notify-desc">You can enable or disable notifications at any time.</p>
   </div>
 </div>
 ```
@@ -96,6 +96,7 @@ All keyboard behavior is provided natively by `<input type="checkbox">`.
 - Use `<label>` with `for` to associate the label text.
 - Use `<fieldset>` + `<legend>` for checkbox groups.
 - Use `aria-invalid="true"` for validation errors.
+- Point `aria-describedby` from the control to the `.field-description`'s `id` — visual proximity alone never reaches a screen reader.
 - Use `indeterminate` property via JS for the indeterminate (mixed) state.
 
 ---

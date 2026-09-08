@@ -38,8 +38,8 @@ Also covers `<textarea>` with auto-grow via `field-sizing: content`.
 ```html
 <div>
   <label class="label" for="username">Username</label>
-  <input class="input" type="text" id="username" placeholder="kyr0">
-  <p class="field-description">Choose a unique username for your account.</p>
+  <input class="input" type="text" id="username" placeholder="kyr0" aria-describedby="username-desc">
+  <p class="field-description" id="username-desc">Choose a unique username for your account.</p>
 </div>
 ```
 
@@ -54,8 +54,8 @@ Also covers `<textarea>` with auto-grow via `field-sizing: content`.
 ### Invalid
 ```html
 <label class="label" for="bad-email">Email</label>
-<input class="input" type="email" id="bad-email" aria-invalid="true" value="not-an-email">
-<p class="field-error">Please enter a valid email address.</p>
+<input class="input" type="email" id="bad-email" aria-invalid="true" aria-describedby="bad-email-err" value="not-an-email">
+<p class="field-error" id="bad-email-err">Please enter a valid email address.</p>
 ```
 
 ### With icon

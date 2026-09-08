@@ -164,18 +164,18 @@
           <form class="form" style="width:100%;max-width:24rem;" onsubmit="return false;">
             <div class="form-field">
               <label class="label" for="f-name">Username</label>
-              <input class="input" type="text" id="f-name" placeholder="kyr0" required>
-              <p class="field-description">This is your public display name.</p>
+              <input class="input" type="text" id="f-name" placeholder="kyr0" required aria-describedby="f-name-desc">
+              <p class="field-description" id="f-name-desc">This is your public display name.</p>
             </div>
             <div class="form-field">
               <label class="label" for="f-email">Email</label>
-              <input class="input" type="email" id="f-email" placeholder="you@example.com" required>
-              <p class="field-description">You can manage email addresses in your settings.</p>
+              <input class="input" type="email" id="f-email" placeholder="you@example.com" required aria-describedby="f-email-desc">
+              <p class="field-description" id="f-email-desc">You can manage email addresses in your settings.</p>
             </div>
             <div class="form-field">
               <label class="label" for="f-bio">Bio</label>
-              <textarea class="textarea" id="f-bio" placeholder="Tell us about yourself..."></textarea>
-              <p class="field-description">You can @mention other users and organizations.</p>
+              <textarea class="textarea" id="f-bio" placeholder="Tell us about yourself..." aria-describedby="f-bio-desc"></textarea>
+              <p class="field-description" id="f-bio-desc">You can @mention other users and organizations.</p>
             </div>
             <div class="form-actions">
               <button class="btn" type="submit" data-variant="default">Submit</button>
@@ -191,18 +191,18 @@
           <pre><code class="language-markup">&lt;form class="form"&gt;
   &lt;div class="form-field"&gt;
     &lt;label class="label" for="name"&gt;Username&lt;/label&gt;
-    &lt;input class="input" type="text" id="name" required&gt;
-    &lt;p class="field-description"&gt;This is your public display name.&lt;/p&gt;
+    &lt;input class="input" type="text" id="name" required aria-describedby="name-desc"&gt;
+    &lt;p class="field-description" id="name-desc"&gt;This is your public display name.&lt;/p&gt;
   &lt;/div&gt;
   &lt;div class="form-field"&gt;
     &lt;label class="label" for="email"&gt;Email&lt;/label&gt;
-    &lt;input class="input" type="email" id="email" required&gt;
-    &lt;p class="field-description"&gt;You can manage email addresses in your settings.&lt;/p&gt;
+    &lt;input class="input" type="email" id="email" required aria-describedby="email-desc"&gt;
+    &lt;p class="field-description" id="email-desc"&gt;You can manage email addresses in your settings.&lt;/p&gt;
   &lt;/div&gt;
   &lt;div class="form-field"&gt;
     &lt;label class="label" for="bio"&gt;Bio&lt;/label&gt;
-    &lt;textarea class="textarea" id="bio"&gt;&lt;/textarea&gt;
-    &lt;p class="field-description"&gt;You can @mention other users and organizations.&lt;/p&gt;
+    &lt;textarea class="textarea" id="bio" aria-describedby="bio-desc"&gt;&lt;/textarea&gt;
+    &lt;p class="field-description" id="bio-desc"&gt;You can @mention other users and organizations.&lt;/p&gt;
   &lt;/div&gt;
   &lt;div class="form-actions"&gt;
     &lt;button class="btn" type="submit" data-variant="default"&gt;Submit&lt;/button&gt;
@@ -256,16 +256,16 @@
             <div class="form-field-row">
               <div>
                 <label class="label" for="f3-marketing">Marketing emails</label>
-                <p class="field-description">Receive emails about new products, features, and more.</p>
+                <p class="field-description" id="f3-marketing-desc">Receive emails about new products, features, and more.</p>
               </div>
-              <input class="switch" type="checkbox" role="switch" id="f3-marketing">
+              <input class="switch" type="checkbox" role="switch" id="f3-marketing" aria-describedby="f3-marketing-desc">
             </div>
             <div class="form-field-row">
               <div>
                 <label class="label" for="f3-security">Security emails</label>
-                <p class="field-description">Receive emails about your account security.</p>
+                <p class="field-description" id="f3-security-desc">Receive emails about your account security.</p>
               </div>
-              <input class="switch" type="checkbox" role="switch" id="f3-security" checked disabled>
+              <input class="switch" type="checkbox" role="switch" id="f3-security" checked disabled aria-describedby="f3-security-desc">
             </div>
             <div class="form-actions">
               <button class="btn" type="submit" data-variant="default">Submit</button>
@@ -280,16 +280,16 @@
           <pre><code class="language-markup">&lt;div class="form-field-row"&gt;
   &lt;div&gt;
     &lt;label class="label" for="marketing"&gt;Marketing emails&lt;/label&gt;
-    &lt;p class="field-description"&gt;Receive emails about new products, features, and more.&lt;/p&gt;
+    &lt;p class="field-description" id="marketing-desc"&gt;Receive emails about new products, features, and more.&lt;/p&gt;
   &lt;/div&gt;
-  &lt;input class="switch" type="checkbox" role="switch" id="marketing"&gt;
+  &lt;input class="switch" type="checkbox" role="switch" id="marketing" aria-describedby="marketing-desc"&gt;
 &lt;/div&gt;
 &lt;div class="form-field-row"&gt;
   &lt;div&gt;
     &lt;label class="label" for="security"&gt;Security emails&lt;/label&gt;
-    &lt;p class="field-description"&gt;Receive emails about your account security.&lt;/p&gt;
+    &lt;p class="field-description" id="security-desc"&gt;Receive emails about your account security.&lt;/p&gt;
   &lt;/div&gt;
-  &lt;input class="switch" type="checkbox" role="switch" id="security" checked disabled&gt;
+  &lt;input class="switch" type="checkbox" role="switch" id="security" checked disabled aria-describedby="security-desc"&gt;
 &lt;/div&gt;</code></pre>
         </div>
 
@@ -356,8 +356,8 @@
             <div class="form-field" data-orientation="horizontal">
               <label class="label" for="f5-name">Name</label>
               <div>
-                <input class="input" type="text" id="f5-name" placeholder="Jane Doe">
-                <p class="field-description">Your full name for identification.</p>
+                <input class="input" type="text" id="f5-name" placeholder="Jane Doe" aria-describedby="f5-name-desc">
+                <p class="field-description" id="f5-name-desc">Your full name for identification.</p>
               </div>
             </div>
             <div class="form-field" data-orientation="horizontal">
@@ -380,8 +380,8 @@
           <pre><code class="language-markup">&lt;div class="form-field" data-orientation="horizontal"&gt;
   &lt;label class="label" for="name"&gt;Name&lt;/label&gt;
   &lt;div&gt;
-    &lt;input class="input" type="text" id="name"&gt;
-    &lt;p class="field-description"&gt;Your full name for identification.&lt;/p&gt;
+    &lt;input class="input" type="text" id="name" aria-describedby="name-desc"&gt;
+    &lt;p class="field-description" id="name-desc"&gt;Your full name for identification.&lt;/p&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
         </div>
@@ -403,8 +403,8 @@
             </div>
             <div class="form-field">
               <label class="label" for="f6-msg">Message</label>
-              <textarea class="textarea" id="f6-msg" placeholder="Your message..."></textarea>
-              <p class="field-description">Optional message.</p>
+              <textarea class="textarea" id="f6-msg" placeholder="Your message..." aria-describedby="f6-msg-desc"></textarea>
+              <p class="field-description" id="f6-msg-desc">Optional message.</p>
             </div>
             <div class="form-actions">
               <button class="btn" type="submit" data-variant="default">Submit</button>
@@ -433,27 +433,27 @@
           <form class="form" style="width:100%;max-width:28rem;" onsubmit="return false;">
             <div class="form-field">
               <label class="label" for="f7-name">Username</label>
-              <input class="input" type="text" id="f7-name" placeholder="kyr0" required>
-              <p class="field-description">This is your public display name.</p>
+              <input class="input" type="text" id="f7-name" placeholder="kyr0" required aria-describedby="f7-name-desc">
+              <p class="field-description" id="f7-name-desc">This is your public display name.</p>
             </div>
             <div class="form-field">
               <label class="label" for="f7-email">Email</label>
-              <select class="select" id="f7-email">
+              <select class="select" id="f7-email" aria-describedby="f7-email-desc">
                 <option value="m@example.com">m@example.com</option>
                 <option value="m@google.com">m@google.com</option>
                 <option value="m@support.com">m@support.com</option>
               </select>
-              <p class="field-description">You can manage email addresses in your settings.</p>
+              <p class="field-description" id="f7-email-desc">You can manage email addresses in your settings.</p>
             </div>
             <div class="form-field">
               <label class="label" for="f7-bio">Bio</label>
-              <textarea class="textarea" id="f7-bio" placeholder="I like to..."></textarea>
-              <p class="field-description">You can @mention other users and organizations.</p>
+              <textarea class="textarea" id="f7-bio" placeholder="I like to..." aria-describedby="f7-bio-desc"></textarea>
+              <p class="field-description" id="f7-bio-desc">You can @mention other users and organizations.</p>
             </div>
             <div class="form-field">
               <label class="label" for="f7-dob">Date of birth</label>
-              <input class="input" type="date" id="f7-dob">
-              <p class="field-description">Your date of birth is used to calculate your age.</p>
+              <input class="input" type="date" id="f7-dob" aria-describedby="f7-dob-desc">
+              <p class="field-description" id="f7-dob-desc">Your date of birth is used to calculate your age.</p>
             </div>
             <fieldset class="form-fieldset">
               <legend>Notify me about...</legend>
@@ -475,16 +475,16 @@
             <div class="form-field-row">
               <div>
                 <label class="label" for="f7-marketing">Marketing emails</label>
-                <p class="field-description">Receive emails about new products, features, and more.</p>
+                <p class="field-description" id="f7-marketing-desc">Receive emails about new products, features, and more.</p>
               </div>
-              <input class="switch" type="checkbox" role="switch" id="f7-marketing">
+              <input class="switch" type="checkbox" role="switch" id="f7-marketing" aria-describedby="f7-marketing-desc">
             </div>
             <div class="form-field-row" data-disabled>
               <div>
                 <label class="label" for="f7-security">Security emails</label>
-                <p class="field-description">Receive emails about your account security.</p>
+                <p class="field-description" id="f7-security-desc">Receive emails about your account security.</p>
               </div>
-              <input class="switch" type="checkbox" role="switch" id="f7-security" checked disabled>
+              <input class="switch" type="checkbox" role="switch" id="f7-security" checked disabled aria-describedby="f7-security-desc">
             </div>
             <div class="form-actions">
               <button class="btn" type="submit" data-variant="default">Submit</button>
@@ -499,8 +499,8 @@
           <pre><code class="language-markup">&lt;form class="form"&gt;
   &lt;div class="form-field"&gt;
     &lt;label class="label" for="name"&gt;Username&lt;/label&gt;
-    &lt;input class="input" type="text" id="name" required&gt;
-    &lt;p class="field-description"&gt;This is your public display name.&lt;/p&gt;
+    &lt;input class="input" type="text" id="name" required aria-describedby="name-desc"&gt;
+    &lt;p class="field-description" id="name-desc"&gt;This is your public display name.&lt;/p&gt;
   &lt;/div&gt;
   &lt;div class="form-field"&gt;
     &lt;label class="label" for="email"&gt;Email&lt;/label&gt;
@@ -520,9 +520,9 @@
   &lt;div class="form-field-row"&gt;
     &lt;div&gt;
       &lt;label class="label" for="marketing"&gt;Marketing emails&lt;/label&gt;
-      &lt;p class="field-description"&gt;Receive emails about new products.&lt;/p&gt;
+      &lt;p class="field-description" id="marketing-desc"&gt;Receive emails about new products.&lt;/p&gt;
     &lt;/div&gt;
-    &lt;input class="switch" type="checkbox" role="switch" id="marketing"&gt;
+    &lt;input class="switch" type="checkbox" role="switch" id="marketing" aria-describedby="marketing-desc"&gt;
   &lt;/div&gt;
   &lt;div class="form-actions"&gt;
     &lt;button class="btn" type="submit"&gt;Submit&lt;/button&gt;

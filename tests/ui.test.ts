@@ -208,6 +208,22 @@ test('component skill link toggles its <details> natively (no modal intercept)',
   expect(doc.querySelector('dialog.spec-modal'), 'no spec modal in DOM').toBeNull();
 });
 
+test('field description example wires aria-describedby to its input', async () => {
+  // regression: doc examples showed a .field-description under the field with
+  // no aria-describedby — sighted users see the hint, screen-reader users
+  // heard nothing. The pattern is gated by verify's `field description wiring`;
+  // this proves it in the rendered page.
+  const { doc } = await openDocPage('label.html');
+
+  const input = doc.querySelector('#demo-username') as HTMLInputElement;
+  const descId = input.getAttribute('aria-describedby');
+  expect(descId, 'input must reference a description id').toBeTruthy();
+
+  const desc = doc.getElementById(descId!);
+  expect(desc?.classList.contains('field-description'), 'referenced element is the field description').toBe(true);
+  expect(desc?.textContent, 'description carries the help text').toContain('public display name');
+});
+
 test('accordion single-open: opening one item closes its siblings', async () => {
   const { doc } = await openDocPage('accordion.html');
 

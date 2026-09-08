@@ -50,11 +50,11 @@ supportedStates: default
 
 | `data-variant`  | Surface              | Text                     | Hover                          |
 |-----------------|----------------------|--------------------------|--------------------------------|
-| `default`       | `--primary`          | `--primary-foreground`   | `opacity: 0.88`               |
-| `secondary`     | `--secondary`        | `--secondary-foreground` | `opacity: 0.8`                |
+| `default`       | `--primary`          | `--primary-foreground`   | `opacity: 0.9`                |
+| `secondary`     | `--secondary`        | `--secondary-foreground` | `color-mix(in oklch, --secondary 85%, --secondary-foreground)` |
 | `outline`       | `--background` + border + shadow-xs | `--foreground`  | `--accent` bg                  |
 | `ghost`         | transparent          | `--foreground`           | `--accent` bg                  |
-| `destructive`   | `--destructive`      | `--destructive-foreground` | `opacity: 0.88`             |
+| `destructive`   | `--destructive`      | `--destructive-foreground` | `opacity: 0.9`              |
 | `link`          | transparent          | `--primary`              | underline                      |
 
 ---
@@ -85,6 +85,9 @@ supportedStates: default
 
 ## Notes
 
+- `secondary` darkens on hover via `color-mix()` instead of an opacity fade —
+  `--secondary` is near-white in light themes, so fading would push the button
+  *towards* the page background and make the hover effect invisible.
 - The `link` variant resets height and padding — it flows inline.
 - SVGs inside buttons auto-size to 1rem unless they have a `size-*` class.
 - The button works on `<a>` tags for styled navigation links.

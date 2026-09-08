@@ -43,6 +43,22 @@ await cssSmoke('button', [
     ],
   },
   {
+    // regression: secondary used to hover via `opacity: 0.8`, which on the
+    // near-white --secondary just faded the button into the page background
+    label: 'secondary hover darkens the surface instead of fading (no opacity)',
+    run: async (page) => {
+      const before = await page.$eval('#bt-secondary', (el) => getComputedStyle(el).backgroundColor);
+      await page.hover('#bt-secondary');
+      await page.waitForTimeout(200); // .btn transitions `all` (150ms)
+      const after = await page.$eval('#bt-secondary', (el) => {
+        const cs = getComputedStyle(el);
+        return { bg: cs.backgroundColor, opacity: cs.opacity };
+      });
+      assert.notEqual(after.bg, before, 'hover must visibly change the secondary surface');
+      assert.equal(after.opacity, '1', 'hover must not fade the pale surface towards the page');
+    },
+  },
+  {
     label: 'ghost and link are transparent',
     selector: '#bt-ghost',
     css: { 'background-color': 'rgba(0, 0, 0, 0)', 'border-top-color': 'rgba(0, 0, 0, 0)' },

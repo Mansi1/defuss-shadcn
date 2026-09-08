@@ -52,7 +52,13 @@
       background-color: var(--secondary);
       color: var(--secondary-foreground);
 
-      &:hover { opacity: 0.8; }
+      /* --secondary is near-white in light themes, so an opacity fade would
+         wash the button further into the page background (invisible hover).
+         Mixing in the foreground color instead darkens light themes and
+         lightens dark ones — always moving away from the page surface. */
+      &:hover {
+        background-color: color-mix(in oklch, var(--secondary) 85%, var(--secondary-foreground));
+      }
     }
 
     &[data-variant="outline"] {

@@ -41,6 +41,7 @@ Then: for every component you use, read its skill file (linked per-component bel
 ```
 dist/
 ├── SKILL.md                          ← you are here — start every task with this file
+├── stats.json                        ← component counts (per type, JS/CSS-only) + byte sizes raw/minified/gzipped
 ├── theme/default-semantic-tokens.css ← design tokens (the only theme file)
 ├── components/{name}/
 │   ├── component-skill.md            ← HOW to build the HTML — read this before using a component

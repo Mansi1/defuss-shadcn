@@ -120,6 +120,11 @@ function init() {
         });
         /* Return focus to trigger */
         dialog.addEventListener('close', () => {
+            // `close` fires AFTER the exit transition (display allow-discrete), so a
+            // fast re-open can beat it — a stale event must not downgrade an open
+            // dialog back to 'default' or yank focus out of it while it's showing.
+            if (dialog.open)
+                return;
             // reflect the actual UI state: close buttons (the only close path) or
             // setState('default') land the dialog back at 'default'
             dialog.dataset.stateName = 'default';

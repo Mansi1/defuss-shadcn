@@ -113,6 +113,11 @@ function init() {
             btn.addEventListener('click', () => { sheet.close(); });
         });
         sheet.addEventListener('close', () => {
+            // `close` fires AFTER the exit transition (display allow-discrete), so a
+            // fast re-open can beat it — a stale event must not downgrade an open
+            // sheet back to 'default' or yank focus out of it while it's showing.
+            if (sheet.open)
+                return;
             // reflect the actual UI state: any close path (Escape, backdrop, close
             // button) returns the sheet to 'default', even when it wasn't setState'd
             sheet.dataset.stateName = 'default';

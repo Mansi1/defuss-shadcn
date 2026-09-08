@@ -2,7 +2,7 @@
 # KISS: every target delegates to package.json so there is one source of truth.
 
 .DEFAULT_GOAL := help
-.PHONY: help setup dev test test-run coverage e2e lint verify screenshots minify build docs purge-cdn
+.PHONY: help setup dev test test-run coverage e2e lint verify screenshots minify stats build docs purge-cdn
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z0-9_-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -43,10 +43,11 @@ purge-cdn: ## Purge jsDelivr @latest cache for all dist assets (run after deploy
 # each component's fingerprint — hence minify BEFORE screenshots), then gate +
 # tests. Calls scripts/build.ts directly because `bun run build` would run
 # verify BEFORE the screenshots could be refreshed.
-build: ## Full pipeline: lint → compile → minify → screenshots → docs → verify → tests → e2e
+build: ## Full pipeline: lint → compile → minify → stats → screenshots → docs → verify → tests → e2e
 	bun run lint
 	bun scripts/build.ts
 	bun run minify
+	bun run stats
 	bun run screenshots
 	bun run docs
 	bun run verify
@@ -55,6 +56,9 @@ build: ## Full pipeline: lint → compile → minify → screenshots → docs �
 
 minify: ## Post-build: *.min.css + *.min.js (+ source maps) into dist/components/
 	bun run minify
+
+stats: ## Post-minify: dist/stats.json (component counts + byte sizes)
+	bun run stats
 
 verify: ## Static consistency gate (runs automatically after build)
 	bun run verify

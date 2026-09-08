@@ -11,7 +11,10 @@
 
 **A UI component system that scales with _local_ AI.** Themeable components built on semantic HTML, modern CSS, and vanilla JavaScript. No framework. No build step for consumers — `dist/` is committed and ready to use as-is. The simplest possible foundation for AI-driven prototyping.
 
+**68 components — 27 with JavaScript, 41 CSS-only — 67.9 KiB minified + compressed.**
 41 of 68 components need no JavaScript — native HTML and modern CSS cover them entirely.
+The footprint is measured from the shipped `dist/` files on every build and published as
+[`dist/stats.json`](dist/stats.json); `verify` fails the build if this sentence and that file disagree.
 
 The set includes 13 marketing blocks (Site Header, Hero, Pricing, Testimonials, Blog, Footer, …) — full-page sections composed from the same tokens and primitives, all CSS-only.
 
@@ -140,7 +143,9 @@ bun run test:run   # run the UI test suite (headless Chromium)
 ```
 
 `src/` is the authoring tree (`.ts` + html/css/md/fonts); `dist/` is its compiled, 1:1
-mirror, committed and the only thing that ships. `docs/` is the generated **documentation
+mirror, committed and the only thing that ships — every build also regenerates the
+machine-readable `dist/stats.json` (component counts per type, the JS/CSS-only split, and
+byte sizes raw/minified/gzipped via `make stats`). `docs/` is the generated **documentation
 site** (only `dist/documentation/` + the SEO files + a `404.html` copy of `index.html` so
 GitHub Pages never serves an empty page for dead links) that GitHub Pages publishes — the
 pages' `../components/…` / `../theme/…` references are rewritten to the jsDelivr GitHub
@@ -149,8 +154,8 @@ copies of the component assets. Refresh with `bun run docs`, never edit it direc
 
 A `Makefile` wraps the common tasks: `make setup` (install deps + Playwright browsers),
 `make dev`, `make test-run`, `make coverage`, `make e2e`, `make lint` (oxlint),
-`make typecheck`, `make verify`, `make screenshots`, `make docs`. **`make build`** runs
-the whole pipeline — lint → compile → screenshots → docs-mirror → verify → tests → e2e —
+`make typecheck`, `make verify`, `make screenshots`, `make stats`, `make docs`. **`make build`** runs
+the whole pipeline — lint → compile → minify → stats → screenshots → docs-mirror → verify → tests → e2e —
 the same loop CI runs.
 
 `bun run verify` is the static consistency gate (~0.3 s, runs automatically at the end
@@ -161,7 +166,8 @@ of every build) and the contract every coding agent must satisfy. It checks, amo
 - **consistency** — inline source snippets match the real files (and are properly escaped),
   skill ↔ docs ↔ CSS variant parity, State API contract + per-state coverage across
   screenshots/docs/skill/e2e, changelog & version markers, doc command references
-  (every `bun run`/`make` quoted in the docs must exist)
+  (every `bun run`/`make` quoted in the docs must exist), `dist/stats.json` freshness and
+  the stats claims in README/index matching the measured numbers exactly
 - **quality** — token boundary rule (only tweakcn-defined `var(--*)`), undefined utility
   classes, `prefers-reduced-motion` coverage, init idempotency (double-binding guard),
   dead links (parsed with linkedom), portable paths (no machine-absolute paths),

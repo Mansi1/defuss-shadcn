@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest';
 import { clickSelector, openDocPage, waitFor } from './helpers.ts';
+import { statsClaimText, type StatsDoc } from '../scripts/lib/stats.ts';
 
 /** site.js/layout.js expose their globals under `_defussShadcn` (no window globals). */
 type DocsGlobal = Window & { _defussShadcn: { docs: { realignWhenSettled?: (id: string) => void } } };
@@ -101,6 +102,29 @@ test('dialog component: trigger opens native <dialog>, close button closes it', 
     () => doc.activeElement === doc.querySelector('[data-dialog-trigger="demo-dialog"]'),
     'focus to return to trigger',
   );
+});
+
+test('index states the current stats.json footprint and dogfoods the Statistic component', async () => {
+  // the machine-checked claim (verify's `stats claim` gate) proven in the real
+  // browser too: what a visitor reads must equal what the build measured
+  const stats = (await (await fetch('/dist/stats.json')).json()) as StatsDoc;
+
+  const { doc } = await openDocPage('index.html');
+  await waitFor(() => doc.querySelector('main h1') || doc.querySelector('.statistic'), 'index content');
+
+  const normalized = doc.body!.textContent!.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ');
+  expect(normalized).toContain(statsClaimText(stats));
+
+  // dogfooding: the numbers render through the shipped Statistic component,
+  // with its CSS applied (1.875rem value ⇒ 30px computed)
+  const cards = [...doc.querySelectorAll('.statistic')];
+  expect(cards.length, 'Statistic cards on the index').toBeGreaterThanOrEqual(4);
+  const styles = (doc.defaultView as Window).getComputedStyle(cards[0].querySelector('.statistic-value')!);
+  expect(styles.fontSize).toBe('30px');
+  const values = cards.map((c) => c.querySelector('.statistic-value')!.textContent!.trim());
+  expect(values).toContain(String(stats.total));
+  expect(values).toContain(String(stats.withJs));
+  expect(values).toContain(String(stats.withoutJs));
 });
 
 test('SPA router migrates body-level dialogs so triggers work after nav', async () => {

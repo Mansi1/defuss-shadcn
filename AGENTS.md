@@ -39,6 +39,7 @@ Never edit `dist/` directly; it is deleted and rebuilt on every build.
 defuss-shadcn/
 ├── dist/                              ← the distributable (drop into any project)
 │   ├── SKILL.md                       ← agent entry point (generated from src/SKILL_tpl.md + skill frontmatter)
+│   ├── stats.json                     ← generated size/surface summary (counts per type, JS split, byte sizes; `make stats`)
 │   ├── theme/default-semantic-tokens.css      ← design tokens (source of truth for colors, radius, shadows)
 │   ├── components/                    ← self-contained component folders
 │   │   └── {name}/
@@ -68,6 +69,9 @@ defuss-shadcn/
 ├── scripts/                           ← build & maintenance scripts (no one-shot migrations)
 │   ├── build.ts                       ← src/ → dist/ (tsc type-strip + sourceMap + copy everything else 1:1)
 │   ├── minify.ts                      ← post-pass: per-component *.min.css (lightningcss) + *.min.js + *.min.js.map (oxc-minify; `make minify`)
+│   ├── stats.ts                       ← post-minify pass: measures dist/components/ → dist/stats.json (`make stats`)
+│   ├── lib/stats.ts                   ← stats aggregation core (pure: counts + totals, no fs/zlib)
+│   ├── lib/stats-files.ts             ← dist/components/ byte+gzip measurement (writer + verify gate share it)
 │   ├── verify.ts                      ← static consistency gate (runs at end of build; `bun run verify`)
 │   ├── sync-docs.ts                   ← mirror dist/documentation → docs/ (CDN-rewritten; `bun run docs`)
 │   ├── lib/mirror.ts                  ← shared docs/ mirror transform (sync-docs + verify compare against it)
@@ -152,6 +156,10 @@ forget:
   `README CSS-only stat` / `index CSS-only stat` gates compare it against
   the actual `src/components/` tree (a component `.ts` = ships a `.js`).
   Update both files together whenever a component gains or loses behavior.
+- **Stats claim** — the measured footprint sentence (total / withJs /
+  withoutJs + KiB-formatted gzip sizes) appears in both files, generated
+  from `dist/stats.json` by `statsClaimText()`; `verify`'s `stats claim`
+  gate fails when either file's sentence no longer matches the measurement.
 
 `verify` enforces the pillar set (`README ↔ index parity`, hard gate) and the
 **`README ↔ index commit window`** gate: if the two files' last-touch commits
@@ -882,13 +890,22 @@ of removing it).
 ## Testing
 
 `make help` lists the shortcuts (`setup`, `dev`, `test`, `test-run`, `coverage`, `e2e`, `lint`,
-`verify`, `screenshots`, `minify`, `build`) — they wrap the equivalent `bun run <script>` commands;
+`verify`, `screenshots`, `minify`, `stats`, `build`) — they wrap the equivalent `bun run <script>` commands;
 package.json stays the single source of truth. `make build` is the full pipeline:
-lint → compile → minify → screenshots → docs-mirror → verify → tests → e2e (it calls `scripts/build.ts` +
+lint → compile → minify → stats → screenshots → docs-mirror → verify → tests → e2e (it calls `scripts/build.ts` +
 `scripts/minify.ts` directly, since `bun run build` runs `verify` before screenshots could be refreshed).
 `make minify` alone re-runs just the minify post-pass over `dist/components/` (every shipped `.css` gains a
 `.min.css`, every `.js` a `.min.js` + `.min.js.map`; tsc already emits the readable `.js.map`). verify's
 `minified artifacts` gate fails when a component ships without its twins.
+`make stats` regenerates `dist/stats.json` after minify — component counts per taxonomy type, the
+withJs/withoutJs split, and per-component + total byte sizes (`jsSize`/`cssSize`/`*Minified`/`*Gz`).
+Deterministic (no timestamps); verify's `stats.json fresh` gate fails when it lags `dist/components/`.
+Verify's **`stats claim` gate** additionally requires README.md and `src/documentation/index.html`
+to state the current figures verbatim as one sentence — generated from stats.json by
+`statsClaimText()` (`scripts/lib/stats.ts`): `{total} components — {withJs} with JavaScript,
+{withoutJs} CSS-only — {KiB} minified + compressed`. When the numbers change, both
+files change with them (parity pair) — the index renders them through the shipped Statistic
+component, so the site always shows its own measured footprint.
 
 `bun run test:run` runs the UI suite in headless Chromium (Vitest browser mode + Playwright).
 First run needs `make setup` (or `bunx playwright install`).

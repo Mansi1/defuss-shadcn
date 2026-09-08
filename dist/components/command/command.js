@@ -196,6 +196,12 @@ function init() {
                 dialog.close();
         });
         dialog.addEventListener('close', () => {
+            // `close` fires AFTER the exit transition (display allow-discrete), so a
+            // fast re-open (setState/⌘K within 150ms) can beat the queued event — a
+            // stale one must not downgrade an open palette to 'default'. (Skipping
+            // the reset on re-open keeps the last query, like macOS Spotlight.)
+            if (dialog.open)
+                return;
             // reflect the actual UI state: Escape/item-click/backdrop close = 'default'
             dialog.dataset.stateName = 'default';
             input.value = '';

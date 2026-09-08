@@ -43,15 +43,6 @@ supportedStates: default
 </div>
 ```
 
-### With separator
-```html
-<div class="btn-group" role="group" aria-label="Actions">
-  <button class="btn" data-variant="default">Copy</button>
-  <hr role="separator">
-  <button class="btn" data-variant="default">Paste</button>
-</div>
-```
-
 ---
 
 ## Accessibility
@@ -69,7 +60,6 @@ supportedStates: default
 - Button groups work best with the `outline` variant — the connected borders create a cohesive unit.
 - Adjacent button borders collapse so only one border renders between buttons.
 - The group removes internal border-radii to create seamless joins.
-- Use `<hr role="separator">` to visually divide non-outline buttons (e.g., `default` variant).
-- Outline buttons already have visible borders and don't need separators.
+- Use `<hr role="separator">` in Split buttons to divide the primary action from its dropdown trigger.
 - Uses CSS logical properties (`margin-inline-start`, `border-start-*-radius`) for automatic RTL support.
 - No JavaScript required — this is purely a CSS layout component.

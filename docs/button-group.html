@@ -143,7 +143,7 @@
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Button groups work best with the <code>outline</code> variant — the connected borders create a cohesive unit.</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Adjacent button borders collapse so only one border renders between buttons.</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• The group removes internal border-radii to create seamless joins.</p>
-            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Use <code>&lt;hr role=&quot;separator&quot;&gt;</code> to visually divide non-outline buttons.</p>
+            <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Use <code>&lt;hr role=&quot;separator&quot;&gt;</code> in Split buttons to divide the primary action from its dropdown trigger.</p>
             <p class="text-muted-foreground" style="margin:0 0 0.25rem;">• Uses CSS logical properties for automatic RTL support.</p>
             <p class="text-muted-foreground" style="margin:0 0 0;">• No JavaScript required — this is purely a CSS layout component.</p>
           </div>
@@ -217,28 +217,6 @@
         </div>
 
         <!-- Spec link -->
-
-        <!-- Separator -->
-        <p class="text-sm font-medium mb-2 mt-8">Separator</p>
-        <p class="text-xs text-muted-foreground mb-3">Use <code>&lt;hr role="separator"&gt;</code> to visually divide non-outline buttons. Outline buttons don't need separators since they have visible borders.</p>
-        <div class="preview">
-          <div class="btn-group" role="group" aria-label="Clipboard">
-            <button class="btn" data-variant="default">Copy</button>
-            <hr role="separator">
-            <button class="btn" data-variant="default">Paste</button>
-          </div>
-        </div>
-        <div style="position:relative;margin-top:0.5rem;">
-          <button class="copy-btn">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-            Copy
-          </button>
-          <pre><code class="language-markup">&lt;div class="btn-group" role="group" aria-label="Clipboard"&gt;
-  &lt;button class="btn" data-variant="default"&gt;Copy&lt;/button&gt;
-  &lt;hr role="separator"&gt;
-  &lt;button class="btn" data-variant="default"&gt;Paste&lt;/button&gt;
-&lt;/div&gt;</code></pre>
-        </div>
 
         <!-- Sizes -->
         <p class="text-sm font-medium mb-2 mt-8">Sizes</p>

@@ -147,6 +147,37 @@ check(
   'run `bun run sync-snippets`',
 );
 
+// 6b. doc-page code-block integrity: unbalanced <pre> tags mean a snippet's
+// opening tag was destroyed and raw code leaked into live markup (accordion/
+// dialog shipped exactly that — the parser then swallows real DOM and site.js
+// mis-pairs code toggles); duplicate real-DOM ids mean a whole section was
+// duplicated (both pages also shipped that, breaking `built with` anchors and
+// any getElementById consumer). Ids quoted inside <pre>/inline <code> are
+// prose, not DOM, so both are stripped before the duplicate scan.
+const codeBlockProblems: string[] = [];
+for (const [page, html] of docHtml) {
+  const opens = html.match(/<pre[\s>]/g)?.length ?? 0;
+  const closes = html.match(/<\/pre>/g)?.length ?? 0;
+  if (opens !== closes) {
+    codeBlockProblems.push(
+      `${page}: ${opens} <pre> open vs ${closes} </pre> close tags — a code block's opening tag was destroyed, raw code leaked into markup`,
+    );
+    continue;
+  }
+  const realDom = html.replace(/<pre[\s>][\s\S]*?<\/pre>/g, '').replace(/<code[\s>][\s\S]*?<\/code>/g, '');
+  const ids: string[] = [];
+  for (const m of realDom.matchAll(/(?<![\w-])id="([^"]+)"/g)) ids.push(m[1]);
+  const dupes = [...new Set(ids.filter((id, i) => ids.indexOf(id) !== i))];
+  if (dupes.length) {
+    codeBlockProblems.push(`${page}: duplicate element id(s) ${dupes.join(', ')} — a section is duplicated`);
+  }
+}
+check(
+  'doc code-block integrity',
+  codeBlockProblems,
+  'repair the page markup: every <pre><code class="language-…"> block needs its opening tag, and each section id must appear exactly once',
+);
+
 // 7. every doc page imports every component's CSS and JS (cross-page demos)
 const importProblems: string[] = [];
 for (const [page, html] of docHtml) {

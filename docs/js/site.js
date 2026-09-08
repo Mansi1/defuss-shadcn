@@ -119,16 +119,22 @@
     }
     // -- Code collapse/expand ---------------------------------
     var CODE_ICON = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>';
+    // Why: a code block is collapsible when it uses the shared snippet markup —
+    // a wrapper <div> pairing a .copy-btn with its <pre>. That is true for the
+    // per-example snippets under a .preview AND for the standalone CSS/JS source
+    // sections at the bottom of every page. Pairing on "next sibling of .preview"
+    // (the old rule) missed the source sections entirely: their blocks got no
+    // toggle and "Collapse all code" visibly did nothing for them.
     function initCodeCollapse() {
         // Guard against duplicate init (SPA replaces main innerHTML, so this is a safety net)
         if (document.querySelector('.code-collapse-toolbar'))
             return;
-        var previews = document.querySelectorAll('.preview');
-        if (!previews.length)
+        var main = document.querySelector('main');
+        if (!main)
             return;
         var pairs = [];
-        previews.forEach(function (preview) {
-            var wrapper = preview.nextElementSibling;
+        main.querySelectorAll('.copy-btn').forEach(function (btn) {
+            var wrapper = btn.parentElement;
             if (!wrapper || wrapper.tagName !== 'DIV' || !wrapper.querySelector('pre'))
                 return;
             wrapper.classList.add('code-block-wrapper');
@@ -136,7 +142,7 @@
             toggle.className = 'code-toggle-btn';
             toggle.setAttribute('aria-expanded', 'true');
             toggle.innerHTML = CODE_ICON + ' Hide code';
-            preview.parentNode.insertBefore(toggle, wrapper);
+            wrapper.parentNode.insertBefore(toggle, wrapper);
             toggle.addEventListener('click', function () {
                 var collapsed = wrapper.classList.toggle('code-collapsed');
                 toggle.setAttribute('aria-expanded', String(!collapsed));
@@ -154,9 +160,6 @@
         allBtn.className = 'code-collapse-all-btn';
         allBtn.innerHTML = CODE_ICON + ' Collapse all code';
         toolbar.appendChild(allBtn);
-        var main = document.querySelector('main');
-        if (!main)
-            return;
         // Move spec <details> out of sticky page-header into scrollable area
         var pageHeader = main.querySelector('.page-header');
         var details = pageHeader ? pageHeader.querySelector('details') : main.querySelector('details');
@@ -171,7 +174,7 @@
             details.insertAdjacentElement('afterend', toolbar);
         }
         else {
-            previews[0].insertAdjacentElement('beforebegin', toolbar);
+            pairs[0].wrapper.insertAdjacentElement('beforebegin', toolbar);
         }
         function syncAllBtn() {
             var allCollapsed = pairs.every(function (p) { return p.wrapper.classList.contains('code-collapsed'); });

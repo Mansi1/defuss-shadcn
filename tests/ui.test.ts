@@ -254,6 +254,48 @@ test('field description example wires aria-describedby to its input', async () =
   expect(desc?.textContent, 'description carries the help text').toContain('public display name');
 });
 
+test('code collapse-all toggles every snippet block — including the standalone CSS/JS source sections', async () => {
+  // regression: initCodeCollapse paired toggles with ".preview's next sibling"
+  // only, so the CSS/JS source sections at the bottom of each page had no
+  // toggle and "Collapse all code" visibly did nothing for them.
+  const { doc } = await openDocPage('sheet.html');
+
+  await waitFor(() => doc.querySelector('.code-collapse-toolbar'), 'code collapse toolbar');
+
+  const main = doc.querySelector('main')!;
+  const wrappers = [...main.querySelectorAll('.code-block-wrapper')];
+  const toggles = [...main.querySelectorAll('.code-toggle-btn')];
+  // every snippet wrapper (copy-btn + <pre> div) on the page got a toggle...
+  expect(wrappers.length).toBeGreaterThanOrEqual(6); // 4 examples + CSS + JS
+  expect(toggles.length).toBe(wrappers.length);
+  // ...including the two standalone source sections (old bug: these were missed)
+  const cssWrapper = doc.querySelector('#source-css .copy-btn')!.parentElement!;
+  const jsWrapper = doc.querySelector('#source-js .copy-btn')!.parentElement!;
+  expect(cssWrapper.classList.contains('code-block-wrapper'), 'CSS source section is collapsible').toBe(true);
+  expect(jsWrapper.classList.contains('code-block-wrapper'), 'JS source section is collapsible').toBe(true);
+
+  const win = doc.defaultView!;
+  const allBtn = doc.querySelector('.code-collapse-all-btn')!;
+
+  // collapse all → every wrapper hidden (display:none via .code-collapsed)
+  await clickSelector(doc, '.code-collapse-all-btn');
+  await waitFor(
+    () => wrappers.every((w) => w.classList.contains('code-collapsed')),
+    'all code blocks to collapse',
+  );
+  wrappers.forEach((w) => expect(win.getComputedStyle(w).display).toBe('none'));
+  expect(allBtn.textContent, 'button offers expand-all afterwards').toContain('Expand all code');
+
+  // expand all → nothing hidden, individual toggles back in sync
+  await clickSelector(doc, '.code-collapse-all-btn');
+  await waitFor(
+    () => wrappers.every((w) => !w.classList.contains('code-collapsed')),
+    'all code blocks to expand',
+  );
+  wrappers.forEach((w) => expect(win.getComputedStyle(w).display).not.toBe('none'));
+  expect(toggles.every((t) => t.getAttribute('aria-expanded') === 'true'), 'per-block toggles in sync').toBe(true);
+});
+
 test('accordion single-open: opening one item closes its siblings', async () => {
   const { doc } = await openDocPage('accordion.html');
 
